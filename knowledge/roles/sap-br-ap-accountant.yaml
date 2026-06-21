@@ -1,0 +1,28 @@
+id: sap.role.sap-br-ap-accountant
+title: SAP_BR_AP_ACCOUNTANT
+kind: sap_role
+status: active
+access: internal_derived
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [business-role, accounts-payable, supplier-invoice, workflow]
+used_for: [fo.authorization, fo.test_scenarios, fo.support_model]
+summary: >
+  Role anchor for AP users who maintain or process supplier invoice workflow
+  context. Verify exact business catalogs in the customer tenant before go-live.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-12-21
+  retrieved_at: 2026-06-21
+source:
+  kind: internal_pattern
+  title: Internal FO role anchor for AP accountant responsibilities
+  url: ""
+  retrieved_at: 2026-06-21
+  license_note: Internal-derived role pointer; verify exact catalogs in SAP.
+claims:
+  - statement: FO authorization sections should name AP maintenance or processing roles and state tenant verification is required.
+    evidence: [sap.app.manage-workflows-supplier-invoices]
+relations:
+  apps: [sap.app.manage-workflows-supplier-invoices]
+  objects: [sap.object.supplier-invoice]

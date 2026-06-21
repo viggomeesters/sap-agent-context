@@ -1,0 +1,30 @@
+id: sap.scope.j60-supplier-invoice-processing
+title: J60 - Supplier Invoice Processing
+kind: scope_item
+status: active
+access: public
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [supplier-invoice, accounts-payable, workflow, approval, j60]
+used_for: [fo.sap_configuration, fo.process_flow, fo.test_scenarios]
+summary: >
+  Scope pointer for supplier invoice processing in SAP S/4HANA Cloud Public
+  Edition. Use it to anchor FO sections that discuss blocked invoice handling,
+  approval routing and AP processing boundaries.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-09-21
+  retrieved_at: 2026-06-21
+source:
+  kind: public_url
+  title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
+  url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
+  retrieved_at: 2026-06-21
+  license_note: Link-first pointer; scope details must be verified in SAP source.
+claims:
+  - statement: Supplier invoice workflow FOs should anchor process and test coverage to the relevant AP scope context.
+    evidence: [sap.ref.s4hana-cloud-help-portal]
+relations:
+  apps: [sap.app.manage-workflows-supplier-invoices]
+  objects: [sap.object.supplier-invoice]
+  roles: [sap.role.sap-br-ap-accountant, sap.role.sap-br-manager]

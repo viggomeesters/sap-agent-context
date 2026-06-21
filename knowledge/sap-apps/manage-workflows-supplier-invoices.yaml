@@ -1,0 +1,31 @@
+id: sap.app.manage-workflows-supplier-invoices
+title: Manage Workflows for Supplier Invoices
+kind: sap_app
+status: active
+access: public
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [supplier-invoice, workflow, approval, fiori-app, accounts-payable]
+used_for: [fo.sap_configuration, fo.authorization, fo.process_flow, fo.developer_readiness]
+summary: >
+  SAP app pointer for configuring supplier invoice approval workflow variants.
+  In an FO this should surface as configuration context, not as generic "SAP
+  workflow" prose.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-09-21
+  retrieved_at: 2026-06-21
+source:
+  kind: public_url
+  title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
+  url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
+  retrieved_at: 2026-06-21
+  license_note: Link-first pointer; verify exact app availability per release and tenant.
+claims:
+  - statement: Supplier invoice approval FOs should identify the workflow configuration app or configuration surface.
+    evidence: [sap.ref.s4hana-cloud-help-portal]
+relations:
+  scope_items: [sap.scope.j60-supplier-invoice-processing]
+  objects: [sap.object.supplier-invoice]
+  roles: [sap.role.sap-br-ap-accountant, sap.role.sap-br-manager]
+  fo_patterns: [sap.fo-pattern.workflow-approval]

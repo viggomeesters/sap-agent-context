@@ -1,0 +1,46 @@
+id: sap.field-map.supplier-invoice-approval-routing
+title: Supplier invoice approval routing field map
+kind: field_map
+status: active
+access: internal_derived
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [supplier-invoice, field-mapping, workflow, routing, approval]
+used_for: [fo.field_mapping, fo.business_rules, fo.developer_readiness, fo.test_data]
+summary: >
+  Minimal field map for supplier invoice approval routing examples. It gives FO
+  generation concrete fields to mention when supplier group, gross amount and
+  company code drive workflow decisions.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-12-21
+  retrieved_at: 2026-06-21
+source:
+  kind: internal_pattern
+  title: Internal field map for supplier invoice approval routing
+  url: ""
+  retrieved_at: 2026-06-21
+  license_note: Internal-derived implementation pattern.
+claims:
+  - statement: Approval routing FOs should include a field table with source field, meaning, owner and validation note.
+    evidence: [sap.fo-pattern.workflow-approval]
+relations:
+  objects: [sap.object.supplier-invoice]
+  fields:
+    - SupplierInvoice.SupplierGroup
+    - SupplierInvoice.GrossAmount
+    - SupplierInvoice.CompanyCode
+    - WorkflowDecision.RejectionReason
+field_map:
+  - source_field: SupplierInvoice.SupplierGroup
+    meaning: Supplier category used for workflow routing.
+    owner: AP key user
+  - source_field: SupplierInvoice.GrossAmount
+    meaning: Gross invoice amount used for approval threshold logic.
+    owner: AP process owner
+  - source_field: SupplierInvoice.CompanyCode
+    meaning: Company code boundary for workflow variant selection.
+    owner: Finance master data owner
+  - source_field: WorkflowDecision.RejectionReason
+    meaning: Reason captured when approver rejects the invoice.
+    owner: Workflow approver

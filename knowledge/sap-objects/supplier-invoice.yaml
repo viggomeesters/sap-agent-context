@@ -1,0 +1,31 @@
+id: sap.object.supplier-invoice
+title: SupplierInvoice business object
+kind: sap_object
+status: active
+access: internal_derived
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [supplier-invoice, business-object, accounts-payable, workflow]
+used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios, fo.developer_readiness]
+summary: >
+  Curated object anchor for supplier invoice workflow FOs. Use this item to keep
+  field mappings, decision rules and test data tied to the same business object.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-12-21
+  retrieved_at: 2026-06-21
+source:
+  kind: internal_pattern
+  title: Internal FO object anchor for supplier invoice workflow
+  url: ""
+  retrieved_at: 2026-06-21
+  license_note: Internal-derived abstraction; does not copy SAP documentation.
+claims:
+  - statement: Workflow approval rules should name the invoice object and the fields used for routing decisions.
+    evidence: [sap.field-map.supplier-invoice-approval-routing]
+relations:
+  fields:
+    - SupplierInvoice.SupplierGroup
+    - SupplierInvoice.GrossAmount
+    - SupplierInvoice.CompanyCode
+  apps: [sap.app.manage-workflows-supplier-invoices]

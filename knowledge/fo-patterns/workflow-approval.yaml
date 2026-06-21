@@ -1,0 +1,31 @@
+id: sap.fo-pattern.workflow-approval
+title: Workflow approval FO section pattern
+kind: fo_pattern
+status: active
+access: internal_derived
+requires_login: false
+sap_product: cross_sap
+topics: [workflow, approval, functioneel-ontwerp, process-flow, quality-gate]
+used_for: [fo.process_flow, fo.business_rules, fo.authorization, fo.test_scenarios]
+summary: >
+  Reusable FO pattern for workflow approval changes. The pattern requires
+  concrete actor-trigger-action-result-exception steps, a decision matrix,
+  authorization impact and executable test scenarios.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-12-21
+  retrieved_at: 2026-06-21
+source:
+  kind: internal_pattern
+  title: Internal good-FO rubric pattern for workflow approval
+  url: ""
+  retrieved_at: 2026-06-21
+  license_note: Internal-derived quality pattern.
+claims:
+  - statement: A workflow FO is not consultant-ready without concrete process steps and exception handling.
+    evidence: [sap.rule.supplier-invoice-approval-routing]
+  - statement: A workflow FO is not developer-ready without business rules, field mapping and role impact.
+    evidence: [sap.field-map.supplier-invoice-approval-routing]
+relations:
+  fo_patterns: [sap.fo-pattern.source-access-governance]
+  test_patterns: [sap.test-pattern.supplier-invoice-workflow]

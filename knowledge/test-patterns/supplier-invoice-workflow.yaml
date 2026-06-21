@@ -1,0 +1,41 @@
+id: sap.test-pattern.supplier-invoice-workflow
+title: Supplier invoice workflow test pattern
+kind: test_pattern
+status: active
+access: internal_derived
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [supplier-invoice, workflow, test-scenarios, negative-tests, acceptance-test]
+used_for: [fo.test_scenarios, fo.test_data, fo.quality_gate]
+summary: >
+  Test pattern for supplier invoice workflow FOs. It gives the generator
+  concrete unit, integration, acceptance and negative scenarios to include.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-12-21
+  retrieved_at: 2026-06-21
+source:
+  kind: internal_pattern
+  title: Internal test pattern for supplier invoice workflow
+  url: ""
+  retrieved_at: 2026-06-21
+  license_note: Internal-derived test design pattern.
+claims:
+  - statement: Workflow FO test sections should cover positive routing, rejection, missing rule and authorization cases.
+    evidence: [sap.fo-pattern.workflow-approval]
+relations:
+  objects: [sap.object.supplier-invoice]
+  roles: [sap.role.sap-br-ap-accountant, sap.role.sap-br-manager]
+test_scenarios:
+  - level: unit
+    case: Rule selects the expected approver for supplier group, amount and company code.
+    expected: Workflow variant produces a single approver task.
+  - level: integration
+    case: Blocked invoice is posted and enters the approval workflow.
+    expected: AP user and manager see the expected task/status transition.
+  - level: acceptance
+    case: Manager approves invoice.
+    expected: Invoice continues to downstream AP processing with audit trail.
+  - level: negative
+    case: No rule matches the invoice attributes.
+    expected: Invoice remains in exception handling or AP work queue with clear reason.

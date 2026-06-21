@@ -1,0 +1,44 @@
+id: sap.rule.supplier-invoice-approval-routing
+title: Supplier invoice approval routing decision rules
+kind: decision_rule
+status: active
+access: internal_derived
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [supplier-invoice, workflow, approval, decision-matrix, business-rules]
+used_for: [fo.business_rules, fo.process_flow, fo.test_scenarios, fo.developer_readiness]
+summary: >
+  Decision-rule pattern for supplier invoice approval routing. Use it to force
+  generated FOs to express conditions, outcomes, owner and negative cases.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-12-21
+  retrieved_at: 2026-06-21
+source:
+  kind: internal_pattern
+  title: Internal decision matrix pattern for supplier invoice workflow
+  url: ""
+  retrieved_at: 2026-06-21
+  license_note: Internal-derived FO pattern.
+claims:
+  - statement: Workflow FOs should include a decision matrix with condition, value source, outcome and owner.
+    evidence: [sap.fo-pattern.workflow-approval]
+relations:
+  objects: [sap.object.supplier-invoice]
+  fields:
+    - SupplierInvoice.SupplierGroup
+    - SupplierInvoice.GrossAmount
+    - SupplierInvoice.CompanyCode
+rules:
+  - condition: Supplier group is strategic and gross amount exceeds approval threshold.
+    value_source: SupplierInvoice.SupplierGroup and SupplierInvoice.GrossAmount
+    outcome: Route approval task to designated manager group.
+    owner: AP process owner
+  - condition: Company code has a dedicated AP approval variant.
+    value_source: SupplierInvoice.CompanyCode
+    outcome: Apply company-code-specific workflow variant.
+    owner: Finance configuration owner
+  - condition: Approver rejects invoice.
+    value_source: WorkflowDecision.RejectionReason
+    outcome: Return invoice to AP queue with rejection reason and audit trail.
+    owner: Workflow approver

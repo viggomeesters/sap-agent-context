@@ -1,0 +1,76 @@
+from __future__ import annotations
+
+import json
+import sqlite3
+from datetime import date
+from pathlib import Path
+
+from sap_fo_knowledge_base.bundle import build_context_bundle, mccoy_provider_manifest
+from sap_fo_knowledge_base.index import build_indexes
+from sap_fo_knowledge_base.repository import load_items
+from sap_fo_knowledge_base.validation import has_errors, validate_items
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_canonical_items_validate() -> None:
+    items = load_items(ROOT)
+    issues = validate_items(items, current_date=date(2026, 6, 21))
+
+    assert len(items) >= 10
+    assert not has_errors(issues), [issue.to_dict() for issue in issues]
+
+
+def test_build_indexes_writes_sqlite_jsonl_and_vector_ready_chunks(tmp_path: Path) -> None:
+    items = load_items(ROOT)
+    report = build_indexes(
+        items,
+        sqlite_path=tmp_path / "kb.sqlite",
+        jsonl_path=tmp_path / "items.jsonl",
+        vector_jsonl_path=tmp_path / "vector-corpus.jsonl",
+        root=ROOT,
+    )
+
+    assert report["items"] == len(items)
+    with sqlite3.connect(tmp_path / "kb.sqlite") as conn:
+        row = conn.execute(
+            "SELECT title FROM items WHERE id = ?",
+            ("sap.app.manage-workflows-supplier-invoices",),
+        ).fetchone()
+    assert row == ("Manage Workflows for Supplier Invoices",)
+
+    item_lines = (tmp_path / "items.jsonl").read_text(encoding="utf-8").splitlines()
+    vector_lines = (tmp_path / "vector-corpus.jsonl").read_text(encoding="utf-8").splitlines()
+    assert len(item_lines) == len(items)
+    assert len(vector_lines) == len(items)
+    assert json.loads(vector_lines[0])["text"]
+
+
+def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:
+    bundle = build_context_bundle(
+        load_items(ROOT),
+        root=ROOT,
+        intent="fo.workflow",
+        topic="supplier-invoice",
+        sap_product="s4hana_cloud_public",
+        current_date=date(2026, 6, 21),
+    )
+
+    ids = {item["id"] for item in bundle["items"]}
+    assert bundle["status"] == "ready"
+    assert "sap.app.manage-workflows-supplier-invoices" in ids
+    assert "sap.test-pattern.supplier-invoice-workflow" in ids
+    assert bundle["citations"]
+    assert bundle["mccoy_integration"]["register_as"] == "local_folder"
+
+
+def test_mccoy_provider_manifest_points_to_bundle_folder(tmp_path: Path) -> None:
+    bundle_path = tmp_path / "context-bundles" / "supplier-invoice-workflow.json"
+    bundle_path.parent.mkdir()
+    bundle_path.write_text("{}", encoding="utf-8")
+
+    manifest = mccoy_provider_manifest(bundle_path, title="SAP FO KB bundle - supplier-invoice")
+
+    assert manifest["type"] == "local-folder"
+    assert manifest["path"] == str(bundle_path.parent)
+    assert "fo-gen-v2 register-source" in manifest["mccoy_command"]

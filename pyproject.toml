@@ -1,0 +1,40 @@
+[project]
+name = "sap-fo-knowledge-base"
+version = "0.1.0"
+description = "Minimal technical product for a curated SAP FO knowledge base."
+readme = "README.md"
+authors = [
+    { name = "viggo", email = "229558850+viggomeesters@users.noreply.github.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml>=6.0.3",
+]
+
+[project.scripts]
+sap-fo-kb = "sap_fo_knowledge_base.cli:main"
+sap-fo-knowledge-base = "sap_fo_knowledge_base.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.15.18",
+    "ty>=0.0.51",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ty.src]
+include = ["src", "tests"]

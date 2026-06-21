@@ -1,0 +1,28 @@
+id: sap.ref.s4hana-cloud-help-portal
+title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
+kind: external_reference
+status: active
+access: public
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [sap-help, s4hana-cloud, public-documentation, source-registry]
+used_for: [fo.source_traceability, fo.sap_configuration, fo.consultant_verification]
+summary: >
+  Public SAP Help Portal entry point for SAP S/4HANA Cloud Public Edition
+  documentation. Use it as a link-first verification source instead of copying
+  SAP documentation into this repository.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-09-21
+  retrieved_at: 2026-06-21
+source:
+  kind: public_url
+  title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
+  url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
+  retrieved_at: 2026-06-21
+  license_note: Link-first pointer; do not mirror SAP documentation text.
+claims:
+  - statement: SAP Help Portal is the preferred public pointer for product assistance and release-specific verification.
+    evidence: [https://help.sap.com/docs/SAP_S4HANA_CLOUD]
+relations:
+  scope_items: [sap.scope.j60-supplier-invoice-processing]

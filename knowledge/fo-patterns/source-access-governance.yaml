@@ -1,0 +1,29 @@
+id: sap.fo-pattern.source-access-governance
+title: Source access governance for SAP FO drafting
+kind: fo_pattern
+status: active
+access: internal_derived
+requires_login: false
+sap_product: cross_sap
+topics: [source-governance, citations, gated-sources, fo-quality]
+used_for: [fo.source_traceability, fo.assumptions, fo.risk_notes]
+summary: >
+  FO generators should distinguish public SAP references, gated SAP references,
+  internal-derived implementation knowledge and customer-specific evidence.
+  Gated pointers can support traceability, but missing access must become an
+  explicit assumption or verification task.
+freshness:
+  valid_from: 2026-06-21
+  review_after: 2026-12-21
+  retrieved_at: 2026-06-21
+source:
+  kind: internal_pattern
+  title: SAP FO KB MTP governance rule
+  url: ""
+  retrieved_at: 2026-06-21
+  license_note: Internal-derived rule; safe to store and reuse.
+claims:
+  - statement: A context bundle may cite gated SAP pointers, but downstream tools must expose the access limitation.
+    evidence: [sap.ref.sap-for-me-gated-support]
+relations:
+  fo_patterns: [sap.fo-pattern.workflow-approval]

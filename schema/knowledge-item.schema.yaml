@@ -1,0 +1,57 @@
+schema_version: 1
+description: Human-readable contract for canonical SAP FO knowledge items.
+required:
+  - id
+  - title
+  - kind
+  - status
+  - access
+  - requires_login
+  - sap_product
+  - topics
+  - used_for
+  - summary
+  - freshness
+  - source
+  - claims
+enums:
+  kind:
+    - access_policy
+    - decision_rule
+    - external_reference
+    - field_map
+    - fo_pattern
+    - sap_app
+    - sap_object
+    - sap_role
+    - scope_item
+    - test_pattern
+  status:
+    - active
+    - draft
+    - deprecated
+  access:
+    - public
+    - gated
+    - internal_derived
+freshness:
+  valid_from: YYYY-MM-DD
+  review_after: YYYY-MM-DD
+  retrieved_at: YYYY-MM-DD
+source:
+  kind: public_url | gated_url | internal_pattern | derived_summary
+  title: Human-readable source title.
+  url: Required for public and gated external references.
+  retrieved_at: YYYY-MM-DD
+  license_note: Short reuse rule, for example link-only or internal-derived.
+claims:
+  - statement: Curated claim, written in our own words.
+    evidence:
+      - source pointer or internal item id
+relations:
+  apps: []
+  objects: []
+  roles: []
+  scope_items: []
+  fields: []
+  fo_patterns: []
