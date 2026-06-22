@@ -1,0 +1,109 @@
+schema_version: 1
+scope:
+  id: sap_fo_starter_coverage
+  title: SAP FO starter coverage for McCoy implementation design
+  definition: >
+    Complete means no known critical or important gaps for generating McCoy
+    Functioneel Ontwerp context bundles across the representative SAP FO domains
+    listed here. It does not claim exhaustive global SAP product coverage.
+minimums:
+  items_total: 50
+  required_access_classes: [public, gated, internal_derived]
+  required_kinds:
+    - access_policy
+    - decision_rule
+    - external_reference
+    - field_map
+    - fo_pattern
+    - sap_app
+    - sap_object
+    - sap_role
+    - scope_item
+    - test_pattern
+domains:
+  - id: finance_ap
+    title: Finance and Accounts Payable
+    topic_tokens: [finance, accounts, payable, ap, invoice, supplier]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: procurement
+    title: Procurement
+    topic_tokens: [procurement, purchase, requisition]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: sales
+    title: Sales
+    topic_tokens: [sales, order]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: master_data
+    title: Master Data
+    topic_tokens: [master, data, business, partner]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: migration
+    title: Data Migration
+    topic_tokens: [migration, data, cockpit]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: workflow
+    title: Workflow and Approvals
+    topic_tokens: [workflow, approval]
+    min_items: 5
+    required_kinds: [sap_app, sap_object, field_map, decision_rule, test_pattern]
+  - id: output
+    title: Output Management
+    topic_tokens: [output, form, channel]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: authorizations
+    title: Authorizations
+    topic_tokens: [authorization, role, catalog]
+    min_items: 5
+    required_kinds: [access_policy, sap_app, sap_object, sap_role, test_pattern]
+  - id: integrations
+    title: Integrations and APIs
+    topic_tokens: [integration, api, communication]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: extensibility
+    title: Extensibility
+    topic_tokens: [extensibility, extension, custom, field]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: analytics
+    title: Analytics and Reporting
+    topic_tokens: [analytics, reporting, report, kpi]
+    min_items: 5
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+representative_queries:
+  - id: workflow_supplier_invoice
+    intent: fo.workflow
+    topic: supplier-invoice workflow
+    sap_product: s4hana_cloud_public
+    limit: 12
+    required_kinds: [sap_app, sap_object, field_map, test_pattern]
+  - id: procurement_configuration
+    intent: fo.sap_configuration
+    topic: procurement purchase requisition workflow
+    sap_product: s4hana_cloud_public
+    limit: 12
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: master_data_field_mapping
+    intent: fo.field_mapping
+    topic: business partner master data
+    sap_product: s4hana_cloud_public
+    limit: 12
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: sales_output_tests
+    intent: fo.test_scenarios
+    topic: sales order output management
+    sap_product: s4hana_cloud_public
+    limit: 12
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+  - id: integration_authorization
+    intent: fo.authorization
+    topic: integration communication role authorization api
+    sap_product: s4hana_cloud_public
+    limit: 12
+    required_kinds: [external_reference, sap_app, sap_object, sap_role, test_pattern]

@@ -1,0 +1,740 @@
+pack_id: sap-fo-starter-coverage
+title: SAP FO starter coverage domain pack
+description: >
+  Canonical starter coverage for representative SAP FO generation domains.
+  Public items are link-first pointers; internal-derived items are curated FO
+  implementation patterns and do not mirror SAP documentation.
+freshness_current: &freshness_current
+  valid_from: 2026-06-22
+  review_after: 2026-12-22
+  retrieved_at: 2026-06-22
+sap_help_source: &sap_help_source
+  kind: public_url
+  title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
+  url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
+  retrieved_at: 2026-06-22
+  license_note: Link-first pointer; verify exact availability per release and tenant.
+sap_api_source: &sap_api_source
+  kind: public_url
+  title: SAP Business Accelerator Hub
+  url: https://api.sap.com/
+  retrieved_at: 2026-06-22
+  license_note: Link-first pointer; verify exact API package, authentication and release.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal SAP FO starter coverage pattern
+  url: ""
+  retrieved_at: 2026-06-22
+  license_note: Internal-derived implementation pattern; safe to store and reuse.
+items:
+  - id: sap.policy.source-access-and-tenant-boundaries
+    title: Source access and tenant-boundary policy
+    kind: access_policy
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: cross_sap
+    topics: [authorization, access, governance, gated-source, tenant, customer-specific]
+    used_for: [fo.source_traceability, fo.authorization, fo.risk_notes]
+    summary: >
+      Policy item that separates public SAP pointers, gated SAP resources,
+      internal-derived patterns and customer/tenant-specific evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Customer-specific tenant evidence must not be promoted into the generic KB without an explicit access and tenant label.
+        evidence: [sap.fo-pattern.source-access-governance]
+    relations:
+      fo_patterns: [sap.fo-pattern.source-access-governance]
+
+  - id: sap.ref.procurement-overview
+    title: SAP Procurement reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase, requisition, sourcing]
+    used_for: [fo.sap_configuration, fo.process_flow, fo.source_traceability]
+    summary: Public SAP Help pointer for procurement and purchase requisition FO verification.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Procurement FOs should verify app, scope and release details against SAP public documentation or tenant evidence.
+        evidence: [sap.ref.s4hana-cloud-help-portal]
+  - id: sap.app.manage-purchase-requisitions
+    title: Manage Purchase Requisitions
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase, requisition, approval, workflow]
+    used_for: [fo.sap_configuration, fo.process_flow, fo.authorization]
+    summary: SAP app pointer for purchase requisition processing and approval-related FO context.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Purchase requisition FOs should identify the requisition app or configuration surface and distinguish requester, approver and buyer responsibilities.
+        evidence: [sap.ref.procurement-overview]
+  - id: sap.object.purchase-requisition
+    title: PurchaseRequisition business object
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase, requisition, business-object]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios]
+    summary: Object anchor for purchase requisition FO field mapping and approval tests.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Purchase requisition approval FOs should name fields that drive release, budget or buyer routing.
+        evidence: [sap.field-map.purchase-requisition-approval]
+  - id: sap.field-map.purchase-requisition-approval
+    title: Purchase requisition approval field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase, requisition, field-mapping, approval]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: Minimal field map for requisition approval, routing and test-data design.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Procurement FOs should include requester, purchasing group, plant, value and account assignment where they affect routing or validation.
+        evidence: [sap.object.purchase-requisition]
+    relations:
+      fields: [PurchaseRequisition.PurchasingGroup, PurchaseRequisition.Plant, PurchaseRequisition.TotalValue, PurchaseRequisition.AccountAssignmentCategory]
+  - id: sap.test-pattern.purchase-requisition-approval
+    title: Purchase requisition approval test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase, requisition, workflow, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate]
+    summary: Positive, negative and authorization test coverage for purchase requisition approval FOs.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Procurement workflow tests should cover valid approval, missing approver, changed value and requester authorization cases.
+        evidence: [sap.field-map.purchase-requisition-approval]
+
+  - id: sap.ref.sales-overview
+    title: SAP Sales reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, order, output, billing]
+    used_for: [fo.sap_configuration, fo.process_flow, fo.source_traceability]
+    summary: Public SAP Help pointer for sales order and output-related FO verification.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Sales FOs should verify app names, document flow and release behavior against SAP documentation or tenant evidence.
+        evidence: [sap.ref.s4hana-cloud-help-portal]
+  - id: sap.app.manage-sales-orders
+    title: Manage Sales Orders
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, order, customer, output]
+    used_for: [fo.sap_configuration, fo.process_flow, fo.authorization]
+    summary: SAP app pointer for sales order processing FO context.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Sales order FOs should name the app, affected document type and user role boundaries.
+        evidence: [sap.ref.sales-overview]
+  - id: sap.object.sales-order
+    title: SalesOrder business object
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, order, business-object, output]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios]
+    summary: Object anchor for sales order processing, output and fulfillment FO sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Sales FOs should connect order fields to output, pricing, block or fulfillment behavior.
+        evidence: [sap.field-map.sales-order-output]
+  - id: sap.field-map.sales-order-output
+    title: Sales order output field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, order, output, field-mapping, channel]
+    used_for: [fo.field_mapping, fo.output, fo.test_data]
+    summary: Field map for sales output determination and output-channel test design.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Sales output FOs should include document type, sales organization, customer, output channel and language where relevant.
+        evidence: [sap.object.sales-order]
+    relations:
+      fields: [SalesOrder.SalesDocumentType, SalesOrder.SalesOrganization, SalesOrder.SoldToParty, Output.Channel, Output.Language]
+  - id: sap.test-pattern.sales-order-output
+    title: Sales order output test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, order, output, test-scenarios, form]
+    used_for: [fo.test_scenarios, fo.quality_gate]
+    summary: Test pattern for sales order output generation, preview, dispatch and error handling.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Sales output tests should cover expected output, suppressed output, missing receiver and wrong channel cases.
+        evidence: [sap.field-map.sales-order-output]
+
+  - id: sap.ref.master-data-overview
+    title: SAP Master Data reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, material, governance]
+    used_for: [fo.sap_configuration, fo.field_mapping, fo.source_traceability]
+    summary: Public SAP Help pointer for business partner, material and master-data FO verification.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Master-data FOs should verify app and field behavior against public documentation or tenant-specific configuration.
+        evidence: [sap.ref.s4hana-cloud-help-portal]
+  - id: sap.app.manage-business-partner-master-data
+    title: Manage Business Partner Master Data
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, customer, supplier]
+    used_for: [fo.sap_configuration, fo.authorization, fo.field_mapping]
+    summary: SAP app pointer for business partner master-data FO context.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Business partner FOs should name role, grouping, mandatory fields and validation ownership.
+        evidence: [sap.ref.master-data-overview]
+  - id: sap.object.business-partner
+    title: BusinessPartner master-data object
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, business-object]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios]
+    summary: Object anchor for business partner master-data FO sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Business partner FOs should separate general data, role-specific data and company/sales/purchasing views.
+        evidence: [sap.field-map.business-partner-governance]
+  - id: sap.field-map.business-partner-governance
+    title: Business partner governance field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, field-mapping, governance]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: Field map for BP validation, role assignment and duplicate-prevention FOs.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Master-data FOs should identify owner, mandatory field, validation rule and duplicate-check behavior.
+        evidence: [sap.object.business-partner]
+    relations:
+      fields: [BusinessPartner.Category, BusinessPartner.Role, BusinessPartner.SearchTerm, BusinessPartner.TaxNumber, BusinessPartner.CompanyCode]
+  - id: sap.test-pattern.business-partner-validation
+    title: Business partner validation test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, test-scenarios, governance]
+    used_for: [fo.test_scenarios, fo.quality_gate]
+    summary: Test pattern for BP creation, validation, role extension and duplicate checks.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Business partner tests should include valid creation, missing mandatory fields, duplicate candidate and role-extension cases.
+        evidence: [sap.field-map.business-partner-governance]
+
+  - id: sap.ref.migration-cockpit
+    title: SAP S/4HANA Migration Cockpit reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, data, cockpit, load]
+    used_for: [fo.sap_configuration, fo.field_mapping, fo.source_traceability]
+    summary: Public SAP Help pointer for data migration and Migration Cockpit FO verification.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Migration FOs should cite migration object, template, load sequence and reconciliation assumptions.
+        evidence: [sap.ref.s4hana-cloud-help-portal]
+  - id: sap.app.migrate-your-data
+    title: Migrate Your Data
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, data, cockpit, load]
+    used_for: [fo.sap_configuration, fo.process_flow, fo.test_scenarios]
+    summary: SAP app pointer for migration cockpit load and monitoring FO context.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Migration FOs should identify the migration app, object, template owner and validation cycle.
+        evidence: [sap.ref.migration-cockpit]
+  - id: sap.object.migration-project
+    title: MigrationProject object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, data, cockpit, business-object]
+    used_for: [fo.field_mapping, fo.process_flow, fo.test_scenarios]
+    summary: Object anchor for migration project, migration object and load-file FO sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration FOs should distinguish source extraction, mapping, validation, simulation, load and reconciliation.
+        evidence: [sap.field-map.migration-template]
+  - id: sap.field-map.migration-template
+    title: Migration template field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, data, field-mapping, template]
+    used_for: [fo.field_mapping, fo.test_data, fo.developer_readiness]
+    summary: Field-map pattern for migration template columns, source ownership and transformation rules.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration FOs should include source field, SAP target field, transformation rule, mandatory flag and reconciliation note.
+        evidence: [sap.object.migration-project]
+    relations:
+      fields: [MigrationTemplate.SourceField, MigrationTemplate.TargetField, MigrationTemplate.TransformationRule, MigrationTemplate.MandatoryFlag]
+  - id: sap.test-pattern.migration-load
+    title: Migration load test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, data, cockpit, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate]
+    summary: Test pattern for migration load simulation, error correction and reconciliation.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration tests should cover template validation, duplicate load, failed row correction and post-load reconciliation.
+        evidence: [sap.field-map.migration-template]
+
+  - id: sap.ref.output-management
+    title: SAP Output Management reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [output, form, channel, email, print]
+    used_for: [fo.sap_configuration, fo.output, fo.source_traceability]
+    summary: Public SAP Help pointer for output management and form-channel FO verification.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Output FOs should identify document, receiver, channel, form template and retry/error behavior.
+        evidence: [sap.ref.s4hana-cloud-help-portal]
+  - id: sap.app.output-parameter-determination
+    title: Output Parameter Determination
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [output, form, channel, determination]
+    used_for: [fo.sap_configuration, fo.business_rules, fo.test_scenarios]
+    summary: SAP app/configuration pointer for output parameter determination FO sections.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Output FOs should express determination conditions and fallback behavior.
+        evidence: [sap.ref.output-management]
+  - id: sap.object.output-request
+    title: OutputRequest object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [output, form, channel, business-object]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios]
+    summary: Object anchor for output request, receiver and channel FO sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Output FOs should trace business document to output request, receiver and channel.
+        evidence: [sap.field-map.output-channel]
+  - id: sap.field-map.output-channel
+    title: Output channel field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [output, form, channel, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: Field map for output channel determination, receiver and language testing.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Output FOs should include document type, receiver role, channel, form template, language and retry behavior.
+        evidence: [sap.object.output-request]
+  - id: sap.test-pattern.output-processing
+    title: Output processing test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [output, form, channel, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate]
+    summary: Test pattern for output preview, dispatch, suppression, retry and failed receiver cases.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Output tests should cover generated output, missing receiver, wrong channel, suppressed output and retry.
+        evidence: [sap.field-map.output-channel]
+
+  - id: sap.ref.identity-access-management
+    title: SAP Identity and Access Management reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, role, catalog, identity, access]
+    used_for: [fo.authorization, fo.source_traceability, fo.risk_notes]
+    summary: Public SAP Help pointer for role/catalog and access-management FO verification.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Authorization FOs should verify business roles and catalogs in the target tenant.
+        evidence: [sap.policy.source-access-and-tenant-boundaries]
+  - id: sap.app.maintain-business-roles
+    title: Maintain Business Roles
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, role, catalog, business-role]
+    used_for: [fo.authorization, fo.sap_configuration, fo.test_scenarios]
+    summary: SAP app pointer for business role maintenance and authorization impact FO sections.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Authorization FOs should list role changes, affected catalogs and regression tests.
+        evidence: [sap.ref.identity-access-management]
+  - id: sap.object.business-role-catalog
+    title: Business role and catalog object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, role, catalog, business-object]
+    used_for: [fo.authorization, fo.field_mapping, fo.test_scenarios]
+    summary: Object anchor for business role, catalog and restriction field FO sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Authorization FOs should distinguish role assignment, catalog access and organizational restrictions.
+        evidence: [sap.app.maintain-business-roles]
+  - id: sap.role.sap-br-business-process-specialist
+    title: SAP_BR_BUSINESS_PROCESS_SPECIALIST
+    kind: sap_role
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, role, catalog, key-user]
+    used_for: [fo.authorization, fo.sap_configuration, fo.support_model]
+    summary: Role anchor for key-user or process specialist responsibilities in FO authorization sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Key-user role references must be verified against actual tenant assignments before go-live.
+        evidence: [sap.policy.source-access-and-tenant-boundaries]
+  - id: sap.test-pattern.authorization-regression
+    title: Authorization regression test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, role, catalog, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate]
+    summary: Test pattern for positive access, missing role, excessive access and restriction regression.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Authorization tests should include allowed user, blocked user, excessive access check and organization restriction checks.
+        evidence: [sap.object.business-role-catalog]
+
+  - id: sap.ref.integration-api
+    title: SAP integration and API reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, communication, event]
+    used_for: [fo.integration, fo.source_traceability, fo.developer_readiness]
+    summary: Public API and integration pointer for communication arrangement and payload FO verification.
+    freshness: *freshness_current
+    source: *sap_api_source
+    claims:
+      - statement: Integration FOs should verify API package, authentication, endpoint and release details against public API docs or tenant evidence.
+        evidence: [https://api.sap.com/]
+  - id: sap.app.communication-arrangements
+    title: Communication Arrangements
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, communication, arrangement, authorization]
+    used_for: [fo.integration, fo.authorization, fo.sap_configuration]
+    summary: SAP app pointer for communication arrangement setup and integration FO sections.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Integration FOs should name communication scenario, arrangement, authentication and monitoring owner.
+        evidence: [sap.ref.integration-api]
+  - id: sap.object.communication-arrangement
+    title: CommunicationArrangement object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, communication, business-object]
+    used_for: [fo.integration, fo.field_mapping, fo.test_scenarios]
+    summary: Object anchor for communication scenario, arrangement and credential FO sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Integration FOs should connect scenario, system, endpoint, payload and monitoring evidence.
+        evidence: [sap.field-map.integration-payload]
+  - id: sap.field-map.integration-payload
+    title: Integration payload field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, communication, field-mapping, payload]
+    used_for: [fo.field_mapping, fo.integration, fo.test_data]
+    summary: Field map pattern for API payloads, source ownership and error handling.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Integration FOs should include source field, target field, transformation, mandatory flag and error handling.
+        evidence: [sap.object.communication-arrangement]
+  - id: sap.test-pattern.integration-api
+    title: Integration API test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, communication, authorization, test-scenarios]
+    used_for: [fo.test_scenarios, fo.integration, fo.quality_gate]
+    summary: Test pattern for API authentication, payload validation, retry and monitoring.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Integration tests should cover success, authentication failure, malformed payload, duplicate message and monitoring evidence.
+        evidence: [sap.field-map.integration-payload]
+
+  - id: sap.ref.extensibility
+    title: SAP extensibility reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, extension, custom-field, custom-logic]
+    used_for: [fo.extensibility, fo.sap_configuration, fo.source_traceability]
+    summary: Public SAP Help pointer for custom fields, custom logic and extensibility FO verification.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Extensibility FOs should distinguish in-app extensibility, released APIs/events and side-by-side extension boundaries.
+        evidence: [sap.ref.s4hana-cloud-help-portal]
+  - id: sap.app.custom-fields-and-logic
+    title: Custom Fields and Logic
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, extension, custom-field, custom-logic]
+    used_for: [fo.extensibility, fo.sap_configuration, fo.test_scenarios]
+    summary: SAP app pointer for in-app custom fields and logic FO sections.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Extensibility FOs should identify business context, field usage, UI exposure and transport/release steps.
+        evidence: [sap.ref.extensibility]
+  - id: sap.object.custom-field
+    title: CustomField extension object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, extension, custom-field, business-object]
+    used_for: [fo.field_mapping, fo.extensibility, fo.test_scenarios]
+    summary: Object anchor for custom field definition, usage and lifecycle FO sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Custom field FOs should name business context, data type, UI/API exposure, defaulting and validation.
+        evidence: [sap.field-map.custom-field-lifecycle]
+  - id: sap.field-map.custom-field-lifecycle
+    title: Custom field lifecycle field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, extension, custom-field, field-mapping]
+    used_for: [fo.field_mapping, fo.extensibility, fo.test_data]
+    summary: Field map for custom field definition, owner, exposure and validation behavior.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: "Extensibility FOs should include lifecycle impact: create, expose, transport, test, monitor and deprecate."
+        evidence: [sap.object.custom-field]
+  - id: sap.test-pattern.custom-field-extension
+    title: Custom field extension test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, extension, custom-field, test-scenarios]
+    used_for: [fo.test_scenarios, fo.extensibility, fo.quality_gate]
+    summary: Test pattern for custom field visibility, editability, API exposure and validation.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Custom field tests should cover create, display, edit, integration exposure and invalid value behavior.
+        evidence: [sap.field-map.custom-field-lifecycle]
+
+  - id: sap.ref.analytics-reporting
+    title: SAP analytics and reporting reference pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, report, kpi, embedded-analytics]
+    used_for: [fo.analytics, fo.reporting, fo.source_traceability]
+    summary: Public SAP Help pointer for embedded analytics, reporting and KPI FO verification.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Reporting FOs should verify available app, CDS/query basis and authorization behavior.
+        evidence: [sap.ref.s4hana-cloud-help-portal]
+  - id: sap.app.view-browser
+    title: View Browser
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, report, kpi]
+    used_for: [fo.analytics, fo.reporting, fo.authorization]
+    summary: SAP app pointer for analytical view discovery and reporting FO sections.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: Analytics FOs should name report consumer, data source, filter and authorization requirements.
+        evidence: [sap.ref.analytics-reporting]
+  - id: sap.object.analytical-query
+    title: AnalyticalQuery object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, report, kpi, business-object]
+    used_for: [fo.analytics, fo.field_mapping, fo.test_scenarios]
+    summary: Object anchor for analytical query, KPI and report FO sections.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Reporting FOs should define data source, measures, dimensions, filters, refresh and authorization behavior.
+        evidence: [sap.field-map.analytics-query]
+  - id: sap.field-map.analytics-query
+    title: Analytics query field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, report, kpi, field-mapping]
+    used_for: [fo.field_mapping, fo.analytics, fo.test_data]
+    summary: Field map for report measures, dimensions, filters and consumer-facing labels.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Analytics FOs should map measure/dimension semantics and include data freshness assumptions.
+        evidence: [sap.object.analytical-query]
+  - id: sap.test-pattern.analytics-report
+    title: Analytics report test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, report, kpi, test-scenarios]
+    used_for: [fo.test_scenarios, fo.analytics, fo.quality_gate]
+    summary: Test pattern for report filters, totals, drilldown, authorization and data freshness.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Analytics tests should cover filter results, totals, authorization restriction and reconciliation against source transactions.
+        evidence: [sap.field-map.analytics-query]

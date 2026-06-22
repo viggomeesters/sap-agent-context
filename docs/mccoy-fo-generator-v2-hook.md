@@ -10,6 +10,7 @@ Run in deze repo:
 ```bash
 uv run sap-fo-kb validate
 uv run sap-fo-kb build-index
+uv run sap-fo-kb audit-completeness
 uv run sap-fo-kb query \
   --intent fo.workflow \
   --topic "supplier-invoice workflow" \
@@ -32,7 +33,8 @@ The context bundle has:
 
 ## Consumer Contract
 
-Register the generated bundle folder in a McCoy workspace:
+Register the generated bundle folder in a McCoy workspace. The folder can hold
+one bundle or all representative bundles:
 
 ```bash
 cd /Users/viggomeesters/Dev/mccoy-fo-generator-v2

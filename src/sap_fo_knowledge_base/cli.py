@@ -8,6 +8,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from sap_fo_knowledge_base.bundle import build_context_bundle, mccoy_provider_manifest
+from sap_fo_knowledge_base.completeness import audit_completeness
 from sap_fo_knowledge_base.index import build_indexes
 from sap_fo_knowledge_base.repository import load_items
 from sap_fo_knowledge_base.validation import has_errors, validate_items
@@ -23,6 +24,8 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     subparsers.add_parser("validate")
+    audit = subparsers.add_parser("audit-completeness")
+    audit.add_argument("--matrix", type=Path)
 
     build_index = subparsers.add_parser("build-index")
     build_index.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
@@ -83,6 +86,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
+
+    if args.command == "audit-completeness":
+        items = load_items(root)
+        payload = audit_completeness(
+            items,
+            root=root,
+            matrix_path=_resolve_output(root, args.matrix) if args.matrix else None,
+        )
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0 if payload["status"] == "passed" else 1
 
     if args.command == "query":
         items = load_items(root)

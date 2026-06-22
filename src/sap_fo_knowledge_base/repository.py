@@ -21,6 +21,12 @@ def load_items(root: Path) -> list[KnowledgeItem]:
     items: list[KnowledgeItem] = []
     for path in sorted(knowledge_dir.rglob("*.yaml")):
         payload = read_yaml_mapping(path)
+        if isinstance(payload.get("items"), list):
+            for index, raw_item in enumerate(payload["items"], start=1):
+                if not isinstance(raw_item, dict):
+                    raise ValueError(f"expected mapping in {path} items[{index}]")
+                items.append(KnowledgeItem(path=path, data=raw_item))
+            continue
         items.append(KnowledgeItem(path=path, data=payload))
     return items
 

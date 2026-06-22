@@ -6,6 +6,7 @@ from datetime import date
 from pathlib import Path
 
 from sap_fo_knowledge_base.bundle import build_context_bundle, mccoy_provider_manifest
+from sap_fo_knowledge_base.completeness import audit_completeness
 from sap_fo_knowledge_base.index import build_indexes
 from sap_fo_knowledge_base.repository import load_items
 from sap_fo_knowledge_base.validation import has_errors, validate_items
@@ -17,7 +18,7 @@ def test_canonical_items_validate() -> None:
     items = load_items(ROOT)
     issues = validate_items(items, current_date=date(2026, 6, 21))
 
-    assert len(items) >= 10
+    assert len(items) >= 50
     assert not has_errors(issues), [issue.to_dict() for issue in issues]
 
 
@@ -51,8 +52,9 @@ def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:
         load_items(ROOT),
         root=ROOT,
         intent="fo.workflow",
-        topic="supplier-invoice",
+        topic="supplier-invoice workflow",
         sap_product="s4hana_cloud_public",
+        limit=12,
         current_date=date(2026, 6, 21),
     )
 
@@ -62,6 +64,58 @@ def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:
     assert "sap.test-pattern.supplier-invoice-workflow" in ids
     assert bundle["citations"]
     assert bundle["mccoy_integration"]["register_as"] == "local_folder"
+
+
+def test_completeness_audit_reports_no_critical_or_important_gaps() -> None:
+    report = audit_completeness(
+        load_items(ROOT),
+        root=ROOT,
+        current_date=date(2026, 6, 22),
+    )
+
+    assert report["status"] == "passed"
+    assert report["critical"] == 0
+    assert report["important"] == 0
+    assert report["items"] >= 50
+
+
+def test_gated_and_access_policy_items_are_loaded() -> None:
+    items = load_items(ROOT)
+
+    assert any(item.access == "gated" and item.data["requires_login"] for item in items)
+    assert any(item.kind == "access_policy" for item in items)
+
+
+def test_stale_source_is_reported_as_warning() -> None:
+    issues = validate_items(load_items(ROOT), current_date=date(2027, 1, 1))
+
+    assert any(
+        issue.severity == "warning" and "review_after is stale" in issue.message for issue in issues
+    )
+
+
+def test_representative_bundles_have_no_unexpected_gaps() -> None:
+    items = load_items(ROOT)
+    queries = [
+        ("fo.workflow", "supplier-invoice workflow"),
+        ("fo.sap_configuration", "procurement purchase requisition workflow"),
+        ("fo.field_mapping", "business partner master data"),
+        ("fo.test_scenarios", "sales order output management"),
+        ("fo.authorization", "integration communication role authorization api"),
+    ]
+
+    for intent, topic in queries:
+        bundle = build_context_bundle(
+            items,
+            root=ROOT,
+            intent=intent,
+            topic=topic,
+            sap_product="s4hana_cloud_public",
+            limit=12,
+            current_date=date(2026, 6, 22),
+        )
+        assert bundle["status"] == "ready"
+        assert bundle["gaps"] == []
 
 
 def test_mccoy_provider_manifest_points_to_bundle_folder(tmp_path: Path) -> None:

@@ -5,7 +5,7 @@ status: active
 access: public
 requires_login: false
 sap_product: s4hana_cloud_public
-topics: [sap-help, s4hana-cloud, public-documentation, source-registry]
+topics: [sap-help, s4hana-cloud, public-documentation, source-registry, finance, ap, accounts-payable, supplier-invoice]
 used_for: [fo.source_traceability, fo.sap_configuration, fo.consultant_verification]
 summary: >
   Public SAP Help Portal entry point for SAP S/4HANA Cloud Public Edition

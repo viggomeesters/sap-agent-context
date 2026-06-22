@@ -12,27 +12,23 @@ of SAP for Me content wordt niet gespiegeld. De canonical laag bewaart wel:
 - relaties naar SAP apps, objecten, rollen, velden, FO-patronen en tests;
 - rebuildbare indexen voor CLI/agent-consumptie.
 
-## MTP Scope
+## Current Completeness Scope
 
-De eerste curated domeinset is Supplier Invoice Workflow / J60:
+The current product-grade scope is `sap_fo_starter_coverage`, defined in
+`schema/completeness-matrix.yaml`.
 
-- scope item pointer;
-- SAP app pointer;
-- SupplierInvoice object anchor;
-- AP accountant en manager role anchors;
-- field map voor approval routing;
-- decision matrix pattern;
-- workflow approval FO pattern;
-- supplier invoice workflow test pattern;
-- public SAP Help source pointer;
-- gated SAP for Me/support pointer;
-- source access governance pattern.
+It covers starter FO-generation knowledge for finance/AP, procurement, sales,
+master data, migration, workflow, output management, authorizations,
+integrations, extensibility and analytics/reporting. The scope is intentionally
+bounded: this is not exhaustive SAP product coverage. It is complete when
+`sap-fo-kb audit-completeness` reports zero critical and zero important gaps.
 
 ## Commands
 
 ```bash
 uv run sap-fo-kb validate
 uv run sap-fo-kb build-index
+uv run sap-fo-kb audit-completeness
 uv run sap-fo-kb query \
   --intent fo.workflow \
   --topic "supplier-invoice workflow" \
@@ -47,6 +43,16 @@ uv run sap-fo-kb mccoy-provider \
 
 `build/vector-corpus.jsonl` is een vector-ready chunk export. Een echte vector
 database blijft rebuildbaar en optioneel; de YAML-items blijven source of truth.
+
+Representative no-gap bundles:
+
+```bash
+uv run sap-fo-kb query --intent fo.workflow --topic "supplier-invoice workflow" --sap-product s4hana_cloud_public --limit 12 --output build/context-bundles/workflow-supplier-invoice.json
+uv run sap-fo-kb query --intent fo.sap_configuration --topic "procurement purchase requisition workflow" --sap-product s4hana_cloud_public --limit 12 --output build/context-bundles/procurement-configuration.json
+uv run sap-fo-kb query --intent fo.field_mapping --topic "business partner master data" --sap-product s4hana_cloud_public --limit 12 --output build/context-bundles/master-data-field-mapping.json
+uv run sap-fo-kb query --intent fo.test_scenarios --topic "sales order output management" --sap-product s4hana_cloud_public --limit 12 --output build/context-bundles/sales-output-tests.json
+uv run sap-fo-kb query --intent fo.authorization --topic "integration communication role authorization api" --sap-product s4hana_cloud_public --limit 12 --output build/context-bundles/integration-authorization.json
+```
 
 ## McCoy FO Generator Hook
 
