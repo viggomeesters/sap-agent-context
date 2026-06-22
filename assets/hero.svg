@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">SAP FO Knowledge Base</title>
+  <desc id="desc">A source-backed SAP Functional Design knowledge base for retrieval and McCoy context bundles.</desc>
+  <rect width="1280" height="640" fill="#102a43"/>
+  <rect x="72" y="72" width="1136" height="496" rx="20" fill="#f8fafc"/>
+  <rect x="112" y="122" width="318" height="396" rx="10" fill="#d9e2ec"/>
+  <rect x="152" y="166" width="238" height="20" rx="4" fill="#486581"/>
+  <rect x="152" y="214" width="188" height="18" rx="4" fill="#829ab1"/>
+  <rect x="152" y="262" width="220" height="18" rx="4" fill="#829ab1"/>
+  <rect x="152" y="310" width="166" height="18" rx="4" fill="#829ab1"/>
+  <rect x="152" y="380" width="238" height="78" rx="8" fill="#bcccdc"/>
+  <path d="M500 170h420" stroke="#0f609b" stroke-width="10" stroke-linecap="round"/>
+  <path d="M500 238h580" stroke="#9fb3c8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M500 294h510" stroke="#9fb3c8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M500 350h546" stroke="#9fb3c8" stroke-width="8" stroke-linecap="round"/>
+  <rect x="500" y="420" width="190" height="58" rx="8" fill="#0f609b"/>
+  <rect x="720" y="420" width="190" height="58" rx="8" fill="#38bec9"/>
+  <rect x="940" y="420" width="190" height="58" rx="8" fill="#f0b429"/>
+  <text x="500" y="140" fill="#102a43" font-family="Arial, sans-serif" font-size="54" font-weight="700">SAP FO Knowledge Base</text>
+  <text x="500" y="532" fill="#486581" font-family="Arial, sans-serif" font-size="28">Curated sources, typed facts, and deterministic context bundles.</text>
+</svg>
