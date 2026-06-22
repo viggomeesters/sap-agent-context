@@ -59,3 +59,17 @@ Representative and adversarial queries must prove scenario precision. A bundle
 that collects the right item kinds through broad overlap, but where no selected
 item covers enough of the concrete query tokens, is marked `needs_curation`.
 The regression corpus lives in `schema/adversarial-query-corpus.yaml`.
+
+## FO Output Evaluation
+
+`schema/fo-output-evaluation-fixtures.yaml` defines deterministic FO-output
+fixtures. The evaluator checks whether generated context bundles can satisfy
+expected FO section ingredients such as source traceability, required item ids,
+field references, test coverage and follow-up gaps for stale, gated or
+too-broad queries.
+
+Run it with:
+
+```bash
+uv run sap-fo-kb evaluate-fixtures
+```

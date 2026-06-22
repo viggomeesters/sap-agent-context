@@ -32,6 +32,7 @@ not only item-count and knowledge-kind coverage.
 uv run sap-fo-kb validate
 uv run sap-fo-kb build-index
 uv run sap-fo-kb audit-completeness
+uv run sap-fo-kb evaluate-fixtures
 uv run sap-fo-kb query \
   --intent fo.workflow \
   --topic "supplier-invoice workflow" \

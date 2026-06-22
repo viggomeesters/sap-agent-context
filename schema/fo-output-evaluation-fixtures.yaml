@@ -1,0 +1,45 @@
+schema_version: 1
+description: >
+  Deterministic checks for whether a context bundle can support expected
+  Functioneel Ontwerp sections without invoking an external generator.
+fixtures:
+  - id: supplier_invoice_workflow_fo_sections
+    intent: fo.workflow
+    topic: supplier-invoice workflow
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: ready
+    require_source_traceability: true
+    required_kinds: [sap_app, sap_object, field_map, decision_rule, test_pattern]
+    required_item_ids:
+      - sap.app.manage-workflows-supplier-invoices
+      - sap.field-map.supplier-invoice-approval-routing
+      - sap.rule.supplier-invoice-approval-routing
+      - sap.test-pattern.supplier-invoice-workflow
+    required_fields:
+      - SupplierInvoice.GrossAmount
+      - SupplierInvoice.CompanyCode
+  - id: broad_material_master_query_needs_curation
+    intent: fo.field_mapping
+    topic: material master purchasing sales plant
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: needs_curation
+    require_open_questions: true
+    expected_gap_contains: Low topic precision
+  - id: stale_supplier_invoice_sources_need_recertification
+    intent: fo.workflow
+    topic: supplier-invoice workflow
+    sap_product: s4hana_cloud_public
+    limit: 12
+    current_date: 2027-01-01
+    expected_status: needs_curation
+    require_open_questions: true
+    expected_gap_contains: past review_after
+  - id: gated_source_governance_requires_follow_up
+    intent: fo.source_traceability
+    topic: sap for me gated support
+    sap_product: cross_sap
+    limit: 8
+    expected_status: ready
+    required_access_labels: [gated]

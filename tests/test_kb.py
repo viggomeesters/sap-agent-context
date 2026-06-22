@@ -9,6 +9,7 @@ import yaml
 
 from sap_fo_knowledge_base.bundle import build_context_bundle, mccoy_provider_manifest
 from sap_fo_knowledge_base.completeness import audit_completeness
+from sap_fo_knowledge_base.evaluation import evaluate_fo_output_fixtures
 from sap_fo_knowledge_base.index import build_indexes
 from sap_fo_knowledge_base.repository import load_items
 from sap_fo_knowledge_base.validation import has_errors, validate_items
@@ -157,6 +158,17 @@ def test_representative_bundles_have_no_unexpected_gaps() -> None:
         )
         assert bundle["status"] == "ready"
         assert bundle["gaps"] == []
+
+
+def test_fo_output_evaluation_fixtures_pass() -> None:
+    report = evaluate_fo_output_fixtures(
+        load_items(ROOT),
+        root=ROOT,
+        current_date=date(2026, 6, 22),
+    )
+
+    assert report["status"] == "passed", report["results"]
+    assert report["fixtures"] >= 4
 
 
 def test_mccoy_provider_manifest_points_to_bundle_folder(tmp_path: Path) -> None:
