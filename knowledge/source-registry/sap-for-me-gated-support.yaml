@@ -20,6 +20,7 @@ source:
   title: SAP for Me
   url: https://me.sap.com/
   retrieved_at: 2026-06-21
+  specificity: root_pointer
   license_note: Link-only pointer to gated SAP environment; no protected content is stored.
 claims:
   - statement: Gated SAP support sources must be treated as verification pointers and may require manual consultant access.

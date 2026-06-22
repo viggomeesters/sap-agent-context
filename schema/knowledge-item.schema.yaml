@@ -46,6 +46,9 @@ source:
   license_note: Short reuse rule, for example link-only or internal-derived.
   specificity: Optional root_pointer | exact_page | catalog_entry | internal_pattern.
 requires_source_specificity: Optional exact | high when root pointers are not sufficient.
+release_applicability:
+  edition: Optional SAP edition or product family this item is curated for.
+  verification: Optional note describing tenant or release checks before FO use.
 claims:
   - statement: Curated claim, written in our own words.
     evidence:

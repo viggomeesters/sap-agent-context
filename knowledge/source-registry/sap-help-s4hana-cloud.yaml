@@ -20,6 +20,7 @@ source:
   title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
   url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
   retrieved_at: 2026-06-21
+  specificity: root_pointer
   license_note: Link-first pointer; do not mirror SAP documentation text.
 claims:
   - statement: SAP Help Portal is the preferred public pointer for product assistance and release-specific verification.

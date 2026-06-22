@@ -111,6 +111,22 @@ def test_gated_and_access_policy_items_are_loaded() -> None:
     assert any(item.kind == "access_policy" for item in items)
 
 
+def test_curated_items_record_source_specificity_and_release_applicability() -> None:
+    items = load_items(ROOT)
+
+    items_with_source_specificity = [
+        item
+        for item in items
+        if isinstance(item.data.get("source"), dict) and item.data["source"].get("specificity")
+    ]
+    items_with_release_applicability = [
+        item for item in items if isinstance(item.data.get("release_applicability"), dict)
+    ]
+
+    assert len(items_with_source_specificity) >= 3
+    assert len(items_with_release_applicability) >= 3
+
+
 def test_stale_source_is_reported_as_warning() -> None:
     issues = validate_items(load_items(ROOT), current_date=date(2027, 1, 1))
 

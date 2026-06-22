@@ -48,6 +48,11 @@ Items can set `requires_source_specificity: high` and then must not rely on a
 generic SAP Help, SAP for Me or SAP Business Accelerator Hub root URL as their
 only source anchor.
 
+Root pointers are still useful starter evidence when they are labeled as
+`source.specificity: root_pointer`. Scenario items should add
+`release_applicability` when FO correctness can vary by edition, tenant, or
+release.
+
 ## Retrieval Precision
 
 Representative and adversarial queries must prove scenario precision. A bundle

@@ -11,6 +11,9 @@ summary: >
   SAP app pointer for configuring supplier invoice approval workflow variants.
   In an FO this should surface as configuration context, not as generic "SAP
   workflow" prose.
+release_applicability:
+  edition: s4hana_cloud_public
+  verification: Verify workflow scenario availability and condition fields in the target tenant and release.
 freshness:
   valid_from: 2026-06-21
   review_after: 2026-09-21
@@ -20,6 +23,7 @@ source:
   title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
   url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
   retrieved_at: 2026-06-21
+  specificity: root_pointer
   license_note: Link-first pointer; verify exact app availability per release and tenant.
 claims:
   - statement: Supplier invoice approval FOs should identify the workflow configuration app or configuration surface.

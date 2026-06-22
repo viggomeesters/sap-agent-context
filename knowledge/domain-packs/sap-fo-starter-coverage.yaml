@@ -4,6 +4,15 @@ description: >
   Canonical starter coverage for representative SAP FO generation domains.
   Public items are link-first pointers; internal-derived items are curated FO
   implementation patterns and do not mirror SAP documentation.
+ownership:
+  owner: sap-fo-knowledge-base
+  review_strategy: >
+    This pack intentionally groups starter-domain slices until a domain has
+    enough source-specific material to justify a separate file. Keep changes
+    reviewable by editing one domain block at a time.
+  split_policy: >
+    Split a domain out of this pack when it gains exact source anchors,
+    release-specific variants, or more than one scenario per domain.
 freshness_current: &freshness_current
   valid_from: 2026-06-22
   review_after: 2026-12-22
@@ -13,18 +22,21 @@ sap_help_source: &sap_help_source
   title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
   url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
   retrieved_at: 2026-06-22
+  specificity: root_pointer
   license_note: Link-first pointer; verify exact availability per release and tenant.
 sap_api_source: &sap_api_source
   kind: public_url
   title: SAP Business Accelerator Hub
   url: https://api.sap.com/
   retrieved_at: 2026-06-22
+  specificity: root_pointer
   license_note: Link-first pointer; verify exact API package, authentication and release.
 internal_source: &internal_source
   kind: internal_pattern
   title: Internal SAP FO starter coverage pattern
   url: ""
   retrieved_at: 2026-06-22
+  specificity: internal_pattern
   license_note: Internal-derived implementation pattern; safe to store and reuse.
 items:
   - id: sap.policy.source-access-and-tenant-boundaries
@@ -72,6 +84,9 @@ items:
     topics: [procurement, purchase, requisition, approval, workflow]
     used_for: [fo.sap_configuration, fo.process_flow, fo.authorization]
     summary: SAP app pointer for purchase requisition processing and approval-related FO context.
+    release_applicability:
+      edition: s4hana_cloud_public
+      verification: Verify app availability and approval behavior in the target tenant and release.
     freshness: *freshness_current
     source: *sap_help_source
     claims:
@@ -157,6 +172,9 @@ items:
     topics: [sales, order, customer, output]
     used_for: [fo.sap_configuration, fo.process_flow, fo.authorization]
     summary: SAP app pointer for sales order processing FO context.
+    release_applicability:
+      edition: s4hana_cloud_public
+      verification: Verify document type, output and block behavior in the target tenant and release.
     freshness: *freshness_current
     source: *sap_help_source
     claims:
@@ -242,6 +260,9 @@ items:
     topics: [master-data, business-partner, customer, supplier]
     used_for: [fo.sap_configuration, fo.authorization, fo.field_mapping]
     summary: SAP app pointer for business partner master-data FO context.
+    release_applicability:
+      edition: s4hana_cloud_public
+      verification: Verify role and field-control behavior in the target tenant and release.
     freshness: *freshness_current
     source: *sap_help_source
     claims:
