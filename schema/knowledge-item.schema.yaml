@@ -22,6 +22,7 @@ enums:
     - field_map
     - fo_pattern
     - sap_app
+    - sap_field
     - sap_object
     - sap_role
     - scope_item
@@ -60,3 +61,10 @@ relations:
   scope_items: []
   fields: []
   fo_patterns: []
+sap_field:
+  field_definitions:
+    - key: Stable field key, for example SupplierInvoice.GrossAmount.
+      sap_structure: Optional SAP structure name when reviewed.
+      sap_field: Optional SAP technical field name when reviewed.
+      description: Human-readable field meaning written in our own words.
+      usage: How agents should use the field in functional design or mapping output.

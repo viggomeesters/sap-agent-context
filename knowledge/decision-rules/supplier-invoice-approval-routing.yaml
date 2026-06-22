@@ -26,6 +26,7 @@ claims:
 relations:
   objects: [sap.object.supplier-invoice]
   fields:
+    - sap.field-set.supplier-invoice-routing
     - SupplierInvoice.SupplierGroup
     - SupplierInvoice.GrossAmount
     - SupplierInvoice.CompanyCode

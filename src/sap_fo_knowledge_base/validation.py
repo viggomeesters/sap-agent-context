@@ -242,6 +242,12 @@ def _validate_kind_detail(issues: list[ValidationIssue], item: KnowledgeItem) ->
         fields = relations.get("fields") if isinstance(relations, dict) else []
         if not isinstance(field_map, list) and not fields:
             issues.append(_issue(str(item.path), item.item_id, "field_map needs fields"))
+    if item.kind == "sap_field":
+        field_definitions = item.data.get("field_definitions")
+        if not isinstance(field_definitions, list) or not field_definitions:
+            issues.append(
+                _issue(str(item.path), item.item_id, "sap_field needs field_definitions")
+            )
     if item.kind == "decision_rule":
         rules = item.data.get("rules")
         if not isinstance(rules, list) or not rules:

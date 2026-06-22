@@ -1,0 +1,48 @@
+schema_version: 1
+description: Canonical SAP Agent Context folder and naming layout.
+canonical_folders:
+  source-registry:
+    path: knowledge/source-registry
+    item_kinds: [external_reference]
+    id_prefixes: [sap.ref]
+  fields:
+    path: knowledge/fields
+    item_kinds: [sap_field]
+    id_prefixes: [sap.field, sap.field-set]
+  objects:
+    path: knowledge/objects
+    legacy_aliases: [knowledge/sap-objects]
+    item_kinds: [sap_object]
+    id_prefixes: [sap.object]
+  apps:
+    path: knowledge/apps
+    legacy_aliases: [knowledge/sap-apps]
+    item_kinds: [sap_app]
+    id_prefixes: [sap.app]
+  workflows:
+    path: knowledge/workflows
+    legacy_aliases: [knowledge/decision-rules]
+    item_kinds: [decision_rule]
+    id_prefixes: [sap.rule]
+  roles:
+    path: knowledge/roles
+    item_kinds: [sap_role]
+    id_prefixes: [sap.role]
+  scope-items:
+    path: knowledge/scope-items
+    item_kinds: [scope_item]
+    id_prefixes: [sap.scope]
+  field-maps:
+    path: knowledge/field-maps
+    item_kinds: [field_map]
+    id_prefixes: [sap.field-map]
+  functional-design-patterns:
+    path: knowledge/fo-patterns
+    item_kinds: [fo_pattern, test_pattern, access_policy]
+    id_prefixes: [sap.fo-pattern, sap.test-pattern, sap.policy]
+generated_outputs:
+  path: build
+  policy: Generated indexes, bundles and provider manifests are rebuildable and not canonical source.
+import_policy:
+  field_atlas_sources: candidate-only-until-reviewed
+  privacy_gate: Do not import customer-specific, copied SAP, private screenshot or proprietary implementation material.

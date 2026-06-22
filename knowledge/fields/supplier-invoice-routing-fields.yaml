@@ -1,0 +1,52 @@
+id: sap.field-set.supplier-invoice-routing
+title: Supplier invoice workflow routing fields
+kind: sap_field
+status: active
+access: internal_derived
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [supplier-invoice, workflow, approval, field-atlas, field-mapping]
+used_for: [fo.field_mapping, fo.business_rules, fo.test_data, agent.context]
+summary: >
+  Field atlas item for the supplier invoice fields used by approval routing
+  examples. These fields are generic implementation context and must be
+  verified against the target tenant before configuration or development.
+freshness:
+  valid_from: 2026-06-22
+  review_after: 2026-12-22
+  retrieved_at: 2026-06-22
+source:
+  kind: internal_pattern
+  title: Internal reviewed field atlas seed for supplier invoice routing
+  url: ""
+  retrieved_at: 2026-06-22
+  specificity: internal_pattern
+  license_note: Internal-derived field context; no customer data or copied SAP documentation.
+claims:
+  - statement: Approval routing context should carry field identity, field meaning and tenant verification notes together.
+    evidence: [sap.field-map.supplier-invoice-approval-routing]
+relations:
+  objects: [sap.object.supplier-invoice]
+  field_maps: [sap.field-map.supplier-invoice-approval-routing]
+  fo_patterns: [sap.fo-pattern.workflow-approval]
+field_definitions:
+  - key: SupplierInvoice.SupplierGroup
+    sap_structure: ""
+    sap_field: ""
+    description: Supplier category or grouping value used by the approval decision.
+    usage: Use as a business-rule condition and verify the real source field in the tenant.
+  - key: SupplierInvoice.GrossAmount
+    sap_structure: ""
+    sap_field: ""
+    description: Gross invoice amount used for approval threshold logic.
+    usage: Use in threshold rules and test data; verify currency and amount handling per release.
+  - key: SupplierInvoice.CompanyCode
+    sap_structure: ""
+    sap_field: ""
+    description: Company code boundary for workflow variant selection.
+    usage: Use to explain organizational routing and company-code-specific configuration.
+  - key: WorkflowDecision.RejectionReason
+    sap_structure: ""
+    sap_field: ""
+    description: Reason captured when an approver rejects an invoice.
+    usage: Use in negative tests and exception handling sections.

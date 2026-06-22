@@ -25,6 +25,7 @@ claims:
     evidence: [sap.field-map.supplier-invoice-approval-routing]
 relations:
   fields:
+    - sap.field-set.supplier-invoice-routing
     - SupplierInvoice.SupplierGroup
     - SupplierInvoice.GrossAmount
     - SupplierInvoice.CompanyCode

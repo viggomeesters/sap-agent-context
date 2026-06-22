@@ -15,6 +15,8 @@ sources through access-labelled pointers.
 ## Highlights
 
 - Canonical YAML knowledge items under `knowledge/**/*.yaml`.
+- Canonical context layout documented in
+  [Context Structure](docs/context-structure.md).
 - Rebuildable SQLite, JSONL, and vector-ready indexes under `build/`.
 - Context bundle generation through the `sap-agent-context` CLI.
 - Completeness, evidence integrity, retrieval precision, and FO-output

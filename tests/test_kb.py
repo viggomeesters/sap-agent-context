@@ -64,11 +64,22 @@ def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:
     ids = {item["id"] for item in bundle["items"]}
     assert bundle["status"] == "ready"
     assert "sap.app.manage-workflows-supplier-invoices" in ids
+    assert "sap.field-set.supplier-invoice-routing" in ids
     assert "sap.test-pattern.supplier-invoice-workflow" in ids
     assert bundle["citations"]
     assert bundle["quality_signals"]["gap_count"] == 0
+    assert "sap_field" in bundle["quality_signals"]["item_kind_counts"]
     assert "sap_app" in bundle["quality_signals"]["item_kind_counts"]
     assert bundle["mccoy_integration"]["register_as"] == "local_folder"
+
+
+def test_context_layout_documents_field_atlas_merge_shape() -> None:
+    layout = yaml.safe_load((ROOT / "schema/context-layout.yaml").read_text())
+
+    assert layout["canonical_folders"]["fields"]["path"] == "knowledge/fields"
+    assert "sap_field" in layout["canonical_folders"]["fields"]["item_kinds"]
+    assert "knowledge/sap-objects" in layout["canonical_folders"]["objects"]["legacy_aliases"]
+    assert layout["import_policy"]["field_atlas_sources"] == "candidate-only-until-reviewed"
 
 
 def test_completeness_audit_reports_no_critical_or_important_gaps() -> None:

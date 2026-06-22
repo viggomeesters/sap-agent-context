@@ -27,20 +27,25 @@ claims:
 relations:
   objects: [sap.object.supplier-invoice]
   fields:
+    - sap.field-set.supplier-invoice-routing
     - SupplierInvoice.SupplierGroup
     - SupplierInvoice.GrossAmount
     - SupplierInvoice.CompanyCode
     - WorkflowDecision.RejectionReason
 field_map:
   - source_field: SupplierInvoice.SupplierGroup
+    field_ref: sap.field-set.supplier-invoice-routing
     meaning: Supplier category used for workflow routing.
     owner: AP key user
   - source_field: SupplierInvoice.GrossAmount
+    field_ref: sap.field-set.supplier-invoice-routing
     meaning: Gross invoice amount used for approval threshold logic.
     owner: AP process owner
   - source_field: SupplierInvoice.CompanyCode
+    field_ref: sap.field-set.supplier-invoice-routing
     meaning: Company code boundary for workflow variant selection.
     owner: Finance master data owner
   - source_field: WorkflowDecision.RejectionReason
+    field_ref: sap.field-set.supplier-invoice-routing
     meaning: Reason captured when approver rejects the invoice.
     owner: Workflow approver

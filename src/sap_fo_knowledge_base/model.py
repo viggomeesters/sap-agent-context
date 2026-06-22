@@ -15,6 +15,7 @@ ALLOWED_KINDS = {
     "field_map",
     "fo_pattern",
     "sap_app",
+    "sap_field",
     "sap_object",
     "sap_role",
     "scope_item",
