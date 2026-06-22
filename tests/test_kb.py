@@ -82,7 +82,10 @@ def test_context_layout_documents_field_atlas_merge_shape() -> None:
     assert layout["canonical_folders"]["fields"]["path"] == "knowledge/fields"
     assert "sap_field" in layout["canonical_folders"]["fields"]["item_kinds"]
     assert "knowledge/sap-objects" in layout["canonical_folders"]["objects"]["legacy_aliases"]
-    assert layout["import_policy"]["field_atlas_sources"] == "candidate-only-until-reviewed"
+    assert (
+        layout["import_policy"]["field_atlas_sources"]
+        == "review-pending-until-source-approved"
+    )
 
 
 def test_completeness_audit_reports_no_critical_or_important_gaps() -> None:

@@ -17,7 +17,7 @@ reviewers. It should contain source-backed, compact context artifacts that help
 agents generate or review functional design, field mapping, workflow, role,
 scope item, and implementation-support output.
 
-Split into a second private repository only when a candidate source contains
+Split into a second private repository only when a review-pending source contains
 customer data, private screenshots, proprietary implementation evidence, copied
 SAP content, or material that cannot be made public with clear provenance.
 
@@ -40,8 +40,8 @@ SAP content, or material that cannot be made public with clear provenance.
 | --- | --- | --- |
 | `/Users/viggomeesters/Dev/sap-fo-knowledge-base` | Canonical current repository | Starting point for `sap-agent-context`. |
 | `/Users/viggomeesters/Dev/sap-field-atlas` | Not found locally during this audit | Do not invent this as a source. If it appears later, audit it before import. |
-| `/Users/viggomeesters/Dev/alteryx-flow-agent-toolkit/1-dictionary` | Candidate dictionary source | Contains dictionary docs plus `data-migration-dictionary.xlsx` and `object-registry.xlsx`; review before import. |
-| `/Users/viggomeesters/Dev/alteryx-template-flows/1-dictionary` | Candidate dictionary source | Contains dictionary docs plus a smaller `data-migration-dictionary.xlsx`; review before import. |
+| `/Users/viggomeesters/Dev/alteryx-flow-agent-toolkit/1-dictionary` | Review-pending dictionary source | Contains dictionary docs plus `data-migration-dictionary.xlsx` and `object-registry.xlsx`; review before import. |
+| `/Users/viggomeesters/Dev/alteryx-template-flows/1-dictionary` | Review-pending dictionary source | Contains dictionary docs plus a smaller `data-migration-dictionary.xlsx`; review before import. |
 
 Observed workbook metadata:
 
@@ -52,7 +52,7 @@ Observed workbook metadata:
 - `alteryx-template-flows/1-dictionary/data-migration-dictionary.xlsx`: one
   sheet, 5,441 rows, 10 columns.
 
-These workbooks are not imported by this task. They are candidate sources only.
+These workbooks are not imported by this task. They are review-pending sources only.
 
 ## Canonical In-Scope Domains
 
@@ -107,7 +107,7 @@ Stop the merge and keep separate public/private repositories if:
 2. Define the canonical folder and schema structure for fields, objects,
    workflows, roles, scope items, field maps, source registry, and functional
    design patterns.
-3. Import or map candidate field/object material only after provenance and
+3. Import or map review-pending field/object material only after provenance and
    privacy review.
 4. Update agent and McCoy consumer contracts to use `sap-agent-context` as the
    public provenance and local clone target.

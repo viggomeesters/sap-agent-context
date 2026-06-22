@@ -25,7 +25,7 @@ priority is preserving retrieval, validation, and fixture behavior.
 
 ## Field Atlas Policy
 
-Field atlas material may be imported only after source review. Candidate Excel
+Field atlas material may be imported only after source review. Review-pending Excel
 sources in sibling repositories are not canonical until each row or derived item
 has:
 
