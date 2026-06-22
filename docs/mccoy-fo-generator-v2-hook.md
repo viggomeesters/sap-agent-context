@@ -1,7 +1,8 @@
 # McCoy FO Generator v2 Hook Contract
 
-Deze MTP integreert met `mccoy-fo-generator-v2` via bestaande source-provider
-mechaniek. De generator hoeft hiervoor nog niet aangepast te worden.
+This document shows `mccoy-fo-generator-v2` as one example consumer for SAP
+Agent Context. The repository is a general local SAP context provider for AI
+agents; McCoy integration is not the only supported use case.
 
 ## Producer Contract
 
@@ -25,6 +26,8 @@ uv run sap-agent-context mccoy-provider \
 
 The context bundle has:
 
+- `producer.name: sap-agent-context`;
+- `producer.contract: sap-agent-context-bundle`;
 - `bundle_kind: sap_fo_context_bundle`
 - selected `items` with claims, relations, freshness and access labels;
 - `citations` with public/gated/internal source markers;
@@ -53,8 +56,8 @@ and draft source maps.
 ## Next Integration Step
 
 The next non-MTP step is to teach `mccoy-fo-generator-v2` to parse
-`sap_fo_context_bundle` JSON directly and inject selected KB items into the typed
-planner, instead of treating the bundle only as a local source folder.
+`sap-agent-context-bundle` JSON directly and inject selected context items into
+the typed planner, instead of treating the bundle only as a local source folder.
 
-See `docs/typed-mccoy-consumer-contract.md` and
+See `docs/agent-consumer-contract.md`, `docs/typed-mccoy-consumer-contract.md`, and
 `schema/sap-fo-context-bundle.schema.yaml` for the KB-side typed contract.

@@ -1,15 +1,17 @@
 # Typed McCoy Consumer Contract
 
-This repository publishes `sap_fo_context_bundle` JSON. McCoy can keep using the
-bundle directory as a local-folder source provider, but the preferred next step
-is typed parsing of the bundle payload.
+SAP Agent Context publishes `sap-agent-context-bundle` JSON with backward
+compatible `bundle_kind: sap_fo_context_bundle`. McCoy can keep using the bundle
+directory as a local-folder source provider, but the preferred next step is typed
+parsing of the bundle payload.
 
 ## Versioning
 
-Bundles include `schema_version: 1` and `bundle_kind:
-sap_fo_context_bundle`. Consumers should ignore unknown keys, reject unsupported
-schema versions, and keep backward compatibility for the current local-folder
-registration path.
+Bundles include `schema_version: 1`, `producer.name: sap-agent-context`,
+`producer.contract: sap-agent-context-bundle`, and backward-compatible
+`bundle_kind: sap_fo_context_bundle`. Consumers should ignore unknown keys,
+reject unsupported schema versions, and keep backward compatibility for the
+current local-folder registration path.
 
 The human-readable schema is
 `schema/sap-fo-context-bundle.schema.yaml`.
@@ -40,6 +42,8 @@ McCoy should not treat item presence as enough. It should also inspect
 `docs/mccoy-fo-generator-v2-hook.md` remains valid. Registering the generated
 bundle folder as a local-folder provider is still supported while typed parsing
 is implemented downstream.
+
+The broader non-McCoy contract lives in `docs/agent-consumer-contract.md`.
 
 ## Out Of Scope
 

@@ -78,6 +78,27 @@ uv run sap-agent-context mccoy-provider \
   --output build/context-bundles/mccoy-provider.json
 ```
 
+## Agent Setup
+
+For local AI workflows, each colleague can clone the repository and register the
+generated bundle directory with their agent or source-provider layer:
+
+```bash
+git clone <repo-url> sap-agent-context
+cd sap-agent-context
+uv sync
+uv run sap-agent-context query \
+  --intent fo.workflow \
+  --topic "supplier-invoice workflow" \
+  --sap-product s4hana_cloud_public \
+  --limit 12 \
+  --output build/context-bundles/supplier-invoice-workflow.json
+```
+
+The generated bundle includes `producer.name: sap-agent-context` and
+`producer.contract: sap-agent-context-bundle`. The legacy
+`bundle_kind: sap_fo_context_bundle` remains for backward-compatible consumers.
+
 Representative no-gap queries:
 
 ```bash
@@ -134,8 +155,9 @@ uv run fo-gen-v2 register-source <workspace> <project-id> \
 ```
 
 Typed consumers should use the
-[Typed McCoy Consumer Contract](docs/typed-mccoy-consumer-contract.md). The
-local-folder registration path remains backward compatible.
+[Agent Consumer Contract](docs/agent-consumer-contract.md). McCoy-specific
+local-folder registration remains an example integration path in
+[McCoy FO Generator v2 Hook Contract](docs/mccoy-fo-generator-v2-hook.md).
 
 ## Privacy And Security
 

@@ -50,6 +50,11 @@ def build_context_bundle(
     return {
         "schema_version": 1,
         "bundle_kind": "sap_fo_context_bundle",
+        "producer": {
+            "name": "sap-agent-context",
+            "contract": "sap-agent-context-bundle",
+            "compatibility_bundle_kind": "sap_fo_context_bundle",
+        },
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "query": {
             "intent": intent,

@@ -63,6 +63,9 @@ def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:
 
     ids = {item["id"] for item in bundle["items"]}
     assert bundle["status"] == "ready"
+    assert bundle["producer"]["name"] == "sap-agent-context"
+    assert bundle["producer"]["contract"] == "sap-agent-context-bundle"
+    assert bundle["bundle_kind"] == "sap_fo_context_bundle"
     assert "sap.app.manage-workflows-supplier-invoices" in ids
     assert "sap.field-set.supplier-invoice-routing" in ids
     assert "sap.test-pattern.supplier-invoice-workflow" in ids
@@ -187,7 +190,9 @@ def test_fo_output_evaluation_fixtures_pass() -> None:
 def test_context_bundle_contract_schema_is_documented() -> None:
     schema = yaml.safe_load((ROOT / "schema/sap-fo-context-bundle.schema.yaml").read_text())
 
+    assert schema["public_contract_name"] == "sap-agent-context-bundle"
     assert schema["bundle_kind"] == "sap_fo_context_bundle"
+    assert "producer" in schema["required_top_level"]
     assert "quality_signals" in schema["required_top_level"]
     assert "citations" in schema["required_top_level"]
 
