@@ -1,4 +1,4 @@
-"""SAP FO Knowledge Base package."""
+"""SAP Agent Context package."""
 
 __all__ = ["__version__"]
 

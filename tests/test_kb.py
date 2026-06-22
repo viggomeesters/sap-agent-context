@@ -186,8 +186,12 @@ def test_mccoy_provider_manifest_points_to_bundle_folder(tmp_path: Path) -> None
     bundle_path.parent.mkdir()
     bundle_path.write_text("{}", encoding="utf-8")
 
-    manifest = mccoy_provider_manifest(bundle_path, title="SAP FO KB bundle - supplier-invoice")
+    manifest = mccoy_provider_manifest(
+        bundle_path, title="SAP Agent Context bundle - supplier-invoice"
+    )
 
     assert manifest["type"] == "local-folder"
     assert manifest["path"] == str(bundle_path.parent)
+    assert manifest["provenance"] == "sap-agent-context"
     assert "fo-gen-v2 register-source" in manifest["mccoy_command"]
+    assert "sap-agent-context" in manifest["mccoy_command"]

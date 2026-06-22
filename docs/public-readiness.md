@@ -1,6 +1,6 @@
 # Public Readiness
 
-This repository is intended to be published as a professional public GitHub
+SAP Agent Context is intended to be published as a professional public GitHub
 project after a remote is connected.
 
 ## Current Status
@@ -41,20 +41,21 @@ Before publishing, run a final manual review for:
 
    ```bash
    gh repo edit <OWNER/REPO> \
-     --description "Curated, link-first SAP Functional Design knowledge base for source-backed FO context bundles." \
+     --description "Source-backed SAP context bundles for AI agents, functional design, and field mapping." \
      --add-topic sap \
      --add-topic s4hana \
+     --add-topic ai-agents \
      --add-topic functional-design \
-     --add-topic knowledge-base \
+     --add-topic field-mapping \
      --add-topic python
    ```
 
 4. Run the full validation gate:
 
    ```bash
-   uv run sap-fo-kb validate
-   uv run sap-fo-kb audit-completeness
-   uv run sap-fo-kb evaluate-fixtures
+   uv run sap-agent-context validate
+   uv run sap-agent-context audit-completeness
+   uv run sap-agent-context evaluate-fixtures
    uv run pytest -q
    uv run ruff check .
    ```

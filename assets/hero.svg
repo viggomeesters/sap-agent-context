@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
-  <title id="title">SAP FO Knowledge Base</title>
-  <desc id="desc">A source-backed SAP Functional Design knowledge base for retrieval and McCoy context bundles.</desc>
+  <title id="title">SAP Agent Context</title>
+  <desc id="desc">Source-backed SAP context bundles for AI agents, functional design, and field mapping.</desc>
   <rect width="1280" height="640" fill="#102a43"/>
   <rect x="72" y="72" width="1136" height="496" rx="20" fill="#f8fafc"/>
   <rect x="112" y="122" width="318" height="396" rx="10" fill="#d9e2ec"/>
@@ -16,6 +16,6 @@
   <rect x="500" y="420" width="190" height="58" rx="8" fill="#0f609b"/>
   <rect x="720" y="420" width="190" height="58" rx="8" fill="#38bec9"/>
   <rect x="940" y="420" width="190" height="58" rx="8" fill="#f0b429"/>
-  <text x="500" y="140" fill="#102a43" font-family="Arial, sans-serif" font-size="54" font-weight="700">SAP FO Knowledge Base</text>
-  <text x="500" y="532" fill="#486581" font-family="Arial, sans-serif" font-size="28">Curated sources, typed facts, and deterministic context bundles.</text>
+  <text x="500" y="140" fill="#102a43" font-family="Arial, sans-serif" font-size="54" font-weight="700">SAP Agent Context</text>
+  <text x="500" y="532" fill="#486581" font-family="Arial, sans-serif" font-size="28">Source-backed SAP context bundles for AI workflows.</text>
 </svg>

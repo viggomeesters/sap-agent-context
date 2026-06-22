@@ -26,7 +26,7 @@ Covered dimensions:
 Audit command:
 
 ```bash
-uv run sap-fo-kb audit-completeness
+uv run sap-agent-context audit-completeness
 ```
 
 The command must report `status: passed` with zero critical and zero important

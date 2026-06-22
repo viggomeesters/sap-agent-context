@@ -8,18 +8,18 @@ mechaniek. De generator hoeft hiervoor nog niet aangepast te worden.
 Run in deze repo:
 
 ```bash
-uv run sap-fo-kb validate
-uv run sap-fo-kb build-index
-uv run sap-fo-kb audit-completeness
-uv run sap-fo-kb query \
+uv run sap-agent-context validate
+uv run sap-agent-context build-index
+uv run sap-agent-context audit-completeness
+uv run sap-agent-context query \
   --intent fo.workflow \
   --topic "supplier-invoice workflow" \
   --sap-product s4hana_cloud_public \
   --limit 12 \
   --output build/context-bundles/supplier-invoice-workflow.json
-uv run sap-fo-kb mccoy-provider \
+uv run sap-agent-context mccoy-provider \
   build/context-bundles/supplier-invoice-workflow.json \
-  --title "SAP FO KB bundle - supplier-invoice workflow" \
+  --title "SAP Agent Context bundle - supplier-invoice workflow" \
   --output build/context-bundles/mccoy-provider.json
 ```
 
@@ -40,9 +40,9 @@ one bundle or all representative bundles:
 cd /Users/viggomeesters/Dev/mccoy-fo-generator-v2
 uv run fo-gen-v2 register-source <workspace> <project-id> \
   --type local-folder \
-  --title "SAP FO KB bundle - supplier-invoice workflow" \
-  --path "/Users/viggomeesters/Dev/sap-fo-knowledge-base/build/context-bundles" \
-  --provenance sap-fo-knowledge-base
+  --title "SAP Agent Context bundle - supplier-invoice workflow" \
+  --path "/Users/viggomeesters/Dev/sap-agent-context/build/context-bundles" \
+  --provenance sap-agent-context
 ```
 
 Current `mccoy-fo-generator-v2` stores this in

@@ -1,4 +1,4 @@
-"""Build rebuildable local indexes for the knowledge base."""
+"""Build rebuildable local indexes for SAP Agent Context."""
 
 from __future__ import annotations
 

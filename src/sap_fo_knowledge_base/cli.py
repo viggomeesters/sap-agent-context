@@ -1,4 +1,4 @@
-"""Command line interface for the SAP FO knowledge base."""
+"""Command line interface for SAP Agent Context."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ DEFAULT_VECTOR_JSONL = "build/vector-corpus.jsonl"
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="sap-fo-kb")
+    parser = argparse.ArgumentParser(prog="sap-agent-context")
     parser.add_argument("--root", type=Path, default=Path("."))
     subparsers = parser.add_subparsers(dest="command", required=True)
 

@@ -103,7 +103,7 @@ Stop the merge and keep separate public/private repositories if:
 
 ## Next Tasks
 
-1. Rebrand public identity from SAP FO Knowledge Base to SAP Agent Context.
+1. Rebrand public identity to SAP Agent Context.
 2. Define the canonical folder and schema structure for fields, objects,
    workflows, roles, scope items, field maps, source registry, and functional
    design patterns.

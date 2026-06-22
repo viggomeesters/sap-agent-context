@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
-  <title id="title">SAP FO Knowledge Base social preview</title>
-  <desc id="desc">Social preview for a public SAP Functional Design knowledge base repository.</desc>
+  <title id="title">SAP Agent Context social preview</title>
+  <desc id="desc">Social preview for a public SAP context bundle repository for AI agents.</desc>
   <rect width="1200" height="630" fill="#102a43"/>
   <rect x="72" y="82" width="1056" height="466" rx="18" fill="#f8fafc"/>
   <rect x="118" y="132" width="248" height="314" rx="10" fill="#d9e2ec"/>
@@ -9,9 +9,9 @@
   <rect x="154" y="266" width="166" height="16" rx="4" fill="#829ab1"/>
   <rect x="154" y="310" width="128" height="16" rx="4" fill="#829ab1"/>
   <rect x="154" y="370" width="176" height="44" rx="7" fill="#bcccdc"/>
-  <text x="426" y="232" fill="#102a43" font-family="Arial, sans-serif" font-size="64" font-weight="700">SAP FO</text>
-  <text x="426" y="306" fill="#102a43" font-family="Arial, sans-serif" font-size="64" font-weight="700">Knowledge Base</text>
-  <text x="426" y="374" fill="#486581" font-family="Arial, sans-serif" font-size="30">Source-backed Functional Design context bundles</text>
+  <text x="426" y="232" fill="#102a43" font-family="Arial, sans-serif" font-size="64" font-weight="700">SAP Agent</text>
+  <text x="426" y="306" fill="#102a43" font-family="Arial, sans-serif" font-size="64" font-weight="700">Context</text>
+  <text x="426" y="374" fill="#486581" font-family="Arial, sans-serif" font-size="30">Source-backed context bundles for AI workflows</text>
   <rect x="426" y="426" width="170" height="52" rx="8" fill="#0f609b"/>
   <rect x="622" y="426" width="170" height="52" rx="8" fill="#38bec9"/>
   <rect x="818" y="426" width="170" height="52" rx="8" fill="#f0b429"/>

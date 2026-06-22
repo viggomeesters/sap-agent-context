@@ -18,7 +18,7 @@ freshness:
   retrieved_at: 2026-06-21
 source:
   kind: internal_pattern
-  title: SAP FO KB MTP governance rule
+  title: SAP Agent Context MTP governance rule
   url: ""
   retrieved_at: 2026-06-21
   license_note: Internal-derived rule; safe to store and reuse.

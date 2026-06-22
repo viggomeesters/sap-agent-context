@@ -1,4 +1,4 @@
-"""Completeness audit for the SAP FO knowledge base."""
+"""Completeness audit for SAP Agent Context."""
 
 from __future__ import annotations
 

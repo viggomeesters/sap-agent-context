@@ -1,6 +1,6 @@
 # Gap Register
 
-Current audit source: `uv run sap-fo-kb audit-completeness`.
+Current audit source: `uv run sap-agent-context audit-completeness`.
 
 ## Closed Critical/Important Gaps
 
@@ -8,7 +8,7 @@ Current audit source: `uv run sap-fo-kb audit-completeness`.
 |---|---:|---|
 | No explicit completeness definition | critical | `schema/completeness-matrix.yaml` and this register define bounded scope and audit evidence. |
 | Only Supplier Invoice Workflow coverage | critical | `knowledge/domain-packs/sap-fo-starter-coverage.yaml` extends coverage across the representative domains. |
-| No machine-verifiable completeness gate | critical | `sap-fo-kb audit-completeness` fails on missing required domains, kinds, access classes or representative bundles. |
+| No machine-verifiable completeness gate | critical | `sap-agent-context audit-completeness` fails on missing required domains, kinds, access classes or representative bundles. |
 | No access-policy knowledge kind | important | `sap.policy.source-access-and-tenant-boundaries` covers public/gated/internal/customer-specific boundaries. |
 | Representative bundle coverage unproven | important | Tests and audit representative queries cover workflow, procurement, master data, sales/output and integration/authorization. |
 | Bundles with gaps could still report ready | critical | `build_context_bundle` now returns `needs_curation` whenever bundle gaps exist; adversarial tests cover generic-source-only and stale bundles. |

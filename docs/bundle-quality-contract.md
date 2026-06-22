@@ -71,5 +71,5 @@ too-broad queries.
 Run it with:
 
 ```bash
-uv run sap-fo-kb evaluate-fixtures
+uv run sap-agent-context evaluate-fixtures
 ```

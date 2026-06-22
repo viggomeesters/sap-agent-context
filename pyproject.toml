@@ -1,7 +1,7 @@
 [project]
 name = "sap-fo-knowledge-base"
 version = "0.1.0"
-description = "Minimal technical product for a curated SAP FO knowledge base."
+description = "Source-backed SAP context bundles for AI agents, functional design, and field mapping."
 readme = "README.md"
 authors = [
     { name = "viggo", email = "229558850+viggomeesters@users.noreply.github.com" }
@@ -12,6 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
+sap-agent-context = "sap_fo_knowledge_base.cli:main"
 sap-fo-kb = "sap_fo_knowledge_base.cli:main"
 sap-fo-knowledge-base = "sap_fo_knowledge_base.cli:main"
 

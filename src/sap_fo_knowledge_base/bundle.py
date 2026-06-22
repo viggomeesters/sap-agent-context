@@ -64,10 +64,11 @@ def build_context_bundle(
         "quality_signals": quality_signals,
         "mccoy_integration": {
             "provider_type": "local-folder",
-            "recommended_title": f"SAP FO KB bundle - {topic}",
+            "recommended_title": f"SAP Agent Context bundle - {topic}",
             "register_as": "local_folder",
             "reason": (
-                "Curated SAP FO knowledge bundle with source pointers, freshness and access labels."
+                "Curated SAP agent context bundle with source pointers, freshness "
+                "and access labels."
             ),
         },
     }
@@ -274,17 +275,19 @@ def _bundle_gaps(bundle_items: list[dict[str, Any]], *, intent: str, topic: str)
 def mccoy_provider_manifest(bundle_path: Path, *, title: str | None = None) -> dict[str, Any]:
     return {
         "type": "local-folder",
-        "title": title or "SAP FO Knowledge Base context bundle",
+        "title": title or "SAP Agent Context bundle",
         "path": str(bundle_path.parent),
         "url": "",
-        "provenance": "sap-fo-knowledge-base",
+        "provenance": "sap-agent-context",
         "retrieved_at": datetime.now(timezone.utc).isoformat(),
-        "reason": "Register this generated KB bundle directory as a local FO source provider.",
+        "reason": (
+            "Register this generated context bundle directory as a local SAP source provider."
+        ),
         "bundle_file": str(bundle_path),
         "mccoy_command": (
             "uv run fo-gen-v2 register-source <workspace> <project-id> "
-            f"--type local-folder --title {quote(title or 'SAP FO Knowledge Base context bundle')} "
-            f"--path {quote(str(bundle_path.parent))} --provenance sap-fo-knowledge-base"
+            f"--type local-folder --title {quote(title or 'SAP Agent Context bundle')} "
+            f"--path {quote(str(bundle_path.parent))} --provenance sap-agent-context"
         ),
     }
 

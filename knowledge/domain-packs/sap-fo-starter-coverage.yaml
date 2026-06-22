@@ -5,7 +5,7 @@ description: >
   Public items are link-first pointers; internal-derived items are curated FO
   implementation patterns and do not mirror SAP documentation.
 ownership:
-  owner: sap-fo-knowledge-base
+  owner: sap-agent-context
   review_strategy: >
     This pack intentionally groups starter-domain slices until a domain has
     enough source-specific material to justify a separate file. Keep changes

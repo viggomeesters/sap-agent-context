@@ -13,8 +13,8 @@ jobs:
         with:
           python-version: "3.11"
       - run: uv sync --locked
-      - run: uv run sap-fo-kb validate
-      - run: uv run sap-fo-kb audit-completeness
-      - run: uv run sap-fo-kb evaluate-fixtures
+      - run: uv run sap-agent-context validate
+      - run: uv run sap-agent-context audit-completeness
+      - run: uv run sap-agent-context evaluate-fixtures
       - run: uv run pytest -q
       - run: uv run ruff check .
