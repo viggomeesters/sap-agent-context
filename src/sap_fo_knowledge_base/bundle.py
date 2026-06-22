@@ -46,6 +46,7 @@ def build_context_bundle(
     ]
     gaps = _bundle_gaps(bundle_items, intent=intent, topic=topic)
     status = "ready" if bundle_items and not gaps else "needs_curation"
+    quality_signals = _quality_signals(bundle_items, gaps=gaps)
     return {
         "schema_version": 1,
         "bundle_kind": "sap_fo_context_bundle",
@@ -60,6 +61,7 @@ def build_context_bundle(
         "items": bundle_items,
         "citations": _citations(bundle_items),
         "gaps": gaps,
+        "quality_signals": quality_signals,
         "mccoy_integration": {
             "provider_type": "local-folder",
             "recommended_title": f"SAP FO KB bundle - {topic}",
@@ -212,6 +214,33 @@ def _citations(bundle_items: list[dict[str, Any]]) -> list[dict[str, str]]:
             }
         )
     return citations
+
+
+def _quality_signals(bundle_items: list[dict[str, Any]], *, gaps: list[str]) -> dict[str, Any]:
+    kind_counts: dict[str, int] = {}
+    access_labels = set()
+    source_url_count = 0
+    stale_count = 0
+    for item in bundle_items:
+        kind = str(item.get("kind") or "")
+        kind_counts[kind] = kind_counts.get(kind, 0) + 1
+        access = str(item.get("access") or "")
+        if access:
+            access_labels.add(access)
+        if item.get("stale"):
+            stale_count += 1
+        raw_source = item.get("source")
+        source: dict[str, Any] = raw_source if isinstance(raw_source, dict) else {}
+        if str(source.get("url") or "").strip():
+            source_url_count += 1
+    return {
+        "gap_count": len(gaps),
+        "stale_count": stale_count,
+        "gated_item_count": sum(1 for item in bundle_items if item.get("access") == "gated"),
+        "source_url_count": source_url_count,
+        "access_labels": sorted(access_labels),
+        "item_kind_counts": dict(sorted(kind_counts.items())),
+    }
 
 
 def _bundle_gaps(bundle_items: list[dict[str, Any]], *, intent: str, topic: str) -> list[str]:

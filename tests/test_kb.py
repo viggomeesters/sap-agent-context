@@ -66,6 +66,8 @@ def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:
     assert "sap.app.manage-workflows-supplier-invoices" in ids
     assert "sap.test-pattern.supplier-invoice-workflow" in ids
     assert bundle["citations"]
+    assert bundle["quality_signals"]["gap_count"] == 0
+    assert "sap_app" in bundle["quality_signals"]["item_kind_counts"]
     assert bundle["mccoy_integration"]["register_as"] == "local_folder"
 
 
@@ -169,6 +171,14 @@ def test_fo_output_evaluation_fixtures_pass() -> None:
 
     assert report["status"] == "passed", report["results"]
     assert report["fixtures"] >= 4
+
+
+def test_context_bundle_contract_schema_is_documented() -> None:
+    schema = yaml.safe_load((ROOT / "schema/sap-fo-context-bundle.schema.yaml").read_text())
+
+    assert schema["bundle_kind"] == "sap_fo_context_bundle"
+    assert "quality_signals" in schema["required_top_level"]
+    assert "citations" in schema["required_top_level"]
 
 
 def test_mccoy_provider_manifest_points_to_bundle_folder(tmp_path: Path) -> None:

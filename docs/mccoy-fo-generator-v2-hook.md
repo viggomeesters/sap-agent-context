@@ -55,3 +55,6 @@ and draft source maps.
 The next non-MTP step is to teach `mccoy-fo-generator-v2` to parse
 `sap_fo_context_bundle` JSON directly and inject selected KB items into the typed
 planner, instead of treating the bundle only as a local source folder.
+
+See `docs/typed-mccoy-consumer-contract.md` and
+`schema/sap-fo-context-bundle.schema.yaml` for the KB-side typed contract.

@@ -74,6 +74,9 @@ uv run fo-gen-v2 register-source <workspace> <project-id> \
 
 De bundle zelf bevat `mccoy_integration` metadata en `citations`, zodat de FO
 pipeline de KB als traceerbare bron kan meenemen in `sources.yaml`.
+Typed consumers should use the
+[`Typed McCoy Consumer Contract`](docs/typed-mccoy-consumer-contract.md);
+local-folder registration remains the backward-compatible path.
 
 ## Design Rules
 

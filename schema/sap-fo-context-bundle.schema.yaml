@@ -1,0 +1,57 @@
+schema_version: 1
+bundle_kind: sap_fo_context_bundle
+versioning:
+  schema_version: Increment when keys or semantics change.
+  compatibility: Consumers must ignore unknown keys and fail on unsupported schema_version.
+required_top_level:
+  - schema_version
+  - bundle_kind
+  - generated_at
+  - query
+  - status
+  - items
+  - citations
+  - gaps
+  - quality_signals
+  - mccoy_integration
+status:
+  ready: Bundle has selected items and no known curation gaps.
+  needs_curation: Bundle is usable only as draft context with explicit follow-up gaps.
+items:
+  required_fields:
+    - id
+    - title
+    - kind
+    - score
+    - summary
+    - topics
+    - used_for
+    - access
+    - requires_login
+    - sap_product
+    - path
+    - review_after
+    - stale
+    - source
+    - claims
+    - relations
+citations:
+  description: Source map records for McCoy source tracing.
+  required_fields: [item_id, title, url, access, retrieved_at]
+quality_signals:
+  description: Machine-readable rollup for planner gates and warning surfaces.
+  fields:
+    gap_count: Number of bundle gaps.
+    stale_count: Number of selected items past review_after.
+    gated_item_count: Number of selected gated-source items.
+    source_url_count: Number of selected items with source.url.
+    access_labels: Sorted access labels in the bundle.
+    item_kind_counts: Mapping of knowledge kind to selected count.
+consumer_expectations:
+  - Treat status=needs_curation as blocking for final FO generation unless a human explicitly accepts the gaps.
+  - Preserve citations in the downstream source map.
+  - Surface stale, gated and gap quality signals in the FO plan or review notes.
+  - Keep local-folder provider ingestion as a backward-compatible fallback.
+out_of_scope:
+  - Implementing McCoy parser changes in this repository.
+  - Mirroring SAP Help, SAP Notes, Learning Hub or SAP for Me content.
