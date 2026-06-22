@@ -128,6 +128,61 @@ def test_public_item_with_internal_derived_evidence_fails_validation() -> None:
     assert any("public item uses internal-derived evidence" in issue.message for issue in issues)
 
 
+def test_missing_claim_evidence_id_fails_validation() -> None:
+    item = next(item for item in load_items(ROOT) if item.item_id == "sap.object.sales-order")
+    payload = deepcopy(item.data)
+    payload["claims"][0]["evidence"] = ["sap.missing.evidence"]
+    mutated = KnowledgeItem(path=item.path, data=payload)
+
+    issues = validate_items([mutated], current_date=date(2026, 6, 22))
+
+    assert has_errors(issues)
+    assert any("is not a known item id or URL" in issue.message for issue in issues)
+
+
+def test_missing_relation_id_fails_validation() -> None:
+    item = next(item for item in load_items(ROOT) if item.item_id == "sap.object.sales-order")
+    payload = deepcopy(item.data)
+    payload.setdefault("relations", {})["objects"] = ["sap.object.missing"]
+    mutated = KnowledgeItem(path=item.path, data=payload)
+
+    issues = validate_items([mutated], current_date=date(2026, 6, 22))
+
+    assert has_errors(issues)
+    assert any("relations.objects references missing item" in issue.message for issue in issues)
+
+
+def test_generic_root_source_fails_when_high_specificity_is_required() -> None:
+    item = next(
+        item for item in load_items(ROOT) if item.item_id == "sap.ref.s4hana-cloud-help-portal"
+    )
+    payload = deepcopy(item.data)
+    payload["requires_source_specificity"] = "high"
+    mutated = KnowledgeItem(path=item.path, data=payload)
+
+    issues = validate_items([mutated], current_date=date(2026, 6, 22))
+
+    assert has_errors(issues)
+    assert any("generic root source URL" in issue.message for issue in issues)
+
+
+def test_exact_source_satisfies_high_specificity_requirement() -> None:
+    item = next(
+        item for item in load_items(ROOT) if item.item_id == "sap.ref.s4hana-cloud-help-portal"
+    )
+    payload = deepcopy(item.data)
+    payload["requires_source_specificity"] = "high"
+    payload["source"]["url"] = "https://help.sap.com/docs/SAP_S4HANA_CLOUD/example/exact-topic"
+    payload["source"]["specificity"] = "exact_page"
+    payload["claims"][0]["evidence"] = [payload["source"]["url"]]
+    payload["relations"] = {}
+    mutated = KnowledgeItem(path=item.path, data=payload)
+
+    issues = validate_items([mutated], current_date=date(2026, 6, 22))
+
+    assert not has_errors(issues), [issue.to_dict() for issue in issues]
+
+
 def test_stale_items_make_bundle_needs_curation() -> None:
     bundle = build_context_bundle(
         load_items(ROOT),

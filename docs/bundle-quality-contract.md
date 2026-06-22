@@ -36,3 +36,14 @@ query is ready by item kind but misses a required quality dimension. This keeps
 the current scope honest: the KB remains starter coverage, not exhaustive SAP
 product coverage, and a green audit means the starter contract is satisfied at
 the bundle level.
+
+## Evidence Integrity
+
+Claim evidence may reference either an existing knowledge item id or a URL. Any
+other evidence reference is invalid. Relations that use `sap.*` ids must also
+point at existing knowledge items.
+
+Source specificity is explicit when a claim needs more than a root pointer.
+Items can set `requires_source_specificity: high` and then must not rely on a
+generic SAP Help, SAP for Me or SAP Business Accelerator Hub root URL as their
+only source anchor.

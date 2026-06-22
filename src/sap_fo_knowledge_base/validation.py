@@ -30,6 +30,9 @@ REQUIRED_TOP_LEVEL = {
     "claims",
 }
 
+ALLOWED_SOURCE_SPECIFICITY = {"root_pointer", "exact_page", "catalog_entry", "internal_pattern"}
+HIGH_SOURCE_SPECIFICITY = {"exact", "high"}
+
 
 @dataclass(frozen=True)
 class ValidationIssue:
@@ -80,6 +83,7 @@ def validate_items(
         if item.data.get("access") == "gated" and item.data.get("requires_login") is not True:
             issues.append(_issue(path, item_id, "gated sources must set requires_login: true"))
     _validate_cross_item_evidence(issues, items)
+    _validate_cross_item_relations(issues, items)
     return issues
 
 
@@ -175,6 +179,30 @@ def _validate_source(issues: list[ValidationIssue], item: KnowledgeItem) -> None
                 f"source.kind {source_kind!r} does not match access {item.access!r}",
             )
         )
+    specificity = source.get("specificity")
+    if specificity is not None and specificity not in ALLOWED_SOURCE_SPECIFICITY:
+        issues.append(
+            _issue(
+                str(item.path),
+                item.item_id,
+                f"source.specificity must be one of {sorted(ALLOWED_SOURCE_SPECIFICITY)}",
+            )
+        )
+    required_specificity = str(item.data.get("requires_source_specificity") or "")
+    if (
+        required_specificity in HIGH_SOURCE_SPECIFICITY
+        and _source_specificity(source) == "root_pointer"
+    ):
+        issues.append(
+            _issue(
+                str(item.path),
+                item.item_id,
+                (
+                    "requires_source_specificity: high cannot be satisfied by a "
+                    "generic root source URL"
+                ),
+            )
+        )
 
 
 def _validate_claims(issues: list[ValidationIssue], item: KnowledgeItem) -> None:
@@ -226,8 +254,6 @@ def _validate_cross_item_evidence(
 ) -> None:
     access_by_id = {item.item_id: item.access for item in items}
     for item in items:
-        if item.access != "public":
-            continue
         claims = item.data.get("claims")
         if not isinstance(claims, list):
             continue
@@ -238,8 +264,23 @@ def _validate_cross_item_evidence(
             if not isinstance(evidence, list):
                 continue
             for evidence_id in evidence:
-                evidence_access = access_by_id.get(str(evidence_id))
-                if evidence_access == "internal_derived":
+                evidence_ref = str(evidence_id)
+                if _is_url_evidence(evidence_ref):
+                    continue
+                evidence_access = access_by_id.get(evidence_ref)
+                if evidence_access is None:
+                    issues.append(
+                        _issue(
+                            str(item.path),
+                            item.item_id,
+                            (
+                                f"claims[{claim_index}] evidence {evidence_ref!r} "
+                                "is not a known item id or URL"
+                            ),
+                        )
+                    )
+                    continue
+                if item.access == "public" and evidence_access == "internal_derived":
                     issues.append(
                         _issue(
                             str(item.path),
@@ -250,6 +291,53 @@ def _validate_cross_item_evidence(
                             ),
                         )
                     )
+
+
+def _validate_cross_item_relations(
+    issues: list[ValidationIssue],
+    items: list[KnowledgeItem],
+) -> None:
+    item_ids = {item.item_id for item in items}
+    for item in items:
+        raw_relations = item.data.get("relations")
+        relations: dict[str, Any] = raw_relations if isinstance(raw_relations, dict) else {}
+        for relation_name, relation_values in relations.items():
+            if not isinstance(relation_values, list):
+                continue
+            for relation_value in relation_values:
+                relation_ref = str(relation_value)
+                if relation_ref.startswith("sap.") and relation_ref not in item_ids:
+                    issues.append(
+                        _issue(
+                            str(item.path),
+                            item.item_id,
+                            f"relations.{relation_name} references missing item {relation_ref!r}",
+                        )
+                    )
+
+
+def _is_url_evidence(value: str) -> bool:
+    return value.startswith(("https://", "http://"))
+
+
+def _source_specificity(source: dict[str, Any]) -> str:
+    explicit = source.get("specificity")
+    if explicit in ALLOWED_SOURCE_SPECIFICITY:
+        return str(explicit)
+    kind = str(source.get("kind") or "")
+    if kind in {"internal_pattern", "derived_summary"}:
+        return "internal_pattern"
+    url = str(source.get("url") or "").rstrip("/")
+    root_urls = {
+        "https://help.sap.com/docs/SAP_S4HANA_CLOUD",
+        "https://api.sap.com",
+        "https://me.sap.com",
+    }
+    if url in root_urls:
+        return "root_pointer"
+    if url:
+        return "exact_page"
+    return "root_pointer"
 
 
 def _parse_date(value: Any) -> date | None:

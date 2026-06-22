@@ -44,10 +44,12 @@ source:
   url: Required for public and gated external references.
   retrieved_at: YYYY-MM-DD
   license_note: Short reuse rule, for example link-only or internal-derived.
+  specificity: Optional root_pointer | exact_page | catalog_entry | internal_pattern.
+requires_source_specificity: Optional exact | high when root pointers are not sufficient.
 claims:
   - statement: Curated claim, written in our own words.
     evidence:
-      - source pointer or internal item id
+      - Existing knowledge item id or URL evidence pointer.
 relations:
   apps: []
   objects: []
