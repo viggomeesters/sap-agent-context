@@ -1,0 +1,59 @@
+schema_version: 1
+description: >
+  Regression corpus for retrieval precision. Negative probes should not become
+  ready only because broad domain tokens select enough item kinds.
+queries:
+  - id: positive_supplier_invoice_workflow
+    class: positive
+    intent: fo.workflow
+    topic: supplier-invoice workflow
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: ready
+  - id: positive_sales_output_tests
+    class: positive
+    intent: fo.test_scenarios
+    topic: sales order output management
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: ready
+  - id: negative_material_master_purchasing_sales_plant
+    class: negative
+    intent: fo.field_mapping
+    topic: material master purchasing sales plant
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: needs_curation
+    expected_gap_contains: Low topic precision
+  - id: negative_purchase_order_release_strategy
+    class: negative
+    intent: fo.workflow
+    topic: purchase order approval release strategy
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: needs_curation
+    expected_gap_contains: Low topic precision
+  - id: negative_sales_pricing_billing_block
+    class: negative
+    intent: fo.sap_configuration
+    topic: sales pricing billing block
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: needs_curation
+    expected_gap_contains: Low topic precision
+  - id: ambiguous_business_partner_api_replication_cpi
+    class: ambiguous
+    intent: fo.integration
+    topic: business partner api replication cpi
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: needs_curation
+    expected_gap_contains: Low topic precision
+  - id: ambiguous_accounts_payable_aging_reporting_kpi
+    class: ambiguous
+    intent: fo.analytics
+    topic: accounts payable aging reporting kpi
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: needs_curation
+    expected_gap_contains: Low topic precision

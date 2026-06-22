@@ -8,6 +8,25 @@ from typing import Any
 
 from sap_fo_knowledge_base.model import KnowledgeItem
 
+QUERY_SYNONYMS = {
+    "factuur": "invoice",
+    "facturen": "invoice",
+    "goedkeuring": "approval",
+    "goedkeuren": "approval",
+    "leverancier": "supplier",
+    "leveranciers": "supplier",
+    "veldmapping": "field mapping",
+    "stamdata": "master data",
+    "autorisatie": "authorization",
+    "autorisaties": "authorization",
+    "formulier": "form",
+    "uitvoer": "output",
+    "migratie": "migration",
+    "inkoop": "procurement",
+}
+
+PRECISION_TOKEN_THRESHOLD = 0.6
+
 
 def build_context_bundle(
     items: list[KnowledgeItem],
@@ -199,6 +218,7 @@ def _bundle_gaps(bundle_items: list[dict[str, Any]], *, intent: str, topic: str)
     if not bundle_items:
         return [f"No curated SAP FO knowledge found for intent={intent!r}, topic={topic!r}."]
     gaps = []
+    gaps.extend(_topic_precision_gaps(bundle_items, topic=topic))
     if not any(item["kind"] == "test_pattern" for item in bundle_items):
         gaps.append("No test_pattern item selected; FO test section may need manual enrichment.")
     if not any(item["kind"] == "sap_app" for item in bundle_items):
@@ -251,26 +271,65 @@ def _tokens(value: str) -> set[str]:
     raw_tokens = {
         part for part in value.lower().replace("-", " ").replace("_", " ").split() if len(part) > 2
     }
-    synonyms = {
-        "factuur": "invoice",
-        "facturen": "invoice",
-        "goedkeuring": "approval",
-        "goedkeuren": "approval",
-        "leverancier": "supplier",
-        "leveranciers": "supplier",
-        "veldmapping": "field mapping",
-        "stamdata": "master data",
-        "autorisatie": "authorization",
-        "autorisaties": "authorization",
-        "formulier": "form",
-        "uitvoer": "output",
-        "migratie": "migration",
-        "inkoop": "procurement",
-    }
     expanded = set(raw_tokens)
     for token in raw_tokens:
-        expanded.update(synonyms.get(token, "").split())
+        expanded.update(QUERY_SYNONYMS.get(token, "").split())
     return {token for token in expanded if len(token) > 2}
+
+
+def _precision_tokens(value: str) -> set[str]:
+    tokens = set()
+    for token in _tokens(value):
+        translated = QUERY_SYNONYMS.get(token)
+        if translated:
+            tokens.update(part for part in translated.split() if len(part) > 2)
+        else:
+            tokens.add(token)
+    generic = {
+        "sap",
+        "s4hana",
+        "cloud",
+        "public",
+        "edition",
+        "functioneel",
+        "ontwerp",
+    }
+    return tokens - generic
+
+
+def _topic_precision_gaps(bundle_items: list[dict[str, Any]], *, topic: str) -> list[str]:
+    topic_tokens = _precision_tokens(topic)
+    if len(topic_tokens) < 3:
+        return []
+
+    best_overlap = 0
+    best_item_id = ""
+    for item in bundle_items:
+        item_text = " ".join(
+            str(part)
+            for part in [
+                item.get("id"),
+                item.get("title"),
+                item.get("summary"),
+                " ".join(str(topic) for topic in item.get("topics", [])),
+                " ".join(str(used_for) for used_for in item.get("used_for", [])),
+            ]
+            if part
+        )
+        overlap = len(topic_tokens.intersection(_precision_tokens(item_text)))
+        if overlap > best_overlap:
+            best_overlap = overlap
+            best_item_id = str(item.get("id") or "")
+
+    precision = best_overlap / len(topic_tokens)
+    if precision < PRECISION_TOKEN_THRESHOLD:
+        return [
+            (
+                "Low topic precision; no selected item covers enough of the query "
+                f"tokens ({best_overlap}/{len(topic_tokens)}, best_item={best_item_id})."
+            )
+        ]
+    return []
 
 
 def _required_kinds_for_intent(intent: str) -> set[str]:

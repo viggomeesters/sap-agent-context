@@ -4,6 +4,8 @@ from copy import deepcopy
 from datetime import date
 from pathlib import Path
 
+import yaml
+
 from sap_fo_knowledge_base.bundle import build_context_bundle
 from sap_fo_knowledge_base.completeness import audit_completeness
 from sap_fo_knowledge_base.model import KnowledgeItem
@@ -196,3 +198,23 @@ def test_stale_items_make_bundle_needs_curation() -> None:
 
     assert bundle["status"] == "needs_curation"
     assert any("past review_after" in gap for gap in bundle["gaps"])
+
+
+def test_adversarial_query_corpus_expected_statuses() -> None:
+    corpus = yaml.safe_load((ROOT / "schema/adversarial-query-corpus.yaml").read_text())
+    items = load_items(ROOT)
+
+    for query in corpus["queries"]:
+        bundle = build_context_bundle(
+            items,
+            root=ROOT,
+            intent=query["intent"],
+            topic=query["topic"],
+            sap_product=query["sap_product"],
+            limit=query["limit"],
+            current_date=date(2026, 6, 22),
+        )
+        assert bundle["status"] == query["expected_status"], query["id"]
+        expected_gap = query.get("expected_gap_contains")
+        if expected_gap:
+            assert any(expected_gap in gap for gap in bundle["gaps"]), query["id"]

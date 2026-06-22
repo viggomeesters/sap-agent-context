@@ -47,3 +47,10 @@ Source specificity is explicit when a claim needs more than a root pointer.
 Items can set `requires_source_specificity: high` and then must not rely on a
 generic SAP Help, SAP for Me or SAP Business Accelerator Hub root URL as their
 only source anchor.
+
+## Retrieval Precision
+
+Representative and adversarial queries must prove scenario precision. A bundle
+that collects the right item kinds through broad overlap, but where no selected
+item covers enough of the concrete query tokens, is marked `needs_curation`.
+The regression corpus lives in `schema/adversarial-query-corpus.yaml`.
