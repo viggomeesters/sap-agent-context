@@ -22,6 +22,9 @@ master data, migration, workflow, output management, authorizations,
 integrations, extensibility and analytics/reporting. The scope is intentionally
 bounded: this is not exhaustive SAP product coverage. It is complete when
 `sap-fo-kb audit-completeness` reports zero critical and zero important gaps.
+Representative bundles are also checked against the
+[`Bundle Quality Contract`](docs/bundle-quality-contract.md), so completeness is
+not only item-count and knowledge-kind coverage.
 
 ## Commands
 

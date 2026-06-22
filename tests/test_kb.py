@@ -5,6 +5,8 @@ import sqlite3
 from datetime import date
 from pathlib import Path
 
+import yaml
+
 from sap_fo_knowledge_base.bundle import build_context_bundle, mccoy_provider_manifest
 from sap_fo_knowledge_base.completeness import audit_completeness
 from sap_fo_knowledge_base.index import build_indexes
@@ -77,6 +79,29 @@ def test_completeness_audit_reports_no_critical_or_important_gaps() -> None:
     assert report["critical"] == 0
     assert report["important"] == 0
     assert report["items"] >= 50
+
+
+def test_completeness_audit_checks_representative_query_quality_dimensions(
+    tmp_path: Path,
+) -> None:
+    matrix = yaml.safe_load((ROOT / "schema/completeness-matrix.yaml").read_text())
+    matrix["representative_queries"][0]["required_dimensions"] = ["access_policy"]
+    matrix_path = tmp_path / "matrix.yaml"
+    matrix_path.write_text(yaml.safe_dump(matrix), encoding="utf-8")
+
+    report = audit_completeness(
+        load_items(ROOT),
+        root=ROOT,
+        matrix_path=matrix_path,
+        current_date=date(2026, 6, 22),
+    )
+
+    assert report["status"] == "failed"
+    assert any(
+        finding["area"] == "query:workflow_supplier_invoice"
+        and "missing quality dimension: access_policy" in finding["message"]
+        for finding in report["findings"]
+    )
 
 
 def test_gated_and_access_policy_items_are_loaded() -> None:

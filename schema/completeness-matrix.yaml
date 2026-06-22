@@ -20,6 +20,20 @@ minimums:
     - sap_role
     - scope_item
     - test_pattern
+quality_contract:
+  description: >
+    Representative bundles must prove that they can support concrete FO sections,
+    not only that they contain the right knowledge item kinds.
+  dimensions:
+    source_traceability: Public or gated citation with a concrete URL is present.
+    configuration_app: A SAP app or configuration surface is selected.
+    business_object: A SAP business object or comparable object anchor is selected.
+    field_mapping: A field_map item is selected.
+    process_flow: At least one selected item is explicitly useful for fo.process_flow.
+    decision_rule: A decision_rule item is selected.
+    test_coverage: A test_pattern item is selected.
+    authorization_role: A sap_role item is selected.
+    access_policy: An access_policy item is selected.
 domains:
   - id: finance_ap
     title: Finance and Accounts Payable
@@ -83,27 +97,32 @@ representative_queries:
     sap_product: s4hana_cloud_public
     limit: 12
     required_kinds: [sap_app, sap_object, field_map, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, process_flow, decision_rule, test_coverage]
   - id: procurement_configuration
     intent: fo.sap_configuration
     topic: procurement purchase requisition workflow
     sap_product: s4hana_cloud_public
     limit: 12
     required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, process_flow, test_coverage]
   - id: master_data_field_mapping
     intent: fo.field_mapping
     topic: business partner master data
     sap_product: s4hana_cloud_public
     limit: 12
     required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, test_coverage]
   - id: sales_output_tests
     intent: fo.test_scenarios
     topic: sales order output management
     sap_product: s4hana_cloud_public
     limit: 12
     required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, test_coverage]
   - id: integration_authorization
     intent: fo.authorization
     topic: integration communication role authorization api
     sap_product: s4hana_cloud_public
     limit: 12
     required_kinds: [external_reference, sap_app, sap_object, sap_role, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, authorization_role, access_policy, test_coverage]

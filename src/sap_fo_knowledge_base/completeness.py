@@ -208,6 +208,18 @@ def _audit_representative_queries(
                     evidence=f"present={sorted(present_kinds)}",
                 )
             )
+        for missing in _missing_quality_dimensions(
+            bundle,
+            required_dimensions=_strings(query.get("required_dimensions")),
+        ):
+            findings.append(
+                CompletenessFinding(
+                    severity="important",
+                    area=f"query:{query_id}",
+                    message=f"Representative bundle missing quality dimension: {missing}",
+                    evidence=f"required={_strings(query.get('required_dimensions'))}",
+                )
+            )
 
 
 def _normalized_tokens(values: list[str]) -> set[str]:
@@ -216,6 +228,46 @@ def _normalized_tokens(values: list[str]) -> set[str]:
         tokens.update(part for part in value.lower().replace("_", "-").split("-") if part)
         tokens.add(value.lower())
     return tokens
+
+
+def _missing_quality_dimensions(
+    bundle: dict[str, Any],
+    *,
+    required_dimensions: list[str],
+) -> list[str]:
+    return [
+        dimension
+        for dimension in required_dimensions
+        if not _quality_dimension_present(bundle, dimension)
+    ]
+
+
+def _quality_dimension_present(bundle: dict[str, Any], dimension: str) -> bool:
+    raw_items = bundle.get("items")
+    items: list[dict[str, Any]] = raw_items if isinstance(raw_items, list) else []
+    raw_citations = bundle.get("citations")
+    citations: list[dict[str, Any]] = raw_citations if isinstance(raw_citations, list) else []
+    kinds = {str(item.get("kind") or "") for item in items}
+
+    if dimension == "source_traceability":
+        return any(str(citation.get("url") or "").strip() for citation in citations)
+    if dimension == "configuration_app":
+        return "sap_app" in kinds
+    if dimension == "business_object":
+        return "sap_object" in kinds
+    if dimension == "field_mapping":
+        return "field_map" in kinds
+    if dimension == "process_flow":
+        return any("fo.process_flow" in item.get("used_for", []) for item in items)
+    if dimension == "decision_rule":
+        return "decision_rule" in kinds
+    if dimension == "test_coverage":
+        return "test_pattern" in kinds
+    if dimension == "authorization_role":
+        return "sap_role" in kinds
+    if dimension == "access_policy":
+        return "access_policy" in kinds
+    return False
 
 
 def _strings(value: Any) -> list[str]:
