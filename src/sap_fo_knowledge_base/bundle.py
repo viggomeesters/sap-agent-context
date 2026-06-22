@@ -21,11 +21,12 @@ def build_context_bundle(
 ) -> dict[str, Any]:
     today = current_date or date.today()
     ranked = _rank_items(items, intent=intent, topic=topic, sap_product=sap_product)
-    selected = ranked[:limit]
+    selected = _assemble_bundle(items, ranked=ranked, intent=intent, limit=limit)
     bundle_items = [
         _bundle_item(item, root=root, current_date=today, score=score) for score, item in selected
     ]
     gaps = _bundle_gaps(bundle_items, intent=intent, topic=topic)
+    status = "ready" if bundle_items and not gaps else "needs_curation"
     return {
         "schema_version": 1,
         "bundle_kind": "sap_fo_context_bundle",
@@ -36,7 +37,7 @@ def build_context_bundle(
             "sap_product": sap_product,
             "limit": limit,
         },
-        "status": "ready" if bundle_items else "needs_curation",
+        "status": status,
         "items": bundle_items,
         "citations": _citations(bundle_items),
         "gaps": gaps,
@@ -64,8 +65,11 @@ def _rank_items(
     ranked = []
     for item in items:
         text = item.text_for_retrieval.lower()
+        topic_score = sum(8 for token in topic_tokens if token in text)
+        if not topic_score:
+            continue
         score = 0
-        score += sum(8 for token in topic_tokens if token in text)
+        score += topic_score
         score += sum(4 for token in intent_tokens if token in text)
         score += sum(8 for used_for in item.used_for if intent.lower() in used_for.lower())
         if product and str(item.data.get("sap_product") or "").lower() == product:
@@ -75,6 +79,65 @@ def _rank_items(
         if score:
             ranked.append((score, item))
     return sorted(ranked, key=lambda pair: (-pair[0], pair[1].item_id))
+
+
+def _assemble_bundle(
+    items: list[KnowledgeItem],
+    *,
+    ranked: list[tuple[int, KnowledgeItem]],
+    intent: str,
+    limit: int,
+) -> list[tuple[int, KnowledgeItem]]:
+    selected: list[tuple[int, KnowledgeItem]] = ranked[:limit]
+    selected_ids = {item.item_id for _, item in selected}
+    by_id = {item.item_id: item for item in items}
+
+    for _, item in list(selected):
+        for related_id in _relation_ids(item):
+            if len(selected) >= limit:
+                break
+            related = by_id.get(related_id)
+            if related and related.item_id not in selected_ids:
+                selected.append((1, related))
+                selected_ids.add(related.item_id)
+
+    required_kinds = _required_kinds_for_intent(intent)
+    present_kinds = {item.kind for _, item in selected}
+    selected_topic_tokens = set()
+    for _, item in selected:
+        selected_topic_tokens.update(_tokens(" ".join(item.topics)))
+
+    for required_kind in sorted(required_kinds - present_kinds):
+        candidate = _best_kind_candidate(ranked, required_kind, selected_ids, selected_topic_tokens)
+        if candidate is None:
+            continue
+        selected.append(candidate)
+        selected_ids.add(candidate[1].item_id)
+    return selected
+
+
+def _relation_ids(item: KnowledgeItem) -> list[str]:
+    raw_relations = item.data.get("relations")
+    relations: dict[str, Any] = raw_relations if isinstance(raw_relations, dict) else {}
+    ids = []
+    for value in relations.values():
+        if isinstance(value, list):
+            ids.extend(str(entry) for entry in value if str(entry).startswith("sap."))
+    return ids
+
+
+def _best_kind_candidate(
+    ranked: list[tuple[int, KnowledgeItem]],
+    required_kind: str,
+    selected_ids: set[str],
+    selected_topic_tokens: set[str],
+) -> tuple[int, KnowledgeItem] | None:
+    for score, item in ranked:
+        if item.kind != required_kind or item.item_id in selected_ids:
+            continue
+        if selected_topic_tokens.intersection(_tokens(" ".join(item.topics))):
+            return score, item
+    return None
 
 
 def _bundle_item(
@@ -140,10 +203,20 @@ def _bundle_gaps(bundle_items: list[dict[str, Any]], *, intent: str, topic: str)
         gaps.append("No test_pattern item selected; FO test section may need manual enrichment.")
     if not any(item["kind"] == "sap_app" for item in bundle_items):
         gaps.append("No sap_app item selected; SAP configuration section may be too generic.")
+    if not any(item["kind"] == "sap_object" for item in bundle_items):
+        gaps.append("No sap_object item selected; FO object scope may be too generic.")
+    if not any(item["kind"] == "field_map" for item in bundle_items):
+        gaps.append("No field_map item selected; FO field mapping may be too generic.")
     if not any(item["access"] == "public" for item in bundle_items):
         gaps.append(
             "Only gated/internal sources selected; citations may need consultant verification."
         )
+    if "authorization" in intent and not any(item["kind"] == "sap_role" for item in bundle_items):
+        gaps.append("No sap_role item selected; authorization impact may be too generic.")
+    if "authorization" in intent and not any(
+        item["kind"] == "access_policy" for item in bundle_items
+    ):
+        gaps.append("No access_policy item selected; access governance may be too weak.")
     if any(item["stale"] for item in bundle_items):
         gaps.append("One or more selected items are past review_after and need recertification.")
     return gaps
@@ -175,9 +248,36 @@ def _parse_date(value: Any) -> date | None:
 
 
 def _tokens(value: str) -> set[str]:
-    return {
+    raw_tokens = {
         part for part in value.lower().replace("-", " ").replace("_", " ").split() if len(part) > 2
     }
+    synonyms = {
+        "factuur": "invoice",
+        "facturen": "invoice",
+        "goedkeuring": "approval",
+        "goedkeuren": "approval",
+        "leverancier": "supplier",
+        "leveranciers": "supplier",
+        "veldmapping": "field mapping",
+        "stamdata": "master data",
+        "autorisatie": "authorization",
+        "autorisaties": "authorization",
+        "formulier": "form",
+        "uitvoer": "output",
+        "migratie": "migration",
+        "inkoop": "procurement",
+    }
+    expanded = set(raw_tokens)
+    for token in raw_tokens:
+        expanded.update(synonyms.get(token, "").split())
+    return {token for token in expanded if len(token) > 2}
+
+
+def _required_kinds_for_intent(intent: str) -> set[str]:
+    required = {"external_reference", "sap_app", "sap_object", "field_map", "test_pattern"}
+    if "authorization" in intent:
+        required.update({"sap_role", "access_policy"})
+    return required
 
 
 def quote(value: str) -> str:

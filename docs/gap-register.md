@@ -11,6 +11,13 @@ Current audit source: `uv run sap-fo-kb audit-completeness`.
 | No machine-verifiable completeness gate | critical | `sap-fo-kb audit-completeness` fails on missing required domains, kinds, access classes or representative bundles. |
 | No access-policy knowledge kind | important | `sap.policy.source-access-and-tenant-boundaries` covers public/gated/internal/customer-specific boundaries. |
 | Representative bundle coverage unproven | important | Tests and audit representative queries cover workflow, procurement, master data, sales/output and integration/authorization. |
+| Bundles with gaps could still report ready | critical | `build_context_bundle` now returns `needs_curation` whenever bundle gaps exist; adversarial tests cover generic-source-only and stale bundles. |
+| Intent-only retrieval could return unrelated bundles | critical | Ranking now requires topic-token evidence; `test_unknown_topic_does_not_return_intent_only_bundle` proves unknown topics do not pass via intent alone. |
+| Domains could pass with unusable test-pattern shells | critical | Validator now requires `test_pattern.test_scenarios`; domain pack test patterns include concrete positive/negative scenarios. |
+| Field maps could pass without machine-readable fields | important | Validator now requires `field_map` entries or `relations.fields`; missing output/integration/extensibility/analytics fields were added. |
+| Public items could cite internal-derived evidence | important | Cross-item evidence validation blocks public items that rely on internal-derived evidence; an actual identity-access claim was fixed. |
+| Dutch/English mixed FO queries unproven | important | Synonym expansion and adversarial tests cover mixed Dutch/English supplier-invoice workflow queries. |
+| McCoy provider registration might not produce usable context | important | Temp-workspace smoke now verifies both `state/source-providers.yaml` and provider source records in `state/sources.yaml`. |
 
 ## Later Gaps
 

@@ -75,9 +75,11 @@ def validate_items(
         _validate_freshness(issues, item, today)
         _validate_source(issues, item)
         _validate_claims(issues, item)
+        _validate_kind_detail(issues, item)
 
         if item.data.get("access") == "gated" and item.data.get("requires_login") is not True:
             issues.append(_issue(path, item_id, "gated sources must set requires_login: true"))
+    _validate_cross_item_evidence(issues, items)
     return issues
 
 
@@ -158,6 +160,21 @@ def _validate_source(issues: list[ValidationIssue], item: KnowledgeItem) -> None
         issues.append(
             _issue(str(item.path), item.item_id, "external source items require source.url")
         )
+    source_kind = str(source.get("kind") or "")
+    expected_by_access = {
+        "public": {"public_url"},
+        "gated": {"gated_url"},
+        "internal_derived": {"internal_pattern", "derived_summary"},
+    }
+    allowed = expected_by_access.get(str(item.data.get("access") or ""), set())
+    if allowed and source_kind not in allowed:
+        issues.append(
+            _issue(
+                str(item.path),
+                item.item_id,
+                f"source.kind {source_kind!r} does not match access {item.access!r}",
+            )
+        )
 
 
 def _validate_claims(issues: list[ValidationIssue], item: KnowledgeItem) -> None:
@@ -175,11 +192,64 @@ def _validate_claims(issues: list[ValidationIssue], item: KnowledgeItem) -> None
             issues.append(
                 _issue(str(item.path), item.item_id, f"claims[{index}].statement is required")
             )
+        elif len(str(claim.get("statement") or "").split()) < 9:
+            issues.append(
+                _issue(str(item.path), item.item_id, f"claims[{index}].statement is too vague")
+            )
         evidence = claim.get("evidence")
         if not isinstance(evidence, list) or not evidence:
             issues.append(
                 _issue(str(item.path), item.item_id, f"claims[{index}].evidence is required")
             )
+
+
+def _validate_kind_detail(issues: list[ValidationIssue], item: KnowledgeItem) -> None:
+    relations = item.data.get("relations") if isinstance(item.data.get("relations"), dict) else {}
+    if item.kind == "test_pattern":
+        scenarios = item.data.get("test_scenarios")
+        if not isinstance(scenarios, list) or not scenarios:
+            issues.append(_issue(str(item.path), item.item_id, "test_pattern needs test_scenarios"))
+    if item.kind == "field_map":
+        field_map = item.data.get("field_map")
+        fields = relations.get("fields") if isinstance(relations, dict) else []
+        if not isinstance(field_map, list) and not fields:
+            issues.append(_issue(str(item.path), item.item_id, "field_map needs fields"))
+    if item.kind == "decision_rule":
+        rules = item.data.get("rules")
+        if not isinstance(rules, list) or not rules:
+            issues.append(_issue(str(item.path), item.item_id, "decision_rule needs rules"))
+
+
+def _validate_cross_item_evidence(
+    issues: list[ValidationIssue],
+    items: list[KnowledgeItem],
+) -> None:
+    access_by_id = {item.item_id: item.access for item in items}
+    for item in items:
+        if item.access != "public":
+            continue
+        claims = item.data.get("claims")
+        if not isinstance(claims, list):
+            continue
+        for claim_index, claim in enumerate(claims, start=1):
+            if not isinstance(claim, dict):
+                continue
+            evidence = claim.get("evidence")
+            if not isinstance(evidence, list):
+                continue
+            for evidence_id in evidence:
+                evidence_access = access_by_id.get(str(evidence_id))
+                if evidence_access == "internal_derived":
+                    issues.append(
+                        _issue(
+                            str(item.path),
+                            item.item_id,
+                            (
+                                f"claims[{claim_index}] public item uses internal-derived "
+                                f"evidence {evidence_id!r}"
+                            ),
+                        )
+                    )
 
 
 def _parse_date(value: Any) -> date | None:

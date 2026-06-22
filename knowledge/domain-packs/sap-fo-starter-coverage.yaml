@@ -124,6 +124,13 @@ items:
     claims:
       - statement: Procurement workflow tests should cover valid approval, missing approver, changed value and requester authorization cases.
         evidence: [sap.field-map.purchase-requisition-approval]
+    test_scenarios:
+      - level: unit
+        case: Purchase requisition value and purchasing group select the expected approver.
+        expected: Approval task is routed to the configured approver.
+      - level: negative
+        case: No approver can be derived for the requisition attributes.
+        expected: Requisition remains blocked with an actionable exception.
 
   - id: sap.ref.sales-overview
     title: SAP Sales reference pointer
@@ -202,6 +209,13 @@ items:
     claims:
       - statement: Sales output tests should cover expected output, suppressed output, missing receiver and wrong channel cases.
         evidence: [sap.field-map.sales-order-output]
+    test_scenarios:
+      - level: acceptance
+        case: Sales order output is generated for the expected receiver and channel.
+        expected: Output request is created with correct form, language and receiver.
+      - level: negative
+        case: Receiver data is missing for the selected output channel.
+        expected: Output is not dispatched and the error can be monitored.
 
   - id: sap.ref.master-data-overview
     title: SAP Master Data reference pointer
@@ -280,6 +294,13 @@ items:
     claims:
       - statement: Business partner tests should include valid creation, missing mandatory fields, duplicate candidate and role-extension cases.
         evidence: [sap.field-map.business-partner-governance]
+    test_scenarios:
+      - level: unit
+        case: Business partner is created with all mandatory general and role-specific fields.
+        expected: Business partner is saved with the expected role.
+      - level: negative
+        case: Duplicate candidate or mandatory tax data is missing.
+        expected: Validation prevents save or raises a reviewable warning.
 
   - id: sap.ref.migration-cockpit
     title: SAP S/4HANA Migration Cockpit reference pointer
@@ -358,6 +379,13 @@ items:
     claims:
       - statement: Migration tests should cover template validation, duplicate load, failed row correction and post-load reconciliation.
         evidence: [sap.field-map.migration-template]
+    test_scenarios:
+      - level: integration
+        case: Migration template is validated and simulated before load.
+        expected: Valid rows pass simulation and invalid rows return actionable errors.
+      - level: acceptance
+        case: Loaded records are reconciled against the source extraction.
+        expected: Counts and key values match agreed reconciliation criteria.
 
   - id: sap.ref.output-management
     title: SAP Output Management reference pointer
@@ -419,6 +447,8 @@ items:
     claims:
       - statement: Output FOs should include document type, receiver role, channel, form template, language and retry behavior.
         evidence: [sap.object.output-request]
+    relations:
+      fields: [OutputRequest.BusinessDocumentType, OutputRequest.ReceiverRole, OutputRequest.Channel, OutputRequest.FormTemplate, OutputRequest.Language, OutputRequest.RetryStatus]
   - id: sap.test-pattern.output-processing
     title: Output processing test pattern
     kind: test_pattern
@@ -434,6 +464,13 @@ items:
     claims:
       - statement: Output tests should cover generated output, missing receiver, wrong channel, suppressed output and retry.
         evidence: [sap.field-map.output-channel]
+    test_scenarios:
+      - level: integration
+        case: Output request is generated and dispatched through the configured channel.
+        expected: Output status is successful and traceable to the business document.
+      - level: negative
+        case: Output receiver or channel is invalid.
+        expected: Output fails with monitorable status and retry guidance.
 
   - id: sap.ref.identity-access-management
     title: SAP Identity and Access Management reference pointer
@@ -449,7 +486,7 @@ items:
     source: *sap_help_source
     claims:
       - statement: Authorization FOs should verify business roles and catalogs in the target tenant.
-        evidence: [sap.policy.source-access-and-tenant-boundaries]
+        evidence: [sap.ref.s4hana-cloud-help-portal]
   - id: sap.app.maintain-business-roles
     title: Maintain Business Roles
     kind: sap_app
@@ -510,6 +547,13 @@ items:
     claims:
       - statement: Authorization tests should include allowed user, blocked user, excessive access check and organization restriction checks.
         evidence: [sap.object.business-role-catalog]
+    test_scenarios:
+      - level: unit
+        case: User with intended business role can access the target app and action.
+        expected: Access is allowed within assigned organizational restrictions.
+      - level: negative
+        case: User without role or with wrong restriction attempts the same action.
+        expected: Access is blocked and no excessive permission is observed.
 
   - id: sap.ref.integration-api
     title: SAP integration and API reference pointer
@@ -571,6 +615,8 @@ items:
     claims:
       - statement: Integration FOs should include source field, target field, transformation, mandatory flag and error handling.
         evidence: [sap.object.communication-arrangement]
+    relations:
+      fields: [IntegrationPayload.SourceField, IntegrationPayload.TargetField, IntegrationPayload.TransformationRule, IntegrationPayload.MandatoryFlag, IntegrationPayload.ErrorCode]
   - id: sap.test-pattern.integration-api
     title: Integration API test pattern
     kind: test_pattern
@@ -586,6 +632,13 @@ items:
     claims:
       - statement: Integration tests should cover success, authentication failure, malformed payload, duplicate message and monitoring evidence.
         evidence: [sap.field-map.integration-payload]
+    test_scenarios:
+      - level: integration
+        case: Valid API payload is sent with configured communication arrangement.
+        expected: Message is accepted, processed and monitorable.
+      - level: negative
+        case: Authentication fails or payload is malformed.
+        expected: Message is rejected with actionable error and no duplicate side effect.
 
   - id: sap.ref.extensibility
     title: SAP extensibility reference pointer
@@ -647,6 +700,8 @@ items:
     claims:
       - statement: "Extensibility FOs should include lifecycle impact: create, expose, transport, test, monitor and deprecate."
         evidence: [sap.object.custom-field]
+    relations:
+      fields: [CustomField.BusinessContext, CustomField.DataType, CustomField.UiExposure, CustomField.ApiExposure, CustomField.ValidationRule]
   - id: sap.test-pattern.custom-field-extension
     title: Custom field extension test pattern
     kind: test_pattern
@@ -662,6 +717,13 @@ items:
     claims:
       - statement: Custom field tests should cover create, display, edit, integration exposure and invalid value behavior.
         evidence: [sap.field-map.custom-field-lifecycle]
+    test_scenarios:
+      - level: acceptance
+        case: Custom field is visible and editable in the intended business context.
+        expected: Value is saved, displayed and available in configured exposure points.
+      - level: negative
+        case: Invalid value or missing required custom field is entered.
+        expected: Validation prevents save or records the expected warning.
 
   - id: sap.ref.analytics-reporting
     title: SAP analytics and reporting reference pointer
@@ -723,6 +785,8 @@ items:
     claims:
       - statement: Analytics FOs should map measure/dimension semantics and include data freshness assumptions.
         evidence: [sap.object.analytical-query]
+    relations:
+      fields: [AnalyticalQuery.Measure, AnalyticalQuery.Dimension, AnalyticalQuery.Filter, AnalyticalQuery.RefreshTimestamp, AnalyticalQuery.AuthorizationRestriction]
   - id: sap.test-pattern.analytics-report
     title: Analytics report test pattern
     kind: test_pattern
@@ -738,3 +802,10 @@ items:
     claims:
       - statement: Analytics tests should cover filter results, totals, authorization restriction and reconciliation against source transactions.
         evidence: [sap.field-map.analytics-query]
+    test_scenarios:
+      - level: acceptance
+        case: Report filters and drilldown return expected measures and dimensions.
+        expected: Displayed values reconcile to source transactions for the test data.
+      - level: negative
+        case: User without required authorization opens restricted report data.
+        expected: Restricted data is hidden or access is denied.

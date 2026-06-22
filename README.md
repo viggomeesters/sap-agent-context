@@ -80,3 +80,6 @@ pipeline de KB als traceerbare bron kan meenemen in `sources.yaml`.
   expliciet access- en tenantlabel.
 - Stale items mogen nog vindbaar zijn, maar moeten in bundles als stale worden
   gemarkeerd.
+- Bundles met gaps zijn `needs_curation`, niet `ready`.
+- Retrieval moet topic-evidence hebben; intent-only matches zijn onvoldoende.
+- Public knowledge items mogen geen internal-derived evidence gebruiken.
