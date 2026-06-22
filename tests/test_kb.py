@@ -38,10 +38,10 @@ def test_build_indexes_writes_sqlite_jsonl_and_vector_ready_chunks(tmp_path: Pat
     assert report["items"] == len(items)
     with sqlite3.connect(tmp_path / "kb.sqlite") as conn:
         row = conn.execute(
-            "SELECT title FROM items WHERE id = ?",
+            "SELECT title, expires_at FROM items WHERE id = ?",
             ("sap.app.manage-workflows-supplier-invoices",),
         ).fetchone()
-    assert row == ("Manage Workflows for Supplier Invoices",)
+    assert row == ("Manage Workflows for Supplier Invoices", "2026-12-21")
 
     item_lines = (tmp_path / "items.jsonl").read_text(encoding="utf-8").splitlines()
     vector_lines = (tmp_path / "vector-corpus.jsonl").read_text(encoding="utf-8").splitlines()
@@ -73,6 +73,8 @@ def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:
     assert bundle["quality_signals"]["gap_count"] == 0
     assert "sap_field" in bundle["quality_signals"]["item_kind_counts"]
     assert "sap_app" in bundle["quality_signals"]["item_kind_counts"]
+    assert bundle["quality_signals"]["expired_count"] == 0
+    assert all("expires_at" in item and item["expired"] is False for item in bundle["items"])
     assert bundle["mccoy_integration"]["register_as"] == "local_folder"
 
 
@@ -155,6 +157,31 @@ def test_stale_source_is_reported_as_warning() -> None:
     )
 
 
+def test_expired_source_is_reported_as_warning() -> None:
+    issues = validate_items(load_items(ROOT), current_date=date(2028, 1, 1))
+
+    assert any(
+        issue.severity == "warning" and "expires_at is expired" in issue.message
+        for issue in issues
+    )
+
+
+def test_expired_items_make_bundle_needs_curation() -> None:
+    bundle = build_context_bundle(
+        load_items(ROOT),
+        root=ROOT,
+        intent="fo.workflow",
+        topic="supplier-invoice workflow",
+        sap_product="s4hana_cloud_public",
+        limit=12,
+        current_date=date(2028, 1, 1),
+    )
+
+    assert bundle["status"] == "needs_curation"
+    assert bundle["quality_signals"]["expired_count"] > 0
+    assert any("past expires_at" in gap for gap in bundle["gaps"])
+
+
 def test_representative_bundles_have_no_unexpected_gaps() -> None:
     items = load_items(ROOT)
     queries = [
@@ -198,6 +225,8 @@ def test_context_bundle_contract_schema_is_documented() -> None:
     assert "producer" in schema["required_top_level"]
     assert "quality_signals" in schema["required_top_level"]
     assert "citations" in schema["required_top_level"]
+    assert "expires_at" in schema["items"]["required_fields"]
+    assert "expired" in schema["items"]["required_fields"]
 
 
 def test_mccoy_provider_manifest_points_to_bundle_folder(tmp_path: Path) -> None:

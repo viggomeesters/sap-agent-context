@@ -23,19 +23,20 @@ The human-readable schema is
   final FO generation should surface or block on the listed `gaps`.
 
 McCoy should not treat item presence as enough. It should also inspect
-`quality_signals`, especially `gap_count`, `stale_count`, `gated_item_count`,
-`source_url_count`, `access_labels`, and `item_kind_counts`.
+`quality_signals`, especially `gap_count`, `stale_count`, `expired_count`,
+`gated_item_count`, `source_url_count`, `access_labels`, and `item_kind_counts`.
 
 ## Consumption Rules
 
 - Preserve `citations` in downstream source maps.
-- Keep item `access`, `requires_login`, `review_after`, and `stale` visible to
-  the planner and reviewer.
+- Keep item `access`, `requires_login`, `review_after`, `expires_at`, `stale`,
+  and `expired` visible to the planner and reviewer.
 - Use `relations.fields`, `relations.roles`, `relations.objects`, claims and
   summaries to populate FO field mapping, authorization, object scope, test and
   decision-rule sections.
 - Treat gated sources as verification pointers, not copied evidence.
 - Treat stale items as recertification work before final delivery.
+- Treat expired items as blocked for final delivery until recertified.
 
 ## Backward Compatibility
 

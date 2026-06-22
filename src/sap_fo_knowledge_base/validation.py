@@ -131,7 +131,7 @@ def _validate_freshness(
     if not isinstance(freshness, dict):
         issues.append(_issue(str(item.path), item.item_id, "freshness must be a mapping"))
         return
-    for field in ["valid_from", "review_after", "retrieved_at"]:
+    for field in ["valid_from", "review_after", "expires_at", "retrieved_at"]:
         if field not in freshness:
             issues.append(_issue(str(item.path), item.item_id, f"freshness.{field} is required"))
             continue
@@ -140,7 +140,17 @@ def _validate_freshness(
             issues.append(
                 _issue(str(item.path), item.item_id, f"freshness.{field} must be YYYY-MM-DD")
             )
+    valid_from = _parse_date(freshness.get("valid_from"))
     review_after = _parse_date(freshness.get("review_after"))
+    expires_at = _parse_date(freshness.get("expires_at"))
+    if valid_from and review_after and review_after < valid_from:
+        issues.append(
+            _issue(str(item.path), item.item_id, "freshness.review_after is before valid_from")
+        )
+    if review_after and expires_at and expires_at < review_after:
+        issues.append(
+            _issue(str(item.path), item.item_id, "freshness.expires_at is before review_after")
+        )
     if review_after and review_after < today:
         issues.append(
             ValidationIssue(
@@ -148,6 +158,15 @@ def _validate_freshness(
                 item_id=item.item_id,
                 severity="warning",
                 message=f"review_after is stale: {review_after.isoformat()}",
+            )
+        )
+    if expires_at and expires_at < today:
+        issues.append(
+            ValidationIssue(
+                path=str(item.path),
+                item_id=item.item_id,
+                severity="warning",
+                message=f"expires_at is expired: {expires_at.isoformat()}",
             )
         )
 

@@ -41,7 +41,9 @@ items:
     - sap_product
     - path
     - review_after
+    - expires_at
     - stale
+    - expired
     - source
     - claims
     - relations
@@ -53,6 +55,7 @@ quality_signals:
   fields:
     gap_count: Number of bundle gaps.
     stale_count: Number of selected items past review_after.
+    expired_count: Number of selected items past expires_at.
     gated_item_count: Number of selected gated-source items.
     source_url_count: Number of selected items with source.url.
     access_labels: Sorted access labels in the bundle.
@@ -60,7 +63,7 @@ quality_signals:
 consumer_expectations:
   - Treat status=needs_curation as blocking for final FO generation unless a human explicitly accepts the gaps.
   - Preserve citations in the downstream source map.
-  - Surface stale, gated and gap quality signals in the FO plan or review notes.
+  - Surface stale, expired, gated and gap quality signals in the FO plan or review notes.
   - Keep local-folder provider ingestion as a backward-compatible fallback.
 out_of_scope:
   - Implementing McCoy parser changes in this repository.

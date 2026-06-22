@@ -14,6 +14,7 @@ summary: >
 freshness:
   valid_from: 2026-06-22
   review_after: 2026-12-22
+  expires_at: 2027-06-22
   retrieved_at: 2026-06-22
 source:
   kind: internal_pattern

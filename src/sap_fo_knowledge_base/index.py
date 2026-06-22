@@ -37,6 +37,7 @@ def build_indexes(
               requires_login INTEGER NOT NULL,
               sap_product TEXT NOT NULL,
               review_after TEXT NOT NULL,
+              expires_at TEXT NOT NULL,
               summary TEXT NOT NULL,
               path TEXT NOT NULL,
               payload_json TEXT NOT NULL
@@ -56,9 +57,9 @@ def build_indexes(
                 """
                 INSERT INTO items (
                   id, title, kind, status, access, requires_login, sap_product,
-                  review_after, summary, path, payload_json
+                  review_after, expires_at, summary, path, payload_json
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     item.item_id,
@@ -69,6 +70,7 @@ def build_indexes(
                     1 if item.data.get("requires_login") else 0,
                     str(item.data.get("sap_product") or ""),
                     str(freshness.get("review_after") or ""),
+                    str(freshness.get("expires_at") or ""),
                     item.summary,
                     rel_path,
                     json.dumps(item.data, sort_keys=True, default=str),
@@ -102,6 +104,8 @@ def build_indexes(
 
 
 def _item_record(item: KnowledgeItem, root: Path) -> dict[str, Any]:
+    raw_freshness = item.data.get("freshness")
+    freshness: dict[str, Any] = raw_freshness if isinstance(raw_freshness, dict) else {}
     return {
         "id": item.item_id,
         "title": item.title,
@@ -112,6 +116,12 @@ def _item_record(item: KnowledgeItem, root: Path) -> dict[str, Any]:
         "used_for": item.used_for,
         "path": str(item.path.relative_to(root)),
         "summary": item.summary,
+        "freshness": {
+            "valid_from": str(freshness.get("valid_from") or ""),
+            "review_after": str(freshness.get("review_after") or ""),
+            "expires_at": str(freshness.get("expires_at") or ""),
+            "retrieved_at": str(freshness.get("retrieved_at") or ""),
+        },
     }
 
 

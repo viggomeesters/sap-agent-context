@@ -177,6 +177,7 @@ def _bundle_item(
     raw_freshness = item.data.get("freshness")
     freshness: dict[str, Any] = raw_freshness if isinstance(raw_freshness, dict) else {}
     review_after = _parse_date(freshness.get("review_after"))
+    expires_at = _parse_date(freshness.get("expires_at"))
     raw_source = item.data.get("source")
     source: dict[str, Any] = raw_source if isinstance(raw_source, dict) else {}
     return {
@@ -192,7 +193,9 @@ def _bundle_item(
         "sap_product": item.data.get("sap_product"),
         "path": str(item.path.relative_to(root)),
         "review_after": str(freshness.get("review_after") or ""),
+        "expires_at": str(freshness.get("expires_at") or ""),
         "stale": bool(review_after and review_after < current_date),
+        "expired": bool(expires_at and expires_at < current_date),
         "source": {
             "kind": source.get("kind"),
             "title": source.get("title"),
@@ -227,6 +230,7 @@ def _quality_signals(bundle_items: list[dict[str, Any]], *, gaps: list[str]) -> 
     access_labels = set()
     source_url_count = 0
     stale_count = 0
+    expired_count = 0
     for item in bundle_items:
         kind = str(item.get("kind") or "")
         kind_counts[kind] = kind_counts.get(kind, 0) + 1
@@ -235,6 +239,8 @@ def _quality_signals(bundle_items: list[dict[str, Any]], *, gaps: list[str]) -> 
             access_labels.add(access)
         if item.get("stale"):
             stale_count += 1
+        if item.get("expired"):
+            expired_count += 1
         raw_source = item.get("source")
         source: dict[str, Any] = raw_source if isinstance(raw_source, dict) else {}
         if str(source.get("url") or "").strip():
@@ -242,6 +248,7 @@ def _quality_signals(bundle_items: list[dict[str, Any]], *, gaps: list[str]) -> 
     return {
         "gap_count": len(gaps),
         "stale_count": stale_count,
+        "expired_count": expired_count,
         "gated_item_count": sum(1 for item in bundle_items if item.get("access") == "gated"),
         "source_url_count": source_url_count,
         "access_labels": sorted(access_labels),
@@ -274,6 +281,8 @@ def _bundle_gaps(bundle_items: list[dict[str, Any]], *, intent: str, topic: str)
         gaps.append("No access_policy item selected; access governance may be too weak.")
     if any(item["stale"] for item in bundle_items):
         gaps.append("One or more selected items are past review_after and need recertification.")
+    if any(item["expired"] for item in bundle_items):
+        gaps.append("One or more selected items are past expires_at and must not be used.")
     return gaps
 
 

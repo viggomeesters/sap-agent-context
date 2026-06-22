@@ -38,6 +38,7 @@ enums:
 freshness:
   valid_from: YYYY-MM-DD
   review_after: YYYY-MM-DD
+  expires_at: YYYY-MM-DD
   retrieved_at: YYYY-MM-DD
 source:
   kind: public_url | gated_url | internal_pattern | derived_summary

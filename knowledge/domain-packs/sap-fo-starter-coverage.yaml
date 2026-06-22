@@ -16,6 +16,7 @@ ownership:
 freshness_current: &freshness_current
   valid_from: 2026-06-22
   review_after: 2026-12-22
+  expires_at: 2027-06-22
   retrieved_at: 2026-06-22
 sap_help_source: &sap_help_source
   kind: public_url
