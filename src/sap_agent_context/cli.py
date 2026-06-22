@@ -7,14 +7,14 @@ import json
 from collections.abc import Sequence
 from pathlib import Path
 
-from sap_fo_knowledge_base.bundle import build_context_bundle, mccoy_provider_manifest
-from sap_fo_knowledge_base.completeness import audit_completeness
-from sap_fo_knowledge_base.evaluation import evaluate_fo_output_fixtures
-from sap_fo_knowledge_base.index import build_indexes
-from sap_fo_knowledge_base.repository import load_items
-from sap_fo_knowledge_base.validation import has_errors, validate_items
+from sap_agent_context.bundle import build_context_bundle, mccoy_provider_manifest
+from sap_agent_context.completeness import audit_completeness
+from sap_agent_context.evaluation import evaluate_fo_output_fixtures
+from sap_agent_context.index import build_indexes
+from sap_agent_context.repository import load_items
+from sap_agent_context.validation import has_errors, validate_items
 
-DEFAULT_SQLITE = "build/kb.sqlite"
+DEFAULT_SQLITE = "build/context.sqlite"
 DEFAULT_ITEMS_JSONL = "build/items.jsonl"
 DEFAULT_VECTOR_JSONL = "build/vector-corpus.jsonl"
 

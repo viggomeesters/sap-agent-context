@@ -1,0 +1,68 @@
+id: sap.field-set.core-master-data-identifiers
+title: Core master-data identifiers from SAP Field Atlas
+kind: sap_field
+status: active
+access: public
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [material-master, company-code, field-atlas, field-mapping, migration-cockpit]
+used_for: [fo.field_mapping, migration.analysis, fo.test_data, agent.context]
+summary: >
+  Field Atlas seed for generic master-data identifiers used by agents when
+  explaining or drafting field mapping context. The entries keep SAP table/field
+  identity, label variance, value-source notes and verification caveats together.
+freshness:
+  valid_from: 2026-06-22
+  review_after: 2026-12-22
+  expires_at: 2027-06-22
+  retrieved_at: 2026-06-22
+source:
+  kind: public_url
+  title: SAP Field Atlas field seed
+  url: https://github.com/viggomeesters/sap-field-atlas/blob/main/data/fields.yaml
+  retrieved_at: 2026-06-22
+  specificity: exact_page
+  license_note: Public MIT metadata from SAP Field Atlas; no copied SAP documentation.
+claims:
+  - statement: Agents should preserve both technical field identity and business labels because SAP GUI, exports and migration templates can use different wording.
+    evidence: [sap.ref.sap-field-atlas-public]
+  - statement: Company-code values are customizing-managed and should be checked against target-system customizing before migration use.
+    evidence: [sap.ref.sap-field-atlas-public]
+relations:
+  objects: [sap.object.material-master, sap.object.company-code]
+  field_maps: [sap.field-map.product-number-migration-seed]
+field_definitions:
+  - key: MARA.MATNR
+    sap_structure: MARA
+    sap_field: MATNR
+    description: Material number / product number identifier for generic Material Master context.
+    usage: >
+      Use as the canonical technical anchor when a migration cockpit Product Number
+      or Material Number label appears; verify the target template and release.
+    labels:
+      sap_en_short: Material
+      sap_en_long: Material Number
+      export_label: Material Number
+      migration_cockpit_label: Product Number
+    value_source:
+      kind: identifier
+      customizing_managed: false
+    confidence: known_from_experience
+  - key: T001.BUKRS
+    sap_structure: T001
+    sap_field: BUKRS
+    description: Company code identifier used as a financial/legal entity and customizing anchor.
+    usage: >
+      Use when explaining company-code field mapping or validation; map only to
+      target-system company-code values verified in customizing.
+    labels:
+      sap_en_short: CoCd
+      sap_en_long: Company Code
+      export_label: Company Code
+      migration_cockpit_label: ""
+    value_source:
+      kind: customizing
+      domain: domain-bukrs-company-code
+      lookup_table: T001
+      customizing_managed: true
+    confidence: known_from_experience

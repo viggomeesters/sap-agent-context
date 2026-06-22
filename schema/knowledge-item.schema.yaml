@@ -1,5 +1,5 @@
 schema_version: 1
-description: Human-readable contract for canonical SAP FO knowledge items.
+description: Human-readable contract for canonical SAP Agent Context items.
 required:
   - id
   - title

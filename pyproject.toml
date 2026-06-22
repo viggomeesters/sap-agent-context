@@ -1,5 +1,5 @@
 [project]
-name = "sap-fo-knowledge-base"
+name = "sap-agent-context"
 version = "0.1.0"
 description = "Source-backed SAP context bundles for AI agents, functional design, and field mapping."
 readme = "README.md"
@@ -12,9 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-sap-agent-context = "sap_fo_knowledge_base.cli:main"
-sap-fo-kb = "sap_fo_knowledge_base.cli:main"
-sap-fo-knowledge-base = "sap_fo_knowledge_base.cli:main"
+sap-agent-context = "sap_agent_context.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.10.9,<0.11.0"]

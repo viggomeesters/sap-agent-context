@@ -39,9 +39,6 @@ uv sync
 For local development without a remote, use the same commands from the repository
 root after checking out this folder.
 
-Backward-compatible CLI aliases remain available: `sap-fo-kb` and
-`sap-fo-knowledge-base`.
-
 ## Usage
 
 Validate the context repository:
@@ -175,26 +172,21 @@ Report security issues privately according to [SECURITY.md](SECURITY.md).
 
 ## Release
 
-This Python package is currently source-first. Public releases should be created
-as GitHub tags/releases after the repository has a GitHub remote and the quality
-gate passes. Until then, the release strategy is documented local validation plus
-git commits.
+This Python package is source-first. Public releases should be created as GitHub
+tags/releases after the quality gate passes.
 
 ## Remote Strategy
 
-This repository is prepared for a public GitHub source repository, but no remote
-is currently configured. Before publishing, create or connect a GitHub
-repository and push `main`:
+Canonical public repository:
 
-```bash
-git remote add origin <repo-url>
-git push -u origin main
+```text
+https://github.com/viggomeesters/sap-agent-context
 ```
 
 Recommended GitHub metadata:
 
 - Description: `Source-backed SAP context bundles for AI agents, functional design, and field mapping.`
-- Topics: `sap`, `s4hana`, `ai-agents`, `functional-design`, `field-mapping`, `python`
+- Topics: `sap`, `s4hana`, `ai-agents`, `functional-design`, `field-mapping`, `knowledge-base`
 
 ## License
 

@@ -9,7 +9,7 @@ topics: [sap-for-me, sap-notes, s-user, gated-source, support]
 used_for: [fo.source_traceability, fo.risk_notes, fo.consultant_verification]
 summary: >
   SAP for Me, SAP Notes and support/contract resources may require an S-user or
-  customer-specific authorization. The KB can point to these sources but should
+  customer-specific authorization. The context repository can point to these sources but should
   not assume agents can fetch or redistribute the protected content.
 freshness:
   valid_from: 2026-06-21

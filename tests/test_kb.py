@@ -7,12 +7,12 @@ from pathlib import Path
 
 import yaml
 
-from sap_fo_knowledge_base.bundle import build_context_bundle, mccoy_provider_manifest
-from sap_fo_knowledge_base.completeness import audit_completeness
-from sap_fo_knowledge_base.evaluation import evaluate_fo_output_fixtures
-from sap_fo_knowledge_base.index import build_indexes
-from sap_fo_knowledge_base.repository import load_items
-from sap_fo_knowledge_base.validation import has_errors, validate_items
+from sap_agent_context.bundle import build_context_bundle, mccoy_provider_manifest
+from sap_agent_context.completeness import audit_completeness
+from sap_agent_context.evaluation import evaluate_fo_output_fixtures
+from sap_agent_context.index import build_indexes
+from sap_agent_context.repository import load_items
+from sap_agent_context.validation import has_errors, validate_items
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -218,7 +218,7 @@ def test_fo_output_evaluation_fixtures_pass() -> None:
 
 
 def test_context_bundle_contract_schema_is_documented() -> None:
-    schema = yaml.safe_load((ROOT / "schema/sap-fo-context-bundle.schema.yaml").read_text())
+    schema = yaml.safe_load((ROOT / "schema/sap-agent-context-bundle.schema.yaml").read_text())
 
     assert schema["public_contract_name"] == "sap-agent-context-bundle"
     assert schema["bundle_kind"] == "sap_fo_context_bundle"

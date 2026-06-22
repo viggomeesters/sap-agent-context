@@ -1,4 +1,4 @@
-"""Validation rules for SAP FO knowledge items."""
+"""Validation rules for SAP Agent Context items."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any
 
-from sap_fo_knowledge_base.model import (
+from sap_agent_context.model import (
     ALLOWED_ACCESS,
     ALLOWED_KINDS,
     ALLOWED_STATUS,

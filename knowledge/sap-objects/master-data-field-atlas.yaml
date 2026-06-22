@@ -1,0 +1,60 @@
+items:
+  - id: sap.object.material-master
+    title: Material Master / Product master data
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [material-master, product, master-data, migration, field-atlas]
+    used_for: [fo.field_mapping, migration.analysis, agent.context]
+    summary: >
+      Generic material/product master-data anchor absorbed from SAP Field Atlas,
+      centered on MARA and the material number/product number identifier.
+    freshness:
+      valid_from: 2026-06-22
+      review_after: 2026-12-22
+      expires_at: 2027-06-22
+      retrieved_at: 2026-06-22
+    source:
+      kind: public_url
+      title: SAP Field Atlas tables seed
+      url: https://github.com/viggomeesters/sap-field-atlas/blob/main/data/tables.yaml
+      retrieved_at: 2026-06-22
+      specificity: exact_page
+      license_note: Public MIT metadata from SAP Field Atlas; no copied SAP documentation.
+    claims:
+      - statement: Material Master context can use MARA as a generic table anchor for product/material identifier discussions.
+        evidence: [sap.ref.sap-field-atlas-public]
+    relations:
+      fields: [sap.field-set.core-master-data-identifiers]
+
+  - id: sap.object.company-code
+    title: Company Code customizing anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [company-code, customizing, finance, master-data, migration, field-atlas]
+    used_for: [fo.field_mapping, migration.analysis, agent.context]
+    summary: >
+      Generic company-code customizing anchor absorbed from SAP Field Atlas,
+      centered on T001 and the BUKRS company-code identifier.
+    freshness:
+      valid_from: 2026-06-22
+      review_after: 2026-12-22
+      expires_at: 2027-06-22
+      retrieved_at: 2026-06-22
+    source:
+      kind: public_url
+      title: SAP Field Atlas tables and domains seed
+      url: https://github.com/viggomeesters/sap-field-atlas/blob/main/data/tables.yaml
+      retrieved_at: 2026-06-22
+      specificity: exact_page
+      license_note: Public MIT metadata from SAP Field Atlas; no copied SAP documentation.
+    claims:
+      - statement: Company Code values should be treated as customizing-controlled values and validated against the target system.
+        evidence: [sap.ref.sap-field-atlas-public]
+    relations:
+      fields: [sap.field-set.core-master-data-identifiers]

@@ -1,4 +1,4 @@
-"""Core data model helpers for SAP FO knowledge items."""
+"""Core data model helpers for SAP Agent Context items."""
 
 from __future__ import annotations
 

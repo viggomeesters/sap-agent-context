@@ -6,7 +6,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from sap_fo_knowledge_base.model import KnowledgeItem
+from sap_agent_context.model import KnowledgeItem
 
 QUERY_SYNONYMS = {
     "factuur": "invoice",
@@ -258,7 +258,7 @@ def _quality_signals(bundle_items: list[dict[str, Any]], *, gaps: list[str]) -> 
 
 def _bundle_gaps(bundle_items: list[dict[str, Any]], *, intent: str, topic: str) -> list[str]:
     if not bundle_items:
-        return [f"No curated SAP FO knowledge found for intent={intent!r}, topic={topic!r}."]
+        return [f"No curated SAP context found for intent={intent!r}, topic={topic!r}."]
     gaps = []
     gaps.extend(_topic_precision_gaps(bundle_items, topic=topic))
     if not any(item["kind"] == "test_pattern" for item in bundle_items):

@@ -1,6 +1,6 @@
 # Completeness Matrix
 
-This KB is complete for the current goal when it has no known critical or
+This context layer is complete for the current goal when it has no known critical or
 important gaps inside the `sap_fo_starter_coverage` scope defined in
 `schema/completeness-matrix.yaml`.
 
@@ -30,4 +30,4 @@ uv run sap-agent-context audit-completeness
 ```
 
 The command must report `status: passed` with zero critical and zero important
-findings before this KB may claim no known gaps in the current scope.
+findings before this context layer may claim no known gaps in the current scope.

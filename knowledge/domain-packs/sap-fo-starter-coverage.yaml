@@ -55,7 +55,7 @@ items:
     freshness: *freshness_current
     source: *internal_source
     claims:
-      - statement: Customer-specific tenant evidence must not be promoted into the generic KB without an explicit access and tenant label.
+      - statement: Customer-specific tenant evidence must not be promoted into the generic context repository without an explicit access and tenant label.
         evidence: [sap.fo-pattern.source-access-governance]
     relations:
       fo_patterns: [sap.fo-pattern.source-access-governance]

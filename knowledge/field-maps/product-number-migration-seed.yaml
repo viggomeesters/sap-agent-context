@@ -1,0 +1,43 @@
+id: sap.field-map.product-number-migration-seed
+title: Product Number migration seed maps to material number context
+kind: field_map
+status: active
+access: public
+requires_login: false
+sap_product: s4hana_cloud_public
+topics: [product, material-master, migration-cockpit, field-mapping, field-atlas]
+used_for: [fo.field_mapping, migration.analysis, agent.context]
+summary: >
+  Conservative Field Atlas mapping note: the sample S/4 product initial seed uses
+  a Product Number template label that should be treated as the business-facing
+  label for the MARA-MATNR material/product identifier, pending release-specific
+  Migration Cockpit verification.
+freshness:
+  valid_from: 2026-06-22
+  review_after: 2026-12-22
+  expires_at: 2027-06-22
+  retrieved_at: 2026-06-22
+source:
+  kind: public_url
+  title: SAP Field Atlas migration template seed
+  url: https://github.com/viggomeesters/sap-field-atlas/blob/main/data/migration_templates.yaml
+  retrieved_at: 2026-06-22
+  specificity: exact_page
+  license_note: Public MIT metadata from SAP Field Atlas; no copied SAP documentation.
+claims:
+  - statement: Product Number in the seed migration template should be mapped to the canonical material number field context with release verification.
+    evidence: [sap.ref.sap-field-atlas-public]
+relations:
+  objects: [sap.object.material-master]
+  fields: [sap.field-set.core-master-data-identifiers]
+field_map:
+  - source_label: Product Number
+    target_key: MARA.MATNR
+    target_table: MARA
+    target_field: MATNR
+    transform_method: direct_identifier_mapping
+    confidence: needs_verification
+    verification_note: >
+      Verify for the relevant SAP Migration Cockpit version whether the template
+      writes through S/4HANA APIs/structures and how the Product Number label is
+      represented in the exported or downloaded template.

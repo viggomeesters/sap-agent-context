@@ -26,7 +26,7 @@ of done and should become future scopes, not hidden critical gaps.
 
 | Gap | Reason deferred |
 |---|---|
-| Exhaustive global SAP product coverage | Too broad for a maintainable starter KB; the current scope targets FO-generation coverage first. |
+| Exhaustive global SAP product coverage | Too broad for a maintainable starter context layer; the current scope targets FO-generation coverage first. |
 | Live SAP Help crawling or S-user content ingestion | Requires license, access and governance decisions; current design is link-first. |
 | Typed mccoy parsing of `sap_fo_context_bundle` | McCoy can already register bundles as local source providers; typed parsing is the next product iteration. |
 | Real vector database service | `build/vector-corpus.jsonl` is vector-ready and rebuildable; service choice is intentionally deferred. |

@@ -14,7 +14,7 @@ reject unsupported schema versions, and keep backward compatibility for the
 current local-folder registration path.
 
 The human-readable schema is
-`schema/sap-fo-context-bundle.schema.yaml`.
+`schema/sap-agent-context-bundle.schema.yaml`.
 
 ## Readiness Semantics
 

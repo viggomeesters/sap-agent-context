@@ -7,7 +7,7 @@ from typing import Any
 
 import yaml
 
-from sap_fo_knowledge_base.model import KnowledgeItem
+from sap_agent_context.model import KnowledgeItem
 
 DEFAULT_KNOWLEDGE_DIR = "knowledge"
 

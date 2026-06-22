@@ -1,7 +1,7 @@
 # Contributing
 
-Thank you for considering a contribution. This project is a curated SAP
-Functional Design knowledge base, so changes should preserve traceability,
+Thank you for considering a contribution. This project is a curated SAP Agent
+Context repository, so changes should preserve traceability,
 source quality, and deterministic validation.
 
 ## Scope
@@ -16,9 +16,9 @@ source quality, and deterministic validation.
 Run the local quality gates before creating a pull request:
 
 ```bash
-uv run sap-fo-kb validate
-uv run sap-fo-kb audit-completeness
-uv run sap-fo-kb evaluate-fixtures
+uv run sap-agent-context validate
+uv run sap-agent-context audit-completeness
+uv run sap-agent-context evaluate-fixtures
 uv run pytest -q
 uv run ruff check .
 ```

@@ -1,0 +1,29 @@
+id: sap.ref.sap-field-atlas-public
+title: SAP Field Atlas public repository
+kind: external_reference
+status: active
+access: public
+requires_login: false
+sap_product: cross_sap
+topics: [sap-field-atlas, field-mapping, migration, tables, fields, data-migration]
+used_for: [agent.context, fo.field_mapping, migration.analysis, source_traceability]
+summary: >
+  Public SAP Field Atlas repository used as the reviewed upstream source for
+  generic SAP table, field, label, value-source and migration cockpit seed
+  context absorbed into SAP Agent Context.
+freshness:
+  valid_from: 2026-06-22
+  review_after: 2026-12-22
+  expires_at: 2027-06-22
+  retrieved_at: 2026-06-22
+source:
+  kind: public_url
+  title: viggomeesters/sap-field-atlas on GitHub
+  url: https://github.com/viggomeesters/sap-field-atlas
+  retrieved_at: 2026-06-22
+  specificity: exact_page
+  license_note: Public MIT repository; use as compact metadata and retain source pointer.
+claims:
+  - statement: The public SAP Field Atlas repository is the upstream source for the generic master-data field seeds absorbed here.
+    evidence: [https://github.com/viggomeesters/sap-field-atlas]
+relations: {}

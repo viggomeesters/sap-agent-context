@@ -6,11 +6,11 @@ from pathlib import Path
 
 import yaml
 
-from sap_fo_knowledge_base.bundle import build_context_bundle
-from sap_fo_knowledge_base.completeness import audit_completeness
-from sap_fo_knowledge_base.model import KnowledgeItem
-from sap_fo_knowledge_base.repository import load_items
-from sap_fo_knowledge_base.validation import has_errors, validate_items
+from sap_agent_context.bundle import build_context_bundle
+from sap_agent_context.completeness import audit_completeness
+from sap_agent_context.model import KnowledgeItem
+from sap_agent_context.repository import load_items
+from sap_agent_context.validation import has_errors, validate_items
 
 ROOT = Path(__file__).resolve().parents[1]
 

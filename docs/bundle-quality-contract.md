@@ -1,6 +1,6 @@
 # Bundle Quality Contract
 
-The starter KB is not complete merely because a bundle contains enough item
+The starter context layer is not complete merely because a bundle contains enough item
 kinds. A ready `sap_fo_context_bundle` must provide enough evidence to draft or
 review concrete Functioneel Ontwerp sections without hiding source, scope, or
 quality gaps.
@@ -33,7 +33,7 @@ and `access_policy`.
 
 The completeness audit fails with an important finding when a representative
 query is ready by item kind but misses a required quality dimension. This keeps
-the current scope honest: the KB remains starter coverage, not exhaustive SAP
+the current scope honest: the context layer remains starter coverage, not exhaustive SAP
 product coverage, and a green audit means the starter contract is satisfied at
 the bundle level.
 

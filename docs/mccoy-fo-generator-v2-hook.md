@@ -60,4 +60,4 @@ The next non-MTP step is to teach `mccoy-fo-generator-v2` to parse
 the typed planner, instead of treating the bundle only as a local source folder.
 
 See `docs/agent-consumer-contract.md`, `docs/typed-mccoy-consumer-contract.md`, and
-`schema/sap-fo-context-bundle.schema.yaml` for the KB-side typed contract.
+`schema/sap-agent-context-bundle.schema.yaml` for the context-side typed contract.

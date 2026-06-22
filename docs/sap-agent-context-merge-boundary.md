@@ -1,7 +1,7 @@
 # SAP Agent Context Merge Boundary
 
 This document records the execution boundary for merging the current SAP FO
-Knowledge Base direction into one agent-first repository named
+context direction into one agent-first repository named
 `sap-agent-context`.
 
 ## Decision
@@ -38,8 +38,8 @@ SAP content, or material that cannot be made public with clear provenance.
 
 | Source | Status | Use |
 | --- | --- | --- |
-| `/Users/viggomeesters/Dev/sap-fo-knowledge-base` | Canonical current repository | Starting point for `sap-agent-context`. |
-| `/Users/viggomeesters/Dev/sap-field-atlas` | Not found locally during this audit | Do not invent this as a source. If it appears later, audit it before import. |
+| Public `viggomeesters/sap-agent-context` plus legacy Mac local folder | Canonical current repository | Published as `sap-agent-context`; the Mac working folder may still keep its pre-rename basename. |
+| Public `viggomeesters/sap-field-atlas` / WSL `/home/viggo/Dev/sap-field-atlas` | Real public upstream source | Reviewed and partially absorbed for generic field/table/migration cockpit seed context; see `docs/field-atlas-integration.md`. |
 | `/Users/viggomeesters/Dev/alteryx-flow-agent-toolkit/1-dictionary` | Review-pending dictionary source | Contains dictionary docs plus `data-migration-dictionary.xlsx` and `object-registry.xlsx`; review before import. |
 | `/Users/viggomeesters/Dev/alteryx-template-flows/1-dictionary` | Review-pending dictionary source | Contains dictionary docs plus a smaller `data-migration-dictionary.xlsx`; review before import. |
 

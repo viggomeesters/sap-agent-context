@@ -7,7 +7,7 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from sap_fo_knowledge_base.model import KnowledgeItem
+from sap_agent_context.model import KnowledgeItem
 
 
 def build_indexes(
