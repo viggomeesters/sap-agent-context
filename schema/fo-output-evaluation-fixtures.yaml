@@ -25,14 +25,21 @@ fixtures:
   required_fields:
   - SupplierInvoice.GrossAmount
   - SupplierInvoice.CompanyCode
-- id: broad_material_master_query_needs_curation
+- id: material_master_purchasing_sales_plant_ready
   intent: fo.field_mapping
   topic: material master purchasing sales plant
   sap_product: s4hana_cloud_public
   limit: 12
-  expected_status: needs_curation
-  require_open_questions: true
-  expected_gap_contains: Low topic precision
+  expected_status: ready
+  required_kinds:
+  - sap_object
+  - decision_rule
+  - field_map
+  required_item_ids:
+  - sap.object.material-product-master-anchor
+  - sap.object.material-plant-data
+  - sap.object.material-sales-view
+  - sap.rule.material-master-tenant-view-caveat
 - id: stale_supplier_invoice_sources_need_recertification
   intent: fo.workflow
   topic: supplier-invoice workflow

@@ -101,8 +101,8 @@ def test_master_data_bundle_readiness_is_specific_not_broad() -> None:
 
     assert bp_bundle["status"] == "ready"
     assert product_bundle["status"] == "ready"
-    assert broad_bundle["status"] == "needs_curation"
-    assert any("Low topic precision" in gap for gap in broad_bundle["gaps"])
+    assert broad_bundle["status"] == "ready"
+    assert broad_bundle["gaps"] == []
 
 
 def test_master_data_pack_defines_negative_test_paths() -> None:

@@ -1,0 +1,412 @@
+pack_id: sap-material-master-object-anchors-pack
+title: SAP Material/Product Master object anchors
+description: Material/Product Master starter anchors for material master views, plant/storage/valuation/MRP/purchasing/sales
+  and serial/batch caveats.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep link-first public pointers and internal-derived tenant caveats; avoid making broad material
+    queries ready until fixtures explicitly assert the scoped coverage.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.ref.material-product-master-learning
+  title: Product/material master learning pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - product-master
+  - material-master
+  - plant-data
+  - storage-location
+  - valuation
+  - mrp
+  - purchasing
+  - sourcing-procurement
+  used_for:
+  - fo.source_traceability
+  summary: Public pointer for material/product master context such as material type/product type, plant-specific
+    data, purchasing, valuation and MRP checks. Use link-first; verify target tenant/release before implementation.
+  freshness: *id001
+  source:
+    kind: public_url
+    title: "SAP Learning \u2014 Maintaining Product Master Data"
+    url: https://learning.sap.com/courses/implementing-sap-s-4hana-cloud-public-edition-sourcing-and-procurement/maintaining-product-master-data_d2afaa5c-c344-4d00-851f-f117ad075d77
+    retrieved_at: '2026-06-23'
+    specificity: exact_page
+    license_note: Link-first public SAP Learning pointer; do not copy lesson text.
+  claims:
+  - statement: Public pointer for material/product master context such as material type/product type, plant-specific
+      data, purchasing, valuation and MRP checks. Use link-first; verify target tenant/release before implementation.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.ref.api-product-material
+  title: Product API public catalog pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product
+  - material
+  - api
+  - product-master
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Public Product API catalog pointer for product/material identity and API surface verification. Use as
+    source pointer, not copied API documentation.
+  freshness: *id001
+  source:
+    kind: public_url
+    title: "SAP Business Accelerator Hub \u2014 Product API"
+    url: https://api.sap.com/api/API_PRODUCT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Public Product API catalog pointer for product/material identity and API surface verification. Use
+      as source pointer, not copied API documentation.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-product-master-anchor
+  title: Material/product master object
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - product
+  - material-master
+  - product-master
+  - identity
+  - base-unit
+  - product-type
+  - master
+  - purchasing
+  - sales
+  - plant
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Material/product master anchor for questions about product/material identity, base unit, product type/material
+    type and organizational extensions. Exact field names and mandatory views require tenant/release verification.
+    Supports broad material master purchasing sales plant starter questions with caveats.
+  freshness: *id001
+  source: &id002
+    kind: internal_pattern
+    title: Internal material master consultant starter pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived consultant context; no customer data or copied SAP documentation. Verify exact
+      field/view/configuration behavior in target tenant.
+  claims:
+  - statement: Material/product master anchor for questions about product/material identity, base unit, product
+      type/material type and organizational extensions. Exact field names and mandatory views require tenant/release
+      verification.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-type
+  title: Material type / product type caveat
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material-type
+  - product-type
+  - industry-sector
+  - material-master
+  - creation-caveat
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Material type/product type influences which fields/views and process behavior are relevant. Do not invent
+    tenant-specific material types or mandatory field settings.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Material type/product type influences which fields/views and process behavior are relevant. Do not
+      invent tenant-specific material types or mandatory field settings.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-plant-data
+  title: Plant-specific material data
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - plant-data
+  - plant
+  - mrp
+  - purchasing
+  - valuation
+  - material-master-view
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Plant-specific material data anchor for MRP, purchasing, valuation/accounting and logistics checks. Use
+    as starter context, not exact configuration proof.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Plant-specific material data anchor for MRP, purchasing, valuation/accounting and logistics checks.
+      Use as starter context, not exact configuration proof.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-storage-location
+  title: Storage-location material data
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - storage-location
+  - stock
+  - storage-bin
+  - inventory
+  - plant
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Storage-location material context for inventory/storage-specific checks. Exact storage location, bin
+    and MRP-area behavior must be verified in tenant.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Storage-location material context for inventory/storage-specific checks. Exact storage location,
+      bin and MRP-area behavior must be verified in tenant.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-valuation-accounting
+  title: Material valuation/accounting view
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - valuation
+  - accounting
+  - valuation-class
+  - price-control
+  - plant-specific
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Valuation/accounting anchor for material value, valuation class and price-control questions. Do not invent
+    valuation class/account determination; require tenant verification.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Valuation/accounting anchor for material value, valuation class and price-control questions. Do not
+      invent valuation class/account determination; require tenant verification.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-purchasing-view
+  title: Material purchasing view
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - purchasing
+  - purchasing-group
+  - procurement
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Purchasing view anchor for procurement-relevant material data such as purchasing group or procurement-relevant
+    material defaults. Verify fields/release before design.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Purchasing view anchor for procurement-relevant material data such as purchasing group or goods-receipt
+      processing context. Verify fields/release before design.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-sales-view
+  title: Material sales/distribution view
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - sales
+  - distribution
+  - sales-organization
+  - delivering-plant
+  - item-category
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Sales/distribution material view anchor for selling/delivery-related material questions. Tenant sales
+    org/channel and field behavior require verification.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Sales/distribution material view anchor for selling/delivery-related material questions. Tenant sales
+      org/channel and field behavior require verification.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-mrp-view
+  title: Material MRP view
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - mrp
+  - mrp-type
+  - mrp-controller
+  - planning
+  - plant
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: MRP view anchor for planning-related material questions such as MRP type/controller and plant planning
+    caveats. Do not assume exact planning configuration.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: MRP view anchor for planning-related material questions such as MRP type/controller and plant planning
+      caveats. Do not assume exact planning configuration.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-batch-management
+  title: Batch-managed material caveat
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - batch
+  - batch-management
+  - traceability
+  - inventory
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Batch-management anchor for materials requiring batch traceability. Exact batch level/activation and
+    process use are tenant-specific.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Batch-management anchor for materials requiring batch traceability. Exact batch level/activation
+      and process use are tenant-specific.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.object.material-serial-number
+  title: Serial-number managed material caveat
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - serial-number
+  - serial
+  - equipment
+  - traceability
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: Serial-number anchor for material/equipment traceability questions. Exact serial profile/equipment integration
+    must be verified in target tenant/system.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Serial-number anchor for material/equipment traceability questions. Exact serial profile/equipment
+      integration must be verified in target tenant/system.
+    evidence:
+    - sap.ref.material-product-master-learning
+  relations: {}
+- id: sap.rule.material-master-tenant-view-caveat
+  title: Material master view/configuration tenant caveat
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material-master
+  - views
+  - tenant-caveat
+  - mandatory-fields
+  - configuration
+  - do-not-invent
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule: answer material master view questions with source-labelled starter context, but do not
+    invent tenant-specific mandatory fields, material types, valuation classes, MRP settings or sales/purchasing
+    view requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Material view/configuration answers must include tenant/release verification when exact fields, material
+      types, valuation classes or MRP settings are requested.
+    evidence:
+    - sap.ref.material-product-master-learning
+    - sap.object.material-product-master-anchor
+  relations:
+    objects:
+    - sap.object.material-product-master-anchor
+    - sap.object.material-plant-data
+    - sap.object.material-valuation-accounting
+  rules:
+  - if: question asks broad material master views
+    then: answer with scoped starter view anchors and tenant caveat
+    outcome: ready only when precision is high enough
+  - if: question asks exact material type, valuation class, MRP type or mandatory field
+    then: do not invent tenant-specific values
+    outcome: request tenant/release verification

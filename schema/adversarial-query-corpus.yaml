@@ -18,14 +18,13 @@ queries:
   sap_product: s4hana_cloud_public
   limit: 12
   expected_status: ready
-- id: negative_material_master_purchasing_sales_plant
-  class: negative
+- id: positive_material_master_purchasing_sales_plant
+  class: positive
   intent: fo.field_mapping
   topic: material master purchasing sales plant
   sap_product: s4hana_cloud_public
   limit: 12
-  expected_status: needs_curation
-  expected_gap_contains: Low topic precision
+  expected_status: ready
 - id: negative_purchase_order_release_strategy
   class: negative
   intent: fo.workflow
