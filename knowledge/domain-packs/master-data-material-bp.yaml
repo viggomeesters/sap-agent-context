@@ -1,0 +1,574 @@
+pack_id: sap-master-data-material-bp-pack
+title: SAP master data, material/product and business partner context pack
+description: >
+  Source-backed SAP Agent Context pack for representative master-data FO,
+  field-mapping and migration questions. The pack is link-first: public SAP API
+  and archived Field Atlas URLs are retained as pointers, while claims remain
+  concise context written for agent retrieval.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep this pack generic and public. Use exact public source/catalog pointers
+    for API surfaces and mark tenant/customizing-sensitive assumptions as
+    needs_verification rather than ready.
+freshness_current: &freshness_current
+  valid_from: 2026-06-23
+  review_after: 2026-12-23
+  expires_at: 2027-06-23
+  retrieved_at: 2026-06-23
+sap_api_business_partner: &sap_api_business_partner
+  kind: public_url
+  title: SAP Business Accelerator Hub - Business Partner API
+  url: https://api.sap.com/api/API_BUSINESS_PARTNER/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+sap_api_product: &sap_api_product
+  kind: public_url
+  title: SAP Business Accelerator Hub - Product API
+  url: https://api.sap.com/api/API_PRODUCT_SRV/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+field_atlas_source: &field_atlas_source
+  kind: public_url
+  title: SAP Field Atlas archived public seed
+  url: https://github.com/viggomeesters/sap-field-atlas
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Archived MIT metadata repository used as provenance seed; keep URL pointers.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal master-data FO pattern
+  url: ""
+  retrieved_at: 2026-06-23
+  specificity: internal_pattern
+  license_note: Internal-derived implementation pattern; no customer data or copied SAP documentation.
+items:
+  - id: sap.ref.api-business-partner
+    title: Business Partner public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, customer, supplier, field-mapping]
+    used_for: [fo.source_traceability, fo.field_mapping]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for Business Partner catalog
+      surface review. Use it to verify release/API availability and field names
+      before treating BP mappings as tenant-ready.
+    freshness: *freshness_current
+    source: *sap_api_business_partner
+    requires_source_specificity: high
+    release_applicability:
+      edition: s4hana_cloud_public
+      verification: Verify API package and entity availability for the target tenant and release.
+    claims:
+      - statement: Business partner, customer and supplier context should be verified against a catalog surface or tenant evidence before integration design.
+        evidence: [https://api.sap.com/api/API_BUSINESS_PARTNER/overview]
+    relations:
+      objects: [sap.object.business-partner-core, sap.object.customer-master, sap.object.supplier-master]
+
+  - id: sap.ref.api-product
+    title: Product public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, material-master, product, migration, field-mapping]
+    used_for: [fo.source_traceability, fo.field_mapping, migration.analysis]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for Product catalog surface review.
+      Use it with Field Atlas material/product identifiers when checking product
+      or material master mappings.
+    freshness: *freshness_current
+    source: *sap_api_product
+    requires_source_specificity: high
+    release_applicability:
+      edition: s4hana_cloud_public
+      verification: Verify API package, product category and field availability for the target tenant and release.
+    claims:
+      - statement: Product/material master mappings should preserve both business-facing product labels and technical field/API identity.
+        evidence: [https://api.sap.com/api/API_PRODUCT_SRV/overview, sap.field-set.core-master-data-identifiers]
+    relations:
+      objects: [sap.object.product-master, sap.object.material-master]
+
+  - id: sap.ref.field-atlas-master-data-seed
+    title: Field Atlas master-data seed pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: cross_sap
+    topics: [master-data, material-master, company-code, field-atlas, migration]
+    used_for: [fo.source_traceability, fo.field_mapping, migration.analysis]
+    summary: >
+      Archived public Field Atlas seed for generic table, field, domain and
+      migration-template context. Treat it as provenance and not as runtime code.
+    freshness: *freshness_current
+    source: *field_atlas_source
+    claims:
+      - statement: Field Atlas can seed generic technical anchors, but release and tenant details still need verification before implementation use.
+        evidence: [https://github.com/viggomeesters/sap-field-atlas]
+    relations:
+      fields: [sap.field-set.core-master-data-identifiers]
+
+  - id: sap.app.master-data-governance-review
+    title: Master-data governance review surface
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, governance, business-partner, product, validation]
+    used_for: [fo.sap_configuration, fo.business_rules, fo.test_scenarios]
+    summary: >
+      Generic app/configuration surface placeholder for master-data governance
+      review: identify who owns creation/change, duplicate checks, mandatory
+      fields and release/tenant-specific validation before writing an FO.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Master-data FOs should name governance ownership, duplicate-check expectations and exception handling instead of only listing fields.
+        evidence: [sap.ref.api-business-partner, sap.ref.api-product]
+    relations:
+      objects: [sap.object.business-partner-core, sap.object.product-master]
+
+  - id: sap.app.product-master-data-review
+    title: Product master data review surface
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, product, material-master, app, validation]
+    used_for: [fo.sap_configuration, fo.field_mapping, migration.analysis]
+    summary: >
+      Product/master-data review surface for FOs: check product identifier,
+      product type/category, base unit, status and organizational validation
+      before using product data in processes or migration templates.
+    freshness: *freshness_current
+    source: *sap_api_product
+    requires_source_specificity: high
+    claims:
+      - statement: Product master-data FOs should keep product identity, classification, unit and status assumptions explicit and verifiable.
+        evidence: [https://api.sap.com/api/API_PRODUCT_SRV/overview]
+    relations:
+      objects: [sap.object.product-master]
+      fields: [sap.field-set.product-master-core]
+
+  - id: sap.object.business-partner-core
+    title: Business Partner master-data object
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, customer, supplier, governance]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios]
+    summary: >
+      Business Partner object anchor for FO sections where one legal or natural
+      party may carry customer, supplier or other roles. Keep role/company-code
+      and duplicate-check assumptions visible.
+    freshness: *freshness_current
+    source: *sap_api_business_partner
+    requires_source_specificity: high
+    release_applicability:
+      edition: s4hana_cloud_public
+      verification: Verify BP role and customer/supplier extensions in target tenant.
+    claims:
+      - statement: Business partner context should separate party identity from customer/supplier role and organizational extension assumptions.
+        evidence: [sap.ref.api-business-partner]
+    relations:
+      fields: [sap.field-set.business-partner-core, sap.field-set.customer-supplier-role-core]
+      field_maps: [sap.field-map.business-partner-core-identity]
+
+  - id: sap.object.customer-master
+    title: Customer master-data role object
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, customer, business-partner, customer-extension, company-code]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios]
+    summary: >
+      Customer role object anchor for FOs that need BP-to-customer extension,
+      organization or company-code assumptions. Do not assume role availability
+      without tenant/release verification.
+    freshness: *freshness_current
+    source: *sap_api_business_partner
+    requires_source_specificity: high
+    claims:
+      - statement: Customer master-data context should state whether the design concerns party identity, customer extension, company-code/accounting use, or process blocking.
+        evidence: [sap.ref.api-business-partner]
+    relations:
+      objects: [sap.object.business-partner-core]
+      fields: [sap.field-set.customer-supplier-role-core]
+
+  - id: sap.object.supplier-master
+    title: Supplier master-data role object
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, supplier, business-partner, procurement-org, company-code]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios]
+    summary: >
+      Supplier role object anchor for FOs that need BP-to-supplier extension,
+      procurement organization, company-code or payment-term assumptions.
+    freshness: *freshness_current
+    source: *sap_api_business_partner
+    requires_source_specificity: high
+    claims:
+      - statement: Supplier master-data context should distinguish BP identity from supplier organization and company-code extensions that affect procurement or AP processes.
+        evidence: [sap.ref.api-business-partner]
+    relations:
+      objects: [sap.object.business-partner-core]
+      fields: [sap.field-set.customer-supplier-role-core]
+
+  - id: sap.object.product-master
+    title: Product / material master-data object
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, product, material-master, migration, classification]
+    used_for: [fo.field_mapping, migration.analysis, fo.test_scenarios]
+    summary: >
+      Product/material object anchor for FOs involving product identity,
+      product type/category, unit-of-measure, status and migration labels.
+    freshness: *freshness_current
+    source: *sap_api_product
+    requires_source_specificity: high
+    claims:
+      - statement: Product context should align business product numbers, technical material/product identity and migration template labels before mapping.
+        evidence: [sap.ref.api-product, sap.field-map.product-number-migration-seed]
+    relations:
+      fields: [sap.field-set.product-master-core, sap.field-set.core-master-data-identifiers]
+      field_maps: [sap.field-map.product-core-identity]
+
+  - id: sap.field-set.business-partner-core
+    title: Business partner core identity fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, field-mapping, identity, duplicate-check]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for BP identity and duplicate-check sensitive design:
+      partner number, category, name/search attributes, role assignment and tax
+      identifiers must be handled as release/tenant-verifiable fields.
+    freshness: *freshness_current
+    source: *sap_api_business_partner
+    requires_source_specificity: high
+    claims:
+      - statement: BP identity mapping should include identifier, category, name/search data, role context and duplicate-check impact where applicable.
+        evidence: [sap.ref.api-business-partner]
+    relations:
+      objects: [sap.object.business-partner-core]
+      field_maps: [sap.field-map.business-partner-core-identity]
+    field_definitions:
+      - key: BusinessPartner.BusinessPartner
+        description: Business-facing BP identifier; verify number range/internal-external assignment before migration.
+        usage: Use as the primary BP identity anchor in FO mapping and duplicate-check narratives.
+      - key: BusinessPartner.BusinessPartnerCategory
+        description: Person/organization/group style categorization that can change required fields and validation.
+        usage: Use to explain conditional mandatory fields and test-data variants.
+      - key: BusinessPartner.SearchTerm
+        description: Search attribute used by users and integrations to find the party.
+        usage: Include in test data when duplicate detection or lookup behavior matters.
+      - key: BusinessPartner.TaxNumber
+        description: Tax identifier context that is often country-specific and validation-sensitive.
+        usage: Mark as tenant/country verified before using it as a hard validation rule.
+
+  - id: sap.field-set.customer-supplier-role-core
+    title: Customer and supplier role extension fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, customer, supplier, company-code, procurement-org]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-set context for customer/supplier extensions of a BP: role,
+      company-code, organization and payment/accounting attributes should be explicit when they affect process behavior.
+    freshness: *freshness_current
+    source: *sap_api_business_partner
+    requires_source_specificity: high
+    claims:
+      - statement: Customer and supplier fields should be treated as role/extension context rather than as proof that the party identity itself changed.
+        evidence: [sap.ref.api-business-partner]
+    relations:
+      objects: [sap.object.business-partner-core, sap.object.customer-master, sap.object.supplier-master]
+      field_maps: [sap.field-map.bp-role-extension]
+    field_definitions:
+      - key: BusinessPartner.Role
+        description: Business role or role-extension context used to determine customer/supplier usage.
+        usage: Use to separate general BP identity from customer or supplier process enablement.
+      - key: Customer.CompanyCode
+        description: Company-code extension context for accounting/customer use.
+        usage: Include when the FO affects FI posting, credit or account determination assumptions.
+      - key: Customer.SalesOrganization
+        description: Customer organization extension context for process behavior.
+        usage: Include when customer master changes affect downstream process behavior.
+      - key: Supplier.PurchasingOrganization
+        description: Procurement organization extension context for supplier process behavior.
+        usage: Include when supplier master data affects source-to-pay routing.
+      - key: Supplier.PaymentTerms
+        description: Payment-term context that affects AP/procurement process design.
+        usage: Include as a verified field where payment behavior is in scope.
+
+  - id: sap.field-set.product-master-core
+    title: Product master core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, product, material-master, field-mapping, migration]
+    used_for: [fo.field_mapping, migration.analysis, fo.test_data]
+    summary: >
+      Field-set context for product/material identity, type/category, base unit,
+      product group and status. Use together with Field Atlas MARA/MATNR seed
+      context for migration label mapping.
+    freshness: *freshness_current
+    source: *sap_api_product
+    requires_source_specificity: high
+    claims:
+      - statement: Product mapping should keep product identifier, product type/category, unit and lifecycle/status assumptions explicit.
+        evidence: [sap.ref.api-product, sap.field-set.core-master-data-identifiers]
+    relations:
+      objects: [sap.object.product-master, sap.object.material-master]
+      field_maps: [sap.field-map.product-core-identity]
+    field_definitions:
+      - key: Product.Product
+        description: Product/material identifier used as the product master anchor.
+        usage: Map to product/material number labels and verify against migration template label conventions.
+      - key: Product.ProductType
+        description: Product type/category context that can drive required views and process behavior.
+        usage: Include when FO scope changes material type, product category or process enablement.
+      - key: Product.BaseUnit
+        description: Base unit-of-measure context for quantity handling.
+        usage: Include in migration/test data where unit conversion or quantity validation matters.
+      - key: Product.ProductGroup
+        description: Grouping/classification context used for reporting or process segmentation.
+        usage: Include for analytics, defaults or business-rule segmentation.
+      - key: Product.Status
+        description: Lifecycle/status context that can block or allow downstream use.
+        usage: Test active/inactive or blocked-product behavior when process availability is in scope.
+
+  - id: sap.field-set.company-code-master-data-use
+    title: Company-code use in master-data extensions
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, company-code, business-partner, customer, supplier, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, migration.analysis]
+    summary: >
+      Field-set context for company-code use in customer and supplier extensions.
+      Treat company code as customizing-controlled context that must be checked
+      in the target system before migration or process design.
+    freshness: *freshness_current
+    source: *field_atlas_source
+    claims:
+      - statement: Company-code values are customizing-controlled and should be verified before being used as hard master-data migration or FO assumptions.
+        evidence: [sap.field-set.core-master-data-identifiers, sap.object.company-code]
+    relations:
+      objects: [sap.object.company-code, sap.object.customer-master, sap.object.supplier-master]
+      field_maps: [sap.field-map.bp-role-extension]
+    field_definitions:
+      - key: CompanyCode.BUKRS
+        sap_structure: T001
+        sap_field: BUKRS
+        description: Company-code identifier used as organizational context for customer/supplier accounting extensions.
+        usage: Verify target customizing and include it when master data affects FI/AP/AR process behavior.
+
+  - id: sap.field-map.business-partner-core-identity
+    title: Business partner identity and duplicate-check field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, field-mapping, duplicate-check, governance]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for BP creation/change FOs: map source party identifier,
+      BP category, name/search attributes, tax number and duplicate candidate
+      behavior before claiming a design is migration-ready.
+    freshness: *freshness_current
+    source: *sap_api_business_partner
+    requires_source_specificity: high
+    claims:
+      - statement: A BP FO should define duplicate-check handling and source-vs-target identifier ownership, not only field labels.
+        evidence: [sap.field-set.business-partner-core]
+    relations:
+      objects: [sap.object.business-partner-core]
+      fields: [sap.field-set.business-partner-core]
+    mapping_steps:
+      - source: legacy_party_id
+        target: BusinessPartner.BusinessPartner
+        verification: Verify number range and internal/external assignment.
+      - source: party_type
+        target: BusinessPartner.BusinessPartnerCategory
+        verification: Verify category-specific mandatory fields.
+      - source: search_name
+        target: BusinessPartner.SearchTerm
+        verification: Use in duplicate and search tests.
+      - source: tax_identifier
+        target: BusinessPartner.TaxNumber
+        verification: Verify country and tenant validation rules.
+
+  - id: sap.field-map.bp-role-extension
+    title: BP customer/supplier role extension field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, customer, supplier, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for extending a BP into customer or supplier usage. It
+      keeps company-code and customer/supplier organization assumptions separate
+      from the party identity.
+    freshness: *freshness_current
+    source: *sap_api_business_partner
+    requires_source_specificity: high
+    claims:
+      - statement: Customer/supplier extension mapping should state whether the process needs organizational, company-code or payment-term data.
+        evidence: [sap.field-set.customer-supplier-role-core]
+    relations:
+      objects: [sap.object.business-partner-core, sap.object.customer-master, sap.object.supplier-master]
+      fields: [sap.field-set.customer-supplier-role-core]
+    mapping_steps:
+      - source: customer_company_code
+        target: Customer.CompanyCode
+        verification: Verify company-code extension and accounting process relevance.
+      - source: customer_org_context
+        target: Customer.SalesOrganization
+        verification: Verify customer organization availability and related process scope.
+      - source: supplier_org_context
+        target: Supplier.PurchasingOrganization
+        verification: Verify procurement organization extension.
+      - source: supplier_payment_terms
+        target: Supplier.PaymentTerms
+        verification: Verify payment-term source and AP/procurement impact.
+
+  - id: sap.field-map.product-core-identity
+    title: Product identity and classification field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, product, material-master, migration, field-mapping]
+    used_for: [fo.field_mapping, migration.analysis, fo.test_data]
+    summary: >
+      Field-map pattern for product/material creation and migration FOs: map
+      product number, product type/category, unit, group/classification and
+      status with release-specific verification.
+    freshness: *freshness_current
+    source: *sap_api_product
+    requires_source_specificity: high
+    claims:
+      - statement: Product FO mapping should not treat a migration template label as enough; it must tie the label to product identity and validation fields.
+        evidence: [sap.ref.api-product, sap.field-map.product-number-migration-seed]
+    relations:
+      objects: [sap.object.product-master, sap.object.material-master]
+      fields: [sap.field-set.product-master-core, sap.field-set.core-master-data-identifiers]
+    mapping_steps:
+      - source: product_number
+        target: Product.Product
+        verification: Compare against migration template Product Number and Field Atlas MARA/MATNR context.
+      - source: product_type
+        target: Product.ProductType
+        verification: Verify required views and process enablement.
+      - source: base_unit
+        target: Product.BaseUnit
+        verification: Include UoM conversion/validation test data.
+      - source: product_group
+        target: Product.ProductGroup
+        verification: Verify reporting/defaulting assumptions.
+      - source: lifecycle_status
+        target: Product.Status
+        verification: Test downstream process availability or blocking behavior.
+
+  - id: sap.test-pattern.business-partner-master-data-governance
+    title: Business partner master-data governance test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, business-partner, customer, supplier, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, fo.test_data]
+    summary: >
+      Test pattern for BP master-data FOs covering identity, duplicate, role
+      extension, authorization and negative validation paths.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: BP master-data tests should prove both party identity and role-extension behavior rather than only successful creation.
+        evidence: [sap.field-map.business-partner-core-identity, sap.field-map.bp-role-extension]
+    relations:
+      objects: [sap.object.business-partner-core, sap.object.customer-master, sap.object.supplier-master]
+      field_maps: [sap.field-map.business-partner-core-identity, sap.field-map.bp-role-extension]
+    test_scenarios:
+      - level: acceptance
+        case: Create BP with valid category, search term and required role extension.
+        expected: BP identity and selected customer/supplier extension are available for the target process.
+      - level: negative
+        case: Submit a BP candidate missing role-extension or company-code data required by the FO.
+        expected: The design blocks or routes to enrichment with a clear missing-data reason.
+      - level: negative
+        case: Candidate matches an existing BP by search/tax identifier.
+        expected: Duplicate-handling rule is triggered and visible in the FO.
+      - level: authorization
+        case: User can create BP identity but lacks customer/supplier extension authorization.
+        expected: FO states the role/access boundary and expected exception.
+
+  - id: sap.test-pattern.product-master-migration-validation
+    title: Product master migration validation test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [master-data, product, material-master, migration, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, migration.analysis]
+    summary: >
+      Test pattern for product/material master migration and FO validation,
+      covering identifier mapping, product type, unit, status and downstream
+      process availability.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Product migration tests should prove field identity and validation behavior, not only that a product number is present.
+        evidence: [sap.field-map.product-core-identity]
+    relations:
+      objects: [sap.object.product-master, sap.object.material-master]
+      field_maps: [sap.field-map.product-core-identity, sap.field-map.product-number-migration-seed]
+    test_scenarios:
+      - level: acceptance
+        case: Import product with product number, type, base unit and group populated.
+        expected: Product is usable in the intended process after release/tenant verification.
+      - level: negative
+        case: Product has missing or invalid base unit.
+        expected: Migration/design blocks with a precise unit validation issue.
+      - level: negative
+        case: Product type or status does not allow downstream use.
+        expected: FO captures the blocker and expected remediation path.
+      - level: regression
+        case: Product Number label maps to technical product/material identifier.
+        expected: Mapping remains tied to Field Atlas/Product API evidence and does not drift to an unrelated label.
