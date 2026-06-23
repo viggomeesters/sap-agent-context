@@ -1,0 +1,308 @@
+pack_id: sap-integrations-api-communication-pack
+title: SAP Integrations API and communication context pack
+description: >
+  Source-labelled SAP Agent Context pack for integration/API/communication
+  arrangement FO questions. Public API catalog pointers are link-first;
+  communication systems, arrangements, authentication and endpoints remain
+  tenant-specific and must not be stored in public bundles.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep generic API and communication arrangement context separate from
+    tenant-specific destinations, credentials, hosts, certificates and payloads.
+freshness_current: &freshness_current
+  valid_from: 2026-06-23
+  review_after: 2026-12-23
+  expires_at: 2027-06-23
+  retrieved_at: 2026-06-23
+bp_api: &bp_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Billing Document API
+  url: https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+sales_api: &sales_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Sales Order API
+  url: https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal integration/API FO pattern
+  url: ""
+  retrieved_at: 2026-06-23
+  specificity: internal_pattern
+  license_note: Internal-derived implementation pattern; no customer data, credentials, tenant URLs or copied SAP documentation.
+items:
+  - id: sap.ref.api-billing-document-integration
+    title: Billing Document API integration catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, billing-document, odata, communication, source-traceability]
+    used_for: [fo.integration, fo.source_traceability, fo.field_mapping]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for Billing Document API
+      integration review. Use it to verify API identity and payload surface before
+      mapping or interface design.
+    freshness: *freshness_current
+    source: *bp_api
+    requires_source_specificity: high
+    claims:
+      - statement: Integration FOs should verify API identity and entity availability against public API catalog or tenant evidence.
+        evidence: [https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview]
+    relations:
+      objects: [sap.object.integration-api-endpoint]
+
+  - id: sap.ref.api-sales-order-integration
+    title: Sales Order API integration catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, sales-order, odata, communication, source-traceability]
+    used_for: [fo.integration, fo.source_traceability, fo.field_mapping]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for Sales Order API integration
+      review. Use it to verify API/entity direction and release suitability before
+      integration design.
+    freshness: *freshness_current
+    source: *sales_api
+    requires_source_specificity: high
+    claims:
+      - statement: Sales order integration FOs should separate API catalog proof from tenant communication arrangement proof.
+        evidence: [https://api.sap.com/api/API_SALES_ORDER_SRV/overview]
+    relations:
+      objects: [sap.object.integration-api-endpoint]
+
+  - id: sap.app.communication-arrangements-context
+    title: Communication Arrangements configuration context
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, communication-arrangement, communication-system, api, authentication]
+    used_for: [fo.integration, fo.sap_configuration, fo.security]
+    summary: >
+      Generic configuration context for communication arrangements/systems,
+      inbound/outbound users, authentication and scenario assignment. Do not store
+      tenant URLs, credentials, certificates or secrets in public bundles.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Communication arrangement evidence is tenant-specific and must be represented as a required verification step, not as stored credentials or URLs.
+        evidence: [sap.policy.integration-no-secrets]
+    relations:
+      objects: [sap.object.communication-arrangement-integration]
+      access_policies: [sap.policy.integration-no-secrets]
+
+  - id: sap.object.integration-api-endpoint
+    title: Integration API endpoint object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, endpoint, odata, entity, payload]
+    used_for: [fo.integration, fo.field_mapping, fo.test_data]
+    summary: >
+      API endpoint object anchor for FO work: API name, entity/resource, operation,
+      direction, key fields, payload ownership, error handling and release evidence
+      should be explicit.
+    freshness: *freshness_current
+    source: *bp_api
+    requires_source_specificity: high
+    claims:
+      - statement: API endpoint context should separate public catalog metadata from tenant-specific endpoint URL and authentication details.
+        evidence: [sap.ref.api-billing-document-integration]
+    relations:
+      fields: [sap.field-set.integration-api-message-core]
+      field_maps: [sap.field-map.integration-api-message-readiness]
+
+  - id: sap.object.communication-arrangement-integration
+    title: Communication arrangement object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, communication-arrangement, communication-system, scenario, authentication]
+    used_for: [fo.integration, fo.sap_configuration, fo.security]
+    summary: >
+      Communication arrangement object anchor for FO work: scenario, communication
+      system, user/auth method, inbound/outbound direction and test evidence must
+      be captured without storing secrets or tenant endpoints.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Communication arrangement readiness requires tenant setup proof but public context must not contain the secret or endpoint values.
+        evidence: [sap.policy.integration-no-secrets]
+    relations:
+      access_policies: [sap.policy.integration-no-secrets]
+      field_maps: [sap.field-map.integration-api-message-readiness]
+
+  - id: sap.field-set.integration-api-message-core
+    title: Integration API message core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, payload, field-mapping, odata, error-handling]
+    used_for: [fo.integration, fo.field_mapping, fo.test_data]
+    summary: >
+      Field-set context for API/interface FOs: API name, entity/resource,
+      operation, direction, business key, payload field, idempotency key, status
+      code and error message.
+    freshness: *freshness_current
+    source: *bp_api
+    requires_source_specificity: high
+    claims:
+      - statement: Interface field maps should include business keys, direction and error/status handling, not only payload fields.
+        evidence: [sap.ref.api-billing-document-integration]
+    relations:
+      objects: [sap.object.integration-api-endpoint]
+      field_maps: [sap.field-map.integration-api-message-readiness]
+    field_definitions:
+      - key: Integration.ApiName
+        description: Public API or integration scenario name.
+        usage: Verify against API catalog and tenant communication scenario.
+      - key: Integration.Entity
+        description: Entity/resource used by the interface.
+        usage: Tie payload mapping to the exact API surface.
+      - key: Integration.Direction
+        description: Inbound or outbound integration direction.
+        usage: Separate sender/receiver ownership and test data.
+      - key: Integration.BusinessKey
+        description: Business identifier used for reconciliation/idempotency.
+        usage: Include duplicate/retry test scenarios.
+      - key: Integration.ErrorStatus
+        description: Status/error code or message returned by the interface.
+        usage: Define failure handling and support ownership.
+
+  - id: sap.field-map.integration-api-message-readiness
+    title: Integration API message readiness field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, communication, field-mapping, payload, error-handling]
+    used_for: [fo.integration, fo.field_mapping, fo.test_data]
+    summary: >
+      Field-map pattern for integration API readiness covering API/entity,
+      direction, business key, payload fields, status/error handling and
+      communication arrangement verification.
+    freshness: *freshness_current
+    source: *bp_api
+    requires_source_specificity: high
+    claims:
+      - statement: Integration mapping should show how payload fields, business keys, communication setup and error handling are verified separately.
+        evidence: [sap.field-set.integration-api-message-core]
+    relations:
+      objects: [sap.object.integration-api-endpoint, sap.object.communication-arrangement-integration]
+      fields: [sap.field-set.integration-api-message-core]
+      access_policies: [sap.policy.integration-no-secrets]
+    mapping_steps:
+      - source: source_business_key
+        target: Integration.BusinessKey
+        verification: Use for reconciliation and idempotency checks.
+      - source: api_entity
+        target: Integration.Entity
+        verification: Verify entity/resource against public API catalog.
+      - source: interface_direction
+        target: Integration.Direction
+        verification: Confirm sender/receiver and communication scenario.
+      - source: response_status
+        target: Integration.ErrorStatus
+        verification: Define retry/error handling and support ownership.
+
+  - id: sap.policy.integration-no-secrets
+    title: Integration no-secrets access policy
+    kind: access_policy
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: cross_sap
+    topics: [integration, security, credentials, tenant-url, secrets, access-policy]
+    used_for: [fo.integration, fo.security, fo.privacy]
+    summary: >
+      Integration examples may name generic configuration objects and public API
+      catalog URLs, but must not store credentials, tenant hostnames, certificates,
+      tokens, cookies, communication users or private endpoints.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Public integration context bundles must not contain credentials, tenant URLs, tokens, certificates or private endpoints.
+        evidence: [sap.object.communication-arrangement-integration]
+    relations:
+      objects: [sap.object.communication-arrangement-integration]
+
+  - id: sap.rule.integration-arrangement-readiness
+    title: Integration arrangement readiness rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, communication-arrangement, api, error-handling, readiness]
+    used_for: [fo.integration, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Decision rule for integration FOs: API catalog availability is necessary but
+      not sufficient; communication arrangement, auth method, direction, payload
+      keys and error handling require tenant verification.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: API catalog proof and communication arrangement proof are separate gates for integration readiness.
+        evidence: [sap.field-map.integration-api-message-readiness]
+    relations:
+      field_maps: [sap.field-map.integration-api-message-readiness]
+      access_policies: [sap.policy.integration-no-secrets]
+    rules:
+      - condition: API catalog exists but no tenant communication arrangement proof
+        outcome: integration remains needs verification
+      - condition: payload maps omit business key or error handling
+        outcome: interface design is incomplete
+      - condition: credentials or tenant endpoint values appear in public context
+        outcome: reject/redact and replace with generic verification step
+
+  - id: sap.test-pattern.integration-api-communication
+    title: Integration API and communication test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [integration, api, communication-arrangement, payload, error-handling, test-scenarios]
+    used_for: [fo.integration, fo.test_scenarios, fo.quality_gate]
+    summary: >
+      Test pattern for API/communication integrations covering public API catalog
+      proof, tenant communication arrangement proof, positive message exchange,
+      duplicate/idempotency handling and error/redaction checks.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Integration tests should cover catalog proof, communication arrangement proof, positive exchange, duplicate/retry and secret redaction.
+        evidence: [sap.rule.integration-arrangement-readiness]
+    relations:
+      objects: [sap.object.integration-api-endpoint, sap.object.communication-arrangement-integration]
+      field_maps: [sap.field-map.integration-api-message-readiness]
+      access_policies: [sap.policy.integration-no-secrets]
+    test_scenarios:
+      - level: acceptance
+        case: Public API catalog entry and tenant communication arrangement are verified separately.
+        expected: Interface is eligible for implementation test without storing secrets.
+      - level: negative
+        case: API exists but communication arrangement or auth method is unverified.
+        expected: FO marks integration as needs tenant verification.
+      - level: security
+        case: Example contains credential, token, tenant URL or private endpoint.
+        expected: Public bundle rejects or redacts the value and records a verification step.
