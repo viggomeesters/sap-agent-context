@@ -1,0 +1,364 @@
+pack_id: sap-procurement-pr-po-pack
+title: SAP Procurement PR/PO context pack
+description: >
+  Source-backed SAP Agent Context pack for purchase requisition, purchase order,
+  workflow and goods-receipt readiness FO questions. Public SAP API
+  catalog pointers are link-first; configuration and workflow behavior remains
+  tenant/release verified.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep generic procurement context separate from tenant-specific flexible workflow,
+    purchasing organization and tolerance settings.
+freshness_current: &freshness_current
+  valid_from: 2026-06-23
+  review_after: 2026-12-23
+  expires_at: 2027-06-23
+  retrieved_at: 2026-06-23
+purchase_requisition_api: &purchase_requisition_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Purchase Requisition API
+  url: https://api.sap.com/api/API_PURCHASEREQ_PROCESS_SRV/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+purchase_order_api: &purchase_order_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Purchase Order API
+  url: https://api.sap.com/api/API_PURCHASEORDER_PROCESS_SRV/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal procurement FO pattern
+  url: ""
+  retrieved_at: 2026-06-23
+  specificity: internal_pattern
+  license_note: Internal-derived implementation pattern; no customer data or copied SAP documentation.
+items:
+  - id: sap.ref.api-purchase-requisition-process
+    title: Purchase Requisition API public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchasing, purchase-requisition, pr, workflow-state, api, source-traceability]
+    used_for: [fo.source_traceability, fo.field_mapping, fo.business_rules]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for purchase requisition API
+      surface review. Use it to verify requisition identity, item, requester,
+      account assignment and workflow status fields before FO or integration use.
+    freshness: *freshness_current
+    source: *purchase_requisition_api
+    requires_source_specificity: high
+    claims:
+      - statement: Procurement FOs should verify purchase requisition identity, item, requester, account assignment and workflow state against public catalog or tenant evidence.
+        evidence: [https://api.sap.com/api/API_PURCHASEREQ_PROCESS_SRV/overview]
+    relations:
+      objects: [sap.object.purchase-requisition-pr-po]
+
+  - id: sap.ref.api-purchase-order-process
+    title: Purchase Order API public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchasing, purchase-order, po, supplier, goods-receipt, api]
+    used_for: [fo.source_traceability, fo.field_mapping, fo.business_rules]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for purchase order API surface
+      review. Use it to verify PO header, item, supplier, purchasing organization,
+      delivery and goods receipt context before FO or integration use.
+    freshness: *freshness_current
+    source: *purchase_order_api
+    requires_source_specificity: high
+    claims:
+      - statement: Purchase order FOs should separate supplier/order commitments from receipt and invoice readiness.
+        evidence: [https://api.sap.com/api/API_PURCHASEORDER_PROCESS_SRV/overview]
+    relations:
+      objects: [sap.object.purchase-order]
+
+  - id: sap.app.manage-purchase-requisitions-context
+    title: Manage Purchase Requisitions procurement app context
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase-requisition, workflow-state, app, workflow]
+    used_for: [fo.sap_configuration, fo.authorization, fo.workflow]
+    summary: >
+      Generic app context for FO sections that need requisition creation, review,
+      workflow and conversion-to-PO behavior. Verify exact app/catalog names and
+      workflow availability in the target tenant.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: PR workflow FOs need app/workflow, role and workflow-condition checks in addition to field mappings.
+        evidence: [sap.object.purchase-requisition-pr-po]
+    relations:
+      objects: [sap.object.purchase-requisition-pr-po]
+      decision_rules: [sap.rule.procurement-workflow-readiness]
+
+  - id: sap.object.purchase-requisition-pr-po
+    title: Purchase requisition object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchasing, purchase-requisition, pr, workflow-state, account-assignment]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Purchase requisition object anchor for FO work: requisition/item identity,
+      material/service description, quantity, plant, requester, account assignment,
+      workflow state and conversion readiness should be explicit.
+    freshness: *freshness_current
+    source: *purchase_requisition_api
+    requires_source_specificity: high
+    claims:
+      - statement: PR context should distinguish request workflow completion from purchase order creation and receipt processing.
+        evidence: [sap.ref.api-purchase-requisition-process]
+    relations:
+      fields: [sap.field-set.purchase-requisition-core]
+      field_maps: [sap.field-map.pr-to-po-readiness]
+
+  - id: sap.object.purchase-order
+    title: Purchase order object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchasing, purchase-order, po, supplier, goods-receipt]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Purchase order object anchor for FO work: supplier, purchasing organization,
+      company code, item quantity/value, delivery date, confirmation, goods receipt
+      and invoice receipt context should be separated.
+    freshness: *freshness_current
+    source: *purchase_order_api
+    requires_source_specificity: high
+    claims:
+      - statement: PO readiness should be modeled separately from goods receipt and invoice receipt completion.
+        evidence: [sap.ref.api-purchase-order-process]
+    relations:
+      fields: [sap.field-set.purchase-order-core]
+      field_maps: [sap.field-map.po-fulfillment-readiness]
+
+  - id: sap.field-set.purchase-requisition-core
+    title: Purchase requisition core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase-requisition, pr, field-mapping, workflow-state]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for PR FOs: requisition/item, material or service text,
+      quantity, plant, requester, account assignment category, cost object,
+      workflow status and source-of-supply readiness.
+    freshness: *freshness_current
+    source: *purchase_requisition_api
+    requires_source_specificity: high
+    claims:
+      - statement: PR field maps should include account assignment and workflow status when conversion to PO depends on them.
+        evidence: [sap.ref.api-purchase-requisition-process]
+    relations:
+      objects: [sap.object.purchase-requisition-pr-po]
+      field_maps: [sap.field-map.pr-to-po-readiness]
+    field_definitions:
+      - key: PurchaseRequisition.PurchaseRequisition
+        description: Purchase requisition identifier.
+        usage: Use as the primary PR key for workflow and conversion traceability.
+      - key: PurchaseRequisition.PurchaseRequisitionItem
+        description: Purchase requisition item identifier.
+        usage: Keep item-level quantity, plant and account assignment decisions visible.
+      - key: PurchaseRequisition.AccountAssignmentCategory
+        description: Account assignment category controlling required cost object context.
+        usage: Verify where cost center, order, project or asset data is mandatory.
+      - key: PurchaseRequisition.WorkflowStatus
+        description: Workflow state of the requisition or item.
+        usage: Separate workflow completion from PO creation readiness.
+      - key: PurchaseRequisition.FixedSupplier
+        description: Preferred or fixed supplier/source-of-supply context.
+        usage: Verify sourcing assumptions before automatic PO conversion.
+
+  - id: sap.field-set.purchase-order-core
+    title: Purchase order core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase-order, po, field-mapping, supplier, goods-receipt]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for PO FOs: purchase order/item, supplier, purchasing
+      organization, company code, material/service, quantity, net amount, delivery
+      date, goods receipt indicator and invoice receipt indicator.
+    freshness: *freshness_current
+    source: *purchase_order_api
+    requires_source_specificity: high
+    claims:
+      - statement: PO field maps should distinguish order commitment, delivery/receipt and invoice receipt fields.
+        evidence: [sap.ref.api-purchase-order-process]
+    relations:
+      objects: [sap.object.purchase-order]
+      field_maps: [sap.field-map.po-fulfillment-readiness]
+    field_definitions:
+      - key: PurchaseOrder.PurchaseOrder
+        description: Purchase order identifier.
+        usage: Use as the primary procurement commitment key.
+      - key: PurchaseOrder.Supplier
+        description: Supplier/business partner on the PO.
+        usage: Relate to supplier master and purchasing organization assumptions.
+      - key: PurchaseOrder.PurchasingOrganization
+        description: Purchasing organization responsible for the PO.
+        usage: Verify procurement org and role/workflow assumptions.
+      - key: PurchaseOrder.GoodsReceiptIsExpected
+        description: Indicator that goods receipt is expected before follow-on processing.
+        usage: Separate PO workflow from receipt completion.
+      - key: PurchaseOrder.InvoiceIsExpected
+        description: Indicator that invoice receipt is expected.
+        usage: Connect PO context to AP invoice readiness without treating it as completed.
+
+  - id: sap.field-map.pr-to-po-readiness
+    title: PR to PO readiness field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase-requisition, purchase-order, sourcing, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for PR-to-PO readiness covering item identity, account
+      assignment, source of supply, workflow status and conversion owner.
+    freshness: *freshness_current
+    source: *purchase_requisition_api
+    requires_source_specificity: high
+    claims:
+      - statement: PR-to-PO mapping should explain why an approved requisition can still fail conversion.
+        evidence: [sap.field-set.purchase-requisition-core]
+    relations:
+      objects: [sap.object.purchase-requisition-pr-po, sap.object.purchase-order]
+      fields: [sap.field-set.purchase-requisition-core]
+    mapping_steps:
+      - source: requisition_id
+        target: PurchaseRequisition.PurchaseRequisition
+        verification: Use for PR traceability and conversion audit.
+      - source: requisition_item
+        target: PurchaseRequisition.PurchaseRequisitionItem
+        verification: Keep quantity, plant and account assignment item-specific.
+      - source: account_assignment_category
+        target: PurchaseRequisition.AccountAssignmentCategory
+        verification: Verify required cost object before conversion.
+      - source: workflow_status
+        target: PurchaseRequisition.WorkflowStatus
+        verification: Conversion must wait for required workflow.
+      - source: fixed_supplier
+        target: PurchaseRequisition.FixedSupplier
+        verification: Verify source-of-supply assumptions before automatic PO creation.
+
+  - id: sap.field-map.po-fulfillment-readiness
+    title: PO fulfillment readiness field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase-order, goods-receipt, invoice-receipt, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for PO fulfillment readiness: supplier, purchasing org,
+      ordered quantity/value, delivery date, goods receipt expected and invoice
+      receipt expected.
+    freshness: *freshness_current
+    source: *purchase_order_api
+    requires_source_specificity: high
+    claims:
+      - statement: PO fulfillment mapping should show whether follow-on goods receipt and invoice receipt are expected.
+        evidence: [sap.field-set.purchase-order-core]
+    relations:
+      objects: [sap.object.purchase-order]
+      fields: [sap.field-set.purchase-order-core]
+    mapping_steps:
+      - source: purchase_order
+        target: PurchaseOrder.PurchaseOrder
+        verification: Use for procurement commitment traceability.
+      - source: supplier_id
+        target: PurchaseOrder.Supplier
+        verification: Verify supplier master and procurement org context.
+      - source: purchasing_org
+        target: PurchaseOrder.PurchasingOrganization
+        verification: Verify role/workflow ownership.
+      - source: goods_receipt_expected
+        target: PurchaseOrder.GoodsReceiptIsExpected
+        verification: Determine if receipt is required before invoice processing.
+      - source: invoice_expected
+        target: PurchaseOrder.InvoiceIsExpected
+        verification: Connect PO to AP invoice receipt scenario.
+
+  - id: sap.rule.procurement-workflow-readiness
+    title: Procurement workflow and conversion readiness rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase-requisition, purchase-order, workflow-state, sourcing]
+    used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Decision rule for procurement FOs: requisition workflow completion is necessary but
+      not sufficient for PO creation; source of supply, account assignment,
+      purchasing organization and requester/approver ownership must be explicit.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Workflow-complete PRs can still be blocked from PO conversion by missing sourcing or account assignment context.
+        evidence: [sap.field-map.pr-to-po-readiness]
+    relations:
+      field_maps: [sap.field-map.pr-to-po-readiness]
+    rules:
+      - condition: PR workflow-complete but source of supply missing
+        outcome: block PO conversion and assign sourcing owner
+      - condition: account assignment category requires missing cost object
+        outcome: block workflow/conversion until cost object is supplied
+      - condition: PR workflow-complete with valid source and account assignment
+        outcome: include in PO creation acceptance scenario
+
+  - id: sap.test-pattern.procurement-pr-po-readiness
+    title: Procurement PR-to-PO test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, purchase-requisition, purchase-order, workflow-state, goods-receipt, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, fo.test_data]
+    summary: >
+      Test pattern for procurement PR/PO flows covering workflow, source of
+      supply, account assignment, PO creation and goods/invoice receipt expectations.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Procurement tests should verify PR workflow, sourcing/account assignment, PO creation and receipt expectations independently.
+        evidence: [sap.rule.procurement-workflow-readiness]
+    relations:
+      objects: [sap.object.purchase-requisition-pr-po, sap.object.purchase-order]
+      field_maps: [sap.field-map.pr-to-po-readiness, sap.field-map.po-fulfillment-readiness]
+    test_scenarios:
+      - level: acceptance
+        case: Workflow-complete PR has source of supply and complete account assignment.
+        expected: PR is eligible for PO creation with traceable item context.
+      - level: negative
+        case: Workflow-complete PR lacks fixed supplier/source of supply.
+        expected: PO conversion is blocked with sourcing owner/action.
+      - level: negative
+        case: PO is approved but goods receipt is expected and not posted.
+        expected: Follow-on invoice/receipt readiness remains incomplete.
