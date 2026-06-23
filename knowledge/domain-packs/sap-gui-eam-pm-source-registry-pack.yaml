@@ -1,0 +1,402 @@
+pack_id: sap-gui-eam-pm-source-registry-pack
+title: SAP GUI EAM/PM source registry pack
+description: Link-first public/gated source registry and governance policy for scoped SAP GUI EAM/PM starter coverage.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Use as source pointers only; do not copy SAP documentation or tenant data.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.ref.eam.pm.sap-help-equipment-master
+  title: SAP Help portal search pointer for equipment master / technical object maintenance
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - status
+  - source-registry
+  used_for:
+  - fo.source_traceability
+  - fo.navigation
+  summary: SAP Help portal search pointer for equipment master / technical object maintenance. Use as a source pointer
+    only; verify exact tenant behavior before final consultant answer.
+  freshness: *id001
+  source:
+    kind: public_url
+    title: SAP Help portal search pointer for equipment master / technical object maintenance
+    url: https://help.sap.com/docs/search?q=equipment%20master%20plant%20maintenance
+    retrieved_at: '2026-06-23'
+    specificity: root_pointer
+    license_note: Link-first public source pointer; do not copy SAP or third-party documentation text into the public
+      repo.
+  claims:
+  - statement: This item is a pointer for source discovery and provenance, not copied documentation content.
+    evidence:
+    - sap.ref.eam.pm.sap-help-equipment-master
+  relations: {}
+- id: sap.ref.eam.pm.sap-help-status-management
+  title: SAP Help portal search pointer for status management / status profile
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - status
+  - source-registry
+  used_for:
+  - fo.source_traceability
+  - fo.navigation
+  summary: SAP Help portal search pointer for status management / status profile. Use as a source pointer only;
+    verify exact tenant behavior before final consultant answer.
+  freshness: *id001
+  source:
+    kind: public_url
+    title: SAP Help portal search pointer for status management / status profile
+    url: https://help.sap.com/docs/search?q=status%20management%20status%20profile%20plant%20maintenance
+    retrieved_at: '2026-06-23'
+    specificity: root_pointer
+    license_note: Link-first public source pointer; do not copy SAP or third-party documentation text into the public
+      repo.
+  claims:
+  - statement: This item is a pointer for source discovery and provenance, not copied documentation content.
+    evidence:
+    - sap.ref.eam.pm.sap-help-status-management
+  relations: {}
+- id: sap.ref.eam.pm.sap-help-functional-location
+  title: SAP Help portal search pointer for functional location and technical objects
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - status
+  - source-registry
+  used_for:
+  - fo.source_traceability
+  - fo.navigation
+  summary: SAP Help portal search pointer for functional location and technical objects. Use as a source pointer
+    only; verify exact tenant behavior before final consultant answer.
+  freshness: *id001
+  source:
+    kind: public_url
+    title: SAP Help portal search pointer for functional location and technical objects
+    url: https://help.sap.com/docs/search?q=functional%20location%20equipment%20plant%20maintenance
+    retrieved_at: '2026-06-23'
+    specificity: root_pointer
+    license_note: Link-first public source pointer; do not copy SAP or third-party documentation text into the public
+      repo.
+  claims:
+  - statement: This item is a pointer for source discovery and provenance, not copied documentation content.
+    evidence:
+    - sap.ref.eam.pm.sap-help-functional-location
+  relations: {}
+- id: sap.ref.eam.pm.sap-community-user-status-equipment
+  title: SAP Community pointer for equipment user/system status discussion
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - status
+  - source-registry
+  used_for:
+  - fo.source_traceability
+  - fo.navigation
+  summary: SAP Community pointer for equipment user/system status discussion. Use as a source pointer only; verify
+    exact tenant behavior before final consultant answer.
+  freshness: *id001
+  source:
+    kind: public_url
+    title: SAP Community pointer for equipment user/system status discussion
+    url: https://community.sap.com/t5/enterprise-resource-planning-q-a/equipement-user-status-history/qaq-p/10998096
+    retrieved_at: '2026-06-23'
+    specificity: root_pointer
+    license_note: Link-first public source pointer; do not copy SAP or third-party documentation text into the public
+      repo.
+  claims:
+  - statement: This item is a pointer for source discovery and provenance, not copied documentation content.
+    evidence:
+    - sap.ref.eam.pm.sap-community-user-status-equipment
+  relations: {}
+- id: sap.ref.eam.pm.sap-community-system-status-equipment
+  title: SAP Community pointer for equipment system-status/status-profile caveats
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - status
+  - source-registry
+  used_for:
+  - fo.source_traceability
+  - fo.navigation
+  summary: SAP Community pointer for equipment system-status/status-profile caveats. Use as a source pointer only;
+    verify exact tenant behavior before final consultant answer.
+  freshness: *id001
+  source:
+    kind: public_url
+    title: SAP Community pointer for equipment system-status/status-profile caveats
+    url: https://community.sap.com/t5/enterprise-resource-planning-q-a/system-status-blank-for-equipment-no-changes-allowed/qaq-p/7922216
+    retrieved_at: '2026-06-23'
+    specificity: root_pointer
+    license_note: Link-first public source pointer; do not copy SAP or third-party documentation text into the public
+      repo.
+  claims:
+  - statement: This item is a pointer for source discovery and provenance, not copied documentation content.
+    evidence:
+    - sap.ref.eam.pm.sap-community-system-status-equipment
+  relations: {}
+- id: sap.ref.eam.pm.transaction-code-public-cross-check
+  title: Public cross-check pointer for IE01/IE02/IE03/IH08 transaction code labels
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - status
+  - source-registry
+  used_for:
+  - fo.source_traceability
+  - fo.navigation
+  summary: Public cross-check pointer for IE01/IE02/IE03/IH08 transaction code labels. Use as a source pointer only;
+    verify exact tenant behavior before final consultant answer.
+  freshness: *id001
+  source:
+    kind: public_url
+    title: Public cross-check pointer for IE01/IE02/IE03/IH08 transaction code labels
+    url: https://sapstack.com/tcodes/sap-equipment-status-tcode-in-sap
+    retrieved_at: '2026-06-23'
+    specificity: root_pointer
+    license_note: Link-first public source pointer; do not copy SAP or third-party documentation text into the public
+      repo.
+  claims:
+  - statement: This item is a pointer for source discovery and provenance, not copied documentation content.
+    evidence:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+  relations: {}
+- id: sap.ref.eam.pm.sap-for-me-gated-notes
+  title: SAP for Me / Launchpad gated pointer for tenant-specific SAP Notes and component-specific details
+  kind: external_reference
+  status: active
+  access: gated
+  requires_login: true
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - status
+  - source-registry
+  used_for:
+  - fo.source_traceability
+  - fo.navigation
+  summary: SAP for Me / Launchpad gated pointer for tenant-specific SAP Notes and component-specific details. Use
+    as a source pointer only; verify exact tenant behavior before final consultant answer.
+  freshness: *id001
+  source:
+    kind: gated_url
+    title: SAP for Me / Launchpad gated pointer for tenant-specific SAP Notes and component-specific details
+    url: https://me.sap.com/notes
+    retrieved_at: '2026-06-23'
+    specificity: root_pointer
+    license_note: Gated/source-discovery pointer; use only as a pointer and verify access/tenant specifics before
+      relying on it.
+  claims:
+  - statement: This item is a pointer for source discovery and provenance, not copied documentation content.
+    evidence:
+    - sap.ref.eam.pm.sap-for-me-gated-notes
+  relations: {}
+- id: sap.ref.eam.pm.gui-help-gated
+  title: SAP GUI / in-system help gated pointer for final tenant verification
+  kind: external_reference
+  status: active
+  access: gated
+  requires_login: true
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - status
+  - source-registry
+  used_for:
+  - fo.source_traceability
+  - fo.navigation
+  summary: SAP GUI / in-system help gated pointer for final tenant verification. Use as a source pointer only; verify
+    exact tenant behavior before final consultant answer.
+  freshness: *id001
+  source:
+    kind: gated_url
+    title: SAP GUI / in-system help gated pointer for final tenant verification
+    url: sap-gui://in-system-help/plant-maintenance/equipment
+    retrieved_at: '2026-06-23'
+    specificity: root_pointer
+    license_note: Gated/source-discovery pointer; use only as a pointer and verify access/tenant specifics before
+      relying on it.
+  claims:
+  - statement: This item is a pointer for source discovery and provenance, not copied documentation content.
+    evidence:
+    - sap.ref.eam.pm.gui-help-gated
+  relations: {}
+- id: sap.rule.eam.pm.source-confidence-policy
+  title: SAP GUI EAM/PM source confidence policy
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - source-confidence
+  - tenant-verification
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  - fo.navigation
+  summary: 'Decision rule: public/gated references can support source traceability, but transaction usage and status/profile
+    semantics must be caveated when based on consultant knowledge or tenant-configurable behavior.'
+  freshness: *id001
+  source:
+    kind: internal_pattern
+    title: Internal source confidence policy
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived consultant knowledge; verify in target SAP tenant because screens, statuses and
+      profiles can be configured.
+  rules:
+  - if: answer uses SAP GUI transaction or status semantics without a public/gated pointer or internal_derived caveat
+    then: block ready claim
+    outcome: add provenance/caveat or return needs_curation
+  - if: answer claims a tenant-specific status profile/user status without tenant evidence
+    then: block universality claim
+    outcome: state tenant verification caveat
+  claims:
+  - statement: EAM/PM source confidence requires provenance plus caveats for tenant-specific screens/status profiles.
+    evidence:
+    - sap.ref.eam.pm.sap-help-status-management
+    - sap.ref.eam.pm.sap-for-me-gated-notes
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-equipment-master
+    - sap.ref.eam.pm.sap-help-status-management
+    - sap.ref.eam.pm.sap-help-functional-location
+    - sap.ref.eam.pm.sap-community-user-status-equipment
+    - sap.ref.eam.pm.sap-community-system-status-equipment
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+    - sap.ref.eam.pm.sap-for-me-gated-notes
+    - sap.ref.eam.pm.gui-help-gated
+- id: sap.policy.eam.pm.public-boundary
+  title: SAP GUI EAM/PM public boundary policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - public-boundary
+  - no-screenshots
+  - no-exports
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Public boundary policy for EAM/PM: do not store SAP system screenshots, client exports, internal URLs,
+    tenant role/profile names, customer equipment numbers, or copied SAP documentation.'
+  freshness: *id001
+  source:
+    kind: internal_pattern
+    title: Internal public-boundary policy
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived consultant knowledge; verify in target SAP tenant because screens, statuses and
+      profiles can be configured.
+  claims:
+  - statement: EAM/PM public context must stay generic, source-labelled and free of customer/project data.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    decision_rules:
+    - sap.rule.eam.pm.source-confidence-policy
+- id: sap.test-pattern.eam.pm.source-governance
+  title: SAP GUI EAM/PM source governance test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - source-governance
+  - tenant-verification
+  - test-pattern
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.source_traceability
+  summary: 'Test pattern: a ready EAM/PM answer must include at least one source pointer or explicit internal_derived
+    confidence/caveat, and must not treat tenant-specific status/profile behavior as universal.'
+  freshness: *id001
+  source:
+    kind: internal_pattern
+    title: Internal source governance test pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived consultant knowledge; verify in target SAP tenant because screens, statuses and
+      profiles can be configured.
+  test_scenarios:
+  - name: EAM/PM source-governance smoke
+    given: A question about IE03 equipment status or transaction usage.
+    when: A bundle is selected.
+    then: The bundle includes source pointers and a tenant-verification caveat where consultant-derived or configurable
+      behavior is used.
+  claims:
+  - statement: Source-governance tests prevent source laundering and fake SAP universality.
+    evidence:
+    - sap.policy.eam.pm.public-boundary
+  relations:
+    access_policies:
+    - sap.policy.eam.pm.public-boundary
