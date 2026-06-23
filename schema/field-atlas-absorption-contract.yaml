@@ -1,0 +1,148 @@
+schema_version: 1
+id: sap_field_atlas_absorption_contract
+title: SAP Field Atlas absorption contract for SAP Agent Context
+status: active
+canonical_target:
+  repo: viggomeesters/sap-agent-context
+  local_path: /home/viggo/Dev/sap-agent-context
+provenance_source:
+  repo: viggomeesters/sap-field-atlas
+  url: https://github.com/viggomeesters/sap-field-atlas
+  status: archived_public_legacy_seed
+  role: provenance_source_only
+policy:
+  runtime_dependency: false
+  import_package: false
+  copy_standalone_cli: false
+  copy_standalone_schemas: false
+  copy_generated_artifacts: false
+  preserve_source_urls: true
+  preserve_freshness_expires_at: true
+  preserve_access_labels: true
+  preserve_verification_caveats: true
+  no_private_or_client_data: true
+  no_copied_sap_documentation: true
+concept_mappings:
+  transactions:
+    source_paths:
+      - data/transactions.yaml
+    canonical_kinds:
+      - sap_app
+      - external_reference
+    canonical_paths:
+      - knowledge/apps/
+      - knowledge/source-registry/
+    required_metadata:
+      - source.url
+      - source.specificity
+      - freshness.expires_at
+      - access
+    notes: >
+      Transaction codes are retrieval/search aliases and source context. They
+      must not become runtime commands or copied operational instructions.
+  tables:
+    source_paths:
+      - data/tables.yaml
+    canonical_kinds:
+      - sap_object
+      - external_reference
+    canonical_paths:
+      - knowledge/objects/
+      - knowledge/sap-objects/
+      - knowledge/source-registry/
+    required_relations:
+      - fields
+    notes: >
+      Tables become object anchors only when useful for agent explanation,
+      migration, field-map, or FO context.
+  fields:
+    source_paths:
+      - data/fields.yaml
+    canonical_kinds:
+      - sap_field
+      - field_map
+    canonical_paths:
+      - knowledge/fields/
+      - knowledge/field-maps/
+    required_relations:
+      - objects
+      - field_maps
+    required_metadata:
+      - freshness.expires_at
+      - source.url
+      - source.specificity
+    notes: >
+      Fields must retain technical identity, business label variance,
+      value-source caveats, and release verification status.
+  domains_value_sources:
+    source_paths:
+      - data/domains.yaml
+    canonical_kinds:
+      - sap_field
+      - decision_rule
+      - external_reference
+    canonical_paths:
+      - knowledge/fields/
+      - knowledge/workflows/
+      - knowledge/source-registry/
+    notes: >
+      Value sources and domain/codelist hints become caveats or decision rules;
+      they are not tenant customizing truths unless verified.
+  relationships:
+    source_paths:
+      - data/relationships.yaml
+    canonical_kinds:
+      - sap_object
+      - sap_field
+      - field_map
+    canonical_paths:
+      - knowledge/objects/
+      - knowledge/fields/
+      - knowledge/field-maps/
+    required_relations:
+      - objects
+      - fields
+    notes: >
+      Relationships are imported as cross-item relations, not as a separate
+      runtime graph package.
+  migration_templates:
+    source_paths:
+      - data/migration_templates.yaml
+    canonical_kinds:
+      - field_map
+      - sap_object
+      - test_pattern
+    canonical_paths:
+      - knowledge/field-maps/
+      - knowledge/objects/
+      - knowledge/fo-patterns/
+    required_metadata:
+      - verification_status
+      - freshness.expires_at
+      - source.url
+    notes: >
+      Migration template labels must carry release-specific verification caveats
+      and should use needs_verification/needs_curation when labels are broad or
+      release-dependent.
+  fiori_apps:
+    source_paths:
+      - data/fiori_apps.yaml
+    canonical_kinds:
+      - sap_app
+      - sap_role
+      - access_policy
+    canonical_paths:
+      - knowledge/apps/
+      - knowledge/roles/
+      - knowledge/fo-patterns/
+    notes: >
+      Fiori app entries become app/catalog/role/access context only when backed
+      by public or gated source pointers; empty source lists stay empty, not
+      invented.
+quality_gates:
+  - sap-agent-context validate must pass.
+  - Starter audit-completeness must stay green unless the task explicitly changes the starter gate.
+  - v0.2 gap report may be red until the fill campaign completes.
+  - Generic SAP root URLs do not satisfy exact source coverage.
+  - Public items must not cite internal-derived evidence.
+  - Archived sap-field-atlas is not a runtime dependency.

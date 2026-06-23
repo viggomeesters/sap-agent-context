@@ -44,5 +44,6 @@ generated_outputs:
   path: build
   policy: Generated indexes, bundles and provider manifests are rebuildable and not canonical source.
 import_policy:
-  field_atlas_sources: review-pending-until-source-approved
+  field_atlas_sources: archived-public-provenance-source-only
+  field_atlas_contract: schema/field-atlas-absorption-contract.yaml
   privacy_gate: Do not import customer-specific, copied SAP, private screenshot or proprietary implementation material.

@@ -43,10 +43,29 @@ SAP Agent Context remains responsible for:
 - bundle readiness semantics including stale/expired item handling;
 - McCoy/local-folder integration examples.
 
+## Absorption contract
+
+The canonical concept mapping is maintained in:
+
+- `schema/field-atlas-absorption-contract.yaml`
+
+That contract maps archived Field Atlas concepts into SAP Agent Context without
+reintroducing Field Atlas as a runtime package:
+
+- transactions → `sap_app` / `external_reference` retrieval aliases;
+- tables → `sap_object` anchors;
+- fields → `sap_field` and `field_map` items;
+- domains/value sources → caveats, `sap_field` details or `decision_rule` items;
+- relationships → cross-item `relations`, not a separate graph package;
+- migration templates → `field_map`, `sap_object`, and `test_pattern` context
+  with release/verification caveats;
+- Fiori apps → `sap_app`, `sap_role`, and `access_policy` context only when a
+  source-backed app/catalog/role pointer exists.
+
 ## Not merged
 
-The following Field Atlas surfaces were intentionally not copied into the
-canonical package in this pass:
+The following Field Atlas surfaces are intentionally not copied into the
+canonical package:
 
 - The standalone `sap_field_atlas` Python package and CLI.
 - The standalone Field Atlas schemas as first-class runtime schemas.
@@ -56,11 +75,10 @@ canonical package in this pass:
 
 ## Legacy repository strategy
 
-Preferred public-state after this merge:
+Current public state:
 
 1. `viggomeesters/sap-agent-context` is the canonical clone target for agents.
-2. `viggomeesters/sap-field-atlas` can remain public as a legacy seed/source
-   package, but its README should point readers to `sap-agent-context` for the
-   canonical agent-consumable bundle contract.
-3. If the Field Atlas repository is archived later, keep the GitHub URL alive as
-   a source pointer and update freshness metadata in this repository.
+2. `viggomeesters/sap-field-atlas` is archived public legacy/provenance seed.
+3. The archived GitHub URL stays alive as a source pointer; if it disappears,
+   update `knowledge/source-registry/sap-field-atlas-public.yaml` and related
+   freshness metadata before relying on the absorbed context.

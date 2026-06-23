@@ -86,7 +86,10 @@ def test_context_layout_documents_field_atlas_merge_shape() -> None:
     assert "knowledge/sap-objects" in layout["canonical_folders"]["objects"]["legacy_aliases"]
     assert (
         layout["import_policy"]["field_atlas_sources"]
-        == "review-pending-until-source-approved"
+        == "archived-public-provenance-source-only"
+    )
+    assert layout["import_policy"]["field_atlas_contract"] == (
+        "schema/field-atlas-absorption-contract.yaml"
     )
 
 
