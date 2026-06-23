@@ -1,0 +1,4658 @@
+pack_id: sap-enterprise-process-backbone-bulk-pack
+title: SAP enterprise process backbone bulk context pack
+description: Bulk source-labelled enterprise process backbone for SAP Agent Context. Items are compact, link-first
+  and generic; no customer data or copied SAP documentation.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Large process-backbone pack; keep each domain generic, source-labelled and tenant-verification
+    aware.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.bulk.record-to-report.ref-api
+  title: Record to Report public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Record to Report API/catalog surface. Use as citation anchor only;
+    verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id002
+    kind: public_url
+    title: SAP Business Accelerator Hub - Record to Report public API pointer
+    url: https://api.sap.com/api/API_GLACCOUNTLINEITEMS/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_GLACCOUNTLINEITEMS/overview
+  relations:
+    objects:
+    - sap.bulk.record-to-report.object
+- id: sap.bulk.record-to-report.app
+  title: Record to Report application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Record to Report. Use it to ask which app, role/catalog,
+    variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id004
+    kind: internal_pattern
+    title: Internal Record to Report FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.record-to-report.ref-api
+  relations:
+    objects:
+    - sap.bulk.record-to-report.object
+    decision_rules:
+    - sap.bulk.record-to-report.rule
+- id: sap.bulk.record-to-report.object
+  title: JournalEntry business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: JournalEntry object anchor for Record to Report FOs. It keeps identity, organizational context, lifecycle
+    status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_GLACCOUNTLINEITEMS/overview
+  relations:
+    fields:
+    - sap.bulk.record-to-report.field-set
+    field_maps:
+    - sap.bulk.record-to-report.field-map
+- id: sap.bulk.record-to-report.field-set
+  title: Record to Report core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Record to Report: CompanyCode, FiscalYear, AccountingDocument, GLAccount,
+    ProfitCenter, and related status/control fields.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_GLACCOUNTLINEITEMS/overview
+  relations:
+    objects:
+    - sap.bulk.record-to-report.object
+    field_maps:
+    - sap.bulk.record-to-report.field-map
+  field_definitions:
+  - key: JournalEntry.CompanyCode
+    description: CompanyCode context for Record to Report design and verification.
+    usage: Use CompanyCode to make period close readiness traceable in FO, migration, integration or test design.
+  - key: JournalEntry.FiscalYear
+    description: FiscalYear context for Record to Report design and verification.
+    usage: Use FiscalYear to make period close readiness traceable in FO, migration, integration or test design.
+  - key: JournalEntry.AccountingDocument
+    description: AccountingDocument context for Record to Report design and verification.
+    usage: Use AccountingDocument to make period close readiness traceable in FO, migration, integration or test
+      design.
+  - key: JournalEntry.GLAccount
+    description: GLAccount context for Record to Report design and verification.
+    usage: Use GLAccount to make period close readiness traceable in FO, migration, integration or test design.
+  - key: JournalEntry.ProfitCenter
+    description: ProfitCenter context for Record to Report design and verification.
+    usage: Use ProfitCenter to make period close readiness traceable in FO, migration, integration or test design.
+  - key: JournalEntry.CostCenter
+    description: CostCenter context for Record to Report design and verification.
+    usage: Use CostCenter to make period close readiness traceable in FO, migration, integration or test design.
+  - key: JournalEntry.AmountInCompanyCodeCurrency
+    description: AmountInCompanyCodeCurrency context for Record to Report design and verification.
+    usage: Use AmountInCompanyCodeCurrency to make period close readiness traceable in FO, migration, integration
+      or test design.
+  - key: JournalEntry.PostingDate
+    description: PostingDate context for Record to Report design and verification.
+    usage: Use PostingDate to make period close readiness traceable in FO, migration, integration or test design.
+- id: sap.bulk.record-to-report.field-map
+  title: Record to Report readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Record to Report. It maps core identity, organization, status, owner, amount/quantity/date,
+    and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_GLACCOUNTLINEITEMS/overview
+  relations:
+    fields:
+    - sap.bulk.record-to-report.field-set
+    objects:
+    - sap.bulk.record-to-report.object
+  field_map: &id003
+  - source: JournalEntry.CompanyCode
+    target: JournalEntry.CompanyCode
+    purpose: Preserve CompanyCode for Record to Report readiness and test traceability.
+  - source: JournalEntry.FiscalYear
+    target: JournalEntry.FiscalYear
+    purpose: Preserve FiscalYear for Record to Report readiness and test traceability.
+  - source: JournalEntry.AccountingDocument
+    target: JournalEntry.AccountingDocument
+    purpose: Preserve AccountingDocument for Record to Report readiness and test traceability.
+  - source: JournalEntry.GLAccount
+    target: JournalEntry.GLAccount
+    purpose: Preserve GLAccount for Record to Report readiness and test traceability.
+  - source: JournalEntry.ProfitCenter
+    target: JournalEntry.ProfitCenter
+    purpose: Preserve ProfitCenter for Record to Report readiness and test traceability.
+  - source: JournalEntry.CostCenter
+    target: JournalEntry.CostCenter
+    purpose: Preserve CostCenter for Record to Report readiness and test traceability.
+  mapping_steps: *id003
+- id: sap.bulk.record-to-report.rule
+  title: Record to Report decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Record to Report: do not claim readiness unless source, object, field-map, owner and
+    test signals are present.'
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.record-to-report.ref-api
+  relations:
+    objects:
+    - sap.bulk.record-to-report.object
+    field_maps:
+    - sap.bulk.record-to-report.field-map
+  rules:
+  - if: Missing CompanyCode or lifecycle status
+    then: block final FO claim
+    outcome: request Record to Report owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.record-to-report.test-pattern
+  title: Record to Report FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Record to Report: prove object identity, mapped fields, status/exception handling,
+    and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.record-to-report.ref-api
+  relations:
+    objects:
+    - sap.bulk.record-to-report.object
+    field_maps:
+    - sap.bulk.record-to-report.field-map
+  test_scenarios:
+  - name: Record to Report happy path
+    given: A synthetic JournalEntry example with object, field map and owner context.
+    when: An agent drafts posting and reconciliation FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Record to Report generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.record-to-report.fo-pattern
+  title: Record to Report FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Record to Report: include process trigger, object identity, field mapping, decision
+    owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.record-to-report.ref-api
+  relations:
+    objects:
+    - sap.bulk.record-to-report.object
+    test_patterns:
+    - sap.bulk.record-to-report.test-pattern
+- id: sap.bulk.record-to-report.scope-item
+  title: Record to Report scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Record to Report. It reminds agents to verify activated scope, app availability,
+    roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.record-to-report.ref-api
+  relations:
+    apps:
+    - sap.bulk.record-to-report.app
+- id: sap.bulk.record-to-report.role
+  title: Record to Report responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Record to Report. Use it to request tenant-specific responsibility
+    and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.record-to-report.ref-api
+  relations:
+    apps:
+    - sap.bulk.record-to-report.app
+- id: sap.bulk.record-to-report.access-policy
+  title: Record to Report public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Record to Report: public/source pointers and generic internal-derived patterns are
+    allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.record-to-report.ref-api
+  relations:
+    references:
+    - sap.bulk.record-to-report.ref-api
+- id: sap.bulk.record-to-report.integration-touchpoint
+  title: Record to Report process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - record-to-report
+  - general-ledger
+  - period-close
+  - accounting
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Record to Report: identify business key, payload fields, lifecycle
+    status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Record to Report FO context should keep period close readiness explicit, source-labelled, and separate
+      from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_GLACCOUNTLINEITEMS/overview
+  relations:
+    fields:
+    - sap.bulk.record-to-report.field-set
+    field_maps:
+    - sap.bulk.record-to-report.field-map
+- id: sap.bulk.order-to-cash.ref-api
+  title: Order to Cash public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Order to Cash API/catalog surface. Use as citation anchor only;
+    verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id005
+    kind: public_url
+    title: SAP Business Accelerator Hub - Order to Cash public API pointer
+    url: https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.order-to-cash.object
+- id: sap.bulk.order-to-cash.app
+  title: Order to Cash application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Order to Cash. Use it to ask which app, role/catalog, variant,
+    and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id007
+    kind: internal_pattern
+    title: Internal Order to Cash FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.order-to-cash.ref-api
+  relations:
+    objects:
+    - sap.bulk.order-to-cash.object
+    decision_rules:
+    - sap.bulk.order-to-cash.rule
+- id: sap.bulk.order-to-cash.object
+  title: SalesOrder business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: SalesOrder object anchor for Order to Cash FOs. It keeps identity, organizational context, lifecycle
+    status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id005
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.order-to-cash.field-set
+    field_maps:
+    - sap.bulk.order-to-cash.field-map
+- id: sap.bulk.order-to-cash.field-set
+  title: Order to Cash core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Order to Cash: SalesOrder, SalesOrderItem, SoldToParty, SalesOrganization,
+    DistributionChannel, and related status/control fields.'
+  freshness: *id001
+  source: *id005
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.order-to-cash.object
+    field_maps:
+    - sap.bulk.order-to-cash.field-map
+  field_definitions:
+  - key: SalesOrder.SalesOrder
+    description: SalesOrder context for Order to Cash design and verification.
+    usage: Use SalesOrder to make fulfillment and billing readiness traceable in FO, migration, integration or test
+      design.
+  - key: SalesOrder.SalesOrderItem
+    description: SalesOrderItem context for Order to Cash design and verification.
+    usage: Use SalesOrderItem to make fulfillment and billing readiness traceable in FO, migration, integration
+      or test design.
+  - key: SalesOrder.SoldToParty
+    description: SoldToParty context for Order to Cash design and verification.
+    usage: Use SoldToParty to make fulfillment and billing readiness traceable in FO, migration, integration or
+      test design.
+  - key: SalesOrder.SalesOrganization
+    description: SalesOrganization context for Order to Cash design and verification.
+    usage: Use SalesOrganization to make fulfillment and billing readiness traceable in FO, migration, integration
+      or test design.
+  - key: SalesOrder.DistributionChannel
+    description: DistributionChannel context for Order to Cash design and verification.
+    usage: Use DistributionChannel to make fulfillment and billing readiness traceable in FO, migration, integration
+      or test design.
+  - key: SalesOrder.RequestedDeliveryDate
+    description: RequestedDeliveryDate context for Order to Cash design and verification.
+    usage: Use RequestedDeliveryDate to make fulfillment and billing readiness traceable in FO, migration, integration
+      or test design.
+  - key: SalesOrder.DeliveryBlockReason
+    description: DeliveryBlockReason context for Order to Cash design and verification.
+    usage: Use DeliveryBlockReason to make fulfillment and billing readiness traceable in FO, migration, integration
+      or test design.
+  - key: SalesOrder.BillingBlockReason
+    description: BillingBlockReason context for Order to Cash design and verification.
+    usage: Use BillingBlockReason to make fulfillment and billing readiness traceable in FO, migration, integration
+      or test design.
+- id: sap.bulk.order-to-cash.field-map
+  title: Order to Cash readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Order to Cash. It maps core identity, organization, status, owner, amount/quantity/date,
+    and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id005
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.order-to-cash.field-set
+    objects:
+    - sap.bulk.order-to-cash.object
+  field_map: &id006
+  - source: SalesOrder.SalesOrder
+    target: SalesOrder.SalesOrder
+    purpose: Preserve SalesOrder for Order to Cash readiness and test traceability.
+  - source: SalesOrder.SalesOrderItem
+    target: SalesOrder.SalesOrderItem
+    purpose: Preserve SalesOrderItem for Order to Cash readiness and test traceability.
+  - source: SalesOrder.SoldToParty
+    target: SalesOrder.SoldToParty
+    purpose: Preserve SoldToParty for Order to Cash readiness and test traceability.
+  - source: SalesOrder.SalesOrganization
+    target: SalesOrder.SalesOrganization
+    purpose: Preserve SalesOrganization for Order to Cash readiness and test traceability.
+  - source: SalesOrder.DistributionChannel
+    target: SalesOrder.DistributionChannel
+    purpose: Preserve DistributionChannel for Order to Cash readiness and test traceability.
+  - source: SalesOrder.RequestedDeliveryDate
+    target: SalesOrder.RequestedDeliveryDate
+    purpose: Preserve RequestedDeliveryDate for Order to Cash readiness and test traceability.
+  mapping_steps: *id006
+- id: sap.bulk.order-to-cash.rule
+  title: Order to Cash decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Order to Cash: do not claim readiness unless source, object, field-map, owner and
+    test signals are present.'
+  freshness: *id001
+  source: *id007
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.order-to-cash.ref-api
+  relations:
+    objects:
+    - sap.bulk.order-to-cash.object
+    field_maps:
+    - sap.bulk.order-to-cash.field-map
+  rules:
+  - if: Missing SalesOrder or lifecycle status
+    then: block final FO claim
+    outcome: request Order to Cash owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.order-to-cash.test-pattern
+  title: Order to Cash FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Order to Cash: prove object identity, mapped fields, status/exception handling, and
+    fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id007
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.order-to-cash.ref-api
+  relations:
+    objects:
+    - sap.bulk.order-to-cash.object
+    field_maps:
+    - sap.bulk.order-to-cash.field-map
+  test_scenarios:
+  - name: Order to Cash happy path
+    given: A synthetic SalesOrder example with object, field map and owner context.
+    when: An agent drafts order delivery billing FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Order to Cash generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.order-to-cash.fo-pattern
+  title: Order to Cash FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Order to Cash: include process trigger, object identity, field mapping, decision
+    owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id007
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.order-to-cash.ref-api
+  relations:
+    objects:
+    - sap.bulk.order-to-cash.object
+    test_patterns:
+    - sap.bulk.order-to-cash.test-pattern
+- id: sap.bulk.order-to-cash.scope-item
+  title: Order to Cash scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Order to Cash. It reminds agents to verify activated scope, app availability,
+    roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id007
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.order-to-cash.ref-api
+  relations:
+    apps:
+    - sap.bulk.order-to-cash.app
+- id: sap.bulk.order-to-cash.role
+  title: Order to Cash responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Order to Cash. Use it to request tenant-specific responsibility
+    and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id007
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.order-to-cash.ref-api
+  relations:
+    apps:
+    - sap.bulk.order-to-cash.app
+- id: sap.bulk.order-to-cash.access-policy
+  title: Order to Cash public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Order to Cash: public/source pointers and generic internal-derived patterns are allowed;
+    customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id007
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.order-to-cash.ref-api
+  relations:
+    references:
+    - sap.bulk.order-to-cash.ref-api
+- id: sap.bulk.order-to-cash.integration-touchpoint
+  title: Order to Cash process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - order-to-cash
+  - sales-order
+  - delivery
+  - billing
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Order to Cash: identify business key, payload fields, lifecycle status,
+    error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id005
+  claims:
+  - statement: Order to Cash FO context should keep fulfillment and billing readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.order-to-cash.field-set
+    field_maps:
+    - sap.bulk.order-to-cash.field-map
+- id: sap.bulk.delivery-logistics.ref-api
+  title: Delivery and Logistics Execution public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Delivery and Logistics Execution API/catalog surface. Use as citation
+    anchor only; verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id008
+    kind: public_url
+    title: SAP Business Accelerator Hub - Delivery and Logistics Execution public API pointer
+    url: https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.delivery-logistics.object
+- id: sap.bulk.delivery-logistics.app
+  title: Delivery and Logistics Execution application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Delivery and Logistics Execution. Use it to ask which app,
+    role/catalog, variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id010
+    kind: internal_pattern
+    title: Internal Delivery and Logistics Execution FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.delivery-logistics.ref-api
+  relations:
+    objects:
+    - sap.bulk.delivery-logistics.object
+    decision_rules:
+    - sap.bulk.delivery-logistics.rule
+- id: sap.bulk.delivery-logistics.object
+  title: OutboundDelivery business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: OutboundDelivery object anchor for Delivery and Logistics Execution FOs. It keeps identity, organizational
+    context, lifecycle status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id008
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.delivery-logistics.field-set
+    field_maps:
+    - sap.bulk.delivery-logistics.field-map
+- id: sap.bulk.delivery-logistics.field-set
+  title: Delivery and Logistics Execution core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Delivery and Logistics Execution: DeliveryDocument, DeliveryDocumentItem,
+    ShippingPoint, ShipToParty, PickingStatus, and related status/control fields.'
+  freshness: *id001
+  source: *id008
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.delivery-logistics.object
+    field_maps:
+    - sap.bulk.delivery-logistics.field-map
+  field_definitions:
+  - key: OutboundDelivery.DeliveryDocument
+    description: DeliveryDocument context for Delivery and Logistics Execution design and verification.
+    usage: Use DeliveryDocument to make delivery execution readiness traceable in FO, migration, integration or
+      test design.
+  - key: OutboundDelivery.DeliveryDocumentItem
+    description: DeliveryDocumentItem context for Delivery and Logistics Execution design and verification.
+    usage: Use DeliveryDocumentItem to make delivery execution readiness traceable in FO, migration, integration
+      or test design.
+  - key: OutboundDelivery.ShippingPoint
+    description: ShippingPoint context for Delivery and Logistics Execution design and verification.
+    usage: Use ShippingPoint to make delivery execution readiness traceable in FO, migration, integration or test
+      design.
+  - key: OutboundDelivery.ShipToParty
+    description: ShipToParty context for Delivery and Logistics Execution design and verification.
+    usage: Use ShipToParty to make delivery execution readiness traceable in FO, migration, integration or test
+      design.
+  - key: OutboundDelivery.PickingStatus
+    description: PickingStatus context for Delivery and Logistics Execution design and verification.
+    usage: Use PickingStatus to make delivery execution readiness traceable in FO, migration, integration or test
+      design.
+  - key: OutboundDelivery.GoodsIssueStatus
+    description: GoodsIssueStatus context for Delivery and Logistics Execution design and verification.
+    usage: Use GoodsIssueStatus to make delivery execution readiness traceable in FO, migration, integration or
+      test design.
+  - key: OutboundDelivery.Route
+    description: Route context for Delivery and Logistics Execution design and verification.
+    usage: Use Route to make delivery execution readiness traceable in FO, migration, integration or test design.
+  - key: OutboundDelivery.PlannedGoodsIssueDate
+    description: PlannedGoodsIssueDate context for Delivery and Logistics Execution design and verification.
+    usage: Use PlannedGoodsIssueDate to make delivery execution readiness traceable in FO, migration, integration
+      or test design.
+- id: sap.bulk.delivery-logistics.field-map
+  title: Delivery and Logistics Execution readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Delivery and Logistics Execution. It maps core identity, organization, status,
+    owner, amount/quantity/date, and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id008
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.delivery-logistics.field-set
+    objects:
+    - sap.bulk.delivery-logistics.object
+  field_map: &id009
+  - source: OutboundDelivery.DeliveryDocument
+    target: OutboundDelivery.DeliveryDocument
+    purpose: Preserve DeliveryDocument for Delivery and Logistics Execution readiness and test traceability.
+  - source: OutboundDelivery.DeliveryDocumentItem
+    target: OutboundDelivery.DeliveryDocumentItem
+    purpose: Preserve DeliveryDocumentItem for Delivery and Logistics Execution readiness and test traceability.
+  - source: OutboundDelivery.ShippingPoint
+    target: OutboundDelivery.ShippingPoint
+    purpose: Preserve ShippingPoint for Delivery and Logistics Execution readiness and test traceability.
+  - source: OutboundDelivery.ShipToParty
+    target: OutboundDelivery.ShipToParty
+    purpose: Preserve ShipToParty for Delivery and Logistics Execution readiness and test traceability.
+  - source: OutboundDelivery.PickingStatus
+    target: OutboundDelivery.PickingStatus
+    purpose: Preserve PickingStatus for Delivery and Logistics Execution readiness and test traceability.
+  - source: OutboundDelivery.GoodsIssueStatus
+    target: OutboundDelivery.GoodsIssueStatus
+    purpose: Preserve GoodsIssueStatus for Delivery and Logistics Execution readiness and test traceability.
+  mapping_steps: *id009
+- id: sap.bulk.delivery-logistics.rule
+  title: Delivery and Logistics Execution decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Delivery and Logistics Execution: do not claim readiness unless source, object, field-map,
+    owner and test signals are present.'
+  freshness: *id001
+  source: *id010
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.delivery-logistics.ref-api
+  relations:
+    objects:
+    - sap.bulk.delivery-logistics.object
+    field_maps:
+    - sap.bulk.delivery-logistics.field-map
+  rules:
+  - if: Missing DeliveryDocument or lifecycle status
+    then: block final FO claim
+    outcome: request Delivery and Logistics Execution owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.delivery-logistics.test-pattern
+  title: Delivery and Logistics Execution FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Delivery and Logistics Execution: prove object identity, mapped fields, status/exception
+    handling, and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id010
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.delivery-logistics.ref-api
+  relations:
+    objects:
+    - sap.bulk.delivery-logistics.object
+    field_maps:
+    - sap.bulk.delivery-logistics.field-map
+  test_scenarios:
+  - name: Delivery and Logistics Execution happy path
+    given: A synthetic OutboundDelivery example with object, field map and owner context.
+    when: An agent drafts pick pack goods issue FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Delivery and Logistics Execution generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.delivery-logistics.fo-pattern
+  title: Delivery and Logistics Execution FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Delivery and Logistics Execution: include process trigger, object identity, field
+    mapping, decision owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id010
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.delivery-logistics.ref-api
+  relations:
+    objects:
+    - sap.bulk.delivery-logistics.object
+    test_patterns:
+    - sap.bulk.delivery-logistics.test-pattern
+- id: sap.bulk.delivery-logistics.scope-item
+  title: Delivery and Logistics Execution scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Delivery and Logistics Execution. It reminds agents to verify activated scope,
+    app availability, roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id010
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.delivery-logistics.ref-api
+  relations:
+    apps:
+    - sap.bulk.delivery-logistics.app
+- id: sap.bulk.delivery-logistics.role
+  title: Delivery and Logistics Execution responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Delivery and Logistics Execution. Use it to request tenant-specific
+    responsibility and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id010
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.delivery-logistics.ref-api
+  relations:
+    apps:
+    - sap.bulk.delivery-logistics.app
+- id: sap.bulk.delivery-logistics.access-policy
+  title: Delivery and Logistics Execution public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Delivery and Logistics Execution: public/source pointers and generic internal-derived
+    patterns are allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id010
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.delivery-logistics.ref-api
+  relations:
+    references:
+    - sap.bulk.delivery-logistics.ref-api
+- id: sap.bulk.delivery-logistics.integration-touchpoint
+  title: Delivery and Logistics Execution process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - logistics
+  - delivery
+  - shipment
+  - goods-issue
+  - warehouse
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Delivery and Logistics Execution: identify business key, payload fields,
+    lifecycle status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id008
+  claims:
+  - statement: Delivery and Logistics Execution FO context should keep delivery execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.delivery-logistics.field-set
+    field_maps:
+    - sap.bulk.delivery-logistics.field-map
+- id: sap.bulk.inventory-management.ref-api
+  title: Inventory Management public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Inventory Management API/catalog surface. Use as citation anchor
+    only; verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id011
+    kind: public_url
+    title: SAP Business Accelerator Hub - Inventory Management public API pointer
+    url: https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.inventory-management.object
+- id: sap.bulk.inventory-management.app
+  title: Inventory Management application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Inventory Management. Use it to ask which app, role/catalog,
+    variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id013
+    kind: internal_pattern
+    title: Internal Inventory Management FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.inventory-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.inventory-management.object
+    decision_rules:
+    - sap.bulk.inventory-management.rule
+- id: sap.bulk.inventory-management.object
+  title: MaterialDocument business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: MaterialDocument object anchor for Inventory Management FOs. It keeps identity, organizational context,
+    lifecycle status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id011
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.inventory-management.field-set
+    field_maps:
+    - sap.bulk.inventory-management.field-map
+- id: sap.bulk.inventory-management.field-set
+  title: Inventory Management core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Inventory Management: MaterialDocument, MaterialDocumentYear, Material, Plant,
+    StorageLocation, and related status/control fields.'
+  freshness: *id001
+  source: *id011
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.inventory-management.object
+    field_maps:
+    - sap.bulk.inventory-management.field-map
+  field_definitions:
+  - key: MaterialDocument.MaterialDocument
+    description: MaterialDocument context for Inventory Management design and verification.
+    usage: Use MaterialDocument to make stock posting readiness traceable in FO, migration, integration or test
+      design.
+  - key: MaterialDocument.MaterialDocumentYear
+    description: MaterialDocumentYear context for Inventory Management design and verification.
+    usage: Use MaterialDocumentYear to make stock posting readiness traceable in FO, migration, integration or test
+      design.
+  - key: MaterialDocument.Material
+    description: Material context for Inventory Management design and verification.
+    usage: Use Material to make stock posting readiness traceable in FO, migration, integration or test design.
+  - key: MaterialDocument.Plant
+    description: Plant context for Inventory Management design and verification.
+    usage: Use Plant to make stock posting readiness traceable in FO, migration, integration or test design.
+  - key: MaterialDocument.StorageLocation
+    description: StorageLocation context for Inventory Management design and verification.
+    usage: Use StorageLocation to make stock posting readiness traceable in FO, migration, integration or test design.
+  - key: MaterialDocument.GoodsMovementType
+    description: GoodsMovementType context for Inventory Management design and verification.
+    usage: Use GoodsMovementType to make stock posting readiness traceable in FO, migration, integration or test
+      design.
+  - key: MaterialDocument.QuantityInBaseUnit
+    description: QuantityInBaseUnit context for Inventory Management design and verification.
+    usage: Use QuantityInBaseUnit to make stock posting readiness traceable in FO, migration, integration or test
+      design.
+  - key: MaterialDocument.InventoryStockType
+    description: InventoryStockType context for Inventory Management design and verification.
+    usage: Use InventoryStockType to make stock posting readiness traceable in FO, migration, integration or test
+      design.
+- id: sap.bulk.inventory-management.field-map
+  title: Inventory Management readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Inventory Management. It maps core identity, organization, status, owner, amount/quantity/date,
+    and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id011
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.inventory-management.field-set
+    objects:
+    - sap.bulk.inventory-management.object
+  field_map: &id012
+  - source: MaterialDocument.MaterialDocument
+    target: MaterialDocument.MaterialDocument
+    purpose: Preserve MaterialDocument for Inventory Management readiness and test traceability.
+  - source: MaterialDocument.MaterialDocumentYear
+    target: MaterialDocument.MaterialDocumentYear
+    purpose: Preserve MaterialDocumentYear for Inventory Management readiness and test traceability.
+  - source: MaterialDocument.Material
+    target: MaterialDocument.Material
+    purpose: Preserve Material for Inventory Management readiness and test traceability.
+  - source: MaterialDocument.Plant
+    target: MaterialDocument.Plant
+    purpose: Preserve Plant for Inventory Management readiness and test traceability.
+  - source: MaterialDocument.StorageLocation
+    target: MaterialDocument.StorageLocation
+    purpose: Preserve StorageLocation for Inventory Management readiness and test traceability.
+  - source: MaterialDocument.GoodsMovementType
+    target: MaterialDocument.GoodsMovementType
+    purpose: Preserve GoodsMovementType for Inventory Management readiness and test traceability.
+  mapping_steps: *id012
+- id: sap.bulk.inventory-management.rule
+  title: Inventory Management decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Inventory Management: do not claim readiness unless source, object, field-map, owner
+    and test signals are present.'
+  freshness: *id001
+  source: *id013
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.inventory-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.inventory-management.object
+    field_maps:
+    - sap.bulk.inventory-management.field-map
+  rules:
+  - if: Missing MaterialDocument or lifecycle status
+    then: block final FO claim
+    outcome: request Inventory Management owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.inventory-management.test-pattern
+  title: Inventory Management FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Inventory Management: prove object identity, mapped fields, status/exception handling,
+    and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id013
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.inventory-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.inventory-management.object
+    field_maps:
+    - sap.bulk.inventory-management.field-map
+  test_scenarios:
+  - name: Inventory Management happy path
+    given: A synthetic MaterialDocument example with object, field map and owner context.
+    when: An agent drafts goods movement reconciliation FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Inventory Management generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.inventory-management.fo-pattern
+  title: Inventory Management FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Inventory Management: include process trigger, object identity, field mapping,
+    decision owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id013
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.inventory-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.inventory-management.object
+    test_patterns:
+    - sap.bulk.inventory-management.test-pattern
+- id: sap.bulk.inventory-management.scope-item
+  title: Inventory Management scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Inventory Management. It reminds agents to verify activated scope, app availability,
+    roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id013
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.inventory-management.ref-api
+  relations:
+    apps:
+    - sap.bulk.inventory-management.app
+- id: sap.bulk.inventory-management.role
+  title: Inventory Management responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Inventory Management. Use it to request tenant-specific responsibility
+    and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id013
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.inventory-management.ref-api
+  relations:
+    apps:
+    - sap.bulk.inventory-management.app
+- id: sap.bulk.inventory-management.access-policy
+  title: Inventory Management public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Inventory Management: public/source pointers and generic internal-derived patterns
+    are allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id013
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.inventory-management.ref-api
+  relations:
+    references:
+    - sap.bulk.inventory-management.ref-api
+- id: sap.bulk.inventory-management.integration-touchpoint
+  title: Inventory Management process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory
+  - material-document
+  - stock
+  - goods-movement
+  - warehouse
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Inventory Management: identify business key, payload fields, lifecycle
+    status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id011
+  claims:
+  - statement: Inventory Management FO context should keep stock posting readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.inventory-management.field-set
+    field_maps:
+    - sap.bulk.inventory-management.field-map
+- id: sap.bulk.manufacturing-mrp.ref-api
+  title: Manufacturing and MRP public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Manufacturing and MRP API/catalog surface. Use as citation anchor
+    only; verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id014
+    kind: public_url
+    title: SAP Business Accelerator Hub - Manufacturing and MRP public API pointer
+    url: https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.manufacturing-mrp.object
+- id: sap.bulk.manufacturing-mrp.app
+  title: Manufacturing and MRP application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Manufacturing and MRP. Use it to ask which app, role/catalog,
+    variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id016
+    kind: internal_pattern
+    title: Internal Manufacturing and MRP FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.manufacturing-mrp.ref-api
+  relations:
+    objects:
+    - sap.bulk.manufacturing-mrp.object
+    decision_rules:
+    - sap.bulk.manufacturing-mrp.rule
+- id: sap.bulk.manufacturing-mrp.object
+  title: ProductionOrder business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: ProductionOrder object anchor for Manufacturing and MRP FOs. It keeps identity, organizational context,
+    lifecycle status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id014
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.manufacturing-mrp.field-set
+    field_maps:
+    - sap.bulk.manufacturing-mrp.field-map
+- id: sap.bulk.manufacturing-mrp.field-set
+  title: Manufacturing and MRP core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Manufacturing and MRP: ProductionOrder, Material, ProductionPlant, MRPController,
+    OrderType, and related status/control fields.'
+  freshness: *id001
+  source: *id014
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.manufacturing-mrp.object
+    field_maps:
+    - sap.bulk.manufacturing-mrp.field-map
+  field_definitions:
+  - key: ProductionOrder.ProductionOrder
+    description: ProductionOrder context for Manufacturing and MRP design and verification.
+    usage: Use ProductionOrder to make production order readiness traceable in FO, migration, integration or test
+      design.
+  - key: ProductionOrder.Material
+    description: Material context for Manufacturing and MRP design and verification.
+    usage: Use Material to make production order readiness traceable in FO, migration, integration or test design.
+  - key: ProductionOrder.ProductionPlant
+    description: ProductionPlant context for Manufacturing and MRP design and verification.
+    usage: Use ProductionPlant to make production order readiness traceable in FO, migration, integration or test
+      design.
+  - key: ProductionOrder.MRPController
+    description: MRPController context for Manufacturing and MRP design and verification.
+    usage: Use MRPController to make production order readiness traceable in FO, migration, integration or test
+      design.
+  - key: ProductionOrder.OrderType
+    description: OrderType context for Manufacturing and MRP design and verification.
+    usage: Use OrderType to make production order readiness traceable in FO, migration, integration or test design.
+  - key: ProductionOrder.BasicStartDate
+    description: BasicStartDate context for Manufacturing and MRP design and verification.
+    usage: Use BasicStartDate to make production order readiness traceable in FO, migration, integration or test
+      design.
+  - key: ProductionOrder.BasicEndDate
+    description: BasicEndDate context for Manufacturing and MRP design and verification.
+    usage: Use BasicEndDate to make production order readiness traceable in FO, migration, integration or test design.
+  - key: ProductionOrder.ConfirmedQuantity
+    description: ConfirmedQuantity context for Manufacturing and MRP design and verification.
+    usage: Use ConfirmedQuantity to make production order readiness traceable in FO, migration, integration or test
+      design.
+  - key: ProductionOrder.SystemStatus
+    description: SystemStatus context for Manufacturing and MRP design and verification.
+    usage: Use SystemStatus to make production order readiness traceable in FO, migration, integration or test design.
+- id: sap.bulk.manufacturing-mrp.field-map
+  title: Manufacturing and MRP readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Manufacturing and MRP. It maps core identity, organization, status, owner, amount/quantity/date,
+    and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id014
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.manufacturing-mrp.field-set
+    objects:
+    - sap.bulk.manufacturing-mrp.object
+  field_map: &id015
+  - source: ProductionOrder.ProductionOrder
+    target: ProductionOrder.ProductionOrder
+    purpose: Preserve ProductionOrder for Manufacturing and MRP readiness and test traceability.
+  - source: ProductionOrder.Material
+    target: ProductionOrder.Material
+    purpose: Preserve Material for Manufacturing and MRP readiness and test traceability.
+  - source: ProductionOrder.ProductionPlant
+    target: ProductionOrder.ProductionPlant
+    purpose: Preserve ProductionPlant for Manufacturing and MRP readiness and test traceability.
+  - source: ProductionOrder.MRPController
+    target: ProductionOrder.MRPController
+    purpose: Preserve MRPController for Manufacturing and MRP readiness and test traceability.
+  - source: ProductionOrder.OrderType
+    target: ProductionOrder.OrderType
+    purpose: Preserve OrderType for Manufacturing and MRP readiness and test traceability.
+  - source: ProductionOrder.BasicStartDate
+    target: ProductionOrder.BasicStartDate
+    purpose: Preserve BasicStartDate for Manufacturing and MRP readiness and test traceability.
+  mapping_steps: *id015
+- id: sap.bulk.manufacturing-mrp.rule
+  title: Manufacturing and MRP decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Manufacturing and MRP: do not claim readiness unless source, object, field-map, owner
+    and test signals are present.'
+  freshness: *id001
+  source: *id016
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.manufacturing-mrp.ref-api
+  relations:
+    objects:
+    - sap.bulk.manufacturing-mrp.object
+    field_maps:
+    - sap.bulk.manufacturing-mrp.field-map
+  rules:
+  - if: Missing ProductionOrder or lifecycle status
+    then: block final FO claim
+    outcome: request Manufacturing and MRP owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.manufacturing-mrp.test-pattern
+  title: Manufacturing and MRP FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Manufacturing and MRP: prove object identity, mapped fields, status/exception handling,
+    and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id016
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.manufacturing-mrp.ref-api
+  relations:
+    objects:
+    - sap.bulk.manufacturing-mrp.object
+    field_maps:
+    - sap.bulk.manufacturing-mrp.field-map
+  test_scenarios:
+  - name: Manufacturing and MRP happy path
+    given: A synthetic ProductionOrder example with object, field map and owner context.
+    when: An agent drafts plan release confirm settle FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Manufacturing and MRP generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.manufacturing-mrp.fo-pattern
+  title: Manufacturing and MRP FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Manufacturing and MRP: include process trigger, object identity, field mapping,
+    decision owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id016
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.manufacturing-mrp.ref-api
+  relations:
+    objects:
+    - sap.bulk.manufacturing-mrp.object
+    test_patterns:
+    - sap.bulk.manufacturing-mrp.test-pattern
+- id: sap.bulk.manufacturing-mrp.scope-item
+  title: Manufacturing and MRP scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Manufacturing and MRP. It reminds agents to verify activated scope, app availability,
+    roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id016
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.manufacturing-mrp.ref-api
+  relations:
+    apps:
+    - sap.bulk.manufacturing-mrp.app
+- id: sap.bulk.manufacturing-mrp.role
+  title: Manufacturing and MRP responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Manufacturing and MRP. Use it to request tenant-specific responsibility
+    and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id016
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.manufacturing-mrp.ref-api
+  relations:
+    apps:
+    - sap.bulk.manufacturing-mrp.app
+- id: sap.bulk.manufacturing-mrp.access-policy
+  title: Manufacturing and MRP public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Manufacturing and MRP: public/source pointers and generic internal-derived patterns
+    are allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id016
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.manufacturing-mrp.ref-api
+  relations:
+    references:
+    - sap.bulk.manufacturing-mrp.ref-api
+- id: sap.bulk.manufacturing-mrp.integration-touchpoint
+  title: Manufacturing and MRP process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - manufacturing
+  - mrp
+  - production-order
+  - bom
+  - routing
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Manufacturing and MRP: identify business key, payload fields, lifecycle
+    status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id014
+  claims:
+  - statement: Manufacturing and MRP FO context should keep production order readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.manufacturing-mrp.field-set
+    field_maps:
+    - sap.bulk.manufacturing-mrp.field-map
+- id: sap.bulk.quality-management.ref-api
+  title: Quality Management public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Quality Management API/catalog surface. Use as citation anchor only;
+    verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id017
+    kind: public_url
+    title: SAP Business Accelerator Hub - Quality Management public API pointer
+    url: https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.quality-management.object
+- id: sap.bulk.quality-management.app
+  title: Quality Management application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Quality Management. Use it to ask which app, role/catalog,
+    variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id019
+    kind: internal_pattern
+    title: Internal Quality Management FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.quality-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.quality-management.object
+    decision_rules:
+    - sap.bulk.quality-management.rule
+- id: sap.bulk.quality-management.object
+  title: InspectionLot business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: InspectionLot object anchor for Quality Management FOs. It keeps identity, organizational context, lifecycle
+    status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id017
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.quality-management.field-set
+    field_maps:
+    - sap.bulk.quality-management.field-map
+- id: sap.bulk.quality-management.field-set
+  title: Quality Management core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Quality Management: InspectionLot, Material, Plant, InspectionType, InspectionLotStatus,
+    and related status/control fields.'
+  freshness: *id001
+  source: *id017
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.quality-management.object
+    field_maps:
+    - sap.bulk.quality-management.field-map
+  field_definitions:
+  - key: InspectionLot.InspectionLot
+    description: InspectionLot context for Quality Management design and verification.
+    usage: Use InspectionLot to make quality release readiness traceable in FO, migration, integration or test design.
+  - key: InspectionLot.Material
+    description: Material context for Quality Management design and verification.
+    usage: Use Material to make quality release readiness traceable in FO, migration, integration or test design.
+  - key: InspectionLot.Plant
+    description: Plant context for Quality Management design and verification.
+    usage: Use Plant to make quality release readiness traceable in FO, migration, integration or test design.
+  - key: InspectionLot.InspectionType
+    description: InspectionType context for Quality Management design and verification.
+    usage: Use InspectionType to make quality release readiness traceable in FO, migration, integration or test
+      design.
+  - key: InspectionLot.InspectionLotStatus
+    description: InspectionLotStatus context for Quality Management design and verification.
+    usage: Use InspectionLotStatus to make quality release readiness traceable in FO, migration, integration or
+      test design.
+  - key: InspectionLot.SampleSize
+    description: SampleSize context for Quality Management design and verification.
+    usage: Use SampleSize to make quality release readiness traceable in FO, migration, integration or test design.
+  - key: InspectionLot.UsageDecisionCode
+    description: UsageDecisionCode context for Quality Management design and verification.
+    usage: Use UsageDecisionCode to make quality release readiness traceable in FO, migration, integration or test
+      design.
+  - key: InspectionLot.Batch
+    description: Batch context for Quality Management design and verification.
+    usage: Use Batch to make quality release readiness traceable in FO, migration, integration or test design.
+- id: sap.bulk.quality-management.field-map
+  title: Quality Management readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Quality Management. It maps core identity, organization, status, owner, amount/quantity/date,
+    and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id017
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.quality-management.field-set
+    objects:
+    - sap.bulk.quality-management.object
+  field_map: &id018
+  - source: InspectionLot.InspectionLot
+    target: InspectionLot.InspectionLot
+    purpose: Preserve InspectionLot for Quality Management readiness and test traceability.
+  - source: InspectionLot.Material
+    target: InspectionLot.Material
+    purpose: Preserve Material for Quality Management readiness and test traceability.
+  - source: InspectionLot.Plant
+    target: InspectionLot.Plant
+    purpose: Preserve Plant for Quality Management readiness and test traceability.
+  - source: InspectionLot.InspectionType
+    target: InspectionLot.InspectionType
+    purpose: Preserve InspectionType for Quality Management readiness and test traceability.
+  - source: InspectionLot.InspectionLotStatus
+    target: InspectionLot.InspectionLotStatus
+    purpose: Preserve InspectionLotStatus for Quality Management readiness and test traceability.
+  - source: InspectionLot.SampleSize
+    target: InspectionLot.SampleSize
+    purpose: Preserve SampleSize for Quality Management readiness and test traceability.
+  mapping_steps: *id018
+- id: sap.bulk.quality-management.rule
+  title: Quality Management decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Quality Management: do not claim readiness unless source, object, field-map, owner
+    and test signals are present.'
+  freshness: *id001
+  source: *id019
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.quality-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.quality-management.object
+    field_maps:
+    - sap.bulk.quality-management.field-map
+  rules:
+  - if: Missing InspectionLot or lifecycle status
+    then: block final FO claim
+    outcome: request Quality Management owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.quality-management.test-pattern
+  title: Quality Management FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Quality Management: prove object identity, mapped fields, status/exception handling,
+    and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id019
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.quality-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.quality-management.object
+    field_maps:
+    - sap.bulk.quality-management.field-map
+  test_scenarios:
+  - name: Quality Management happy path
+    given: A synthetic InspectionLot example with object, field map and owner context.
+    when: An agent drafts inspect decide release FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Quality Management generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.quality-management.fo-pattern
+  title: Quality Management FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Quality Management: include process trigger, object identity, field mapping,
+    decision owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id019
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.quality-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.quality-management.object
+    test_patterns:
+    - sap.bulk.quality-management.test-pattern
+- id: sap.bulk.quality-management.scope-item
+  title: Quality Management scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Quality Management. It reminds agents to verify activated scope, app availability,
+    roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id019
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.quality-management.ref-api
+  relations:
+    apps:
+    - sap.bulk.quality-management.app
+- id: sap.bulk.quality-management.role
+  title: Quality Management responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Quality Management. Use it to request tenant-specific responsibility
+    and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id019
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.quality-management.ref-api
+  relations:
+    apps:
+    - sap.bulk.quality-management.app
+- id: sap.bulk.quality-management.access-policy
+  title: Quality Management public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Quality Management: public/source pointers and generic internal-derived patterns are
+    allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id019
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.quality-management.ref-api
+  relations:
+    references:
+    - sap.bulk.quality-management.ref-api
+- id: sap.bulk.quality-management.integration-touchpoint
+  title: Quality Management process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection-lot
+  - usage-decision
+  - defect
+  - batch
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Quality Management: identify business key, payload fields, lifecycle
+    status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id017
+  claims:
+  - statement: Quality Management FO context should keep quality release readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.quality-management.field-set
+    field_maps:
+    - sap.bulk.quality-management.field-map
+- id: sap.bulk.enterprise-asset-management.ref-api
+  title: Enterprise Asset Management public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Enterprise Asset Management API/catalog surface. Use as citation
+    anchor only; verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id020
+    kind: public_url
+    title: SAP Business Accelerator Hub - Enterprise Asset Management public API pointer
+    url: https://api.sap.com/api/API_MAINTENANCEORDER/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    objects:
+    - sap.bulk.enterprise-asset-management.object
+- id: sap.bulk.enterprise-asset-management.app
+  title: Enterprise Asset Management application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Enterprise Asset Management. Use it to ask which app, role/catalog,
+    variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id022
+    kind: internal_pattern
+    title: Internal Enterprise Asset Management FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-asset-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.enterprise-asset-management.object
+    decision_rules:
+    - sap.bulk.enterprise-asset-management.rule
+- id: sap.bulk.enterprise-asset-management.object
+  title: MaintenanceOrder business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: MaintenanceOrder object anchor for Enterprise Asset Management FOs. It keeps identity, organizational
+    context, lifecycle status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id020
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    fields:
+    - sap.bulk.enterprise-asset-management.field-set
+    field_maps:
+    - sap.bulk.enterprise-asset-management.field-map
+- id: sap.bulk.enterprise-asset-management.field-set
+  title: Enterprise Asset Management core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Enterprise Asset Management: MaintenanceOrder, MaintenanceNotification, TechnicalObject,
+    Equipment, FunctionalLocation, and related status/control fields.'
+  freshness: *id001
+  source: *id020
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    objects:
+    - sap.bulk.enterprise-asset-management.object
+    field_maps:
+    - sap.bulk.enterprise-asset-management.field-map
+  field_definitions:
+  - key: MaintenanceOrder.MaintenanceOrder
+    description: MaintenanceOrder context for Enterprise Asset Management design and verification.
+    usage: Use MaintenanceOrder to make maintenance execution readiness traceable in FO, migration, integration
+      or test design.
+  - key: MaintenanceOrder.MaintenanceNotification
+    description: MaintenanceNotification context for Enterprise Asset Management design and verification.
+    usage: Use MaintenanceNotification to make maintenance execution readiness traceable in FO, migration, integration
+      or test design.
+  - key: MaintenanceOrder.TechnicalObject
+    description: TechnicalObject context for Enterprise Asset Management design and verification.
+    usage: Use TechnicalObject to make maintenance execution readiness traceable in FO, migration, integration or
+      test design.
+  - key: MaintenanceOrder.Equipment
+    description: Equipment context for Enterprise Asset Management design and verification.
+    usage: Use Equipment to make maintenance execution readiness traceable in FO, migration, integration or test
+      design.
+  - key: MaintenanceOrder.FunctionalLocation
+    description: FunctionalLocation context for Enterprise Asset Management design and verification.
+    usage: Use FunctionalLocation to make maintenance execution readiness traceable in FO, migration, integration
+      or test design.
+  - key: MaintenanceOrder.MaintenanceActivityType
+    description: MaintenanceActivityType context for Enterprise Asset Management design and verification.
+    usage: Use MaintenanceActivityType to make maintenance execution readiness traceable in FO, migration, integration
+      or test design.
+  - key: MaintenanceOrder.RequiredStartDate
+    description: RequiredStartDate context for Enterprise Asset Management design and verification.
+    usage: Use RequiredStartDate to make maintenance execution readiness traceable in FO, migration, integration
+      or test design.
+  - key: MaintenanceOrder.SystemStatus
+    description: SystemStatus context for Enterprise Asset Management design and verification.
+    usage: Use SystemStatus to make maintenance execution readiness traceable in FO, migration, integration or test
+      design.
+- id: sap.bulk.enterprise-asset-management.field-map
+  title: Enterprise Asset Management readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Enterprise Asset Management. It maps core identity, organization, status, owner,
+    amount/quantity/date, and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id020
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    fields:
+    - sap.bulk.enterprise-asset-management.field-set
+    objects:
+    - sap.bulk.enterprise-asset-management.object
+  field_map: &id021
+  - source: MaintenanceOrder.MaintenanceOrder
+    target: MaintenanceOrder.MaintenanceOrder
+    purpose: Preserve MaintenanceOrder for Enterprise Asset Management readiness and test traceability.
+  - source: MaintenanceOrder.MaintenanceNotification
+    target: MaintenanceOrder.MaintenanceNotification
+    purpose: Preserve MaintenanceNotification for Enterprise Asset Management readiness and test traceability.
+  - source: MaintenanceOrder.TechnicalObject
+    target: MaintenanceOrder.TechnicalObject
+    purpose: Preserve TechnicalObject for Enterprise Asset Management readiness and test traceability.
+  - source: MaintenanceOrder.Equipment
+    target: MaintenanceOrder.Equipment
+    purpose: Preserve Equipment for Enterprise Asset Management readiness and test traceability.
+  - source: MaintenanceOrder.FunctionalLocation
+    target: MaintenanceOrder.FunctionalLocation
+    purpose: Preserve FunctionalLocation for Enterprise Asset Management readiness and test traceability.
+  - source: MaintenanceOrder.MaintenanceActivityType
+    target: MaintenanceOrder.MaintenanceActivityType
+    purpose: Preserve MaintenanceActivityType for Enterprise Asset Management readiness and test traceability.
+  mapping_steps: *id021
+- id: sap.bulk.enterprise-asset-management.rule
+  title: Enterprise Asset Management decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Enterprise Asset Management: do not claim readiness unless source, object, field-map,
+    owner and test signals are present.'
+  freshness: *id001
+  source: *id022
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-asset-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.enterprise-asset-management.object
+    field_maps:
+    - sap.bulk.enterprise-asset-management.field-map
+  rules:
+  - if: Missing MaintenanceOrder or lifecycle status
+    then: block final FO claim
+    outcome: request Enterprise Asset Management owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.enterprise-asset-management.test-pattern
+  title: Enterprise Asset Management FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Enterprise Asset Management: prove object identity, mapped fields, status/exception
+    handling, and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id022
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-asset-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.enterprise-asset-management.object
+    field_maps:
+    - sap.bulk.enterprise-asset-management.field-map
+  test_scenarios:
+  - name: Enterprise Asset Management happy path
+    given: A synthetic MaintenanceOrder example with object, field map and owner context.
+    when: An agent drafts notify plan execute confirm FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Enterprise Asset Management generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.enterprise-asset-management.fo-pattern
+  title: Enterprise Asset Management FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Enterprise Asset Management: include process trigger, object identity, field
+    mapping, decision owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id022
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-asset-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.enterprise-asset-management.object
+    test_patterns:
+    - sap.bulk.enterprise-asset-management.test-pattern
+- id: sap.bulk.enterprise-asset-management.scope-item
+  title: Enterprise Asset Management scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Enterprise Asset Management. It reminds agents to verify activated scope,
+    app availability, roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id022
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-asset-management.ref-api
+  relations:
+    apps:
+    - sap.bulk.enterprise-asset-management.app
+- id: sap.bulk.enterprise-asset-management.role
+  title: Enterprise Asset Management responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Enterprise Asset Management. Use it to request tenant-specific
+    responsibility and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id022
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-asset-management.ref-api
+  relations:
+    apps:
+    - sap.bulk.enterprise-asset-management.app
+- id: sap.bulk.enterprise-asset-management.access-policy
+  title: Enterprise Asset Management public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Enterprise Asset Management: public/source pointers and generic internal-derived patterns
+    are allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id022
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-asset-management.ref-api
+  relations:
+    references:
+    - sap.bulk.enterprise-asset-management.ref-api
+- id: sap.bulk.enterprise-asset-management.integration-touchpoint
+  title: Enterprise Asset Management process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - asset-management
+  - work-order
+  - equipment
+  - notification
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Enterprise Asset Management: identify business key, payload fields,
+    lifecycle status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id020
+  claims:
+  - statement: Enterprise Asset Management FO context should keep maintenance execution readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    fields:
+    - sap.bulk.enterprise-asset-management.field-set
+    field_maps:
+    - sap.bulk.enterprise-asset-management.field-map
+- id: sap.bulk.service-management.ref-api
+  title: Service Management public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Service Management API/catalog surface. Use as citation anchor only;
+    verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id023
+    kind: public_url
+    title: SAP Business Accelerator Hub - Service Management public API pointer
+    url: https://api.sap.com/api/API_SERVICE_ORDER_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SERVICE_ORDER_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.service-management.object
+- id: sap.bulk.service-management.app
+  title: Service Management application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Service Management. Use it to ask which app, role/catalog,
+    variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id025
+    kind: internal_pattern
+    title: Internal Service Management FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.service-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.service-management.object
+    decision_rules:
+    - sap.bulk.service-management.rule
+- id: sap.bulk.service-management.object
+  title: ServiceOrder business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: ServiceOrder object anchor for Service Management FOs. It keeps identity, organizational context, lifecycle
+    status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id023
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SERVICE_ORDER_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.service-management.field-set
+    field_maps:
+    - sap.bulk.service-management.field-map
+- id: sap.bulk.service-management.field-set
+  title: Service Management core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Service Management: ServiceOrder, ServiceOrderItem, SoldToParty, ServiceEmployee,
+    RequestedServiceStartDate, and related status/control fields.'
+  freshness: *id001
+  source: *id023
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SERVICE_ORDER_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.service-management.object
+    field_maps:
+    - sap.bulk.service-management.field-map
+  field_definitions:
+  - key: ServiceOrder.ServiceOrder
+    description: ServiceOrder context for Service Management design and verification.
+    usage: Use ServiceOrder to make service fulfillment readiness traceable in FO, migration, integration or test
+      design.
+  - key: ServiceOrder.ServiceOrderItem
+    description: ServiceOrderItem context for Service Management design and verification.
+    usage: Use ServiceOrderItem to make service fulfillment readiness traceable in FO, migration, integration or
+      test design.
+  - key: ServiceOrder.SoldToParty
+    description: SoldToParty context for Service Management design and verification.
+    usage: Use SoldToParty to make service fulfillment readiness traceable in FO, migration, integration or test
+      design.
+  - key: ServiceOrder.ServiceEmployee
+    description: ServiceEmployee context for Service Management design and verification.
+    usage: Use ServiceEmployee to make service fulfillment readiness traceable in FO, migration, integration or
+      test design.
+  - key: ServiceOrder.RequestedServiceStartDate
+    description: RequestedServiceStartDate context for Service Management design and verification.
+    usage: Use RequestedServiceStartDate to make service fulfillment readiness traceable in FO, migration, integration
+      or test design.
+  - key: ServiceOrder.ServiceProduct
+    description: ServiceProduct context for Service Management design and verification.
+    usage: Use ServiceProduct to make service fulfillment readiness traceable in FO, migration, integration or test
+      design.
+  - key: ServiceOrder.ServiceStatus
+    description: ServiceStatus context for Service Management design and verification.
+    usage: Use ServiceStatus to make service fulfillment readiness traceable in FO, migration, integration or test
+      design.
+  - key: ServiceOrder.BillingRelevance
+    description: BillingRelevance context for Service Management design and verification.
+    usage: Use BillingRelevance to make service fulfillment readiness traceable in FO, migration, integration or
+      test design.
+- id: sap.bulk.service-management.field-map
+  title: Service Management readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Service Management. It maps core identity, organization, status, owner, amount/quantity/date,
+    and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id023
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SERVICE_ORDER_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.service-management.field-set
+    objects:
+    - sap.bulk.service-management.object
+  field_map: &id024
+  - source: ServiceOrder.ServiceOrder
+    target: ServiceOrder.ServiceOrder
+    purpose: Preserve ServiceOrder for Service Management readiness and test traceability.
+  - source: ServiceOrder.ServiceOrderItem
+    target: ServiceOrder.ServiceOrderItem
+    purpose: Preserve ServiceOrderItem for Service Management readiness and test traceability.
+  - source: ServiceOrder.SoldToParty
+    target: ServiceOrder.SoldToParty
+    purpose: Preserve SoldToParty for Service Management readiness and test traceability.
+  - source: ServiceOrder.ServiceEmployee
+    target: ServiceOrder.ServiceEmployee
+    purpose: Preserve ServiceEmployee for Service Management readiness and test traceability.
+  - source: ServiceOrder.RequestedServiceStartDate
+    target: ServiceOrder.RequestedServiceStartDate
+    purpose: Preserve RequestedServiceStartDate for Service Management readiness and test traceability.
+  - source: ServiceOrder.ServiceProduct
+    target: ServiceOrder.ServiceProduct
+    purpose: Preserve ServiceProduct for Service Management readiness and test traceability.
+  mapping_steps: *id024
+- id: sap.bulk.service-management.rule
+  title: Service Management decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Service Management: do not claim readiness unless source, object, field-map, owner
+    and test signals are present.'
+  freshness: *id001
+  source: *id025
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.service-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.service-management.object
+    field_maps:
+    - sap.bulk.service-management.field-map
+  rules:
+  - if: Missing ServiceOrder or lifecycle status
+    then: block final FO claim
+    outcome: request Service Management owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.service-management.test-pattern
+  title: Service Management FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Service Management: prove object identity, mapped fields, status/exception handling,
+    and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id025
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.service-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.service-management.object
+    field_maps:
+    - sap.bulk.service-management.field-map
+  test_scenarios:
+  - name: Service Management happy path
+    given: A synthetic ServiceOrder example with object, field map and owner context.
+    when: An agent drafts service order to billing FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Service Management generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.service-management.fo-pattern
+  title: Service Management FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Service Management: include process trigger, object identity, field mapping,
+    decision owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id025
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.service-management.ref-api
+  relations:
+    objects:
+    - sap.bulk.service-management.object
+    test_patterns:
+    - sap.bulk.service-management.test-pattern
+- id: sap.bulk.service-management.scope-item
+  title: Service Management scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Service Management. It reminds agents to verify activated scope, app availability,
+    roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id025
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.service-management.ref-api
+  relations:
+    apps:
+    - sap.bulk.service-management.app
+- id: sap.bulk.service-management.role
+  title: Service Management responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Service Management. Use it to request tenant-specific responsibility
+    and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id025
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.service-management.ref-api
+  relations:
+    apps:
+    - sap.bulk.service-management.app
+- id: sap.bulk.service-management.access-policy
+  title: Service Management public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Service Management: public/source pointers and generic internal-derived patterns are
+    allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id025
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.service-management.ref-api
+  relations:
+    references:
+    - sap.bulk.service-management.ref-api
+- id: sap.bulk.service-management.integration-touchpoint
+  title: Service Management process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - service-order
+  - service-contract
+  - case
+  - entitlement
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Service Management: identify business key, payload fields, lifecycle
+    status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id023
+  claims:
+  - statement: Service Management FO context should keep service fulfillment readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_SERVICE_ORDER_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.service-management.field-set
+    field_maps:
+    - sap.bulk.service-management.field-map
+- id: sap.bulk.tax-compliance.ref-api
+  title: Tax and Compliance public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Tax and Compliance API/catalog surface. Use as citation anchor only;
+    verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id026
+    kind: public_url
+    title: SAP Business Accelerator Hub - Tax and Compliance public API pointer
+    url: https://api.sap.com/api/API_TAX_CODE_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_TAX_CODE_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.tax-compliance.object
+- id: sap.bulk.tax-compliance.app
+  title: Tax and Compliance application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Tax and Compliance. Use it to ask which app, role/catalog,
+    variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id028
+    kind: internal_pattern
+    title: Internal Tax and Compliance FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.tax-compliance.ref-api
+  relations:
+    objects:
+    - sap.bulk.tax-compliance.object
+    decision_rules:
+    - sap.bulk.tax-compliance.rule
+- id: sap.bulk.tax-compliance.object
+  title: TaxDetermination business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: TaxDetermination object anchor for Tax and Compliance FOs. It keeps identity, organizational context,
+    lifecycle status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id026
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_TAX_CODE_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.tax-compliance.field-set
+    field_maps:
+    - sap.bulk.tax-compliance.field-map
+- id: sap.bulk.tax-compliance.field-set
+  title: Tax and Compliance core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Tax and Compliance: CompanyCode, Country, TaxCode, TaxJurisdiction, TaxBaseAmount,
+    and related status/control fields.'
+  freshness: *id001
+  source: *id026
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_TAX_CODE_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.tax-compliance.object
+    field_maps:
+    - sap.bulk.tax-compliance.field-map
+  field_definitions:
+  - key: TaxDetermination.CompanyCode
+    description: CompanyCode context for Tax and Compliance design and verification.
+    usage: Use CompanyCode to make tax determination readiness traceable in FO, migration, integration or test design.
+  - key: TaxDetermination.Country
+    description: Country context for Tax and Compliance design and verification.
+    usage: Use Country to make tax determination readiness traceable in FO, migration, integration or test design.
+  - key: TaxDetermination.TaxCode
+    description: TaxCode context for Tax and Compliance design and verification.
+    usage: Use TaxCode to make tax determination readiness traceable in FO, migration, integration or test design.
+  - key: TaxDetermination.TaxJurisdiction
+    description: TaxJurisdiction context for Tax and Compliance design and verification.
+    usage: Use TaxJurisdiction to make tax determination readiness traceable in FO, migration, integration or test
+      design.
+  - key: TaxDetermination.TaxBaseAmount
+    description: TaxBaseAmount context for Tax and Compliance design and verification.
+    usage: Use TaxBaseAmount to make tax determination readiness traceable in FO, migration, integration or test
+      design.
+  - key: TaxDetermination.TaxAmount
+    description: TaxAmount context for Tax and Compliance design and verification.
+    usage: Use TaxAmount to make tax determination readiness traceable in FO, migration, integration or test design.
+  - key: TaxDetermination.Supplier
+    description: Supplier context for Tax and Compliance design and verification.
+    usage: Use Supplier to make tax determination readiness traceable in FO, migration, integration or test design.
+  - key: TaxDetermination.Customer
+    description: Customer context for Tax and Compliance design and verification.
+    usage: Use Customer to make tax determination readiness traceable in FO, migration, integration or test design.
+- id: sap.bulk.tax-compliance.field-map
+  title: Tax and Compliance readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Tax and Compliance. It maps core identity, organization, status, owner, amount/quantity/date,
+    and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id026
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_TAX_CODE_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.tax-compliance.field-set
+    objects:
+    - sap.bulk.tax-compliance.object
+  field_map: &id027
+  - source: TaxDetermination.CompanyCode
+    target: TaxDetermination.CompanyCode
+    purpose: Preserve CompanyCode for Tax and Compliance readiness and test traceability.
+  - source: TaxDetermination.Country
+    target: TaxDetermination.Country
+    purpose: Preserve Country for Tax and Compliance readiness and test traceability.
+  - source: TaxDetermination.TaxCode
+    target: TaxDetermination.TaxCode
+    purpose: Preserve TaxCode for Tax and Compliance readiness and test traceability.
+  - source: TaxDetermination.TaxJurisdiction
+    target: TaxDetermination.TaxJurisdiction
+    purpose: Preserve TaxJurisdiction for Tax and Compliance readiness and test traceability.
+  - source: TaxDetermination.TaxBaseAmount
+    target: TaxDetermination.TaxBaseAmount
+    purpose: Preserve TaxBaseAmount for Tax and Compliance readiness and test traceability.
+  - source: TaxDetermination.TaxAmount
+    target: TaxDetermination.TaxAmount
+    purpose: Preserve TaxAmount for Tax and Compliance readiness and test traceability.
+  mapping_steps: *id027
+- id: sap.bulk.tax-compliance.rule
+  title: Tax and Compliance decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Tax and Compliance: do not claim readiness unless source, object, field-map, owner
+    and test signals are present.'
+  freshness: *id001
+  source: *id028
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.tax-compliance.ref-api
+  relations:
+    objects:
+    - sap.bulk.tax-compliance.object
+    field_maps:
+    - sap.bulk.tax-compliance.field-map
+  rules:
+  - if: Missing CompanyCode or lifecycle status
+    then: block final FO claim
+    outcome: request Tax and Compliance owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.tax-compliance.test-pattern
+  title: Tax and Compliance FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Tax and Compliance: prove object identity, mapped fields, status/exception handling,
+    and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id028
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.tax-compliance.ref-api
+  relations:
+    objects:
+    - sap.bulk.tax-compliance.object
+    field_maps:
+    - sap.bulk.tax-compliance.field-map
+  test_scenarios:
+  - name: Tax and Compliance happy path
+    given: A synthetic TaxDetermination example with object, field map and owner context.
+    when: An agent drafts tax code validation FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Tax and Compliance generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.tax-compliance.fo-pattern
+  title: Tax and Compliance FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Tax and Compliance: include process trigger, object identity, field mapping,
+    decision owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id028
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.tax-compliance.ref-api
+  relations:
+    objects:
+    - sap.bulk.tax-compliance.object
+    test_patterns:
+    - sap.bulk.tax-compliance.test-pattern
+- id: sap.bulk.tax-compliance.scope-item
+  title: Tax and Compliance scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Tax and Compliance. It reminds agents to verify activated scope, app availability,
+    roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id028
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.tax-compliance.ref-api
+  relations:
+    apps:
+    - sap.bulk.tax-compliance.app
+- id: sap.bulk.tax-compliance.role
+  title: Tax and Compliance responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Tax and Compliance. Use it to request tenant-specific responsibility
+    and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id028
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.tax-compliance.ref-api
+  relations:
+    apps:
+    - sap.bulk.tax-compliance.app
+- id: sap.bulk.tax-compliance.access-policy
+  title: Tax and Compliance public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Tax and Compliance: public/source pointers and generic internal-derived patterns are
+    allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id028
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.tax-compliance.ref-api
+  relations:
+    references:
+    - sap.bulk.tax-compliance.ref-api
+- id: sap.bulk.tax-compliance.integration-touchpoint
+  title: Tax and Compliance process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - compliance
+  - vat
+  - withholding
+  - jurisdiction
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Tax and Compliance: identify business key, payload fields, lifecycle
+    status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id026
+  claims:
+  - statement: Tax and Compliance FO context should keep tax determination readiness explicit, source-labelled,
+      and separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_TAX_CODE_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.tax-compliance.field-set
+    field_maps:
+    - sap.bulk.tax-compliance.field-map
+- id: sap.bulk.enterprise-projects.ref-api
+  title: Enterprise Projects public API/source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - api
+  - source-traceability
+  used_for:
+  - fo.source_traceability
+  - fo.integration
+  - fo.field_mapping
+  summary: Link-first public source pointer for Enterprise Projects API/catalog surface. Use as citation anchor
+    only; verify exact release and tenant availability before implementation.
+  freshness: *id001
+  source: &id029
+    kind: public_url
+    title: SAP Business Accelerator Hub - Enterprise Projects public API pointer
+    url: https://api.sap.com/api/API_PROJECT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.enterprise-projects.object
+- id: sap.bulk.enterprise-projects.app
+  title: Enterprise Projects application/configuration surface
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - app
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.authorization
+  - fo.workflow
+  summary: Generic application/configuration surface for Enterprise Projects. Use it to ask which app, role/catalog,
+    variant, and configuration owner must be verified in the tenant.
+  freshness: *id001
+  source: &id031
+    kind: internal_pattern
+    title: Internal Enterprise Projects FO pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic implementation pattern; no customer data or copied SAP documentation.
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-projects.ref-api
+  relations:
+    objects:
+    - sap.bulk.enterprise-projects.object
+    decision_rules:
+    - sap.bulk.enterprise-projects.rule
+- id: sap.bulk.enterprise-projects.object
+  title: Project business object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - business-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Project object anchor for Enterprise Projects FOs. It keeps identity, organizational context, lifecycle
+    status, and downstream readiness explicit.
+  freshness: *id001
+  source: *id029
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.enterprise-projects.field-set
+    field_maps:
+    - sap.bulk.enterprise-projects.field-map
+- id: sap.bulk.enterprise-projects.field-set
+  title: Enterprise Projects core field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - field-mapping
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  - migration.analysis
+  summary: 'Core field-set context for Enterprise Projects: Project, WBSElement, CompanyCode, ResponsibleCostCenter,
+    ProjectProfile, and related status/control fields.'
+  freshness: *id001
+  source: *id029
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.enterprise-projects.object
+    field_maps:
+    - sap.bulk.enterprise-projects.field-map
+  field_definitions:
+  - key: Project.Project
+    description: Project context for Enterprise Projects design and verification.
+    usage: Use Project to make project control readiness traceable in FO, migration, integration or test design.
+  - key: Project.WBSElement
+    description: WBSElement context for Enterprise Projects design and verification.
+    usage: Use WBSElement to make project control readiness traceable in FO, migration, integration or test design.
+  - key: Project.CompanyCode
+    description: CompanyCode context for Enterprise Projects design and verification.
+    usage: Use CompanyCode to make project control readiness traceable in FO, migration, integration or test design.
+  - key: Project.ResponsibleCostCenter
+    description: ResponsibleCostCenter context for Enterprise Projects design and verification.
+    usage: Use ResponsibleCostCenter to make project control readiness traceable in FO, migration, integration or
+      test design.
+  - key: Project.ProjectProfile
+    description: ProjectProfile context for Enterprise Projects design and verification.
+    usage: Use ProjectProfile to make project control readiness traceable in FO, migration, integration or test
+      design.
+  - key: Project.StartDate
+    description: StartDate context for Enterprise Projects design and verification.
+    usage: Use StartDate to make project control readiness traceable in FO, migration, integration or test design.
+  - key: Project.EndDate
+    description: EndDate context for Enterprise Projects design and verification.
+    usage: Use EndDate to make project control readiness traceable in FO, migration, integration or test design.
+  - key: Project.BudgetAvailabilityControl
+    description: BudgetAvailabilityControl context for Enterprise Projects design and verification.
+    usage: Use BudgetAvailabilityControl to make project control readiness traceable in FO, migration, integration
+      or test design.
+- id: sap.bulk.enterprise-projects.field-map
+  title: Enterprise Projects readiness field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - field-mapping
+  - readiness
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_data
+  summary: Field-map pattern for Enterprise Projects. It maps core identity, organization, status, owner, amount/quantity/date,
+    and exception signals into FO-ready sections.
+  freshness: *id001
+  source: *id029
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.enterprise-projects.field-set
+    objects:
+    - sap.bulk.enterprise-projects.object
+  field_map: &id030
+  - source: Project.Project
+    target: Project.Project
+    purpose: Preserve Project for Enterprise Projects readiness and test traceability.
+  - source: Project.WBSElement
+    target: Project.WBSElement
+    purpose: Preserve WBSElement for Enterprise Projects readiness and test traceability.
+  - source: Project.CompanyCode
+    target: Project.CompanyCode
+    purpose: Preserve CompanyCode for Enterprise Projects readiness and test traceability.
+  - source: Project.ResponsibleCostCenter
+    target: Project.ResponsibleCostCenter
+    purpose: Preserve ResponsibleCostCenter for Enterprise Projects readiness and test traceability.
+  - source: Project.ProjectProfile
+    target: Project.ProjectProfile
+    purpose: Preserve ProjectProfile for Enterprise Projects readiness and test traceability.
+  - source: Project.StartDate
+    target: Project.StartDate
+    purpose: Preserve StartDate for Enterprise Projects readiness and test traceability.
+  mapping_steps: *id030
+- id: sap.bulk.enterprise-projects.rule
+  title: Enterprise Projects decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - decision-rule
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Enterprise Projects: do not claim readiness unless source, object, field-map, owner
+    and test signals are present.'
+  freshness: *id001
+  source: *id031
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-projects.ref-api
+  relations:
+    objects:
+    - sap.bulk.enterprise-projects.object
+    field_maps:
+    - sap.bulk.enterprise-projects.field-map
+  rules:
+  - if: Missing Project or lifecycle status
+    then: block final FO claim
+    outcome: request Enterprise Projects owner verification
+  - if: Generic dashboard/report wording without object or field anchors
+    then: mark bundle needs_curation
+    outcome: fail closed instead of hallucinating readiness
+- id: sap.bulk.enterprise-projects.test-pattern
+  title: Enterprise Projects FO test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - test-scenarios
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.test_data
+  summary: 'Test pattern for Enterprise Projects: prove object identity, mapped fields, status/exception handling,
+    and fail-closed behavior for generic prompts.'
+  freshness: *id001
+  source: *id031
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-projects.ref-api
+  relations:
+    objects:
+    - sap.bulk.enterprise-projects.object
+    field_maps:
+    - sap.bulk.enterprise-projects.field-map
+  test_scenarios:
+  - name: Enterprise Projects happy path
+    given: A synthetic Project example with object, field map and owner context.
+    when: An agent drafts project cost and milestone control FO content.
+    then: The bundle cites source pointers and states tenant verification needs.
+  - name: Enterprise Projects generic prompt fail closed
+    given: A vague dashboard or process prompt without concrete object/field/source signals.
+    when: The retrieval bundle is built.
+    then: The result remains needs_curation or asks for follow-up context.
+- id: sap.bulk.enterprise-projects.fo-pattern
+  title: Enterprise Projects FO section pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - fo-pattern
+  - functional-design
+  used_for:
+  - fo.process_flow
+  - fo.functional_design
+  - fo.source_traceability
+  summary: 'FO section pattern for Enterprise Projects: include process trigger, object identity, field mapping,
+    decision owner, exception handling, test evidence and source citations.'
+  freshness: *id001
+  source: *id031
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-projects.ref-api
+  relations:
+    objects:
+    - sap.bulk.enterprise-projects.object
+    test_patterns:
+    - sap.bulk.enterprise-projects.test-pattern
+- id: sap.bulk.enterprise-projects.scope-item
+  title: Enterprise Projects scope and activation anchor
+  kind: scope_item
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - scope
+  - activation
+  - configuration
+  used_for:
+  - fo.sap_configuration
+  - fo.scope
+  - fo.quality_gate
+  summary: Scope/activation anchor for Enterprise Projects. It reminds agents to verify activated scope, app availability,
+    roles and tenant-specific configuration before implementation claims.
+  freshness: *id001
+  source: *id031
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-projects.ref-api
+  relations:
+    apps:
+    - sap.bulk.enterprise-projects.app
+- id: sap.bulk.enterprise-projects.role
+  title: Enterprise Projects responsibility placeholder
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - responsibility
+  - owner
+  used_for:
+  - fo.sap_configuration
+  - fo.test_data
+  summary: Generic responsibility placeholder for Enterprise Projects. Use it to request tenant-specific responsibility
+    and tenant authorization evidence rather than inventing role names.
+  freshness: *id001
+  source: *id031
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-projects.ref-api
+  relations:
+    apps:
+    - sap.bulk.enterprise-projects.app
+- id: sap.bulk.enterprise-projects.access-policy
+  title: Enterprise Projects public/private evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - access-policy
+  - privacy
+  - source-governance
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Enterprise Projects: public/source pointers and generic internal-derived patterns
+    are allowed; customer exports, screenshots, tenant URLs and copied proprietary SAP docs are rejected.'
+  freshness: *id001
+  source: *id031
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - sap.bulk.enterprise-projects.ref-api
+  relations:
+    references:
+    - sap.bulk.enterprise-projects.ref-api
+- id: sap.bulk.enterprise-projects.integration-touchpoint
+  title: Enterprise Projects process interface touchpoint
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - project-system
+  - milestone
+  - cost-control
+  - interface-readiness
+  - handoff
+  used_for:
+  - fo.process_flow
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Process interface touchpoint for Enterprise Projects: identify business key, payload fields, lifecycle
+    status, error owner and idempotency/retry expectation before cross-process handoff design.'
+  freshness: *id001
+  source: *id029
+  claims:
+  - statement: Enterprise Projects FO context should keep project control readiness explicit, source-labelled, and
+      separate from tenant-specific configuration before agents use it for delivery work.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.enterprise-projects.field-set
+    field_maps:
+    - sap.bulk.enterprise-projects.field-map
