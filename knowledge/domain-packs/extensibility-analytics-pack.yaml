@@ -1,0 +1,411 @@
+pack_id: sap-extensibility-analytics-pack
+title: SAP Extensibility custom fields and analytics context pack
+description: >
+  Source-labelled SAP Agent Context pack for custom field extensibility,
+  analytical/reporting app and KPI/CDS-query FO questions. Public SAP and API
+  catalog pointers are link-first; tenant-specific custom field names, published
+  extension IDs, analytical queries and report variants must be verified in the
+  target tenant.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep generic custom-field and analytics context separate from tenant-specific
+    field IDs, UI placements, CDS query names, role catalogs, variants and data
+    extraction rules.
+freshness_current: &freshness_current
+  valid_from: 2026-06-23
+  review_after: 2026-12-23
+  expires_at: 2027-06-23
+  retrieved_at: 2026-06-23
+sap_help_source: &sap_help_source
+  kind: public_url
+  title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
+  url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
+  retrieved_at: 2026-06-23
+  specificity: root_pointer
+  license_note: Link-first public SAP Help pointer; verify exact app and release in target tenant.
+analytics_api: &analytics_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Analytical Queries API
+  url: https://api.sap.com/api/API_QUERY_DESIGNER/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal extensibility/analytics FO pattern
+  url: ""
+  retrieved_at: 2026-06-23
+  specificity: internal_pattern
+  license_note: Internal-derived implementation pattern; no customer data, tenant report names or copied SAP documentation.
+items:
+  - id: sap.ref.s4hana-cloud-extensibility-help
+    title: S/4HANA Cloud extensibility public help pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, key-user-extensibility, in-app-extensibility, source-traceability]
+    used_for: [fo.source_traceability, fo.sap_configuration, fo.business_rules]
+    summary: >
+      Public SAP Help root pointer for S/4HANA Cloud extensibility topics. Use it
+      as a link-first source to verify custom field app availability, publication
+      behavior and extensibility restrictions for the target release.
+    freshness: *freshness_current
+    source: *sap_help_source
+    requires_source_specificity: medium
+    claims:
+      - statement: Custom-field FOs should verify app availability, publish behavior and UI/API exposure against public SAP Help or tenant evidence.
+        evidence: [https://help.sap.com/docs/SAP_S4HANA_CLOUD]
+    relations:
+      objects: [sap.object.custom-field-extension]
+
+  - id: sap.ref.api-analytical-query-designer
+    title: Analytical query API public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, analytical-query, reporting, kpi, cds, api, source-traceability]
+    used_for: [fo.source_traceability, fo.integration, fo.field_mapping]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for analytical query/API review.
+      Use it to verify analytical-query integration surface and release suitability
+      before FO or interface design.
+    freshness: *freshness_current
+    source: *analytics_api
+    requires_source_specificity: high
+    claims:
+      - statement: Analytics/reporting FOs should separate public analytical-query/API proof from tenant-specific query names, variants and authorizations.
+        evidence: [https://api.sap.com/api/API_QUERY_DESIGNER/overview]
+    relations:
+      objects: [sap.object.analytics-query]
+
+  - id: sap.app.custom-fields-and-logic-context
+    title: Custom Fields and Logic app context
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, app, publish, ui-adaptation, lifecycle]
+    used_for: [fo.sap_configuration, fo.authorization, fo.business_rules]
+    summary: >
+      Generic app context for custom field lifecycle FOs: field creation,
+      business context selection, UI/API exposure, publish status and regression
+      impact must be tenant/release verified.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Custom field design should identify business context, field type, exposure target, publish owner and regression impact.
+        evidence: [sap.object.custom-field-extension]
+    relations:
+      objects: [sap.object.custom-field-extension]
+      decision_rules: [sap.rule.custom-field-tenant-boundary]
+
+  - id: sap.app-analytics-reporting-context
+    title: Analytics and reporting app context
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, kpi, analytical-query, app, authorization]
+    used_for: [fo.sap_configuration, fo.authorization, fo.test_scenarios]
+    summary: >
+      Generic analytics/reporting app context for FO sections that need KPI,
+      analytical query, filter, drilldown, role and data-freshness assumptions.
+      Verify exact apps, query names and role catalogs in the target tenant.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Analytics FOs should state KPI definition, source object/query, filters, authorization and freshness assumptions.
+        evidence: [sap.object.analytics-query]
+    relations:
+      objects: [sap.object.analytics-query]
+      test_patterns: [sap.test-pattern.extensibility-analytics-readiness]
+
+  - id: sap.object.custom-field-extension
+    title: Custom field extension object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, business-context, ui, api-exposure]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Custom field extension object anchor for FO work: business context, field
+      type, semantic meaning, UI placement, API/report exposure, publish status
+      and fallback behavior must be explicit and tenant-verified.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Custom fields are tenant-specific design artifacts; public context may describe patterns but not claim a concrete field exists.
+        evidence: [sap.ref.s4hana-cloud-extensibility-help]
+    relations:
+      fields: [sap.field-set.custom-field-lifecycle-core]
+      field_maps: [sap.field-map.custom-field-exposure-readiness]
+
+  - id: sap.object.analytics-query
+    title: Analytics query/reporting object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, analytical-query, kpi, cds, filter]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Analytics query/reporting anchor for FO work: source object/query, KPI
+      definition, filter, drilldown, authorization, extraction mode and data
+      freshness must be specified before reports are accepted.
+    freshness: *freshness_current
+    source: *analytics_api
+    requires_source_specificity: high
+    claims:
+      - statement: Reporting FOs should not treat a generic KPI name as proof of a usable analytical query; source and filter semantics must be verified.
+        evidence: [sap.ref.api-analytical-query-designer]
+    relations:
+      fields: [sap.field-set.analytics-query-core]
+      field_maps: [sap.field-map.analytics-report-readiness]
+
+  - id: sap.field-set.custom-field-lifecycle-core
+    title: Custom field lifecycle core fields
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, lifecycle, exposure, field-mapping]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for custom field FOs: business context, field label,
+      data type, value help, mandatory/default behavior, UI placement, API/report
+      exposure and publish status.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Custom-field field maps should include exposure and publish status, not only a business label.
+        evidence: [sap.object.custom-field-extension]
+    relations:
+      objects: [sap.object.custom-field-extension]
+      field_maps: [sap.field-map.custom-field-exposure-readiness]
+    field_definitions:
+      - key: CustomField.BusinessContext
+        description: Business context in which the field is created.
+        usage: Verify compatibility with target app/API/report before design acceptance.
+      - key: CustomField.FieldType
+        description: Data type and constraints for the extension field.
+        usage: Validate against integration/reporting and UI expectations.
+      - key: CustomField.UIExposure
+        description: Whether the field is visible in the relevant UI/app.
+        usage: Include in acceptance criteria for user-facing extensions.
+      - key: CustomField.APIExposure
+        description: Whether the field is exposed for APIs/integration.
+        usage: Verify before interface mapping or external reporting.
+      - key: CustomField.PublishStatus
+        description: Publication/deployment state of the custom field.
+        usage: Separate design intent from usable runtime availability.
+
+  - id: sap.field-set.analytics-query-core
+    title: Analytics query/report core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, kpi, analytical-query, filter, field-mapping]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for analytics/reporting FOs: query/source object, measure,
+      dimension, filter, drilldown, authorization role, refresh/freshness and
+      export/integration path.
+    freshness: *freshness_current
+    source: *analytics_api
+    requires_source_specificity: high
+    claims:
+      - statement: Analytics field maps should preserve KPI formula, filter semantics and data freshness assumptions.
+        evidence: [sap.ref.api-analytical-query-designer]
+    relations:
+      objects: [sap.object.analytics-query]
+      field_maps: [sap.field-map.analytics-report-readiness]
+    field_definitions:
+      - key: AnalyticsQuery.QueryName
+        description: Query or report identifier.
+        usage: Verify in tenant; public context should not invent tenant query names.
+      - key: AnalyticsQuery.Measure
+        description: KPI or numeric measure.
+        usage: Capture formula/aggregation assumptions.
+      - key: AnalyticsQuery.Dimension
+        description: Drilldown dimension such as product, customer, supplier or period.
+        usage: Verify grouping and authorization impact.
+      - key: AnalyticsQuery.Filter
+        description: Filter condition used by the report/KPI.
+        usage: Keep date, company-code, sales org or other scope filters explicit.
+      - key: AnalyticsQuery.DataFreshness
+        description: Refresh/freshness expectation for the report data.
+        usage: Include in acceptance criteria when timing affects decisions.
+
+  - id: sap.field-map.custom-field-exposure-readiness
+    title: Custom field exposure readiness field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, ui-exposure, api-exposure, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for custom fields: business context, label/type, UI/API
+      exposure, publish status and regression owner.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Custom-field readiness depends on business context and exposure target as much as field definition.
+        evidence: [sap.field-set.custom-field-lifecycle-core]
+    relations:
+      objects: [sap.object.custom-field-extension]
+      fields: [sap.field-set.custom-field-lifecycle-core]
+    mapping_steps:
+      - source: business_context
+        target: CustomField.BusinessContext
+        verification: Verify app/API/report support in the target tenant.
+      - source: field_type
+        target: CustomField.FieldType
+        verification: Verify type constraints and value-help assumptions.
+      - source: ui_exposure_required
+        target: CustomField.UIExposure
+        verification: Confirm field appears in target UI role/app.
+      - source: api_exposure_required
+        target: CustomField.APIExposure
+        verification: Confirm field is exposed before interface use.
+      - source: publish_status
+        target: CustomField.PublishStatus
+        verification: Confirm published/usable state before acceptance.
+
+  - id: sap.field-map.analytics-report-readiness
+    title: Analytics report readiness field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, kpi, filter, field-mapping, freshness]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for analytics/reporting: query, measure, dimension,
+      filter, role/authorization, data freshness and export/integration path.
+    freshness: *freshness_current
+    source: *analytics_api
+    requires_source_specificity: high
+    claims:
+      - statement: Analytics readiness requires query/source verification, KPI formula, filter semantics and authorization/freshness proof.
+        evidence: [sap.field-set.analytics-query-core]
+    relations:
+      objects: [sap.object.analytics-query]
+      fields: [sap.field-set.analytics-query-core]
+    mapping_steps:
+      - source: query_name
+        target: AnalyticsQuery.QueryName
+        verification: Verify exact query/report in tenant before naming it as ready.
+      - source: kpi_measure
+        target: AnalyticsQuery.Measure
+        verification: Capture formula and aggregation assumptions.
+      - source: drilldown_dimension
+        target: AnalyticsQuery.Dimension
+        verification: Verify grouping and authorization impact.
+      - source: report_filter
+        target: AnalyticsQuery.Filter
+        verification: Keep report scope and date/company/org filters explicit.
+      - source: freshness_requirement
+        target: AnalyticsQuery.DataFreshness
+        verification: Verify refresh timing before using in acceptance criteria.
+
+  - id: sap.rule.custom-field-tenant-boundary
+    title: Custom field tenant boundary rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, tenant-boundary, exposure, quality-gate]
+    used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Decision rule for extensibility FOs: public bundles can describe custom-field
+      patterns, but concrete field IDs, UI placements and publication state require
+      tenant evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: A custom field is not ready for an FO unless business context, exposure target and publication state are verified.
+        evidence: [sap.field-map.custom-field-exposure-readiness]
+    relations:
+      field_maps: [sap.field-map.custom-field-exposure-readiness]
+    rules:
+      - condition: custom field requested but business context unknown
+        outcome: block with tenant-context question
+      - condition: API/report exposure is required but not verified
+        outcome: block interface/report acceptance until exposure is proven
+      - condition: field is defined and published with required exposure
+        outcome: include in acceptance and regression test scenarios
+
+  - id: sap.rule.analytics-reporting-readiness
+    title: Analytics reporting readiness rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, kpi, authorization, freshness, quality-gate]
+    used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Decision rule for analytics/reporting FOs: KPI/report readiness needs query
+      source, formula, filters, authorization and data freshness evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: A report/KPI should remain needs-curation if source query, filters or freshness are unknown.
+        evidence: [sap.field-map.analytics-report-readiness]
+    relations:
+      field_maps: [sap.field-map.analytics-report-readiness]
+    rules:
+      - condition: KPI name is known but source query or filters are missing
+        outcome: report remains needs-curation
+      - condition: report uses restricted data without role proof
+        outcome: block acceptance until authorization is verified
+      - condition: query, formula, filters, role and freshness are verified
+        outcome: report can be accepted as ready for the FO scenario
+
+  - id: sap.test-pattern.extensibility-analytics-readiness
+    title: Extensibility and analytics readiness test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, analytics, reporting, kpi, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, fo.test_data]
+    summary: >
+      Test pattern for custom-field and analytics/reporting FOs covering tenant
+      boundary, exposure, publication, query/filter/KPI semantics and data freshness.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Extensibility/analytics tests should prove tenant-specific custom fields and reporting assumptions before marking the FO ready.
+        evidence: [sap.rule.custom-field-tenant-boundary, sap.rule.analytics-reporting-readiness]
+    relations:
+      objects: [sap.object.custom-field-extension, sap.object.analytics-query]
+      field_maps: [sap.field-map.custom-field-exposure-readiness, sap.field-map.analytics-report-readiness]
+    test_scenarios:
+      - level: acceptance
+        case: Custom field has verified business context, UI/API exposure and publish status.
+        expected: Field can be used in FO field map and regression scenario.
+      - level: negative
+        case: Report/KPI name is provided without query source, filter or freshness proof.
+        expected: Analytics section remains needs-curation with explicit follow-up.
+      - level: negative
+        case: Custom field is requested for API/report use but exposure is unverified.
+        expected: Interface/report acceptance is blocked until exposure evidence exists.

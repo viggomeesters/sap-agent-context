@@ -28,7 +28,7 @@ def test_v02_coverage_matrix_truthfully_reports_current_fill_gaps() -> None:
     assert "domain:master_data_material_bp" not in areas
     assert "domain:migration_cockpit" not in areas
     assert "source_traceability" in areas
-    assert "sap_field" in messages
+    assert "sap_role" in messages
 
 
 def test_v02_coverage_matrix_does_not_pass_with_generic_root_filler() -> None:
@@ -51,7 +51,7 @@ def test_v02_coverage_matrix_does_not_pass_with_generic_root_filler() -> None:
     assert report["status"] == "failed"
     assert "source_traceability" in areas
     assert "exact_page" in messages
-    assert "Knowledge kind sap_field has fewer" in messages
+    assert "Knowledge kind sap_role has fewer" in messages
 
 
 def _generic_root_pointer_item(index: int) -> KnowledgeItem:
