@@ -1,0 +1,3618 @@
+pack_id: sap-api-event-surface-bulk-pack
+title: SAP API and event surface bulk context pack
+description: Bulk link-first API/interface context for representative S/4HANA Cloud surfaces. Public URL pointers
+  only; no copied API specifications, tenant hostnames or secrets.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep API/event context as public source pointers plus generic interface patterns; tenant endpoints
+    and credentials are never stored.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.bulk.api.sales-order.ref
+  title: Sales Order API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Sales Order API. Use it to verify API/entity availability and release
+    suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id002
+    kind: public_url
+    title: SAP Business Accelerator Hub - Sales Order API
+    url: https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Sales Order API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.sales-order.object
+- id: sap.bulk.api.sales-order.object
+  title: SalesOrder API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'SalesOrder object anchor for API/event/interface design: preserve business key, item/key fields, lifecycle
+    status and exception ownership.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Sales Order API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.sales-order.field-set
+- id: sap.bulk.api.sales-order.field-set
+  title: Sales Order API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Sales Order API: SalesOrder, SalesOrderItem, SoldToParty, SalesOrganization,
+    OverallSDProcessStatus.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Sales Order API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.sales-order.object
+  field_definitions:
+  - key: SalesOrder.SalesOrder
+    description: SalesOrder field context for Sales Order API.
+    usage: Use SalesOrder for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: SalesOrder.SalesOrderItem
+    description: SalesOrderItem field context for Sales Order API.
+    usage: Use SalesOrderItem for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: SalesOrder.SoldToParty
+    description: SoldToParty field context for Sales Order API.
+    usage: Use SoldToParty for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: SalesOrder.SalesOrganization
+    description: SalesOrganization field context for Sales Order API.
+    usage: Use SalesOrganization for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: SalesOrder.OverallSDProcessStatus
+    description: OverallSDProcessStatus field context for Sales Order API.
+    usage: Use OverallSDProcessStatus for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.sales-order.field-map
+  title: Sales Order API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Sales Order API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Sales Order API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.sales-order.field-set
+    objects:
+    - sap.bulk.api.sales-order.object
+  field_map: &id003
+  - source: SalesOrder.SalesOrder
+    target: Payload.SalesOrder
+    purpose: Carry SalesOrder into payload, mapping, reconciliation or test evidence.
+  - source: SalesOrder.SalesOrderItem
+    target: Payload.SalesOrderItem
+    purpose: Carry SalesOrderItem into payload, mapping, reconciliation or test evidence.
+  - source: SalesOrder.SoldToParty
+    target: Payload.SoldToParty
+    purpose: Carry SoldToParty into payload, mapping, reconciliation or test evidence.
+  - source: SalesOrder.SalesOrganization
+    target: Payload.SalesOrganization
+    purpose: Carry SalesOrganization into payload, mapping, reconciliation or test evidence.
+  - source: SalesOrder.OverallSDProcessStatus
+    target: Payload.OverallSDProcessStatus
+    purpose: Carry OverallSDProcessStatus into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id003
+- id: sap.bulk.api.sales-order.rule
+  title: Sales Order API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Sales Order API: do not claim interface readiness unless business key, payload fields,
+    status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id004
+    kind: internal_pattern
+    title: Internal Sales Order API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Sales Order API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.sales-order.ref
+  relations:
+    objects:
+    - sap.bulk.api.sales-order.object
+    field_maps:
+    - sap.bulk.api.sales-order.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.sales-order.test-pattern
+  title: Sales Order API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Sales Order API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Sales Order API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.sales-order.ref
+  relations:
+    objects:
+    - sap.bulk.api.sales-order.object
+    field_maps:
+    - sap.bulk.api.sales-order.field-map
+  test_scenarios:
+  - name: Sales Order API payload mapping smoke
+    given: A synthetic SalesOrder payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Sales Order API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.billing-document.ref
+  title: Billing Document API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Billing Document API. Use it to verify API/entity availability and
+    release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id005
+    kind: public_url
+    title: SAP Business Accelerator Hub - Billing Document API
+    url: https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Billing Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.billing-document.object
+- id: sap.bulk.api.billing-document.object
+  title: BillingDocument API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'BillingDocument object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id005
+  claims:
+  - statement: Billing Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.billing-document.field-set
+- id: sap.bulk.api.billing-document.field-set
+  title: Billing Document API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Billing Document API: BillingDocument, BillingDocumentItem, BillingDocumentType,
+    PayerParty, AccountingPostingStatus.'
+  freshness: *id001
+  source: *id005
+  claims:
+  - statement: Billing Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.billing-document.object
+  field_definitions:
+  - key: BillingDocument.BillingDocument
+    description: BillingDocument field context for Billing Document API.
+    usage: Use BillingDocument for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: BillingDocument.BillingDocumentItem
+    description: BillingDocumentItem field context for Billing Document API.
+    usage: Use BillingDocumentItem for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: BillingDocument.BillingDocumentType
+    description: BillingDocumentType field context for Billing Document API.
+    usage: Use BillingDocumentType for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: BillingDocument.PayerParty
+    description: PayerParty field context for Billing Document API.
+    usage: Use PayerParty for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: BillingDocument.AccountingPostingStatus
+    description: AccountingPostingStatus field context for Billing Document API.
+    usage: Use AccountingPostingStatus for source-to-target mapping, payload validation, status checks and test
+      evidence.
+- id: sap.bulk.api.billing-document.field-map
+  title: Billing Document API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Billing Document API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id005
+  claims:
+  - statement: Billing Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.billing-document.field-set
+    objects:
+    - sap.bulk.api.billing-document.object
+  field_map: &id006
+  - source: BillingDocument.BillingDocument
+    target: Payload.BillingDocument
+    purpose: Carry BillingDocument into payload, mapping, reconciliation or test evidence.
+  - source: BillingDocument.BillingDocumentItem
+    target: Payload.BillingDocumentItem
+    purpose: Carry BillingDocumentItem into payload, mapping, reconciliation or test evidence.
+  - source: BillingDocument.BillingDocumentType
+    target: Payload.BillingDocumentType
+    purpose: Carry BillingDocumentType into payload, mapping, reconciliation or test evidence.
+  - source: BillingDocument.PayerParty
+    target: Payload.PayerParty
+    purpose: Carry PayerParty into payload, mapping, reconciliation or test evidence.
+  - source: BillingDocument.AccountingPostingStatus
+    target: Payload.AccountingPostingStatus
+    purpose: Carry AccountingPostingStatus into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id006
+- id: sap.bulk.api.billing-document.rule
+  title: Billing Document API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Billing Document API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id007
+    kind: internal_pattern
+    title: Internal Billing Document API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Billing Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.billing-document.ref
+  relations:
+    objects:
+    - sap.bulk.api.billing-document.object
+    field_maps:
+    - sap.bulk.api.billing-document.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.billing-document.test-pattern
+  title: Billing Document API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Billing Document API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id007
+  claims:
+  - statement: Billing Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.billing-document.ref
+  relations:
+    objects:
+    - sap.bulk.api.billing-document.object
+    field_maps:
+    - sap.bulk.api.billing-document.field-map
+  test_scenarios:
+  - name: Billing Document API payload mapping smoke
+    given: A synthetic BillingDocument payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Billing Document API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.bp.ref
+  title: BP API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp-api
+  - bp-api
+  - payload
+  - public-api
+  - interface-readiness
+  - role
+  - category
+  - search-term
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for BP API. Use it to verify API/entity availability and release suitability
+    without copying SAP API documentation.
+  freshness: *id001
+  source: &id008
+    kind: public_url
+    title: SAP Business Accelerator Hub - Business Partner API
+    url: https://api.sap.com/api/API_BUSINESS_PARTNER/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: BP API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_BUSINESS_PARTNER/overview
+  relations:
+    objects:
+    - sap.bulk.api.bp.object
+- id: sap.bulk.api.bp.object
+  title: BP API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp-api
+  - bp-api
+  - payload
+  - public-api
+  - interface-readiness
+  - role
+  - category
+  - search-term
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'BP object anchor for API/event/interface design: preserve business key, item/key fields, lifecycle status
+    and exception ownership.'
+  freshness: *id001
+  source: *id008
+  claims:
+  - statement: BP API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_BUSINESS_PARTNER/overview
+  relations:
+    fields:
+    - sap.bulk.api.bp.field-set
+- id: sap.bulk.api.bp.field-set
+  title: BP API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp-api
+  - bp-api
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  - role
+  - category
+  - search-term
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for BP API: BP, BPCategory, BPRole, SearchTerm1, AuthorizationGroup.'
+  freshness: *id001
+  source: *id008
+  claims:
+  - statement: BP API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_BUSINESS_PARTNER/overview
+  relations:
+    objects:
+    - sap.bulk.api.bp.object
+  field_definitions:
+  - key: BusinessPartner.BusinessPartner
+    description: BusinessPartner field context for Business Partner API.
+    usage: Use BusinessPartner for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: BusinessPartner.BusinessPartnerCategory
+    description: BusinessPartnerCategory field context for Business Partner API.
+    usage: Use BusinessPartnerCategory for source-to-target mapping, payload validation, status checks and test
+      evidence.
+  - key: BusinessPartner.BusinessPartnerRole
+    description: BusinessPartnerRole field context for Business Partner API.
+    usage: Use BusinessPartnerRole for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: BusinessPartner.SearchTerm1
+    description: SearchTerm1 field context for Business Partner API.
+    usage: Use SearchTerm1 for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: BusinessPartner.AuthorizationGroup
+    description: AuthorizationGroup field context for Business Partner API.
+    usage: Use AuthorizationGroup for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.bp.field-map
+  title: BP API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp-api
+  - bp-api
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  - role
+  - category
+  - search-term
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for BP API: business key, item/context fields, lifecycle status and error/reconciliation fields.'
+  freshness: *id001
+  source: *id008
+  claims:
+  - statement: BP API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_BUSINESS_PARTNER/overview
+  relations:
+    fields:
+    - sap.bulk.api.bp.field-set
+    objects:
+    - sap.bulk.api.bp.object
+  field_map: &id009
+  - source: BusinessPartner.BusinessPartner
+    target: Payload.BusinessPartner
+    purpose: Carry BusinessPartner into payload, mapping, reconciliation or test evidence.
+  - source: BusinessPartner.BusinessPartnerCategory
+    target: Payload.BusinessPartnerCategory
+    purpose: Carry BusinessPartnerCategory into payload, mapping, reconciliation or test evidence.
+  - source: BusinessPartner.BusinessPartnerRole
+    target: Payload.BusinessPartnerRole
+    purpose: Carry BusinessPartnerRole into payload, mapping, reconciliation or test evidence.
+  - source: BusinessPartner.SearchTerm1
+    target: Payload.SearchTerm1
+    purpose: Carry SearchTerm1 into payload, mapping, reconciliation or test evidence.
+  - source: BusinessPartner.AuthorizationGroup
+    target: Payload.AuthorizationGroup
+    purpose: Carry AuthorizationGroup into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id009
+- id: sap.bulk.payload.bp.rule
+  title: BP payload interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp-payload
+  - payload-quality
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for BP payload: do not claim interface readiness unless business key, payload fields,
+    status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id010
+    kind: internal_pattern
+    title: Internal Business Partner API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: BP payload context should identify business key, field semantics, lifecycle status, error owner and
+      release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.bp.ref
+  relations:
+    objects:
+    - sap.bulk.api.bp.object
+    field_maps:
+    - sap.bulk.api.bp.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.payload.bp.test-pattern
+  title: BP payload interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp-payload
+  - payload-quality
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for BP payload: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id010
+  claims:
+  - statement: BP payload context should identify business key, field semantics, lifecycle status, error owner and
+      release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.bp.ref
+  relations:
+    objects:
+    - sap.bulk.api.bp.object
+    field_maps:
+    - sap.bulk.api.bp.field-map
+  test_scenarios:
+  - name: Business Partner API payload mapping smoke
+    given: A synthetic BusinessPartner payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Business Partner API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.product-master.ref
+  title: Product API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product-master
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Product API. Use it to verify API/entity availability and release
+    suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id011
+    kind: public_url
+    title: SAP Business Accelerator Hub - Product API
+    url: https://api.sap.com/api/API_PRODUCT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Product API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.product-master.object
+- id: sap.bulk.api.product-master.object
+  title: Product API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product-master
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Product object anchor for API/event/interface design: preserve business key, item/key fields, lifecycle
+    status and exception ownership.'
+  freshness: *id001
+  source: *id011
+  claims:
+  - statement: Product API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.product-master.field-set
+- id: sap.bulk.api.product-master.field-set
+  title: Product API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product-master
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Product API: Product, ProductType, BaseUnit, ProductGroup, CrossPlantStatus.'
+  freshness: *id001
+  source: *id011
+  claims:
+  - statement: Product API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.product-master.object
+  field_definitions:
+  - key: Product.Product
+    description: Product field context for Product API.
+    usage: Use Product for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: Product.ProductType
+    description: ProductType field context for Product API.
+    usage: Use ProductType for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: Product.BaseUnit
+    description: BaseUnit field context for Product API.
+    usage: Use BaseUnit for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: Product.ProductGroup
+    description: ProductGroup field context for Product API.
+    usage: Use ProductGroup for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: Product.CrossPlantStatus
+    description: CrossPlantStatus field context for Product API.
+    usage: Use CrossPlantStatus for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.product-master.field-map
+  title: Product API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product-master
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Product API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id011
+  claims:
+  - statement: Product API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.product-master.field-set
+    objects:
+    - sap.bulk.api.product-master.object
+  field_map: &id012
+  - source: Product.Product
+    target: Payload.Product
+    purpose: Carry Product into payload, mapping, reconciliation or test evidence.
+  - source: Product.ProductType
+    target: Payload.ProductType
+    purpose: Carry ProductType into payload, mapping, reconciliation or test evidence.
+  - source: Product.BaseUnit
+    target: Payload.BaseUnit
+    purpose: Carry BaseUnit into payload, mapping, reconciliation or test evidence.
+  - source: Product.ProductGroup
+    target: Payload.ProductGroup
+    purpose: Carry ProductGroup into payload, mapping, reconciliation or test evidence.
+  - source: Product.CrossPlantStatus
+    target: Payload.CrossPlantStatus
+    purpose: Carry CrossPlantStatus into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id012
+- id: sap.bulk.api.product-master.rule
+  title: Product API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product-master
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Product API: do not claim interface readiness unless business key, payload fields,
+    status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id013
+    kind: internal_pattern
+    title: Internal Product API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Product API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.product-master.ref
+  relations:
+    objects:
+    - sap.bulk.api.product-master.object
+    field_maps:
+    - sap.bulk.api.product-master.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.product-master.test-pattern
+  title: Product API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product-master
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Product API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id013
+  claims:
+  - statement: Product API context should identify business key, field semantics, lifecycle status, error owner
+      and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.product-master.ref
+  relations:
+    objects:
+    - sap.bulk.api.product-master.object
+    field_maps:
+    - sap.bulk.api.product-master.field-map
+  test_scenarios:
+  - name: Product API payload mapping smoke
+    given: A synthetic Product payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Product API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.journal-entry.ref
+  title: Journal Entry API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - journal-entry
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Journal Entry API. Use it to verify API/entity availability and
+    release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id014
+    kind: public_url
+    title: SAP Business Accelerator Hub - Journal Entry API
+    url: https://api.sap.com/api/API_JOURNAL_ENTRY_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Journal Entry API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_JOURNAL_ENTRY_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.journal-entry.object
+- id: sap.bulk.api.journal-entry.object
+  title: JournalEntry API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - journal-entry
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'JournalEntry object anchor for API/event/interface design: preserve business key, item/key fields, lifecycle
+    status and exception ownership.'
+  freshness: *id001
+  source: *id014
+  claims:
+  - statement: Journal Entry API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_JOURNAL_ENTRY_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.journal-entry.field-set
+- id: sap.bulk.api.journal-entry.field-set
+  title: Journal Entry API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - journal-entry
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Journal Entry API: CompanyCode, FiscalYear, AccountingDocument, GLAccount,
+    PostingDate.'
+  freshness: *id001
+  source: *id014
+  claims:
+  - statement: Journal Entry API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_JOURNAL_ENTRY_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.journal-entry.object
+  field_definitions:
+  - key: JournalEntry.CompanyCode
+    description: CompanyCode field context for Journal Entry API.
+    usage: Use CompanyCode for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: JournalEntry.FiscalYear
+    description: FiscalYear field context for Journal Entry API.
+    usage: Use FiscalYear for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: JournalEntry.AccountingDocument
+    description: AccountingDocument field context for Journal Entry API.
+    usage: Use AccountingDocument for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: JournalEntry.GLAccount
+    description: GLAccount field context for Journal Entry API.
+    usage: Use GLAccount for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: JournalEntry.PostingDate
+    description: PostingDate field context for Journal Entry API.
+    usage: Use PostingDate for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.journal-entry.field-map
+  title: Journal Entry API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - journal-entry
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Journal Entry API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id014
+  claims:
+  - statement: Journal Entry API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_JOURNAL_ENTRY_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.journal-entry.field-set
+    objects:
+    - sap.bulk.api.journal-entry.object
+  field_map: &id015
+  - source: JournalEntry.CompanyCode
+    target: Payload.CompanyCode
+    purpose: Carry CompanyCode into payload, mapping, reconciliation or test evidence.
+  - source: JournalEntry.FiscalYear
+    target: Payload.FiscalYear
+    purpose: Carry FiscalYear into payload, mapping, reconciliation or test evidence.
+  - source: JournalEntry.AccountingDocument
+    target: Payload.AccountingDocument
+    purpose: Carry AccountingDocument into payload, mapping, reconciliation or test evidence.
+  - source: JournalEntry.GLAccount
+    target: Payload.GLAccount
+    purpose: Carry GLAccount into payload, mapping, reconciliation or test evidence.
+  - source: JournalEntry.PostingDate
+    target: Payload.PostingDate
+    purpose: Carry PostingDate into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id015
+- id: sap.bulk.api.journal-entry.rule
+  title: Journal Entry API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - journal-entry
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Journal Entry API: do not claim interface readiness unless business key, payload fields,
+    status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id016
+    kind: internal_pattern
+    title: Internal Journal Entry API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Journal Entry API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.journal-entry.ref
+  relations:
+    objects:
+    - sap.bulk.api.journal-entry.object
+    field_maps:
+    - sap.bulk.api.journal-entry.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.journal-entry.test-pattern
+  title: Journal Entry API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - journal-entry
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Journal Entry API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id016
+  claims:
+  - statement: Journal Entry API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.journal-entry.ref
+  relations:
+    objects:
+    - sap.bulk.api.journal-entry.object
+    field_maps:
+    - sap.bulk.api.journal-entry.field-map
+  test_scenarios:
+  - name: Journal Entry API payload mapping smoke
+    given: A synthetic JournalEntry payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Journal Entry API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.supplier-invoice.ref
+  title: Supplier Invoice API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - supplier-invoice
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Supplier Invoice API. Use it to verify API/entity availability and
+    release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id017
+    kind: public_url
+    title: SAP Business Accelerator Hub - Supplier Invoice API
+    url: https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Supplier Invoice API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.supplier-invoice.object
+- id: sap.bulk.api.supplier-invoice.object
+  title: SupplierInvoice API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - supplier-invoice
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'SupplierInvoice object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id017
+  claims:
+  - statement: Supplier Invoice API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.supplier-invoice.field-set
+- id: sap.bulk.api.supplier-invoice.field-set
+  title: Supplier Invoice API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - supplier-invoice
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Supplier Invoice API: SupplierInvoice, CompanyCode, Supplier, InvoiceGrossAmount,
+    PaymentBlockingReason.'
+  freshness: *id001
+  source: *id017
+  claims:
+  - statement: Supplier Invoice API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.supplier-invoice.object
+  field_definitions:
+  - key: SupplierInvoice.SupplierInvoice
+    description: SupplierInvoice field context for Supplier Invoice API.
+    usage: Use SupplierInvoice for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: SupplierInvoice.CompanyCode
+    description: CompanyCode field context for Supplier Invoice API.
+    usage: Use CompanyCode for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: SupplierInvoice.Supplier
+    description: Supplier field context for Supplier Invoice API.
+    usage: Use Supplier for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: SupplierInvoice.InvoiceGrossAmount
+    description: InvoiceGrossAmount field context for Supplier Invoice API.
+    usage: Use InvoiceGrossAmount for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: SupplierInvoice.PaymentBlockingReason
+    description: PaymentBlockingReason field context for Supplier Invoice API.
+    usage: Use PaymentBlockingReason for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.supplier-invoice.field-map
+  title: Supplier Invoice API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - supplier-invoice
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Supplier Invoice API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id017
+  claims:
+  - statement: Supplier Invoice API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.supplier-invoice.field-set
+    objects:
+    - sap.bulk.api.supplier-invoice.object
+  field_map: &id018
+  - source: SupplierInvoice.SupplierInvoice
+    target: Payload.SupplierInvoice
+    purpose: Carry SupplierInvoice into payload, mapping, reconciliation or test evidence.
+  - source: SupplierInvoice.CompanyCode
+    target: Payload.CompanyCode
+    purpose: Carry CompanyCode into payload, mapping, reconciliation or test evidence.
+  - source: SupplierInvoice.Supplier
+    target: Payload.Supplier
+    purpose: Carry Supplier into payload, mapping, reconciliation or test evidence.
+  - source: SupplierInvoice.InvoiceGrossAmount
+    target: Payload.InvoiceGrossAmount
+    purpose: Carry InvoiceGrossAmount into payload, mapping, reconciliation or test evidence.
+  - source: SupplierInvoice.PaymentBlockingReason
+    target: Payload.PaymentBlockingReason
+    purpose: Carry PaymentBlockingReason into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id018
+- id: sap.bulk.api.supplier-invoice.rule
+  title: Supplier Invoice API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - supplier-invoice
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Supplier Invoice API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id019
+    kind: internal_pattern
+    title: Internal Supplier Invoice API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Supplier Invoice API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.supplier-invoice.ref
+  relations:
+    objects:
+    - sap.bulk.api.supplier-invoice.object
+    field_maps:
+    - sap.bulk.api.supplier-invoice.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.supplier-invoice.test-pattern
+  title: Supplier Invoice API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - supplier-invoice
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Supplier Invoice API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id019
+  claims:
+  - statement: Supplier Invoice API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.supplier-invoice.ref
+  relations:
+    objects:
+    - sap.bulk.api.supplier-invoice.object
+    field_maps:
+    - sap.bulk.api.supplier-invoice.field-map
+  test_scenarios:
+  - name: Supplier Invoice API payload mapping smoke
+    given: A synthetic SupplierInvoice payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Supplier Invoice API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.purchase-requisition.ref
+  title: Purchase Requisition API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchase-requisition
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Purchase Requisition API. Use it to verify API/entity availability
+    and release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id020
+    kind: public_url
+    title: SAP Business Accelerator Hub - Purchase Requisition API
+    url: https://api.sap.com/api/API_PURCHASEREQ_PROCESS_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Purchase Requisition API context should identify business key, field semantics, lifecycle status,
+      error owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PURCHASEREQ_PROCESS_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.purchase-requisition.object
+- id: sap.bulk.api.purchase-requisition.object
+  title: PurchaseRequisition API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchase-requisition
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'PurchaseRequisition object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id020
+  claims:
+  - statement: Purchase Requisition API context should identify business key, field semantics, lifecycle status,
+      error owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PURCHASEREQ_PROCESS_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.purchase-requisition.field-set
+- id: sap.bulk.api.purchase-requisition.field-set
+  title: Purchase Requisition API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchase-requisition
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Purchase Requisition API: PurchaseRequisition, PurchaseRequisitionItem,
+    AccountAssignmentCategory, Material, Plant.'
+  freshness: *id001
+  source: *id020
+  claims:
+  - statement: Purchase Requisition API context should identify business key, field semantics, lifecycle status,
+      error owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PURCHASEREQ_PROCESS_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.purchase-requisition.object
+  field_definitions:
+  - key: PurchaseRequisition.PurchaseRequisition
+    description: PurchaseRequisition field context for Purchase Requisition API.
+    usage: Use PurchaseRequisition for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: PurchaseRequisition.PurchaseRequisitionItem
+    description: PurchaseRequisitionItem field context for Purchase Requisition API.
+    usage: Use PurchaseRequisitionItem for source-to-target mapping, payload validation, status checks and test
+      evidence.
+  - key: PurchaseRequisition.AccountAssignmentCategory
+    description: AccountAssignmentCategory field context for Purchase Requisition API.
+    usage: Use AccountAssignmentCategory for source-to-target mapping, payload validation, status checks and test
+      evidence.
+  - key: PurchaseRequisition.Material
+    description: Material field context for Purchase Requisition API.
+    usage: Use Material for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: PurchaseRequisition.Plant
+    description: Plant field context for Purchase Requisition API.
+    usage: Use Plant for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.purchase-requisition.field-map
+  title: Purchase Requisition API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchase-requisition
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Purchase Requisition API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id020
+  claims:
+  - statement: Purchase Requisition API context should identify business key, field semantics, lifecycle status,
+      error owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PURCHASEREQ_PROCESS_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.purchase-requisition.field-set
+    objects:
+    - sap.bulk.api.purchase-requisition.object
+  field_map: &id021
+  - source: PurchaseRequisition.PurchaseRequisition
+    target: Payload.PurchaseRequisition
+    purpose: Carry PurchaseRequisition into payload, mapping, reconciliation or test evidence.
+  - source: PurchaseRequisition.PurchaseRequisitionItem
+    target: Payload.PurchaseRequisitionItem
+    purpose: Carry PurchaseRequisitionItem into payload, mapping, reconciliation or test evidence.
+  - source: PurchaseRequisition.AccountAssignmentCategory
+    target: Payload.AccountAssignmentCategory
+    purpose: Carry AccountAssignmentCategory into payload, mapping, reconciliation or test evidence.
+  - source: PurchaseRequisition.Material
+    target: Payload.Material
+    purpose: Carry Material into payload, mapping, reconciliation or test evidence.
+  - source: PurchaseRequisition.Plant
+    target: Payload.Plant
+    purpose: Carry Plant into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id021
+- id: sap.bulk.api.purchase-requisition.rule
+  title: Purchase Requisition API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchase-requisition
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Purchase Requisition API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id022
+    kind: internal_pattern
+    title: Internal Purchase Requisition API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Purchase Requisition API context should identify business key, field semantics, lifecycle status,
+      error owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.purchase-requisition.ref
+  relations:
+    objects:
+    - sap.bulk.api.purchase-requisition.object
+    field_maps:
+    - sap.bulk.api.purchase-requisition.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.purchase-requisition.test-pattern
+  title: Purchase Requisition API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchase-requisition
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Purchase Requisition API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id022
+  claims:
+  - statement: Purchase Requisition API context should identify business key, field semantics, lifecycle status,
+      error owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.purchase-requisition.ref
+  relations:
+    objects:
+    - sap.bulk.api.purchase-requisition.object
+    field_maps:
+    - sap.bulk.api.purchase-requisition.field-map
+  test_scenarios:
+  - name: Purchase Requisition API payload mapping smoke
+    given: A synthetic PurchaseRequisition payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Purchase Requisition API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.purchase-order.ref
+  title: PO API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-api
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for PO API. Use it to verify API/entity availability and release suitability
+    without copying SAP API documentation.
+  freshness: *id001
+  source: &id023
+    kind: public_url
+    title: SAP Business Accelerator Hub - Purchase Order API
+    url: https://api.sap.com/api/API_PURCHASEORDER_PROCESS_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: PO API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PURCHASEORDER_PROCESS_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.purchase-order.object
+- id: sap.bulk.api.purchase-order.object
+  title: PurchaseOrder API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-api
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'PurchaseOrder object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id023
+  claims:
+  - statement: PO API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PURCHASEORDER_PROCESS_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.purchase-order.field-set
+- id: sap.bulk.api.purchase-order.field-set
+  title: PO API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-api
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for PO API: PurchaseOrder, PurchaseOrderItem, Supplier, PurchasingOrganization,
+    PurchaseOrderNetAmount.'
+  freshness: *id001
+  source: *id023
+  claims:
+  - statement: PO API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PURCHASEORDER_PROCESS_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.purchase-order.object
+  field_definitions:
+  - key: PurchaseOrder.PurchaseOrder
+    description: PurchaseOrder field context for Purchase Order API.
+    usage: Use PurchaseOrder for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: PurchaseOrder.PurchaseOrderItem
+    description: PurchaseOrderItem field context for Purchase Order API.
+    usage: Use PurchaseOrderItem for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: PurchaseOrder.Supplier
+    description: Supplier field context for Purchase Order API.
+    usage: Use Supplier for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: PurchaseOrder.PurchasingOrganization
+    description: PurchasingOrganization field context for Purchase Order API.
+    usage: Use PurchasingOrganization for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: PurchaseOrder.PurchaseOrderNetAmount
+    description: PurchaseOrderNetAmount field context for Purchase Order API.
+    usage: Use PurchaseOrderNetAmount for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.purchase-order.field-map
+  title: PO API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-api
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for PO API: business key, item/context fields, lifecycle status and error/reconciliation fields.'
+  freshness: *id001
+  source: *id023
+  claims:
+  - statement: PO API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PURCHASEORDER_PROCESS_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.purchase-order.field-set
+    objects:
+    - sap.bulk.api.purchase-order.object
+  field_map: &id024
+  - source: PurchaseOrder.PurchaseOrder
+    target: Payload.PurchaseOrder
+    purpose: Carry PurchaseOrder into payload, mapping, reconciliation or test evidence.
+  - source: PurchaseOrder.PurchaseOrderItem
+    target: Payload.PurchaseOrderItem
+    purpose: Carry PurchaseOrderItem into payload, mapping, reconciliation or test evidence.
+  - source: PurchaseOrder.Supplier
+    target: Payload.Supplier
+    purpose: Carry Supplier into payload, mapping, reconciliation or test evidence.
+  - source: PurchaseOrder.PurchasingOrganization
+    target: Payload.PurchasingOrganization
+    purpose: Carry PurchasingOrganization into payload, mapping, reconciliation or test evidence.
+  - source: PurchaseOrder.PurchaseOrderNetAmount
+    target: Payload.PurchaseOrderNetAmount
+    purpose: Carry PurchaseOrderNetAmount into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id024
+- id: sap.bulk.api.purchase-order.rule
+  title: PO API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-api
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for PO API: do not claim interface readiness unless business key, payload fields, status,
+    error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id025
+    kind: internal_pattern
+    title: Internal Purchase Order API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: PO API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.purchase-order.ref
+  relations:
+    objects:
+    - sap.bulk.api.purchase-order.object
+    field_maps:
+    - sap.bulk.api.purchase-order.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.purchase-order.test-pattern
+  title: PO API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-api
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for PO API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id025
+  claims:
+  - statement: PO API context should identify business key, field semantics, lifecycle status, error owner and release-specific
+      verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.purchase-order.ref
+  relations:
+    objects:
+    - sap.bulk.api.purchase-order.object
+    field_maps:
+    - sap.bulk.api.purchase-order.field-map
+  test_scenarios:
+  - name: Purchase Order API payload mapping smoke
+    given: A synthetic PurchaseOrder payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Purchase Order API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.material-document.ref
+  title: Material Document API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Material Document API. Use it to verify API/entity availability
+    and release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id026
+    kind: public_url
+    title: SAP Business Accelerator Hub - Material Document API
+    url: https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Material Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.material-document.object
+- id: sap.bulk.api.material-document.object
+  title: MaterialDocument API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'MaterialDocument object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id026
+  claims:
+  - statement: Material Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.material-document.field-set
+- id: sap.bulk.api.material-document.field-set
+  title: Material Document API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Material Document API: MaterialDocument, MaterialDocumentYear, Material,
+    Plant, GoodsMovementType.'
+  freshness: *id001
+  source: *id026
+  claims:
+  - statement: Material Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.material-document.object
+  field_definitions:
+  - key: MaterialDocument.MaterialDocument
+    description: MaterialDocument field context for Material Document API.
+    usage: Use MaterialDocument for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: MaterialDocument.MaterialDocumentYear
+    description: MaterialDocumentYear field context for Material Document API.
+    usage: Use MaterialDocumentYear for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: MaterialDocument.Material
+    description: Material field context for Material Document API.
+    usage: Use Material for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: MaterialDocument.Plant
+    description: Plant field context for Material Document API.
+    usage: Use Plant for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: MaterialDocument.GoodsMovementType
+    description: GoodsMovementType field context for Material Document API.
+    usage: Use GoodsMovementType for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.material-document.field-map
+  title: Material Document API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Material Document API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id026
+  claims:
+  - statement: Material Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_MATERIAL_DOCUMENT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.material-document.field-set
+    objects:
+    - sap.bulk.api.material-document.object
+  field_map: &id027
+  - source: MaterialDocument.MaterialDocument
+    target: Payload.MaterialDocument
+    purpose: Carry MaterialDocument into payload, mapping, reconciliation or test evidence.
+  - source: MaterialDocument.MaterialDocumentYear
+    target: Payload.MaterialDocumentYear
+    purpose: Carry MaterialDocumentYear into payload, mapping, reconciliation or test evidence.
+  - source: MaterialDocument.Material
+    target: Payload.Material
+    purpose: Carry Material into payload, mapping, reconciliation or test evidence.
+  - source: MaterialDocument.Plant
+    target: Payload.Plant
+    purpose: Carry Plant into payload, mapping, reconciliation or test evidence.
+  - source: MaterialDocument.GoodsMovementType
+    target: Payload.GoodsMovementType
+    purpose: Carry GoodsMovementType into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id027
+- id: sap.bulk.api.material-document.rule
+  title: Material Document API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Material Document API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id028
+    kind: internal_pattern
+    title: Internal Material Document API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Material Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.material-document.ref
+  relations:
+    objects:
+    - sap.bulk.api.material-document.object
+    field_maps:
+    - sap.bulk.api.material-document.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.material-document.test-pattern
+  title: Material Document API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material-document
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Material Document API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id028
+  claims:
+  - statement: Material Document API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.material-document.ref
+  relations:
+    objects:
+    - sap.bulk.api.material-document.object
+    field_maps:
+    - sap.bulk.api.material-document.field-map
+  test_scenarios:
+  - name: Material Document API payload mapping smoke
+    given: A synthetic MaterialDocument payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Material Document API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.outbound-delivery.ref
+  title: Outbound Delivery API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - outbound-delivery
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Outbound Delivery API. Use it to verify API/entity availability
+    and release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id029
+    kind: public_url
+    title: SAP Business Accelerator Hub - Outbound Delivery API
+    url: https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Outbound Delivery API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.outbound-delivery.object
+- id: sap.bulk.api.outbound-delivery.object
+  title: OutboundDelivery API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - outbound-delivery
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'OutboundDelivery object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id029
+  claims:
+  - statement: Outbound Delivery API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.outbound-delivery.field-set
+- id: sap.bulk.api.outbound-delivery.field-set
+  title: Outbound Delivery API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - outbound-delivery
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Outbound Delivery API: DeliveryDocument, DeliveryDocumentItem, ShippingPoint,
+    PickingStatus, GoodsIssueStatus.'
+  freshness: *id001
+  source: *id029
+  claims:
+  - statement: Outbound Delivery API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.outbound-delivery.object
+  field_definitions:
+  - key: OutboundDelivery.DeliveryDocument
+    description: DeliveryDocument field context for Outbound Delivery API.
+    usage: Use DeliveryDocument for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: OutboundDelivery.DeliveryDocumentItem
+    description: DeliveryDocumentItem field context for Outbound Delivery API.
+    usage: Use DeliveryDocumentItem for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: OutboundDelivery.ShippingPoint
+    description: ShippingPoint field context for Outbound Delivery API.
+    usage: Use ShippingPoint for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: OutboundDelivery.PickingStatus
+    description: PickingStatus field context for Outbound Delivery API.
+    usage: Use PickingStatus for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: OutboundDelivery.GoodsIssueStatus
+    description: GoodsIssueStatus field context for Outbound Delivery API.
+    usage: Use GoodsIssueStatus for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.outbound-delivery.field-map
+  title: Outbound Delivery API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - outbound-delivery
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Outbound Delivery API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id029
+  claims:
+  - statement: Outbound Delivery API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_OUTBOUND_DELIVERY_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.outbound-delivery.field-set
+    objects:
+    - sap.bulk.api.outbound-delivery.object
+  field_map: &id030
+  - source: OutboundDelivery.DeliveryDocument
+    target: Payload.DeliveryDocument
+    purpose: Carry DeliveryDocument into payload, mapping, reconciliation or test evidence.
+  - source: OutboundDelivery.DeliveryDocumentItem
+    target: Payload.DeliveryDocumentItem
+    purpose: Carry DeliveryDocumentItem into payload, mapping, reconciliation or test evidence.
+  - source: OutboundDelivery.ShippingPoint
+    target: Payload.ShippingPoint
+    purpose: Carry ShippingPoint into payload, mapping, reconciliation or test evidence.
+  - source: OutboundDelivery.PickingStatus
+    target: Payload.PickingStatus
+    purpose: Carry PickingStatus into payload, mapping, reconciliation or test evidence.
+  - source: OutboundDelivery.GoodsIssueStatus
+    target: Payload.GoodsIssueStatus
+    purpose: Carry GoodsIssueStatus into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id030
+- id: sap.bulk.api.outbound-delivery.rule
+  title: Outbound Delivery API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - outbound-delivery
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Outbound Delivery API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id031
+    kind: internal_pattern
+    title: Internal Outbound Delivery API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Outbound Delivery API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.outbound-delivery.ref
+  relations:
+    objects:
+    - sap.bulk.api.outbound-delivery.object
+    field_maps:
+    - sap.bulk.api.outbound-delivery.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.outbound-delivery.test-pattern
+  title: Outbound Delivery API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - outbound-delivery
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Outbound Delivery API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id031
+  claims:
+  - statement: Outbound Delivery API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.outbound-delivery.ref
+  relations:
+    objects:
+    - sap.bulk.api.outbound-delivery.object
+    field_maps:
+    - sap.bulk.api.outbound-delivery.field-map
+  test_scenarios:
+  - name: Outbound Delivery API payload mapping smoke
+    given: A synthetic OutboundDelivery payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Outbound Delivery API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.production-order.ref
+  title: Production Order API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Production Order API. Use it to verify API/entity availability and
+    release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id032
+    kind: public_url
+    title: SAP Business Accelerator Hub - Production Order API
+    url: https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Production Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.production-order.object
+- id: sap.bulk.api.production-order.object
+  title: ProductionOrder API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'ProductionOrder object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id032
+  claims:
+  - statement: Production Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.production-order.field-set
+- id: sap.bulk.api.production-order.field-set
+  title: Production Order API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Production Order API: ProductionOrder, Material, ProductionPlant, MRPController,
+    SystemStatus.'
+  freshness: *id001
+  source: *id032
+  claims:
+  - statement: Production Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.production-order.object
+  field_definitions:
+  - key: ProductionOrder.ProductionOrder
+    description: ProductionOrder field context for Production Order API.
+    usage: Use ProductionOrder for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: ProductionOrder.Material
+    description: Material field context for Production Order API.
+    usage: Use Material for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: ProductionOrder.ProductionPlant
+    description: ProductionPlant field context for Production Order API.
+    usage: Use ProductionPlant for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: ProductionOrder.MRPController
+    description: MRPController field context for Production Order API.
+    usage: Use MRPController for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: ProductionOrder.SystemStatus
+    description: SystemStatus field context for Production Order API.
+    usage: Use SystemStatus for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.production-order.field-map
+  title: Production Order API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Production Order API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id032
+  claims:
+  - statement: Production Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PRODUCTION_ORDER_2_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.production-order.field-set
+    objects:
+    - sap.bulk.api.production-order.object
+  field_map: &id033
+  - source: ProductionOrder.ProductionOrder
+    target: Payload.ProductionOrder
+    purpose: Carry ProductionOrder into payload, mapping, reconciliation or test evidence.
+  - source: ProductionOrder.Material
+    target: Payload.Material
+    purpose: Carry Material into payload, mapping, reconciliation or test evidence.
+  - source: ProductionOrder.ProductionPlant
+    target: Payload.ProductionPlant
+    purpose: Carry ProductionPlant into payload, mapping, reconciliation or test evidence.
+  - source: ProductionOrder.MRPController
+    target: Payload.MRPController
+    purpose: Carry MRPController into payload, mapping, reconciliation or test evidence.
+  - source: ProductionOrder.SystemStatus
+    target: Payload.SystemStatus
+    purpose: Carry SystemStatus into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id033
+- id: sap.bulk.api.production-order.rule
+  title: Production Order API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Production Order API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id034
+    kind: internal_pattern
+    title: Internal Production Order API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Production Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.production-order.ref
+  relations:
+    objects:
+    - sap.bulk.api.production-order.object
+    field_maps:
+    - sap.bulk.api.production-order.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.production-order.test-pattern
+  title: Production Order API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Production Order API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id034
+  claims:
+  - statement: Production Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.production-order.ref
+  relations:
+    objects:
+    - sap.bulk.api.production-order.object
+    field_maps:
+    - sap.bulk.api.production-order.field-map
+  test_scenarios:
+  - name: Production Order API payload mapping smoke
+    given: A synthetic ProductionOrder payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Production Order API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.inspection-lot.ref
+  title: Inspection Lot API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inspection-lot
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Inspection Lot API. Use it to verify API/entity availability and
+    release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id035
+    kind: public_url
+    title: SAP Business Accelerator Hub - Inspection Lot API
+    url: https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Inspection Lot API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.inspection-lot.object
+- id: sap.bulk.api.inspection-lot.object
+  title: InspectionLot API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inspection-lot
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'InspectionLot object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id035
+  claims:
+  - statement: Inspection Lot API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.inspection-lot.field-set
+- id: sap.bulk.api.inspection-lot.field-set
+  title: Inspection Lot API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inspection-lot
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Inspection Lot API: InspectionLot, Material, Plant, InspectionType, UsageDecisionCode.'
+  freshness: *id001
+  source: *id035
+  claims:
+  - statement: Inspection Lot API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.inspection-lot.object
+  field_definitions:
+  - key: InspectionLot.InspectionLot
+    description: InspectionLot field context for Inspection Lot API.
+    usage: Use InspectionLot for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: InspectionLot.Material
+    description: Material field context for Inspection Lot API.
+    usage: Use Material for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: InspectionLot.Plant
+    description: Plant field context for Inspection Lot API.
+    usage: Use Plant for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: InspectionLot.InspectionType
+    description: InspectionType field context for Inspection Lot API.
+    usage: Use InspectionType for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: InspectionLot.UsageDecisionCode
+    description: UsageDecisionCode field context for Inspection Lot API.
+    usage: Use UsageDecisionCode for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.inspection-lot.field-map
+  title: Inspection Lot API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inspection-lot
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Inspection Lot API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id035
+  claims:
+  - statement: Inspection Lot API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_INSPECTIONLOT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.inspection-lot.field-set
+    objects:
+    - sap.bulk.api.inspection-lot.object
+  field_map: &id036
+  - source: InspectionLot.InspectionLot
+    target: Payload.InspectionLot
+    purpose: Carry InspectionLot into payload, mapping, reconciliation or test evidence.
+  - source: InspectionLot.Material
+    target: Payload.Material
+    purpose: Carry Material into payload, mapping, reconciliation or test evidence.
+  - source: InspectionLot.Plant
+    target: Payload.Plant
+    purpose: Carry Plant into payload, mapping, reconciliation or test evidence.
+  - source: InspectionLot.InspectionType
+    target: Payload.InspectionType
+    purpose: Carry InspectionType into payload, mapping, reconciliation or test evidence.
+  - source: InspectionLot.UsageDecisionCode
+    target: Payload.UsageDecisionCode
+    purpose: Carry UsageDecisionCode into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id036
+- id: sap.bulk.api.inspection-lot.rule
+  title: Inspection Lot API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inspection-lot
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Inspection Lot API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id037
+    kind: internal_pattern
+    title: Internal Inspection Lot API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Inspection Lot API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.inspection-lot.ref
+  relations:
+    objects:
+    - sap.bulk.api.inspection-lot.object
+    field_maps:
+    - sap.bulk.api.inspection-lot.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.inspection-lot.test-pattern
+  title: Inspection Lot API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inspection-lot
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Inspection Lot API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id037
+  claims:
+  - statement: Inspection Lot API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.inspection-lot.ref
+  relations:
+    objects:
+    - sap.bulk.api.inspection-lot.object
+    field_maps:
+    - sap.bulk.api.inspection-lot.field-map
+  test_scenarios:
+  - name: Inspection Lot API payload mapping smoke
+    given: A synthetic InspectionLot payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Inspection Lot API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.maintenance-order.ref
+  title: Maintenance Order API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Maintenance Order API. Use it to verify API/entity availability
+    and release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id038
+    kind: public_url
+    title: SAP Business Accelerator Hub - Maintenance Order API
+    url: https://api.sap.com/api/API_MAINTENANCEORDER/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Maintenance Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    objects:
+    - sap.bulk.api.maintenance-order.object
+- id: sap.bulk.api.maintenance-order.object
+  title: MaintenanceOrder API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'MaintenanceOrder object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id038
+  claims:
+  - statement: Maintenance Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    fields:
+    - sap.bulk.api.maintenance-order.field-set
+- id: sap.bulk.api.maintenance-order.field-set
+  title: Maintenance Order API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Maintenance Order API: MaintenanceOrder, TechnicalObject, Equipment, FunctionalLocation,
+    SystemStatus.'
+  freshness: *id001
+  source: *id038
+  claims:
+  - statement: Maintenance Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    objects:
+    - sap.bulk.api.maintenance-order.object
+  field_definitions:
+  - key: MaintenanceOrder.MaintenanceOrder
+    description: MaintenanceOrder field context for Maintenance Order API.
+    usage: Use MaintenanceOrder for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: MaintenanceOrder.TechnicalObject
+    description: TechnicalObject field context for Maintenance Order API.
+    usage: Use TechnicalObject for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: MaintenanceOrder.Equipment
+    description: Equipment field context for Maintenance Order API.
+    usage: Use Equipment for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: MaintenanceOrder.FunctionalLocation
+    description: FunctionalLocation field context for Maintenance Order API.
+    usage: Use FunctionalLocation for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: MaintenanceOrder.SystemStatus
+    description: SystemStatus field context for Maintenance Order API.
+    usage: Use SystemStatus for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.maintenance-order.field-map
+  title: Maintenance Order API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Maintenance Order API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id038
+  claims:
+  - statement: Maintenance Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_MAINTENANCEORDER/overview
+  relations:
+    fields:
+    - sap.bulk.api.maintenance-order.field-set
+    objects:
+    - sap.bulk.api.maintenance-order.object
+  field_map: &id039
+  - source: MaintenanceOrder.MaintenanceOrder
+    target: Payload.MaintenanceOrder
+    purpose: Carry MaintenanceOrder into payload, mapping, reconciliation or test evidence.
+  - source: MaintenanceOrder.TechnicalObject
+    target: Payload.TechnicalObject
+    purpose: Carry TechnicalObject into payload, mapping, reconciliation or test evidence.
+  - source: MaintenanceOrder.Equipment
+    target: Payload.Equipment
+    purpose: Carry Equipment into payload, mapping, reconciliation or test evidence.
+  - source: MaintenanceOrder.FunctionalLocation
+    target: Payload.FunctionalLocation
+    purpose: Carry FunctionalLocation into payload, mapping, reconciliation or test evidence.
+  - source: MaintenanceOrder.SystemStatus
+    target: Payload.SystemStatus
+    purpose: Carry SystemStatus into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id039
+- id: sap.bulk.api.maintenance-order.rule
+  title: Maintenance Order API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Maintenance Order API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id040
+    kind: internal_pattern
+    title: Internal Maintenance Order API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Maintenance Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.maintenance-order.ref
+  relations:
+    objects:
+    - sap.bulk.api.maintenance-order.object
+    field_maps:
+    - sap.bulk.api.maintenance-order.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.maintenance-order.test-pattern
+  title: Maintenance Order API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-order
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Maintenance Order API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id040
+  claims:
+  - statement: Maintenance Order API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.maintenance-order.ref
+  relations:
+    objects:
+    - sap.bulk.api.maintenance-order.object
+    field_maps:
+    - sap.bulk.api.maintenance-order.field-map
+  test_scenarios:
+  - name: Maintenance Order API payload mapping smoke
+    given: A synthetic MaintenanceOrder payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Maintenance Order API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.project.ref
+  title: Enterprise Project API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Enterprise Project API. Use it to verify API/entity availability
+    and release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id041
+    kind: public_url
+    title: SAP Business Accelerator Hub - Enterprise Project API
+    url: https://api.sap.com/api/API_PROJECT_SRV/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Enterprise Project API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.project.object
+- id: sap.bulk.api.project.object
+  title: EnterpriseProject API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'EnterpriseProject object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id041
+  claims:
+  - statement: Enterprise Project API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.project.field-set
+- id: sap.bulk.api.project.field-set
+  title: Enterprise Project API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Enterprise Project API: Project, WBSElement, CompanyCode, ResponsibleCostCenter,
+    ProjectProfile.'
+  freshness: *id001
+  source: *id041
+  claims:
+  - statement: Enterprise Project API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    objects:
+    - sap.bulk.api.project.object
+  field_definitions:
+  - key: EnterpriseProject.Project
+    description: Project field context for Enterprise Project API.
+    usage: Use Project for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: EnterpriseProject.WBSElement
+    description: WBSElement field context for Enterprise Project API.
+    usage: Use WBSElement for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: EnterpriseProject.CompanyCode
+    description: CompanyCode field context for Enterprise Project API.
+    usage: Use CompanyCode for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: EnterpriseProject.ResponsibleCostCenter
+    description: ResponsibleCostCenter field context for Enterprise Project API.
+    usage: Use ResponsibleCostCenter for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: EnterpriseProject.ProjectProfile
+    description: ProjectProfile field context for Enterprise Project API.
+    usage: Use ProjectProfile for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.project.field-map
+  title: Enterprise Project API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Enterprise Project API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id041
+  claims:
+  - statement: Enterprise Project API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_PROJECT_SRV/overview
+  relations:
+    fields:
+    - sap.bulk.api.project.field-set
+    objects:
+    - sap.bulk.api.project.object
+  field_map: &id042
+  - source: EnterpriseProject.Project
+    target: Payload.Project
+    purpose: Carry Project into payload, mapping, reconciliation or test evidence.
+  - source: EnterpriseProject.WBSElement
+    target: Payload.WBSElement
+    purpose: Carry WBSElement into payload, mapping, reconciliation or test evidence.
+  - source: EnterpriseProject.CompanyCode
+    target: Payload.CompanyCode
+    purpose: Carry CompanyCode into payload, mapping, reconciliation or test evidence.
+  - source: EnterpriseProject.ResponsibleCostCenter
+    target: Payload.ResponsibleCostCenter
+    purpose: Carry ResponsibleCostCenter into payload, mapping, reconciliation or test evidence.
+  - source: EnterpriseProject.ProjectProfile
+    target: Payload.ProjectProfile
+    purpose: Carry ProjectProfile into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id042
+- id: sap.bulk.api.project.rule
+  title: Enterprise Project API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Enterprise Project API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id043
+    kind: internal_pattern
+    title: Internal Enterprise Project API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Enterprise Project API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.project.ref
+  relations:
+    objects:
+    - sap.bulk.api.project.object
+    field_maps:
+    - sap.bulk.api.project.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.project.test-pattern
+  title: Enterprise Project API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Enterprise Project API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id043
+  claims:
+  - statement: Enterprise Project API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.project.ref
+  relations:
+    objects:
+    - sap.bulk.api.project.object
+    field_maps:
+    - sap.bulk.api.project.field-map
+  test_scenarios:
+  - name: Enterprise Project API payload mapping smoke
+    given: A synthetic EnterpriseProject payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Enterprise Project API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
+- id: sap.bulk.api.analytical-query.ref
+  title: Analytical Query API public source pointer
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytical-query
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.source_traceability
+  - fo.field_mapping
+  summary: Link-first public source pointer for Analytical Query API. Use it to verify API/entity availability and
+    release suitability without copying SAP API documentation.
+  freshness: *id001
+  source: &id044
+    kind: public_url
+    title: SAP Business Accelerator Hub - Analytical Query API
+    url: https://api.sap.com/api/API_QUERY_DESIGNER/overview
+    retrieved_at: '2026-06-23'
+    specificity: catalog_entry
+    license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+  claims:
+  - statement: Analytical Query API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_QUERY_DESIGNER/overview
+  relations:
+    objects:
+    - sap.bulk.api.analytical-query.object
+- id: sap.bulk.api.analytical-query.object
+  title: AnalyticalQuery API object anchor
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytical-query
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'AnalyticalQuery object anchor for API/event/interface design: preserve business key, item/key fields,
+    lifecycle status and exception ownership.'
+  freshness: *id001
+  source: *id044
+  claims:
+  - statement: Analytical Query API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_QUERY_DESIGNER/overview
+  relations:
+    fields:
+    - sap.bulk.api.analytical-query.field-set
+- id: sap.bulk.api.analytical-query.field-set
+  title: Analytical Query API payload field set
+  kind: sap_field
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytical-query
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-set
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Payload field-set context for Analytical Query API: AnalyticalQuery, Measure, Dimension, Filter, RefreshTimestamp.'
+  freshness: *id001
+  source: *id044
+  claims:
+  - statement: Analytical Query API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_QUERY_DESIGNER/overview
+  relations:
+    objects:
+    - sap.bulk.api.analytical-query.object
+  field_definitions:
+  - key: AnalyticalQuery.AnalyticalQuery
+    description: AnalyticalQuery field context for Analytical Query API.
+    usage: Use AnalyticalQuery for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: AnalyticalQuery.Measure
+    description: Measure field context for Analytical Query API.
+    usage: Use Measure for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: AnalyticalQuery.Dimension
+    description: Dimension field context for Analytical Query API.
+    usage: Use Dimension for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: AnalyticalQuery.Filter
+    description: Filter field context for Analytical Query API.
+    usage: Use Filter for source-to-target mapping, payload validation, status checks and test evidence.
+  - key: AnalyticalQuery.RefreshTimestamp
+    description: RefreshTimestamp field context for Analytical Query API.
+    usage: Use RefreshTimestamp for source-to-target mapping, payload validation, status checks and test evidence.
+- id: sap.bulk.api.analytical-query.field-map
+  title: Analytical Query API payload field map
+  kind: field_map
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytical-query
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - field-mapping
+  used_for:
+  - fo.field_mapping
+  - fo.test_data
+  summary: 'Field map for Analytical Query API: business key, item/context fields, lifecycle status and error/reconciliation
+    fields.'
+  freshness: *id001
+  source: *id044
+  claims:
+  - statement: Analytical Query API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - https://api.sap.com/api/API_QUERY_DESIGNER/overview
+  relations:
+    fields:
+    - sap.bulk.api.analytical-query.field-set
+    objects:
+    - sap.bulk.api.analytical-query.object
+  field_map: &id045
+  - source: AnalyticalQuery.AnalyticalQuery
+    target: Payload.AnalyticalQuery
+    purpose: Carry AnalyticalQuery into payload, mapping, reconciliation or test evidence.
+  - source: AnalyticalQuery.Measure
+    target: Payload.Measure
+    purpose: Carry Measure into payload, mapping, reconciliation or test evidence.
+  - source: AnalyticalQuery.Dimension
+    target: Payload.Dimension
+    purpose: Carry Dimension into payload, mapping, reconciliation or test evidence.
+  - source: AnalyticalQuery.Filter
+    target: Payload.Filter
+    purpose: Carry Filter into payload, mapping, reconciliation or test evidence.
+  - source: AnalyticalQuery.RefreshTimestamp
+    target: Payload.RefreshTimestamp
+    purpose: Carry RefreshTimestamp into payload, mapping, reconciliation or test evidence.
+  mapping_steps: *id045
+- id: sap.bulk.api.analytical-query.rule
+  title: Analytical Query API interface decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytical-query
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule for Analytical Query API: do not claim interface readiness unless business key, payload
+    fields, status, error owner and privacy boundary are explicit.'
+  freshness: *id001
+  source: &id046
+    kind: internal_pattern
+    title: Internal Analytical Query API interface pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic interface pattern; no customer data, no tenant hostnames, no copied SAP
+      documentation.
+  claims:
+  - statement: Analytical Query API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.analytical-query.ref
+  relations:
+    objects:
+    - sap.bulk.api.analytical-query.object
+    field_maps:
+    - sap.bulk.api.analytical-query.field-map
+  rules:
+  - if: business key or lifecycle status is missing
+    then: block interface-ready claim
+    outcome: request API/entity and tenant verification
+  - if: payload includes credential, token, tenant hostname or secret literal
+    then: reject public bundle evidence
+    outcome: replace with synthetic placeholder and private handoff
+- id: sap.bulk.api.analytical-query.test-pattern
+  title: Analytical Query API interface test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytical-query
+  - api-surface
+  - payload
+  - public-api
+  - interface-readiness
+  - quality-gate
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Analytical Query API: payload mapping, status handling, error ownership, idempotency/reconciliation
+    and private-data boundary.'
+  freshness: *id001
+  source: *id046
+  claims:
+  - statement: Analytical Query API context should identify business key, field semantics, lifecycle status, error
+      owner and release-specific verification before an agent uses it in FO or interface design.
+    evidence:
+    - sap.bulk.api.analytical-query.ref
+  relations:
+    objects:
+    - sap.bulk.api.analytical-query.object
+    field_maps:
+    - sap.bulk.api.analytical-query.field-map
+  test_scenarios:
+  - name: Analytical Query API payload mapping smoke
+    given: A synthetic AnalyticalQuery payload with business key and status fields only.
+    when: An agent builds an FO/interface bundle.
+    then: The bundle cites public source pointers and requests tenant-specific endpoint/auth evidence separately.
+  - name: Analytical Query API secret boundary
+    given: A prompt contains token, hostname or credential-shaped text.
+    when: The agent prepares public context.
+    then: The public bundle rejects or redacts private values and keeps only generic field semantics.
