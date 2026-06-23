@@ -1,0 +1,2718 @@
+pack_id: sap-roles-catalogs-controls-bulk-pack
+title: SAP roles catalogs and controls bulk context pack
+description: Bulk generic access-control context for SAP Agent Context. Uses responsibility profiles and synthetic
+  test patterns, not real tenant permission profiles, identities or exports.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Controls are generic and synthetic; tenant-specific role/catalog/user evidence belongs outside
+    the public repo.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.bulk.control.finance-close.role
+  title: Finance Close responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance-close
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Finance Close. It describes the business activity/persona to test
+    without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: &id002
+    kind: internal_pattern
+    title: Internal SAP responsibility/control pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic control pattern; no tenant role names, user IDs, client data or copied
+      SAP documentation.
+  claims:
+  - statement: Finance Close control context should document segregation between posting and period close approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.finance-close.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.finance-close.access-policy
+- id: sap.bulk.control.finance-close.decision-rule
+  title: Finance Close control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance-close
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Finance Close: verify positive control, negative restriction, owner approval and post-change
+    evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Finance Close control context should document segregation between posting and period close approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.finance-close.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.finance-close.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.finance-close.test-pattern
+  title: Finance Close control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance-close
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Finance Close: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Finance Close control context should document segregation between posting and period close approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.finance-close.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.finance-close.role
+  test_scenarios:
+  - name: Finance Close positive access smoke
+    given: A synthetic synthetic identity assigned to posting reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Finance Close negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.finance-close.access-policy
+  title: Finance Close control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance-close
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Finance Close: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Finance Close control context should document segregation between posting and period close approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.finance-close.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.finance-close.role
+- id: sap.bulk.control.ap-payments.role
+  title: AP Payments responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - ap-payments
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for AP Payments. It describes the business activity/persona to test without
+    inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: AP Payments control context should document segregation between invoice approval and payment release,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.ap-payments.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.ap-payments.access-policy
+- id: sap.bulk.control.ap-payments.decision-rule
+  title: AP Payments control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - ap-payments
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for AP Payments: verify positive control, negative restriction, owner approval and post-change
+    evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: AP Payments control context should document segregation between invoice approval and payment release,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.ap-payments.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.ap-payments.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.ap-payments.test-pattern
+  title: AP Payments control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - ap-payments
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for AP Payments: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: AP Payments control context should document segregation between invoice approval and payment release,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.ap-payments.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.ap-payments.role
+  test_scenarios:
+  - name: AP Payments positive access smoke
+    given: A synthetic synthetic identity assigned to payment proposal reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: AP Payments negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.ap-payments.access-policy
+  title: AP Payments control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - ap-payments
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for AP Payments: never store real identity values, tenant permission profile names, screenshots
+    or production authorization exports in public context; keep only synthetic examples and generic evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: AP Payments control context should document segregation between invoice approval and payment release,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.ap-payments.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.ap-payments.role
+- id: sap.bulk.control.ar-cash.role
+  title: AR Cash Application responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - ar-cash
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for AR Cash Application. It describes the business activity/persona to
+    test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: AR Cash Application control context should document segregation between cash matching and write-off
+      approval, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.ar-cash.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.ar-cash.access-policy
+- id: sap.bulk.control.ar-cash.decision-rule
+  title: AR Cash Application control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - ar-cash
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for AR Cash Application: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: AR Cash Application control context should document segregation between cash matching and write-off
+      approval, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.ar-cash.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.ar-cash.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.ar-cash.test-pattern
+  title: AR Cash Application control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - ar-cash
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for AR Cash Application: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: AR Cash Application control context should document segregation between cash matching and write-off
+      approval, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.ar-cash.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.ar-cash.role
+  test_scenarios:
+  - name: AR Cash Application positive access smoke
+    given: A synthetic synthetic identity assigned to cash application reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: AR Cash Application negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.ar-cash.access-policy
+  title: AR Cash Application control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - ar-cash
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for AR Cash Application: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: AR Cash Application control context should document segregation between cash matching and write-off
+      approval, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.ar-cash.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.ar-cash.role
+- id: sap.bulk.control.procurement-sourcing.role
+  title: Procurement Sourcing responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - procurement-sourcing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Procurement Sourcing. It describes the business activity/persona to
+    test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Procurement Sourcing control context should document segregation between requisition request and
+      supplier/source assignment, positive and negative synthetic identities, control dimensions and evidence owner
+      before an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.procurement-sourcing.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.procurement-sourcing.access-policy
+- id: sap.bulk.control.procurement-sourcing.decision-rule
+  title: Procurement Sourcing control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - procurement-sourcing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Procurement Sourcing: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Procurement Sourcing control context should document segregation between requisition request and
+      supplier/source assignment, positive and negative synthetic identities, control dimensions and evidence owner
+      before an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.procurement-sourcing.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.procurement-sourcing.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.procurement-sourcing.test-pattern
+  title: Procurement Sourcing control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - procurement-sourcing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Procurement Sourcing: positive identity, negative identity, restriction dimension,
+    approval owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Procurement Sourcing control context should document segregation between requisition request and
+      supplier/source assignment, positive and negative synthetic identities, control dimensions and evidence owner
+      before an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.procurement-sourcing.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.procurement-sourcing.role
+  test_scenarios:
+  - name: Procurement Sourcing positive access smoke
+    given: A synthetic synthetic identity assigned to source determination reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Procurement Sourcing negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.procurement-sourcing.access-policy
+  title: Procurement Sourcing control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - procurement-sourcing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Procurement Sourcing: never store real identity values, tenant permission profile
+    names, screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Procurement Sourcing control context should document segregation between requisition request and
+      supplier/source assignment, positive and negative synthetic identities, control dimensions and evidence owner
+      before an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.procurement-sourcing.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.procurement-sourcing.role
+- id: sap.bulk.control.po-receipt.role
+  title: PO Receipt responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-receipt
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for PO Receipt. It describes the business activity/persona to test without
+    inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: PO Receipt control context should document segregation between purchase order change and goods receipt
+      posting, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.po-receipt.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.po-receipt.access-policy
+- id: sap.bulk.control.po-receipt.decision-rule
+  title: PO Receipt control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-receipt
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for PO Receipt: verify positive control, negative restriction, owner approval and post-change
+    evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: PO Receipt control context should document segregation between purchase order change and goods receipt
+      posting, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.po-receipt.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.po-receipt.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.po-receipt.test-pattern
+  title: PO Receipt control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-receipt
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for PO Receipt: positive identity, negative identity, restriction dimension, approval owner
+    and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: PO Receipt control context should document segregation between purchase order change and goods receipt
+      posting, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.po-receipt.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.po-receipt.role
+  test_scenarios:
+  - name: PO Receipt positive access smoke
+    given: A synthetic synthetic identity assigned to goods receipt reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: PO Receipt negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.po-receipt.access-policy
+  title: PO Receipt control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - po-receipt
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for PO Receipt: never store real identity values, tenant permission profile names, screenshots
+    or production authorization exports in public context; keep only synthetic examples and generic evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: PO Receipt control context should document segregation between purchase order change and goods receipt
+      posting, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.po-receipt.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.po-receipt.role
+- id: sap.bulk.control.sales-billing.role
+  title: Sales Billing responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-billing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Sales Billing. It describes the business activity/persona to test
+    without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Sales Billing control context should document segregation between sales order change and billing/output
+      release, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.sales-billing.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.sales-billing.access-policy
+- id: sap.bulk.control.sales-billing.decision-rule
+  title: Sales Billing control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-billing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Sales Billing: verify positive control, negative restriction, owner approval and post-change
+    evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Sales Billing control context should document segregation between sales order change and billing/output
+      release, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.sales-billing.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.sales-billing.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.sales-billing.test-pattern
+  title: Sales Billing control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-billing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Sales Billing: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Sales Billing control context should document segregation between sales order change and billing/output
+      release, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.sales-billing.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.sales-billing.role
+  test_scenarios:
+  - name: Sales Billing positive access smoke
+    given: A synthetic synthetic identity assigned to billing output reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Sales Billing negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.sales-billing.access-policy
+  title: Sales Billing control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales-billing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Sales Billing: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Sales Billing control context should document segregation between sales order change and billing/output
+      release, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.sales-billing.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.sales-billing.role
+- id: sap.bulk.control.delivery-execution.role
+  title: Delivery Execution responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - delivery-execution
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Delivery Execution. It describes the business activity/persona to
+    test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Delivery Execution control context should document segregation between picking confirmation and goods
+      issue posting, positive and negative synthetic identities, control dimensions and evidence owner before an
+      agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.delivery-execution.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.delivery-execution.access-policy
+- id: sap.bulk.control.delivery-execution.decision-rule
+  title: Delivery Execution control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - delivery-execution
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Delivery Execution: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Delivery Execution control context should document segregation between picking confirmation and goods
+      issue posting, positive and negative synthetic identities, control dimensions and evidence owner before an
+      agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.delivery-execution.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.delivery-execution.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.delivery-execution.test-pattern
+  title: Delivery Execution control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - delivery-execution
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Delivery Execution: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Delivery Execution control context should document segregation between picking confirmation and goods
+      issue posting, positive and negative synthetic identities, control dimensions and evidence owner before an
+      agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.delivery-execution.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.delivery-execution.role
+  test_scenarios:
+  - name: Delivery Execution positive access smoke
+    given: A synthetic synthetic identity assigned to delivery execution reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Delivery Execution negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.delivery-execution.access-policy
+  title: Delivery Execution control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - delivery-execution
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Delivery Execution: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Delivery Execution control context should document segregation between picking confirmation and goods
+      issue posting, positive and negative synthetic identities, control dimensions and evidence owner before an
+      agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.delivery-execution.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.delivery-execution.role
+- id: sap.bulk.control.inventory-adjustment.role
+  title: Inventory Adjustment responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory-adjustment
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Inventory Adjustment. It describes the business activity/persona to
+    test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Inventory Adjustment control context should document segregation between count entry and adjustment
+      posting, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.inventory-adjustment.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.inventory-adjustment.access-policy
+- id: sap.bulk.control.inventory-adjustment.decision-rule
+  title: Inventory Adjustment control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory-adjustment
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Inventory Adjustment: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Inventory Adjustment control context should document segregation between count entry and adjustment
+      posting, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.inventory-adjustment.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.inventory-adjustment.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.inventory-adjustment.test-pattern
+  title: Inventory Adjustment control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory-adjustment
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Inventory Adjustment: positive identity, negative identity, restriction dimension,
+    approval owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Inventory Adjustment control context should document segregation between count entry and adjustment
+      posting, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.inventory-adjustment.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.inventory-adjustment.role
+  test_scenarios:
+  - name: Inventory Adjustment positive access smoke
+    given: A synthetic synthetic identity assigned to inventory adjustment reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Inventory Adjustment negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.inventory-adjustment.access-policy
+  title: Inventory Adjustment control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - inventory-adjustment
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Inventory Adjustment: never store real identity values, tenant permission profile
+    names, screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Inventory Adjustment control context should document segregation between count entry and adjustment
+      posting, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.inventory-adjustment.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.inventory-adjustment.role
+- id: sap.bulk.control.production-confirmation.role
+  title: Production Confirmation responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-confirmation
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Production Confirmation. It describes the business activity/persona
+    to test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Production Confirmation control context should document segregation between order release and confirmation
+      reversal, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.production-confirmation.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.production-confirmation.access-policy
+- id: sap.bulk.control.production-confirmation.decision-rule
+  title: Production Confirmation control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-confirmation
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Production Confirmation: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Production Confirmation control context should document segregation between order release and confirmation
+      reversal, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.production-confirmation.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.production-confirmation.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.production-confirmation.test-pattern
+  title: Production Confirmation control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-confirmation
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Production Confirmation: positive identity, negative identity, restriction dimension,
+    approval owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Production Confirmation control context should document segregation between order release and confirmation
+      reversal, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.production-confirmation.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.production-confirmation.role
+  test_scenarios:
+  - name: Production Confirmation positive access smoke
+    given: A synthetic synthetic identity assigned to production confirmation reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Production Confirmation negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.production-confirmation.access-policy
+  title: Production Confirmation control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-confirmation
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Production Confirmation: never store real identity values, tenant permission profile
+    names, screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Production Confirmation control context should document segregation between order release and confirmation
+      reversal, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.production-confirmation.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.production-confirmation.role
+- id: sap.bulk.control.quality-release.role
+  title: Quality Release responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality-release
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Quality Release. It describes the business activity/persona to test
+    without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Quality Release control context should document segregation between inspection recording and usage
+      decision, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.quality-release.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.quality-release.access-policy
+- id: sap.bulk.control.quality-release.decision-rule
+  title: Quality Release control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality-release
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Quality Release: verify positive control, negative restriction, owner approval and
+    post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Quality Release control context should document segregation between inspection recording and usage
+      decision, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.quality-release.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.quality-release.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.quality-release.test-pattern
+  title: Quality Release control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality-release
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Quality Release: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Quality Release control context should document segregation between inspection recording and usage
+      decision, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.quality-release.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.quality-release.role
+  test_scenarios:
+  - name: Quality Release positive access smoke
+    given: A synthetic synthetic identity assigned to usage decision reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Quality Release negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.quality-release.access-policy
+  title: Quality Release control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality-release
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Quality Release: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Quality Release control context should document segregation between inspection recording and usage
+      decision, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.quality-release.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.quality-release.role
+- id: sap.bulk.control.maintenance-execution.role
+  title: Maintenance Execution responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-execution
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Maintenance Execution. It describes the business activity/persona
+    to test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Maintenance Execution control context should document segregation between maintenance order planning
+      and technical completion, positive and negative synthetic identities, control dimensions and evidence owner
+      before an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.maintenance-execution.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.maintenance-execution.access-policy
+- id: sap.bulk.control.maintenance-execution.decision-rule
+  title: Maintenance Execution control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-execution
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Maintenance Execution: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Maintenance Execution control context should document segregation between maintenance order planning
+      and technical completion, positive and negative synthetic identities, control dimensions and evidence owner
+      before an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.maintenance-execution.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.maintenance-execution.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.maintenance-execution.test-pattern
+  title: Maintenance Execution control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-execution
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Maintenance Execution: positive identity, negative identity, restriction dimension,
+    approval owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Maintenance Execution control context should document segregation between maintenance order planning
+      and technical completion, positive and negative synthetic identities, control dimensions and evidence owner
+      before an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.maintenance-execution.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.maintenance-execution.role
+  test_scenarios:
+  - name: Maintenance Execution positive access smoke
+    given: A synthetic synthetic identity assigned to maintenance work reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Maintenance Execution negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.maintenance-execution.access-policy
+  title: Maintenance Execution control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance-execution
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Maintenance Execution: never store real identity values, tenant permission profile
+    names, screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Maintenance Execution control context should document segregation between maintenance order planning
+      and technical completion, positive and negative synthetic identities, control dimensions and evidence owner
+      before an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.maintenance-execution.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.maintenance-execution.role
+- id: sap.bulk.control.service-billing.role
+  title: Service Billing responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service-billing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Service Billing. It describes the business activity/persona to test
+    without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Service Billing control context should document segregation between service confirmation and billing
+      request, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.service-billing.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.service-billing.access-policy
+- id: sap.bulk.control.service-billing.decision-rule
+  title: Service Billing control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service-billing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Service Billing: verify positive control, negative restriction, owner approval and
+    post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Service Billing control context should document segregation between service confirmation and billing
+      request, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.service-billing.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.service-billing.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.service-billing.test-pattern
+  title: Service Billing control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service-billing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Service Billing: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Service Billing control context should document segregation between service confirmation and billing
+      request, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.service-billing.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.service-billing.role
+  test_scenarios:
+  - name: Service Billing positive access smoke
+    given: A synthetic synthetic identity assigned to service billing reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Service Billing negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.service-billing.access-policy
+  title: Service Billing control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service-billing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Service Billing: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Service Billing control context should document segregation between service confirmation and billing
+      request, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.service-billing.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.service-billing.role
+- id: sap.bulk.control.project-budget.role
+  title: Project Budget responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project-budget
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Project Budget. It describes the business activity/persona to test
+    without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Project Budget control context should document segregation between project structure maintenance
+      and budget release, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.project-budget.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.project-budget.access-policy
+- id: sap.bulk.control.project-budget.decision-rule
+  title: Project Budget control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project-budget
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Project Budget: verify positive control, negative restriction, owner approval and
+    post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Project Budget control context should document segregation between project structure maintenance
+      and budget release, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.project-budget.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.project-budget.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.project-budget.test-pattern
+  title: Project Budget control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project-budget
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Project Budget: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Project Budget control context should document segregation between project structure maintenance
+      and budget release, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.project-budget.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.project-budget.role
+  test_scenarios:
+  - name: Project Budget positive access smoke
+    given: A synthetic synthetic identity assigned to project budget reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Project Budget negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.project-budget.access-policy
+  title: Project Budget control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project-budget
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Project Budget: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Project Budget control context should document segregation between project structure maintenance
+      and budget release, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.project-budget.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.project-budget.role
+- id: sap.bulk.control.tax-review.role
+  title: Tax Review responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax-review
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Tax Review. It describes the business activity/persona to test without
+    inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Tax Review control context should document segregation between tax code maintenance and posting approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.tax-review.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.tax-review.access-policy
+- id: sap.bulk.control.tax-review.decision-rule
+  title: Tax Review control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax-review
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Tax Review: verify positive control, negative restriction, owner approval and post-change
+    evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Tax Review control context should document segregation between tax code maintenance and posting approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.tax-review.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.tax-review.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.tax-review.test-pattern
+  title: Tax Review control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax-review
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Tax Review: positive identity, negative identity, restriction dimension, approval owner
+    and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Tax Review control context should document segregation between tax code maintenance and posting approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.tax-review.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.tax-review.role
+  test_scenarios:
+  - name: Tax Review positive access smoke
+    given: A synthetic synthetic identity assigned to tax determination reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Tax Review negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.tax-review.access-policy
+  title: Tax Review control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax-review
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Tax Review: never store real identity values, tenant permission profile names, screenshots
+    or production authorization exports in public context; keep only synthetic examples and generic evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Tax Review control context should document segregation between tax code maintenance and posting approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.tax-review.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.tax-review.role
+- id: sap.bulk.control.analytics-consumption.role
+  title: Analytics Consumption responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytics-consumption
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Analytics Consumption. It describes the business activity/persona
+    to test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Analytics Consumption control context should document segregation between report design and broad
+      data consumption, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.analytics-consumption.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.analytics-consumption.access-policy
+- id: sap.bulk.control.analytics-consumption.decision-rule
+  title: Analytics Consumption control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytics-consumption
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Analytics Consumption: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Analytics Consumption control context should document segregation between report design and broad
+      data consumption, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.analytics-consumption.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.analytics-consumption.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.analytics-consumption.test-pattern
+  title: Analytics Consumption control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytics-consumption
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Analytics Consumption: positive identity, negative identity, restriction dimension,
+    approval owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Analytics Consumption control context should document segregation between report design and broad
+      data consumption, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.analytics-consumption.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.analytics-consumption.role
+  test_scenarios:
+  - name: Analytics Consumption positive access smoke
+    given: A synthetic synthetic identity assigned to analytics access reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Analytics Consumption negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.analytics-consumption.access-policy
+  title: Analytics Consumption control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytics-consumption
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Analytics Consumption: never store real identity values, tenant permission profile
+    names, screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Analytics Consumption control context should document segregation between report design and broad
+      data consumption, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.analytics-consumption.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.analytics-consumption.role
+- id: sap.bulk.control.master-data-governance.role
+  title: Master Data Governance responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - master-data-governance
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Master Data Governance. It describes the business activity/persona
+    to test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Master Data Governance control context should document segregation between master creation and approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.master-data-governance.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.master-data-governance.access-policy
+- id: sap.bulk.control.master-data-governance.decision-rule
+  title: Master Data Governance control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - master-data-governance
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Master Data Governance: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Master Data Governance control context should document segregation between master creation and approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.master-data-governance.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.master-data-governance.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.master-data-governance.test-pattern
+  title: Master Data Governance control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - master-data-governance
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Master Data Governance: positive identity, negative identity, restriction dimension,
+    approval owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Master Data Governance control context should document segregation between master creation and approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.master-data-governance.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.master-data-governance.role
+  test_scenarios:
+  - name: Master Data Governance positive access smoke
+    given: A synthetic synthetic identity assigned to master data change reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Master Data Governance negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.master-data-governance.access-policy
+  title: Master Data Governance control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - master-data-governance
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Master Data Governance: never store real identity values, tenant permission profile
+    names, screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Master Data Governance control context should document segregation between master creation and approval,
+      positive and negative synthetic identities, control dimensions and evidence owner before an agent treats access
+      as implementation-ready.
+    evidence:
+    - sap.bulk.control.master-data-governance.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.master-data-governance.role
+- id: sap.bulk.control.migration-load.role
+  title: Migration Load responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - migration-load
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Migration Load. It describes the business activity/persona to test
+    without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Migration Load control context should document segregation between upload preparation and productive
+      load approval, positive and negative synthetic identities, control dimensions and evidence owner before an
+      agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.migration-load.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.migration-load.access-policy
+- id: sap.bulk.control.migration-load.decision-rule
+  title: Migration Load control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - migration-load
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Migration Load: verify positive control, negative restriction, owner approval and
+    post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Migration Load control context should document segregation between upload preparation and productive
+      load approval, positive and negative synthetic identities, control dimensions and evidence owner before an
+      agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.migration-load.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.migration-load.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.migration-load.test-pattern
+  title: Migration Load control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - migration-load
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Migration Load: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Migration Load control context should document segregation between upload preparation and productive
+      load approval, positive and negative synthetic identities, control dimensions and evidence owner before an
+      agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.migration-load.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.migration-load.role
+  test_scenarios:
+  - name: Migration Load positive access smoke
+    given: A synthetic synthetic identity assigned to migration load reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Migration Load negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.migration-load.access-policy
+  title: Migration Load control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - migration-load
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Migration Load: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Migration Load control context should document segregation between upload preparation and productive
+      load approval, positive and negative synthetic identities, control dimensions and evidence owner before an
+      agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.migration-load.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.migration-load.role
+- id: sap.bulk.control.interface-monitoring.role
+  title: Interface Monitoring responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - interface-monitoring
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Interface Monitoring. It describes the business activity/persona to
+    test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Interface Monitoring control context should document segregation between payload retry and configuration
+      change, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.interface-monitoring.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.interface-monitoring.access-policy
+- id: sap.bulk.control.interface-monitoring.decision-rule
+  title: Interface Monitoring control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - interface-monitoring
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Interface Monitoring: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Interface Monitoring control context should document segregation between payload retry and configuration
+      change, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.interface-monitoring.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.interface-monitoring.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.interface-monitoring.test-pattern
+  title: Interface Monitoring control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - interface-monitoring
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Interface Monitoring: positive identity, negative identity, restriction dimension,
+    approval owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Interface Monitoring control context should document segregation between payload retry and configuration
+      change, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.interface-monitoring.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.interface-monitoring.role
+  test_scenarios:
+  - name: Interface Monitoring positive access smoke
+    given: A synthetic synthetic identity assigned to interface monitor reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Interface Monitoring negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.interface-monitoring.access-policy
+  title: Interface Monitoring control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - interface-monitoring
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Interface Monitoring: never store real identity values, tenant permission profile
+    names, screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Interface Monitoring control context should document segregation between payload retry and configuration
+      change, positive and negative synthetic identities, control dimensions and evidence owner before an agent
+      treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.interface-monitoring.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.interface-monitoring.role
+- id: sap.bulk.control.extension-publishing.role
+  title: Extension Publishing responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - extension-publishing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Extension Publishing. It describes the business activity/persona to
+    test without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Extension Publishing control context should document segregation between custom field design and
+      publish activation, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.extension-publishing.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.extension-publishing.access-policy
+- id: sap.bulk.control.extension-publishing.decision-rule
+  title: Extension Publishing control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - extension-publishing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Extension Publishing: verify positive control, negative restriction, owner approval
+    and post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Extension Publishing control context should document segregation between custom field design and
+      publish activation, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.extension-publishing.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.extension-publishing.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.extension-publishing.test-pattern
+  title: Extension Publishing control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - extension-publishing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Extension Publishing: positive identity, negative identity, restriction dimension,
+    approval owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Extension Publishing control context should document segregation between custom field design and
+      publish activation, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.extension-publishing.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.extension-publishing.role
+  test_scenarios:
+  - name: Extension Publishing positive access smoke
+    given: A synthetic synthetic identity assigned to extension publish reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Extension Publishing negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.extension-publishing.access-policy
+  title: Extension Publishing control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - extension-publishing
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Extension Publishing: never store real identity values, tenant permission profile
+    names, screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Extension Publishing control context should document segregation between custom field design and
+      publish activation, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.extension-publishing.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.extension-publishing.role
+- id: sap.bulk.control.emergency-access.role
+  title: Emergency Control responsibility profile
+  kind: sap_role
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - emergency-access
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_data
+  summary: Generic responsibility profile for Emergency Access. It describes the business activity/persona to test
+    without inventing tenant-specific permission profile names.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Emergency Access control context should document segregation between temporary access request and
+      post-use review, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.emergency-access.access-policy
+  relations:
+    access_policies:
+    - sap.bulk.control.emergency-access.access-policy
+- id: sap.bulk.control.emergency-access.decision-rule
+  title: Emergency Control control decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - emergency-access
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.quality_gate
+  summary: 'Decision rule for Emergency Access: verify positive control, negative restriction, owner approval and
+    post-change evidence before final FO sign-off.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Emergency Access control context should document segregation between temporary access request and
+      post-use review, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.emergency-access.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.emergency-access.role
+  rules:
+  - if: positive synthetic identity lacks the required activity
+    then: block access-ready claim
+    outcome: request responsibility/control evidence
+  - if: negative synthetic identity can perform the restricted activity
+    then: block release
+    outcome: raise segregation-of-duties defect
+- id: sap.bulk.control.emergency-access.test-pattern
+  title: Emergency Control control test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - emergency-access
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Test pattern for Emergency Access: positive identity, negative identity, restriction dimension, approval
+    owner and retest evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Emergency Access control context should document segregation between temporary access request and
+      post-use review, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.emergency-access.access-policy
+  relations:
+    roles:
+    - sap.bulk.control.emergency-access.role
+  test_scenarios:
+  - name: Emergency Access positive access smoke
+    given: A synthetic synthetic identity assigned to emergency access reviewer.
+    when: The user performs the expected business activity.
+    then: The action succeeds and evidence is attached without exposing real identity values.
+  - name: Emergency Access negative restriction smoke
+    given: A synthetic synthetic identity without the responsibility profile.
+    when: The user attempts the restricted activity.
+    then: The action is unavailable or blocked and the FO records the control dimension.
+- id: sap.bulk.control.emergency-access.access-policy
+  title: Emergency Control control evidence policy
+  kind: access_policy
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - emergency-access
+  - responsibility-control
+  - segregation-of-duties
+  - approval-boundary
+  - synthetic-identity
+  - control-evidence
+  used_for:
+  - fo.source_traceability
+  - fo.quality_gate
+  summary: 'Access policy for Emergency Access: never store real identity values, tenant permission profile names,
+    screenshots or production authorization exports in public context; keep only synthetic examples and generic
+    evidence requirements.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Emergency Access control context should document segregation between temporary access request and
+      post-use review, positive and negative synthetic identities, control dimensions and evidence owner before
+      an agent treats access as implementation-ready.
+    evidence:
+    - sap.bulk.control.emergency-access.decision-rule
+  relations:
+    roles:
+    - sap.bulk.control.emergency-access.role
