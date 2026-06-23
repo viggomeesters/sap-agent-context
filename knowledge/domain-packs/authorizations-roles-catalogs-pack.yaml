@@ -1,0 +1,290 @@
+pack_id: sap-authorizations-roles-catalogs-pack
+title: SAP Authorizations roles and catalogs context pack
+description: >
+  Source-labelled SAP Agent Context pack for authorization, business role,
+  business catalog, app and access-policy FO questions. Public SAP Help pointers
+  are link-first; exact role/catalog assignments remain tenant/release verified.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep generic authorization context separate from tenant-specific role copies,
+    catalog assignments, restrictions, SoD rules and launchpad spaces/pages.
+freshness_current: &freshness_current
+  valid_from: 2026-06-23
+  review_after: 2026-12-23
+  expires_at: 2027-06-23
+  retrieved_at: 2026-06-23
+sap_help_source: &sap_help_source
+  kind: public_url
+  title: SAP Help Portal - SAP S/4HANA Cloud Public Edition
+  url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
+  retrieved_at: 2026-06-23
+  specificity: root_pointer
+  license_note: Link-first public SAP Help pointer; verify exact role/catalog availability per release and tenant.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal authorization FO pattern
+  url: ""
+  retrieved_at: 2026-06-23
+  specificity: internal_pattern
+  license_note: Internal-derived implementation pattern; no customer data or copied SAP documentation.
+items:
+  - id: sap.ref.s4hana-cloud-iam-overview
+    title: SAP S/4HANA Cloud IAM public help pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, iam, business-role, business-catalog, restrictions, public-source]
+    used_for: [fo.source_traceability, fo.authorization, fo.security]
+    summary: >
+      Public SAP Help portal pointer for S/4HANA Cloud identity/access-management
+      context. Use it as link-first source context; do not infer tenant-specific
+      role/catalog assignments without tenant evidence.
+    freshness: *freshness_current
+    source: *sap_help_source
+    requires_source_specificity: medium
+    claims:
+      - statement: Authorization FOs should verify business role, business catalog and restriction details against SAP Help or tenant evidence.
+        evidence: [https://help.sap.com/docs/SAP_S4HANA_CLOUD]
+    relations:
+      roles: [sap.role.authorization-administrator]
+      access_policies: [sap.policy.authorization-tenant-verification]
+
+  - id: sap.app.maintain-business-roles-context
+    title: Maintain Business Roles authorization app context
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, business-role, business-catalog, restriction, app, iam]
+    used_for: [fo.authorization, fo.sap_configuration, fo.security]
+    summary: >
+      Generic app context for FO authorization sections that need role creation,
+      catalog assignment, restrictions and test-user validation. Verify exact app,
+      catalog and restriction names in the target tenant.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Authorization configuration FOs need app/catalog/restriction checks and a tenant validation owner.
+        evidence: [sap.policy.authorization-tenant-verification]
+    relations:
+      roles: [sap.role.authorization-administrator]
+      access_policies: [sap.policy.authorization-tenant-verification]
+
+  - id: sap.object.business-role-catalog-assignment
+    title: Business role and catalog assignment object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, business-role, business-catalog, restriction, assignment]
+    used_for: [fo.authorization, fo.business_rules, fo.test_data]
+    summary: >
+      Object anchor for authorization FOs: business role, business catalog,
+      restriction value, app access, user assignment and test-user evidence should
+      be explicit and tenant-verified.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Role/catalog assignments should be tested with named business activities and restrictions, not only with UI availability.
+        evidence: [sap.policy.authorization-tenant-verification]
+    relations:
+      roles: [sap.role.authorization-administrator, sap.role.display-business-user]
+      access_policies: [sap.policy.authorization-tenant-verification]
+      field_maps: [sap.field-map.authorization-role-catalog-readiness]
+
+  - id: sap.role.authorization-administrator
+    title: Authorization administrator role anchor
+    kind: sap_role
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, business-role, business-catalog, iam, admin]
+    used_for: [fo.authorization, fo.security, fo.support_model]
+    summary: >
+      Role anchor for users who maintain business roles, catalogs and restrictions.
+      Treat as generic FO context; verify exact SAP delivered role/catalog names in
+      the tenant before design sign-off.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Authorization admin responsibilities should be separated from end-user business process execution.
+        evidence: [sap.policy.authorization-tenant-verification]
+    relations:
+      apps: [sap.app.maintain-business-roles-context]
+      objects: [sap.object.business-role-catalog-assignment]
+
+  - id: sap.role.display-business-user
+    title: Display business user / test user role anchor
+    kind: sap_role
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, business-user, test-user, display-access, restrictions]
+    used_for: [fo.authorization, fo.test_scenarios, fo.security]
+    summary: >
+      Role anchor for validating assigned access with a display or test user.
+      Use it to force FO test scenarios to show positive and negative access
+      outcomes without storing real user identities.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Authorization tests should include at least one positive and one negative user/access scenario without storing real user identities.
+        evidence: [sap.test-pattern.authorization-role-catalog-access]
+    relations:
+      access_policies: [sap.policy.no-real-user-identities]
+
+  - id: sap.policy.authorization-tenant-verification
+    title: Authorization tenant-verification policy
+    kind: access_policy
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, access-policy, business-role, business-catalog, tenant-verification]
+    used_for: [fo.authorization, fo.quality_gate, fo.security]
+    summary: >
+      Access policy for SAP Agent Context bundles: public role/catalog guidance can
+      guide FO drafting, but exact assignments, restrictions and launchpad access
+      must be verified in the target tenant before tenant-proof delivery.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Generic authorization context is not proof that a business role/catalog/restriction exists in the target tenant.
+        evidence: [sap.ref.s4hana-cloud-iam-overview]
+    relations:
+      roles: [sap.role.authorization-administrator]
+      objects: [sap.object.business-role-catalog-assignment]
+
+  - id: sap.policy.no-real-user-identities
+    title: No real user identities in authorization examples
+    kind: access_policy
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: cross_sap
+    topics: [authorization, privacy, test-user, no-customer-data, access-policy]
+    used_for: [fo.authorization, fo.privacy, fo.test_scenarios]
+    summary: >
+      Authorization examples may use synthetic personas or test users only. Do not
+      store real user names, employee numbers, email addresses or customer tenant
+      exports in public context bundles.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Public SAP context bundles must not contain real user identities or tenant-specific authorization exports.
+        evidence: [sap.policy.authorization-tenant-verification]
+    relations:
+      roles: [sap.role.display-business-user]
+
+  - id: sap.field-map.authorization-role-catalog-readiness
+    title: Authorization role/catalog readiness field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, business-role, business-catalog, restriction, field-mapping]
+    used_for: [fo.authorization, fo.field_mapping, fo.test_data]
+    summary: >
+      Field-map pattern for authorization FO sections: requested business activity,
+      app, business role, business catalog, restriction dimension, test user and
+      expected positive/negative outcome.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Authorization field maps should connect business activity to role/catalog/restriction and test evidence.
+        evidence: [sap.policy.authorization-tenant-verification]
+    relations:
+      objects: [sap.object.business-role-catalog-assignment]
+      roles: [sap.role.authorization-administrator, sap.role.display-business-user]
+      fields:
+        - Authorization.BusinessActivity
+        - Authorization.App
+        - Authorization.BusinessRole
+        - Authorization.BusinessCatalog
+        - Authorization.Restriction
+    mapping_steps:
+      - source: business_activity
+        target: Authorization.BusinessActivity
+        verification: State the process activity the access enables.
+      - source: app_or_tile
+        target: Authorization.App
+        verification: Verify app/catalog assignment in tenant.
+      - source: business_role
+        target: Authorization.BusinessRole
+        verification: Verify role copy/delivered role and owner.
+      - source: business_catalog
+        target: Authorization.BusinessCatalog
+        verification: Verify catalog assignment and restrictions.
+      - source: restriction_dimension
+        target: Authorization.Restriction
+        verification: Test allowed and denied access outcomes.
+
+  - id: sap.rule.authorization-access-caveat
+    title: Authorization caveat rule for context bundles
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, access-policy, caveat, tenant-verification, security]
+    used_for: [fo.authorization, fo.quality_gate, fo.security]
+    summary: >
+      Decision rule for FO bundles: any generated authorization section must state
+      that role/catalog/restriction details are tenant-specific unless supported by
+      explicit tenant evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Authorization/access caveats must be surfaced wherever role/catalog context is used for FO drafting.
+        evidence: [sap.policy.authorization-tenant-verification]
+    relations:
+      access_policies: [sap.policy.authorization-tenant-verification, sap.policy.no-real-user-identities]
+      field_maps: [sap.field-map.authorization-role-catalog-readiness]
+    rules:
+      - condition: role/catalog named from generic context only
+        outcome: mark as needs tenant verification before tenant-proof use
+      - condition: real user identity appears in an example
+        outcome: reject public bundle content and replace with synthetic test user
+      - condition: positive access test passes but negative test is missing
+        outcome: require negative restriction test before sign-off
+
+  - id: sap.test-pattern.authorization-role-catalog-access
+    title: Authorization role/catalog access test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [authorization, business-role, business-catalog, restriction, test-scenarios]
+    used_for: [fo.test_scenarios, fo.authorization, fo.quality_gate]
+    summary: >
+      Test pattern for role/catalog authorization flows covering requested app,
+      positive access, denied access, restriction dimension and no-real-user-data
+      evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Authorization tests should include positive access, negative/restricted access and no real user identifiers.
+        evidence: [sap.rule.authorization-access-caveat]
+    relations:
+      objects: [sap.object.business-role-catalog-assignment]
+      roles: [sap.role.authorization-administrator, sap.role.display-business-user]
+      access_policies: [sap.policy.authorization-tenant-verification, sap.policy.no-real-user-identities]
+    test_scenarios:
+      - level: acceptance
+        case: Synthetic user has the required business role/catalog and restriction.
+        expected: App/action is available and business activity can be performed.
+      - level: negative
+        case: Synthetic user lacks the role/catalog or required restriction.
+        expected: App/action is unavailable or returns an authorization error.
+      - level: privacy
+        case: Example data includes a real named user or tenant export.
+        expected: Public bundle rejects or redacts it and uses synthetic identity.
