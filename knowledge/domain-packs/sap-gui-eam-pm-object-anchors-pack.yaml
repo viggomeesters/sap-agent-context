@@ -1,0 +1,356 @@
+pack_id: sap-gui-eam-pm-object-anchors-pack
+title: SAP GUI EAM/PM object anchors pack
+description: Object anchors for Equipment / EAM / Plant Maintenance starter coverage, with system/user status/status
+  profile distinctions and tenant caveats.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Internal-derived starter anchors must stay confidence-labelled and caveated until backed by exact
+    tenant/source evidence.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.object.eam-equipment
+  title: EAM equipment technical object
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - technical-object
+  - ie01
+  - ie02
+  - ie03
+  - ih08
+  - status
+  - system-status
+  - user-status
+  - status-profile
+  - tenant-verification
+  used_for:
+  - fo.navigation
+  - fo.field_mapping
+  - fo.process_flow
+  - fo.business_rules
+  summary: 'Equipment is a maintainable technical object in EAM/Plant Maintenance context. Treat equipment identifiers,
+    category, planning plant, planner group, location/account assignment and status as tenant-verified fields, not
+    universal values. Confidence: medium internal_derived starter anchor. For status questions, keep the equipment
+    anchor selected together with system status, user status and status profile caveats.'
+  freshness: *id001
+  source: &id002
+    kind: internal_pattern
+    title: Internal SAP GUI EAM/PM consultant starter pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived consultant knowledge, confidence-labelled; verify exact SAP GUI release, tenant
+      customizing, status profile and authorizations in target system.
+  claims:
+  - statement: Equipment is the central technical-object anchor for IE01/IE02/IE03/IH08 starter questions; exact
+      field layout and tabs require tenant verification.
+    evidence:
+    - sap.ref.eam.pm.sap-help-equipment-master
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-equipment-master
+    related_objects:
+    - sap.object.eam-functional-location
+    - sap.object.eam-technical-object-status
+- id: sap.object.eam-functional-location
+  title: EAM functional location technical object
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - functional-location
+  - technical-object
+  - location-hierarchy
+  used_for:
+  - fo.navigation
+  - fo.field_mapping
+  - fo.process_flow
+  summary: 'Functional location is the structured location/hierarchy anchor often related to equipment. Use it as
+    context for equipment placement and technical-object hierarchy, with tenant verification for structure indicators
+    and labels. Confidence: medium internal_derived.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Functional location context helps explain where equipment sits in a technical-object hierarchy, but
+      exact hierarchy/profile behavior is tenant-specific.
+    evidence:
+    - sap.ref.eam.pm.sap-help-functional-location
+    - sap.object.eam-equipment
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-functional-location
+    related_objects:
+    - sap.object.eam-equipment
+- id: sap.object.eam-technical-object-status
+  title: Technical object status container
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - technical-object
+  - status
+  - system-status
+  - user-status
+  - ie03
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.process_flow
+  summary: 'Technical-object status context groups system status and user status information for equipment/functional
+    locations. In display questions, select this object plus the system/user status rules and caveats. Confidence:
+    medium internal_derived.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Equipment status answers must distinguish system status, user status and status profile rather than
+      flattening them into one status value.
+    evidence:
+    - sap.ref.eam.pm.sap-help-status-management
+    - sap.rule.eam.pm.system-vs-user-status-distinction
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-status-management
+    related_objects:
+    - sap.object.eam-equipment
+    - sap.object.eam-system-status
+    - sap.object.eam-user-status
+    - sap.object.eam-status-profile
+- id: sap.object.eam-system-status
+  title: EAM system status
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - system-status
+  - status
+  - ie03
+  - display-status
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  summary: 'System status is SAP/system-controlled status context on a technical object. Do not describe it as freely
+    configurable user status. Exact displayed values depend on object lifecycle and tenant/release. Confidence:
+    medium internal_derived.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: System status is distinct from user status; agents must not claim user-specific configuration owns
+      system status semantics.
+    evidence:
+    - sap.object.eam-technical-object-status
+    - sap.rule.eam.pm.system-vs-user-status-distinction
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-status-management
+    related_objects:
+    - sap.object.eam-user-status
+    - sap.object.eam-status-profile
+- id: sap.object.eam-user-status
+  title: EAM user status
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - user-status
+  - status-profile
+  - ie03
+  - ie02
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  summary: 'User status is customer/tenant-configurable status context controlled through status profile/customizing.
+    Do not present a user-status list as universal SAP standard. Confidence: medium internal_derived.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: User status depends on status profile/customizing and must carry tenant verification caveats.
+    evidence:
+    - sap.object.eam-status-profile
+    - sap.rule.eam.pm.tenant-status-profile-caveat
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-status-management
+    - sap.ref.eam.pm.sap-community-user-status-equipment
+    related_objects:
+    - sap.object.eam-system-status
+    - sap.object.eam-status-profile
+- id: sap.object.eam-status-profile
+  title: EAM status profile
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - status-profile
+  - user-status
+  - customizing
+  - tenant-verification
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Status profile is the tenant/configuration anchor that can control allowed user statuses and business
+    transactions. Public answers must not invent profile names or allowed status values. Confidence: medium internal_derived.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Status profile is the caveat anchor for user-status questions; exact profile names and controls require
+      tenant verification.
+    evidence:
+    - sap.ref.eam.pm.sap-help-status-management
+    - sap.ref.eam.pm.sap-for-me-gated-notes
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-status-management
+    - sap.ref.eam.pm.sap-for-me-gated-notes
+    related_objects:
+    - sap.object.eam-user-status
+- id: sap.rule.eam.pm.system-vs-user-status-distinction
+  title: System status vs user status distinction
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - system-status
+  - user-status
+  - status-profile
+  - tenant-verification
+  used_for:
+  - fo.business_rules
+  - fo.navigation
+  - fo.quality_gate
+  summary: 'Decision rule: answer system status as SAP/system-controlled lifecycle state; answer user status as
+    status-profile/customizing-dependent; include tenant verification caveat for user status/profile behavior.'
+  freshness: *id001
+  source: *id002
+  rules:
+  - if: question asks difference between system status and user status
+    then: select system-status, user-status and status-profile anchors
+    outcome: answer with distinction plus tenant caveat
+  - if: question asks exact user status values/profile names
+    then: do not invent values
+    outcome: request tenant verification or provide caveated generic answer
+  claims:
+  - statement: Status answers must separate system status, user status and status profile to avoid fake SAP universality.
+    evidence:
+    - sap.object.eam-system-status
+    - sap.object.eam-user-status
+    - sap.object.eam-status-profile
+  relations:
+    objects:
+    - sap.object.eam-system-status
+    - sap.object.eam-user-status
+    - sap.object.eam-status-profile
+- id: sap.rule.eam.pm.tenant-status-profile-caveat
+  title: Tenant status profile verification caveat
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - status-profile
+  - tenant-verification
+  - user-status
+  - configuration-caveat
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.source_traceability
+  summary: 'Decision rule: status profile/user status behavior is tenant-configurable; public repo context can explain
+    the distinction but cannot claim customer-specific profile setup without tenant evidence.'
+  freshness: *id001
+  source: *id002
+  rules:
+  - if: answer depends on status profile settings, allowed business transactions or specific user statuses
+    then: add tenant verification caveat
+    outcome: ready only as generic consultant guidance, not tenant proof
+  claims:
+  - statement: Equipment user status values, allowed business transactions and status profile names are tenant-configurable,
+      so a public answer must request target-system verification before treating them as implementation-ready.
+    evidence:
+    - sap.ref.eam.pm.sap-for-me-gated-notes
+    - sap.ref.eam.pm.gui-help-gated
+  relations:
+    objects:
+    - sap.object.eam-status-profile
+    - sap.object.eam-user-status
+- id: sap.test-pattern.eam.pm-object-anchor-readiness
+  title: EAM/PM object anchor readiness test
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - system-status
+  - user-status
+  - status-profile
+  - test-pattern
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.navigation
+  summary: 'Test pattern: an equipment/status bundle should include equipment, technical-object status, system status,
+    user status, status profile and the tenant verification rule.'
+  freshness: *id001
+  source: *id002
+  test_scenarios:
+  - name: Equipment status anchor selection
+    given: A consultant asks about equipment status context before transaction navigation exists.
+    when: The bundle is built for equipment system status user status profile.
+    then: The selected context includes object anchors and caveats, not invented transaction steps.
+  claims:
+  - statement: Object-anchor readiness is prerequisite for later transaction/status navigation fixtures.
+    evidence:
+    - sap.object.eam-equipment
+    - sap.rule.eam.pm.system-vs-user-status-distinction
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    - sap.object.eam-technical-object-status
