@@ -1,81 +1,111 @@
 schema_version: 1
-description: >
-  Regression corpus for retrieval precision. Negative probes should not become
-  ready only because broad domain tokens select enough item kinds.
+description: 'Regression corpus for retrieval precision. Negative probes should not become ready only because broad
+  domain tokens select enough item kinds.
+
+  '
 queries:
-  - id: positive_supplier_invoice_workflow
-    class: positive
-    intent: fo.workflow
-    topic: supplier-invoice workflow
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-  - id: positive_sales_output_tests
-    class: positive
-    intent: fo.test_scenarios
-    topic: sales order output management
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-  - id: negative_material_master_purchasing_sales_plant
-    class: negative
-    intent: fo.field_mapping
-    topic: material master purchasing sales plant
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: needs_curation
-    expected_gap_contains: Low topic precision
-  - id: negative_purchase_order_release_strategy
-    class: negative
-    intent: fo.workflow
-    topic: purchase order approval release strategy
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: needs_curation
-    expected_gap_contains: Low topic precision
-  - id: negative_sales_pricing_billing_block
-    class: negative
-    intent: fo.sap_configuration
-    topic: sales pricing billing block
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: needs_curation
-    expected_gap_contains: Low topic precision
-  - id: ambiguous_business_partner_api_replication_cpi
-    class: ambiguous
-    intent: fo.integration
-    topic: business partner api replication cpi
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: needs_curation
-    expected_gap_contains: Low topic precision
-  - id: ambiguous_accounts_payable_aging_reporting_kpi
-    class: ambiguous
-    intent: fo.analytics
-    topic: accounts payable aging reporting kpi
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: needs_curation
-    expected_gap_contains: Low topic precision
-  - id: positive_integration_api_communication
-    class: positive
-    intent: fo.integration
-    topic: integration api communication arrangement credentials tenant url payload business key error handling no secrets
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-  - id: positive_extensibility_analytics_rules
-    class: positive
-    intent: fo.business_rules
-    topic: custom field tenant boundary exposure analytics reporting readiness filter freshness
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-  - id: negative_generic_executive_dashboard
-    class: negative
-    intent: fo.analytics
-    topic: generic executive dashboard performance report
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: needs_curation
-    expected_gap_contains: Low topic precision
+- id: positive_supplier_invoice_workflow
+  class: positive
+  intent: fo.workflow
+  topic: supplier-invoice workflow
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+- id: positive_sales_output_tests
+  class: positive
+  intent: fo.test_scenarios
+  topic: sales order output management
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+- id: negative_material_master_purchasing_sales_plant
+  class: negative
+  intent: fo.field_mapping
+  topic: material master purchasing sales plant
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: needs_curation
+  expected_gap_contains: Low topic precision
+- id: negative_purchase_order_release_strategy
+  class: negative
+  intent: fo.workflow
+  topic: purchase order approval release strategy
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: needs_curation
+  expected_gap_contains: Low topic precision
+- id: negative_sales_pricing_billing_block
+  class: negative
+  intent: fo.sap_configuration
+  topic: sales pricing billing block
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: needs_curation
+  expected_gap_contains: Low topic precision
+- id: ambiguous_business_partner_api_replication_cpi
+  class: ambiguous
+  intent: fo.integration
+  topic: business partner api replication cpi
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: needs_curation
+  expected_gap_contains: Low topic precision
+- id: ambiguous_accounts_payable_aging_reporting_kpi
+  class: ambiguous
+  intent: fo.analytics
+  topic: accounts payable aging reporting kpi
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: needs_curation
+  expected_gap_contains: Low topic precision
+- id: positive_integration_api_communication
+  class: positive
+  intent: fo.integration
+  topic: integration api communication arrangement credentials tenant url payload business key error handling no
+    secrets
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+- id: positive_extensibility_analytics_rules
+  class: positive
+  intent: fo.business_rules
+  topic: custom field tenant boundary exposure analytics reporting readiness filter freshness
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+- id: negative_generic_executive_dashboard
+  class: negative
+  intent: fo.analytics
+  topic: generic executive dashboard performance report
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: needs_curation
+  expected_gap_contains: Low topic precision
+- id: positive_sap_gui_eam_pm_ie03_status
+  class: positive
+  intent: fo.navigation
+  topic: Waar zie ik in IE03 gebruiker statussen en systeem statussen equipment
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+- id: positive_sap_gui_eam_pm_transactions
+  class: positive
+  intent: fo.navigation
+  topic: IE01 IE02 IE03 IH08 /n /o equipment transaction open search
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+- id: ambiguous_standalone_nie01_not_tcode
+  class: ambiguous
+  intent: fo.navigation
+  topic: NIE01 equipment create transaction
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+- id: negative_tenant_specific_status_profile_values
+  class: negative
+  intent: fo.business_rules
+  topic: exact user status values status profile for my equipment tenant
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready

@@ -1,157 +1,271 @@
 schema_version: 1
-description: >
-  Deterministic checks for whether a context bundle can support expected
-  Functioneel Ontwerp sections without invoking an external generator.
+description: 'Deterministic checks for whether a context bundle can support expected Functioneel Ontwerp sections
+  without invoking an external generator.
+
+  '
 fixtures:
-  - id: supplier_invoice_workflow_fo_sections
-    intent: fo.workflow
-    topic: supplier-invoice workflow
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-    require_source_traceability: true
-    required_kinds: [sap_app, sap_object, field_map, decision_rule, test_pattern]
-    required_item_ids:
-      - sap.app.manage-workflows-supplier-invoices
-      - sap.field-map.supplier-invoice-approval-routing
-      - sap.rule.supplier-invoice-approval-routing
-      - sap.test-pattern.supplier-invoice-workflow
-    required_fields:
-      - SupplierInvoice.GrossAmount
-      - SupplierInvoice.CompanyCode
-  - id: broad_material_master_query_needs_curation
-    intent: fo.field_mapping
-    topic: material master purchasing sales plant
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: needs_curation
-    require_open_questions: true
-    expected_gap_contains: Low topic precision
-  - id: stale_supplier_invoice_sources_need_recertification
-    intent: fo.workflow
-    topic: supplier-invoice workflow
-    sap_product: s4hana_cloud_public
-    limit: 12
-    current_date: 2027-01-01
-    expected_status: needs_curation
-    require_open_questions: true
-    expected_gap_contains: past review_after
-  - id: gated_source_governance_requires_follow_up
-    intent: fo.source_traceability
-    topic: sap for me gated support
-    sap_product: cross_sap
-    limit: 8
-    expected_status: ready
-    required_access_labels: [gated]
-  - id: sales_order_output_management_ready
-    intent: fo.field_mapping
-    topic: sales order billing output management recipient channel billing hold dispatch status
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-    require_source_traceability: true
-    required_kinds: [sap_object, field_map, decision_rule, test_pattern]
-    required_item_ids:
-      - sap.object.sales-order-output
-      - sap.object.billing-document
-      - sap.field-map.billing-output-readiness
-      - sap.rule.sales-output-dispatch-readiness
-      - sap.test-pattern.sales-output-readiness
-    required_fields:
-      - sap.field-set.sales-order-core
-      - sap.field-set.billing-output-core
-  - id: master_data_material_bp_ready
-    intent: fo.field_mapping
-    topic: material product business partner customer supplier company code field mapping
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-    require_source_traceability: true
-    required_kinds: [sap_object, sap_field, field_map]
-    required_item_ids:
-      - sap.object.business-partner-core
-      - sap.object.customer-master
-      - sap.object.supplier-master
-      - sap.field-set.customer-supplier-role-core
-      - sap.field-map.bp-role-extension
-  - id: migration_cockpit_template_mapping_ready
-    intent: fo.field_mapping
-    topic: migration cockpit template product number company code field mapping validation
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-    require_source_traceability: true
-    required_kinds: [sap_app, sap_object, sap_field, field_map]
-    required_item_ids:
-      - sap.app.migration-cockpit-template-review
-      - sap.object.migration-value-mapping
-      - sap.field-map.product-number-template-verification
-      - sap.field-map.product-number-migration-seed
-  - id: finance_ap_invoice_to_payment_ready
-    intent: fo.workflow
-    topic: supplier invoice approval payment block payment proposal
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-    require_source_traceability: true
-    required_kinds: [sap_object, field_map, decision_rule, test_pattern]
-    required_item_ids:
-      - sap.object.supplier-invoice-ap
-      - sap.object.ap-payment-proposal
-      - sap.field-map.ap-payment-readiness
-      - sap.rule.ap-invoice-payment-separation
-      - sap.test-pattern.ap-invoice-to-payment
-    required_fields:
-      - sap.field-set.supplier-invoice-ap-core
-      - sap.field-set.ap-payment-proposal-core
-  - id: procurement_pr_po_readiness_ready
-    intent: fo.field_mapping
-    topic: purchase requisition workflow source of supply account assignment purchase order goods receipt
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-    require_source_traceability: true
-    required_kinds: [sap_object, field_map, decision_rule, test_pattern]
-    required_item_ids:
-      - sap.object.purchase-requisition-pr-po
-      - sap.object.purchase-order
-      - sap.field-map.pr-to-po-readiness
-      - sap.field-map.po-fulfillment-readiness
-      - sap.rule.procurement-workflow-readiness
-      - sap.test-pattern.procurement-pr-po-readiness
-  - id: integration_api_communication_ready
-    intent: fo.integration
-    topic: integration api communication arrangement credentials tenant url payload business key error handling no secrets
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-    required_access_labels: [internal_derived, public]
-    required_kinds: [sap_app, field_map, access_policy, decision_rule, test_pattern]
-    required_item_ids:
-      - sap.app.communication-arrangements-context
-      - sap.field-map.integration-api-message-readiness
-      - sap.policy.integration-no-secrets
-      - sap.rule.integration-arrangement-readiness
-      - sap.test-pattern.integration-api-communication
-  - id: extensibility_analytics_ready
-    intent: fo.business_rules
-    topic: custom field tenant boundary exposure analytics reporting readiness filter freshness
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: ready
-    required_access_labels: [internal_derived, public]
-    required_kinds: [sap_object, field_map, decision_rule, test_pattern]
-    required_item_ids:
-      - sap.field-map.custom-field-exposure-readiness
-      - sap.field-map.analytics-report-readiness
-      - sap.rule.custom-field-tenant-boundary
-      - sap.rule.analytics-reporting-readiness
-      - sap.test-pattern.extensibility-analytics-readiness
-  - id: generic_executive_dashboard_needs_curation
-    intent: fo.analytics
-    topic: generic executive dashboard performance report
-    sap_product: s4hana_cloud_public
-    limit: 12
-    expected_status: needs_curation
-    require_open_questions: true
-    expected_gap_contains: Low topic precision
+- id: supplier_invoice_workflow_fo_sections
+  intent: fo.workflow
+  topic: supplier-invoice workflow
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  require_source_traceability: true
+  required_kinds:
+  - sap_app
+  - sap_object
+  - field_map
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.app.manage-workflows-supplier-invoices
+  - sap.field-map.supplier-invoice-approval-routing
+  - sap.rule.supplier-invoice-approval-routing
+  - sap.test-pattern.supplier-invoice-workflow
+  required_fields:
+  - SupplierInvoice.GrossAmount
+  - SupplierInvoice.CompanyCode
+- id: broad_material_master_query_needs_curation
+  intent: fo.field_mapping
+  topic: material master purchasing sales plant
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: needs_curation
+  require_open_questions: true
+  expected_gap_contains: Low topic precision
+- id: stale_supplier_invoice_sources_need_recertification
+  intent: fo.workflow
+  topic: supplier-invoice workflow
+  sap_product: s4hana_cloud_public
+  limit: 12
+  current_date: 2027-01-01
+  expected_status: needs_curation
+  require_open_questions: true
+  expected_gap_contains: past review_after
+- id: gated_source_governance_requires_follow_up
+  intent: fo.source_traceability
+  topic: sap for me gated support
+  sap_product: cross_sap
+  limit: 8
+  expected_status: ready
+  required_access_labels:
+  - gated
+- id: sales_order_output_management_ready
+  intent: fo.field_mapping
+  topic: sales order billing output management recipient channel billing hold dispatch status
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  require_source_traceability: true
+  required_kinds:
+  - sap_object
+  - field_map
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.object.sales-order-output
+  - sap.object.billing-document
+  - sap.field-map.billing-output-readiness
+  - sap.rule.sales-output-dispatch-readiness
+  - sap.test-pattern.sales-output-readiness
+  required_fields:
+  - sap.field-set.sales-order-core
+  - sap.field-set.billing-output-core
+- id: master_data_material_bp_ready
+  intent: fo.field_mapping
+  topic: material product business partner customer supplier company code field mapping
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  require_source_traceability: true
+  required_kinds:
+  - sap_object
+  - sap_field
+  - field_map
+  required_item_ids:
+  - sap.object.business-partner-core
+  - sap.object.customer-master
+  - sap.object.supplier-master
+  - sap.field-set.customer-supplier-role-core
+  - sap.field-map.bp-role-extension
+- id: migration_cockpit_template_mapping_ready
+  intent: fo.field_mapping
+  topic: migration cockpit template product number company code field mapping validation
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  require_source_traceability: true
+  required_kinds:
+  - sap_app
+  - sap_object
+  - sap_field
+  - field_map
+  required_item_ids:
+  - sap.app.migration-cockpit-template-review
+  - sap.object.migration-value-mapping
+  - sap.field-map.product-number-template-verification
+  - sap.field-map.product-number-migration-seed
+- id: finance_ap_invoice_to_payment_ready
+  intent: fo.workflow
+  topic: supplier invoice approval payment block payment proposal
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  require_source_traceability: true
+  required_kinds:
+  - sap_object
+  - field_map
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.object.supplier-invoice-ap
+  - sap.object.ap-payment-proposal
+  - sap.field-map.ap-payment-readiness
+  - sap.rule.ap-invoice-payment-separation
+  - sap.test-pattern.ap-invoice-to-payment
+  required_fields:
+  - sap.field-set.supplier-invoice-ap-core
+  - sap.field-set.ap-payment-proposal-core
+- id: procurement_pr_po_readiness_ready
+  intent: fo.field_mapping
+  topic: purchase requisition workflow source of supply account assignment purchase order goods receipt
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  require_source_traceability: true
+  required_kinds:
+  - sap_object
+  - field_map
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.object.purchase-requisition-pr-po
+  - sap.object.purchase-order
+  - sap.field-map.pr-to-po-readiness
+  - sap.field-map.po-fulfillment-readiness
+  - sap.rule.procurement-workflow-readiness
+  - sap.test-pattern.procurement-pr-po-readiness
+- id: integration_api_communication_ready
+  intent: fo.integration
+  topic: integration api communication arrangement credentials tenant url payload business key error handling no
+    secrets
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  - public
+  required_kinds:
+  - sap_app
+  - field_map
+  - access_policy
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.app.communication-arrangements-context
+  - sap.field-map.integration-api-message-readiness
+  - sap.policy.integration-no-secrets
+  - sap.rule.integration-arrangement-readiness
+  - sap.test-pattern.integration-api-communication
+- id: extensibility_analytics_ready
+  intent: fo.business_rules
+  topic: custom field tenant boundary exposure analytics reporting readiness filter freshness
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  - public
+  required_kinds:
+  - sap_object
+  - field_map
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.field-map.custom-field-exposure-readiness
+  - sap.field-map.analytics-report-readiness
+  - sap.rule.custom-field-tenant-boundary
+  - sap.rule.analytics-reporting-readiness
+  - sap.test-pattern.extensibility-analytics-readiness
+- id: generic_executive_dashboard_needs_curation
+  intent: fo.analytics
+  topic: generic executive dashboard performance report
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: needs_curation
+  require_open_questions: true
+  expected_gap_contains: Low topic precision
+- id: sap_gui_eam_pm_equipment_transactions_ready
+  intent: fo.navigation
+  topic: IE01 IE02 IE03 IH08 /n /o equipment transaction open search
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  required_kinds:
+  - sap_app
+  - sap_object
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.app.eam.pm.ie01
+  - sap.app.eam.pm.ie02
+  - sap.app.eam.pm.ie03
+  - sap.app.eam.pm.ih08
+  - sap.rule.eam.pm.command-prefix-not-tcode
+  - sap.test-pattern.eam.pm-transaction-navigation
+- id: sap_gui_eam_pm_ie03_status_ready
+  intent: fo.navigation
+  topic: Waar zie ik in IE03 gebruiker statussen en systeem statussen equipment
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  required_kinds:
+  - sap_app
+  - sap_object
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.app.eam.pm.ie03
+  - sap.pattern.eam.pm.ie03-status-navigation
+  - sap.rule.eam.pm-status-answer-contract
+  - sap.object.eam-system-status
+  - sap.object.eam-user-status
+  - sap.object.eam-status-profile
+- id: sap_gui_eam_pm_status_difference_ready
+  intent: fo.business_rules
+  topic: Wat is het verschil tussen system status en user status status profile
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  required_kinds:
+  - sap_object
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.object.eam-system-status
+  - sap.object.eam-user-status
+  - sap.object.eam-status-profile
+  - sap.rule.eam.pm-status-answer-contract
+  - sap.rule.eam.pm.tenant-status-profile-caveat
+- id: sap_gui_eam_pm_equipment_search_ready
+  intent: fo.navigation
+  topic: Welke transaction gebruik ik om equipment te zoeken IH08 equipment list search
+  sap_product: s4hana_cloud_public
+  limit: 12
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  required_kinds:
+  - sap_app
+  - sap_object
+  - test_pattern
+  required_item_ids:
+  - sap.app.eam.pm.ih08
+  - sap.object.eam-equipment
+  - sap.test-pattern.eam.pm-transaction-navigation

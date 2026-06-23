@@ -221,12 +221,20 @@ items:
   - user-status
   - customizing
   - tenant-verification
+  - waar
+  - zie
+  - gebruiker
+  - statussen
+  - systeem
+  - ie03
   used_for:
   - fo.navigation
   - fo.business_rules
   - fo.quality_gate
   summary: 'Status profile is the tenant/configuration anchor that can control allowed user statuses and business
-    transactions. Public answers must not invent profile names or allowed status values. Confidence: medium internal_derived.'
+    transactions. Public answers must not invent profile names or allowed status values. Confidence: medium internal_derived.
+    Supports Dutch IE03 questions about where user statuses and system statuses are visible by keeping status profile
+    caveat selected.'
   freshness: *id001
   source: *id002
   claims:
