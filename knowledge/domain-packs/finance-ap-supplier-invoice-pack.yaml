@@ -1,0 +1,361 @@
+pack_id: sap-finance-ap-supplier-invoice-pack
+title: SAP Finance/AP supplier invoice context pack
+description: >
+  Source-backed SAP Agent Context pack for supplier invoice, AP exception,
+  payment proposal and tolerance/approval FO questions. Public SAP API catalog
+  pointers are link-first; process and control behavior stays tenant/release
+  verified.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep generic AP context separate from tenant-specific workflow, tolerance,
+    payment method and posting configuration.
+freshness_current: &freshness_current
+  valid_from: 2026-06-23
+  review_after: 2026-12-23
+  expires_at: 2027-06-23
+  retrieved_at: 2026-06-23
+supplier_invoice_api: &supplier_invoice_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Supplier Invoice API
+  url: https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+payment_proposal_api: &payment_proposal_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Payment Proposal API
+  url: https://api.sap.com/api/API_PAYMENTPROPOSAL/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal finance/AP FO pattern
+  url: ""
+  retrieved_at: 2026-06-23
+  specificity: internal_pattern
+  license_note: Internal-derived implementation pattern; no customer data or copied SAP documentation.
+items:
+  - id: sap.ref.api-supplier-invoice-process
+    title: Supplier Invoice API public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, supplier-invoice, invoice, api, source-traceability]
+    used_for: [fo.source_traceability, fo.field_mapping, fo.business_rules]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for supplier invoice API
+      surface review. Use it to verify invoice header/item/status field names
+      and release availability before integration or FO use.
+    freshness: *freshness_current
+    source: *supplier_invoice_api
+    requires_source_specificity: high
+    claims:
+      - statement: Supplier invoice FOs should verify invoice identity, supplier, company code, amount and status fields against a public catalog or tenant evidence.
+        evidence: [https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview]
+    relations:
+      objects: [sap.object.supplier-invoice-ap]
+
+  - id: sap.ref.api-payment-proposal
+    title: Payment Proposal API public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, payment, proposal, supplier, api]
+    used_for: [fo.source_traceability, fo.field_mapping, fo.business_rules]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for payment proposal API
+      surface review. Use it as source context for payment-run and supplier
+      invoice payment readiness questions.
+    freshness: *freshness_current
+    source: *payment_proposal_api
+    requires_source_specificity: high
+    claims:
+      - statement: AP payment FOs should separate invoice approval from payment proposal/payment-run eligibility.
+        evidence: [https://api.sap.com/api/API_PAYMENTPROPOSAL/overview]
+    relations:
+      objects: [sap.object.ap-payment-proposal]
+
+  - id: sap.object.supplier-invoice-ap
+    title: Supplier invoice AP object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, supplier-invoice, invoice, posting]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Supplier invoice object anchor for AP FOs: invoice identity, supplier,
+      company code, fiscal period, amounts, tax, approval status, block status
+      and payment readiness must be separated.
+    freshness: *freshness_current
+    source: *supplier_invoice_api
+    requires_source_specificity: high
+    claims:
+      - statement: Supplier invoice context should distinguish posting/approval/payment concerns rather than treating invoice approval as final AP completion.
+        evidence: [sap.ref.api-supplier-invoice-process]
+    relations:
+      fields: [sap.field-set.supplier-invoice-ap-core]
+      field_maps: [sap.field-map.supplier-invoice-ap-core]
+
+  - id: sap.object.ap-payment-proposal
+    title: AP payment proposal object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, payment, proposal, supplier]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_scenarios]
+    summary: >
+      Payment proposal object anchor for AP FOs that need payment eligibility,
+      block reason, due date, payment method and exception handling context.
+    freshness: *freshness_current
+    source: *payment_proposal_api
+    requires_source_specificity: high
+    claims:
+      - statement: Payment readiness should be modeled as separate from invoice posting and workflow approval.
+        evidence: [sap.ref.api-payment-proposal]
+    relations:
+      fields: [sap.field-set.ap-payment-proposal-core]
+      field_maps: [sap.field-map.ap-payment-readiness]
+
+  - id: sap.field-set.supplier-invoice-ap-core
+    title: Supplier invoice AP core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, supplier-invoice, invoice, field-mapping]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for supplier invoice FO design: supplier invoice key,
+      supplier, company code, gross amount, currency, tax amount, posting date,
+      workflow status and payment block context.
+    freshness: *freshness_current
+    source: *supplier_invoice_api
+    requires_source_specificity: high
+    claims:
+      - statement: AP invoice field maps should include both accounting fields and workflow/payment status fields when the process spans approval and payment.
+        evidence: [sap.ref.api-supplier-invoice-process]
+    relations:
+      objects: [sap.object.supplier-invoice-ap]
+      field_maps: [sap.field-map.supplier-invoice-ap-core]
+    field_definitions:
+      - key: SupplierInvoice.SupplierInvoice
+        description: Supplier invoice identifier for AP tracing.
+        usage: Use as the primary invoice key in FO scenarios and reconciliation.
+      - key: SupplierInvoice.Supplier
+        description: Supplier/business partner identifier on the invoice.
+        usage: Relate to supplier master data and payment eligibility.
+      - key: SupplierInvoice.CompanyCode
+        description: Company-code accounting context for invoice posting.
+        usage: Verify against target company-code/customizing assumptions.
+      - key: SupplierInvoice.GrossAmount
+        description: Gross invoice amount before approval/tolerance decisions.
+        usage: Use in approval and tolerance test scenarios.
+      - key: SupplierInvoice.ApprovalStatus
+        description: Approval status context.
+        usage: Separate approval status from posting and payment status.
+      - key: SupplierInvoice.PaymentBlock
+        description: Payment block reason or indicator.
+        usage: Include where invoice should not be eligible for payment.
+
+  - id: sap.field-set.ap-payment-proposal-core
+    title: AP payment proposal core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, payment, proposal, field-mapping]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for payment proposal and payment-run readiness: due date,
+      payment method, payment block, bank/payment data, exception reason and
+      proposal status.
+    freshness: *freshness_current
+    source: *payment_proposal_api
+    requires_source_specificity: high
+    claims:
+      - statement: Payment proposal field maps should state why a posted invoice is or is not eligible for payment.
+        evidence: [sap.ref.api-payment-proposal]
+    relations:
+      objects: [sap.object.ap-payment-proposal]
+      field_maps: [sap.field-map.ap-payment-readiness]
+    field_definitions:
+      - key: PaymentProposal.PaymentDueDate
+        description: Date used to decide whether an item is due for payment.
+        usage: Include in payment readiness and exception scenarios.
+      - key: PaymentProposal.PaymentMethod
+        description: Method used for payment execution.
+        usage: Verify against supplier/payment configuration.
+      - key: PaymentProposal.PaymentBlock
+        description: Block reason preventing proposal or payment execution.
+        usage: Use to distinguish approval complete from payment blocked.
+      - key: PaymentProposal.ProposalStatus
+        description: Current status of the payment proposal item.
+        usage: Include in acceptance criteria for payment processing FOs.
+
+  - id: sap.field-map.supplier-invoice-ap-core
+    title: Supplier invoice AP core field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, supplier-invoice, invoice, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for AP invoice FOs that include invoice identity,
+      supplier, company code, amount, workflow status and payment block.
+    freshness: *freshness_current
+    source: *supplier_invoice_api
+    requires_source_specificity: high
+    claims:
+      - statement: Supplier invoice field mapping should retain invoice identity and status fields that affect posting, approval and payment.
+        evidence: [sap.field-set.supplier-invoice-ap-core]
+    relations:
+      objects: [sap.object.supplier-invoice-ap]
+      fields: [sap.field-set.supplier-invoice-ap-core]
+    mapping_steps:
+      - source: legacy_invoice_id
+        target: SupplierInvoice.SupplierInvoice
+        verification: Use for AP traceability and reconciliation.
+      - source: supplier_id
+        target: SupplierInvoice.Supplier
+        verification: Verify supplier master and payment relevance.
+      - source: company_code
+        target: SupplierInvoice.CompanyCode
+        verification: Verify company-code context.
+      - source: invoice_amount
+        target: SupplierInvoice.GrossAmount
+        verification: Use in tolerance and approval-routing tests.
+      - source: approval_status
+        target: SupplierInvoice.ApprovalStatus
+        verification: Separate from payment proposal status.
+
+  - id: sap.field-map.ap-payment-readiness
+    title: AP payment readiness field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, payment, proposal, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for payment readiness: due date, payment method, payment
+      block, proposal status and exception owner.
+    freshness: *freshness_current
+    source: *payment_proposal_api
+    requires_source_specificity: high
+    claims:
+      - statement: AP payment readiness mapping should explain why an approved invoice can still be excluded from payment.
+        evidence: [sap.field-set.ap-payment-proposal-core]
+    relations:
+      objects: [sap.object.ap-payment-proposal, sap.object.supplier-invoice-ap]
+      fields: [sap.field-set.ap-payment-proposal-core, sap.field-set.supplier-invoice-ap-core]
+    mapping_steps:
+      - source: due_date
+        target: PaymentProposal.PaymentDueDate
+        verification: Verify payment-term and calendar assumptions.
+      - source: payment_method
+        target: PaymentProposal.PaymentMethod
+        verification: Verify supplier/payment configuration.
+      - source: block_reason
+        target: PaymentProposal.PaymentBlock
+        verification: Verify whether block should stop payment proposal.
+      - source: proposal_status
+        target: PaymentProposal.ProposalStatus
+        verification: Use in acceptance tests for payment-run visibility.
+
+  - id: sap.rule.ap-invoice-payment-separation
+    title: AP invoice approval/payment readiness are separate gates
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, supplier-invoice, approval, payment]
+    used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Decision rule for AP FOs: posted/approved invoice status does not imply
+      payment readiness; payment block, due date, supplier/payment setup and
+      proposal status must be checked separately.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: A supplier invoice can be approved but still not payment-ready; FO acceptance criteria must keep these gates separate.
+        evidence: [sap.field-map.ap-payment-readiness, sap.field-map.supplier-invoice-ap-core]
+    relations:
+      field_maps: [sap.field-map.supplier-invoice-ap-core, sap.field-map.ap-payment-readiness]
+    rules:
+      - condition: invoice approved but payment block exists
+        outcome: payment readiness is blocked with reason
+      - condition: invoice posted and due with valid payment configuration
+        outcome: include in payment proposal acceptance scenario
+
+  - id: sap.rule.ap-tolerance-and-exception-routing
+    title: AP tolerance and exception routing rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, supplier-invoice, tolerance, exception]
+    used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Decision rule for AP tolerance/exception FOs: amount variance, missing
+      supplier data, missing company code, missing approver or payment block must
+      route to explicit exception ownership instead of silent approval.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: AP exception handling should identify the field, threshold/condition and correction owner before the invoice can continue.
+        evidence: [sap.field-set.supplier-invoice-ap-core]
+    relations:
+      fields: [sap.field-set.supplier-invoice-ap-core]
+    rules:
+      - condition: gross amount exceeds configured approval/tolerance threshold
+        outcome: route for approval or exception review
+      - condition: supplier/company-code/payment data is incomplete
+        outcome: block payment readiness and assign enrichment owner
+
+  - id: sap.test-pattern.ap-invoice-to-payment
+    title: AP invoice-to-payment test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [finance, accounts-payable, ap, supplier-invoice, payment, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, fo.test_data]
+    summary: >
+      Test pattern for AP invoice-to-payment flows covering approval, exception,
+      payment block, proposal eligibility and payment readiness.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: AP invoice-to-payment tests should verify approval status, payment block, due date and payment proposal eligibility independently.
+        evidence: [sap.rule.ap-invoice-payment-separation]
+    relations:
+      objects: [sap.object.supplier-invoice-ap, sap.object.ap-payment-proposal]
+      field_maps: [sap.field-map.supplier-invoice-ap-core, sap.field-map.ap-payment-readiness]
+    test_scenarios:
+      - level: acceptance
+        case: Posted and approved invoice with no block and due date reached.
+        expected: Invoice appears as payment-ready/proposable.
+      - level: negative
+        case: Approved invoice has a payment block or incomplete payment method.
+        expected: Invoice is excluded from payment proposal with a visible reason.
+      - level: negative
+        case: Amount exceeds tolerance or approval threshold.
+        expected: Invoice is routed for exception/approval/payment readiness remains blocked.
