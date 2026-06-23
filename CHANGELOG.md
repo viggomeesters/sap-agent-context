@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add SDP pattern adoption ledger to document public-safe pattern provenance, rejected private-data copying, and YAML SSOT/read-model boundary.
+
 All notable changes to this project are documented here.
 
 ## Unreleased
