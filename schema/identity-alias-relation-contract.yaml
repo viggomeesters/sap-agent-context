@@ -1,0 +1,65 @@
+version: 1
+name: sap-agent-context identity/alias/relation contract
+status: active
+source_of_truth: yaml_context
+provenance:
+  adopted_from_pattern: sdp_identity_alias_relation_contracts
+  copied_code: false
+  copied_data: false
+  license: MIT-labelled source repo; pattern description only
+  private_data_boundary: No SDP object rows, aliases, relations, field usage, project registry, XLSX contents, internal URLs or proprietary mappings are copied.
+contracts:
+  identity:
+    description: Stable item identity must be explicit, deterministic and independent from generated read models.
+    canonical_key: id
+    required_prefixes:
+      sap_object: sap.object.
+      sap_field: sap.field.
+      field_map: sap.field-map.
+      decision_rule: sap.rule.
+      external_reference: sap.ref.
+      test_pattern: sap.test-pattern.
+      sap_role: sap.role.
+      access_policy: sap.access-policy.
+    rules:
+      - id values are canonical YAML identifiers and must not be rewritten by generated artifacts.
+      - aliases and relations may point to canonical ids, but may not become the canonical id.
+      - generated SQLite, JSONL or report outputs are derived read models.
+  aliases:
+    description: Aliases are search/discovery aids for known items, not alternate truth sources.
+    allowed_fields:
+      - aliases
+      - topics
+      - source.synonyms
+    rules:
+      - aliases must be generic/public-safe labels.
+      - aliases must not include customer, project or tenant-specific names.
+      - aliases must not imply implementation readiness without evidence.
+  relations:
+    description: Relations connect existing canonical item ids and must validate referential integrity.
+    allowed_relation_groups:
+      - objects
+      - fields
+      - apps
+      - source_references
+      - related_objects
+      - rules
+      - test_patterns
+    rules:
+      - relation targets must resolve to existing item ids when the validator supports that relation group.
+      - relation descriptions must not contain private/customer identifiers.
+      - relation presence is evidence of relevance, not proof of tenant configuration.
+  field_identity:
+    description: Field identity keeps business labels, SAP structures/fields and context-map usage separate.
+    rules:
+      - preserve SAP technical field references where present.
+      - keep mapping/defaulting/business-rule context in field_map or decision_rule items.
+      - never infer tenant-specific mandatory/optional status from generic context alone.
+read_model_boundary:
+  authoritative: knowledge/**/*.yaml and schema/**/*.yaml
+  derived:
+    - build/**/*.json
+    - build/**/*.jsonl
+    - build/**/*.db
+    - generated reports
+  rule: Derived artifacts may accelerate lookup/reporting but must not write back or override YAML SSOT without an ADR.
