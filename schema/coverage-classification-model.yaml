@@ -1,0 +1,76 @@
+version: 1
+name: sap-agent-context coverage classification model
+status: active
+source_of_truth: yaml_context
+provenance:
+  adopted_from_pattern: sdp_object_template_coverage_classification
+  copied_code: false
+  copied_data: false
+  license: MIT-labelled source repo; pattern description only
+  private_data_boundary: No SDP coverage rows, object rows, template rows, project analytics, XLSX contents, internal URLs or proprietary mappings are copied.
+statuses:
+  ready:
+    meaning: Evidence and retrieval gates are sufficient for the bounded representative question.
+    allowed_when:
+      - required kinds/dimensions are present
+      - source/freshness gates pass
+      - no accepted blocker remains inside the declared scope
+    next_action: Use with normal source and tenant caveats.
+  needs_curation:
+    meaning: Retrieval found relevant context but quality, precision, freshness or evidence is not sufficient yet.
+    allowed_when:
+      - selected items are stale/expired
+      - topic precision is too low
+      - required kinds/dimensions are missing
+      - source labels are too broad
+    next_action: Add or improve source-labelled context before using as final answer.
+  source_gap:
+    meaning: The repo lacks acceptable public/gated/internal-derived evidence for the requested claim.
+    allowed_when:
+      - no public/gated source pointer exists
+      - internal-derived knowledge would be too speculative
+      - exact SAP/customer proof would be required
+    next_action: Request source discovery or mark out-of-scope; do not synthesize.
+  tenant_verification_required:
+    meaning: Generic context can explain the concept, but exact behavior depends on customer/tenant configuration or live system state.
+    allowed_when:
+      - question asks for exact status profile, stock, reservation, movement type, role, workflow or app availability
+      - answer would require live SAP tenant evidence
+    next_action: Answer with caveat and request tenant/system verification.
+  no_source_known:
+    meaning: No acceptable repo context/source is known for the requested topic.
+    allowed_when:
+      - no selected item covers enough query tokens
+      - no source pointer or internal-derived contract exists
+    next_action: Fail closed and create a follow-up task if in scope.
+classification_dimensions:
+  source_traceability: Evidence points to public/gated/internal-derived source labels.
+  freshness: review_after and expires_at are valid or explicitly treated as stale.
+  retrieval_precision: Selected items cover the representative query without domain displacement.
+  required_kinds: Required item kinds are selected for the representative domain.
+  tenant_specificity: Tenant-specific claims are caveated or blocked.
+  generated_boundary: Derived reports/read models do not become SSOT.
+classification_rules:
+  - if: required gates pass and no scoped blocker remains
+    then: ready
+  - if: evidence exists but freshness, precision or required dimensions fail
+    then: needs_curation
+  - if: acceptable evidence is missing for a claim
+    then: source_gap
+  - if: exact answer depends on tenant/live-system configuration
+    then: tenant_verification_required
+  - if: no acceptable source/context is known
+    then: no_source_known
+report_contract:
+  required_columns:
+    - id
+    - topic
+    - status
+    - evidence
+    - reason
+    - next_action
+    - generated_from
+  generated_from_must_reference:
+    - schema/completeness-matrix.yaml
+    - schema/sap-agent-context-v0.2-coverage.yaml
+    - knowledge/**/*.yaml
