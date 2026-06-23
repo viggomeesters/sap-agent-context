@@ -1,0 +1,198 @@
+pack_id: sap-gui-eam-pm-status-semantics-pack
+title: SAP GUI EAM/PM status semantics pack
+description: Status semantics and IE03 display-context navigation caveats for SAP GUI EAM/PM equipment starter coverage.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Status semantics remain generic; exact user statuses/status profiles require tenant verification.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.pattern.eam.pm.ie03-status-navigation
+  title: IE03 equipment status navigation pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - ie03
+  - system-status
+  - user-status
+  - status-profile
+  - navigation
+  - status-detail
+  - gebruikersstatus
+  - systeemstatus
+  used_for:
+  - fo.navigation
+  - fo.process_flow
+  - fo.test_scenarios
+  summary: 'IE03 is display/open equipment context. For status questions, guide the consultant to inspect equipment
+    status/status details in display context, then verify exact tab/menu/status-detail path in the target tenant.
+    Use IE02 only when change actions are required and authorized. Confidence: medium internal_derived.'
+  freshness: *id001
+  source: &id002
+    kind: internal_pattern
+    title: Internal SAP GUI EAM/PM status navigation starter pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived consultant status/navigation pattern; verify exact IE03 menu/tab/status-detail
+      path, status profile and authorizations in target tenant/system.
+  claims:
+  - statement: IE03 status answers should point to equipment display/status context and carry a tenant verification
+      caveat for exact screen/menu labels.
+    evidence:
+    - sap.app.eam.pm.ie03
+    - sap.object.eam-technical-object-status
+    - sap.rule.eam.pm.tenant-status-profile-caveat
+  relations:
+    apps:
+    - sap.app.eam.pm.ie03
+    - sap.app.eam.pm.ie02
+    objects:
+    - sap.object.eam-equipment
+    - sap.object.eam-technical-object-status
+- id: sap.rule.eam.pm.ie03-display-vs-ie02-change
+  title: IE03 display versus IE02 change caveat
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - ie03
+  - ie02
+  - display
+  - change
+  - equipment
+  - status
+  - authorization
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule: IE03 is display/open equipment context; IE02 is change equipment context. Do not tell
+    a user to change statuses in IE03; use tenant-specific verification for whether status changes are possible/authorized
+    in IE02 or related configuration.'
+  freshness: *id001
+  source: *id002
+  rules:
+  - if: question asks where to see system/user statuses
+    then: use IE03 display/status context with caveat
+    outcome: ready as display guidance
+  - if: question asks how to change user status/status profile
+    then: do not claim IE03 changes it
+    outcome: route to change/configuration caveat and tenant verification
+  claims:
+  - statement: IE03/IE02 distinction prevents display navigation from being confused with status maintenance or
+      configuration.
+    evidence:
+    - sap.app.eam.pm.ie03
+    - sap.app.eam.pm.ie02
+  relations:
+    apps:
+    - sap.app.eam.pm.ie03
+    - sap.app.eam.pm.ie02
+- id: sap.rule.eam.pm-status-answer-contract
+  title: EAM/PM status answer contract
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - system-status
+  - user-status
+  - status-profile
+  - difference
+  - verschil
+  - tenant-caveat
+  - waar
+  - zie
+  - gebruiker
+  - statussen
+  - systeem
+  - ie03
+  - equipment
+  used_for:
+  - fo.business_rules
+  - fo.navigation
+  - fo.quality_gate
+  summary: 'Answer contract: system status is SAP/system-controlled lifecycle/status context; user status is customer-configurable
+    through a status profile; status profile controls/organizes possible user statuses and related business-transaction
+    effects. Exact values, labels and controls require tenant verification. Confidence: medium internal_derived.
+    Supports Dutch IE03 questions: waar zie ik gebruiker statussen en systeem statussen bij equipment.'
+  freshness: *id001
+  source: *id002
+  rules:
+  - if: question asks difference between system status and user status
+    then: explain system-controlled vs user/status-profile configured
+    outcome: ready with caveat
+  - if: question asks exact status values/profile configuration
+    then: do not invent tenant values
+    outcome: request tenant verification
+  claims:
+  - statement: 'A correct EAM/PM status answer must name all three concepts: system status, user status and status
+      profile.'
+    evidence:
+    - sap.object.eam-system-status
+    - sap.object.eam-user-status
+    - sap.object.eam-status-profile
+  relations:
+    objects:
+    - sap.object.eam-system-status
+    - sap.object.eam-user-status
+    - sap.object.eam-status-profile
+- id: sap.test-pattern.eam.pm-ie03-status-question
+  title: IE03 equipment status question test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - ie03
+  - waar
+  - zie
+  - gebruiker
+  - statussen
+  - systeem
+  - statussen
+  - test-pattern
+  used_for:
+  - fo.test_scenarios
+  - fo.navigation
+  - fo.quality_gate
+  summary: 'Test pattern: Dutch IE03 status question should select IE03, equipment, technical-object status, system
+    status, user status, status profile and caveat rules.'
+  freshness: *id001
+  source: *id002
+  test_scenarios:
+  - name: Waar zie ik in IE03 gebruiker statussen en systeem statussen?
+    given: A consultant asks in Dutch where to see user/system statuses in IE03.
+    when: The context bundle is built.
+    then: Bundle is ready and includes IE03 display pattern plus system/user/status-profile distinction and tenant
+      caveat.
+  claims:
+  - statement: IE03 status questions require both navigation and semantics, not just a transaction code.
+    evidence:
+    - sap.pattern.eam.pm.ie03-status-navigation
+    - sap.rule.eam.pm-status-answer-contract
+  relations:
+    apps:
+    - sap.app.eam.pm.ie03
+    objects:
+    - sap.object.eam-technical-object-status
