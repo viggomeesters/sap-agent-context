@@ -1,0 +1,309 @@
+pack_id: sap-material-eam-spares-bom-links-pack
+title: SAP EAM spare parts, BOM and material component links
+description: Starter context linking material/product master to EAM spare parts, equipment/function-location BOMs,
+  maintenance order components and stock/availability caveats.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep the pack public-safe and internal-derived with explicit tenant/system verification caveats;
+    avoid live stock or customer BOM data.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.object.eam-spare-part-material
+  title: EAM spare-part material object
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - eam
+  - pm
+  - material
+  - spare
+  - spare-part
+  - component
+  - maintenance
+  - equipment
+  - functional-location
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: 'EAM spare-part material anchor: a material/product can be used as a maintenance spare or component for
+    equipment, functional-location or order planning. Confidence: medium internal_derived; verify plant, stock,
+    valuation, serial/batch and tenant configuration before implementation.'
+  freshness: *id001
+  source: &id002
+    kind: internal_pattern
+    title: Internal EAM material BOM spares starter pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived consultant context; no customer data or copied SAP documentation. Verify exact
+      BOM category, order component, stock and reservation behavior in target tenant/system.
+  claims:
+  - statement: 'EAM spare-part material anchor: a material/product can be used as a maintenance spare or component
+      for equipment, functional-location or order planning. Confidence: medium internal_derived; verify plant, stock,
+      valuation, serial/batch and tenant configuration before implementation.'
+    evidence:
+    - sap.object.material-product-master-anchor
+    - sap.object.eam-equipment
+  relations:
+    objects:
+    - sap.object.material-product-master-anchor
+    - sap.object.eam-equipment
+    - sap.object.eam-functional-location
+- id: sap.object.eam-equipment-bom
+  title: Equipment BOM spare-parts context
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - eam
+  - pm
+  - equipment
+  - bom
+  - bill-of-material
+  - spare
+  - component
+  - technical-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: 'Equipment BOM starter anchor: equipment-specific BOM context links a technical object to material components/spares
+    for planning and maintenance. Exact BOM usage/category, alternatives and validity are tenant-specific.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: 'Equipment BOM starter anchor: equipment-specific BOM context links a technical object to material
+      components/spares for planning and maintenance. Exact BOM usage/category, alternatives and validity are tenant-specific.'
+    evidence:
+    - sap.object.material-product-master-anchor
+    - sap.object.eam-equipment
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    - sap.object.eam-spare-part-material
+- id: sap.object.eam-functional-location-bom
+  title: Functional-location BOM spare-parts context
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - eam
+  - pm
+  - functional-location
+  - bom
+  - bill-of-material
+  - spare
+  - component
+  - technical-object
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: 'Functional-location BOM starter anchor: location-level BOM context links a functional location to reusable
+    component/spare structures. Exact hierarchy, BOM usage/category and validity require tenant verification.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: 'Functional-location BOM starter anchor: location-level BOM context links a functional location to
+      reusable component/spare structures. Exact hierarchy, BOM usage/category and validity require tenant verification.'
+    evidence:
+    - sap.object.material-product-master-anchor
+    - sap.object.eam-equipment
+  relations:
+    objects:
+    - sap.object.eam-functional-location
+    - sap.object.eam-spare-part-material
+- id: sap.object.eam-maintenance-order-component
+  title: Maintenance order component material context
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - eam
+  - pm
+  - maintenance-order
+  - order-component
+  - component
+  - reservation
+  - goods-issue
+  - spare
+  - material
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: 'Maintenance order component anchor: planned materials/components on a maintenance order can drive reservation,
+    availability and goods issue questions. Do not invent movement types, storage locations or reservation behavior;
+    verify in tenant.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: 'Maintenance order component anchor: planned materials/components on a maintenance order can drive
+      reservation, availability and goods issue questions. Do not invent movement types, storage locations or reservation
+      behavior; verify in tenant.'
+    evidence:
+    - sap.object.material-product-master-anchor
+    - sap.object.eam-equipment
+  relations:
+    objects:
+    - sap.object.eam-spare-part-material
+    - sap.object.material-storage-location
+- id: sap.rule.eam-spares-stock-availability-caveat
+  title: EAM spares stock/availability caveat
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - eam
+  - pm
+  - spare
+  - stock
+  - availability
+  - mmbe
+  - reservation
+  - plant
+  - storage-location
+  - caveat
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.test_scenarios
+  summary: 'Decision rule: answer spare-parts stock/availability questions by separating material master identity,
+    plant/storage stock, planned order components and tenant-specific reservation/availability checking. Do not
+    promise stock exists without a system check.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Spare-part availability answers must separate master-data/BOM/order-component context from live stock
+      or reservation evidence.
+    evidence:
+    - sap.app.material.mmbe
+    - sap.object.eam-maintenance-order-component
+  relations:
+    apps:
+    - sap.app.material.mmbe
+    objects:
+    - sap.object.eam-spare-part-material
+    - sap.object.eam-maintenance-order-component
+  rules:
+  - if: question asks whether a spare is available
+    then: state that live stock/availability requires tenant/system check such as stock overview or order component
+      availability
+    outcome: ready with caveat
+  - if: question asks how equipment BOM relates to material master
+    then: explain BOM component link to material/product and require BOM usage/category/validity verification
+    outcome: ready with tenant caveat
+  - if: question asks exact storage location, movement type or reservation behavior
+    then: do not invent tenant values
+    outcome: needs verification/fail closed
+- id: sap.field-map.eam-spares-bom-material-link
+  title: EAM BOM component to material link mapping
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - eam
+  - pm
+  - bom
+  - material
+  - component
+  - field-map
+  - equipment-bom
+  - functional-location-bom
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: 'Field-map starter: map the business concept spare/component to material/product identity and technical-object
+    BOM context; keep BOM usage/category/validity and item-category details as tenant-verified assumptions.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: 'Field-map starter: map the business concept spare/component to material/product identity and technical-object
+      BOM context; keep BOM usage/category/validity and item-category details as tenant-verified assumptions.'
+    evidence:
+    - sap.object.material-product-master-anchor
+    - sap.object.eam-equipment
+  relations:
+    objects:
+    - sap.object.eam-equipment-bom
+    - sap.object.eam-functional-location-bom
+    - sap.object.eam-spare-part-material
+    fields:
+    - sap.field-set.product-master-core
+  mapping_steps:
+  - source: Spare/component business label
+    target: Material/Product identity
+    rule: Resolve to material/product master identity before using it as a BOM/order component.
+  - source: Equipment or functional-location spare structure
+    target: Technical-object BOM component
+    rule: Verify BOM usage/category, validity and alternatives in the tenant.
+  - source: Maintenance order planned material
+    target: Order component / reservation context
+    rule: Verify storage location, availability checking and goods issue behavior in the tenant.
+- id: sap.test-pattern.eam-spares-bom-links
+  title: EAM spares/BOM/material link test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - eam
+  - pm
+  - bom
+  - spare
+  - material
+  - component
+  - equipment-bom
+  - functional-location-bom
+  - maintenance-order
+  - test-pattern
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern: representative questions about equipment BOM, functional-location BOM, spare parts, order
+    components and stock availability must select material, EAM object and caveat items without claiming live stock
+    or tenant configuration.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: 'Test pattern: representative questions about equipment BOM, functional-location BOM, spare parts,
+      order components and stock availability must select material, EAM object and caveat items without claiming
+      live stock or tenant configuration.'
+    evidence:
+    - sap.object.material-product-master-anchor
+    - sap.object.eam-equipment
+  relations:
+    objects:
+    - sap.object.eam-spare-part-material
+    - sap.object.eam-equipment-bom
+    - sap.object.eam-maintenance-order-component
+  test_scenarios:
+  - name: Equipment BOM to material master
+    given: A consultant asks how equipment BOM spare parts relate to material master.
+    when: A context bundle is built for EAM BOM/spares.
+    then: The bundle selects equipment BOM, spare material and mapping/caveat items.
+  - name: Stock availability caveat
+    given: A consultant asks if a spare is in stock.
+    when: A context bundle is built for spare stock availability.
+    then: The answer requires a live tenant/system stock or reservation check and does not invent stock.
