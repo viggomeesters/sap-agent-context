@@ -1,0 +1,385 @@
+pack_id: sap-sales-order-output-pack
+title: SAP Sales order and output-management context pack
+description: >
+  Source-backed SAP Agent Context pack for sales order, billing document and
+  output-management FO questions. Public SAP API catalog pointers are link-first;
+  output channel rules, form templates and partner/output determination remain
+  tenant/release verified.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep generic sales/output context separate from tenant-specific pricing,
+    form template, channel, partner function and output parameter settings.
+freshness_current: &freshness_current
+  valid_from: 2026-06-23
+  review_after: 2026-12-23
+  expires_at: 2027-06-23
+  retrieved_at: 2026-06-23
+sales_order_api: &sales_order_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Sales Order API
+  url: https://api.sap.com/api/API_SALES_ORDER_SRV/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+billing_document_api: &billing_document_api
+  kind: public_url
+  title: SAP Business Accelerator Hub - Billing Document API
+  url: https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview
+  retrieved_at: 2026-06-23
+  specificity: catalog_entry
+  license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal sales/output FO pattern
+  url: ""
+  retrieved_at: 2026-06-23
+  specificity: internal_pattern
+  license_note: Internal-derived implementation pattern; no customer data or copied SAP documentation.
+items:
+  - id: sap.ref.api-sales-order-process
+    title: Sales Order API public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, order-to-cash, sales-order, sold-to-party, delivery, billing, api, source-traceability]
+    used_for: [fo.source_traceability, fo.field_mapping, fo.business_rules]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for sales order API surface
+      review. Use it to verify sales order header/item, sold-to, sales area,
+      delivery and billing relevance before FO or integration use.
+    freshness: *freshness_current
+    source: *sales_order_api
+    requires_source_specificity: high
+    claims:
+      - statement: Sales order FOs should verify order identity, sales area, sold-to party, item quantity/value, delivery and billing relevance against public catalog or tenant evidence.
+        evidence: [https://api.sap.com/api/API_SALES_ORDER_SRV/overview]
+    relations:
+      objects: [sap.object.sales-order-output]
+
+  - id: sap.ref.api-billing-document-process
+    title: Billing Document API public catalog pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, billing, invoice, billing-document, output-management, api]
+    used_for: [fo.source_traceability, fo.field_mapping, fo.business_rules]
+    summary: >
+      Public SAP Business Accelerator Hub pointer for billing document API surface
+      review. Use it to verify billing document identity, payer, amounts, billing
+      status and follow-on output context before FO or integration use.
+    freshness: *freshness_current
+    source: *billing_document_api
+    requires_source_specificity: high
+    claims:
+      - statement: Billing/output FOs should separate billing document creation from output channel and dispatch readiness.
+        evidence: [https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview]
+    relations:
+      objects: [sap.object.billing-document]
+
+  - id: sap.app.manage-output-items-context
+    title: Manage Output Items app context
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, output-management, output-item, email, print, form-template, app]
+    used_for: [fo.sap_configuration, fo.authorization, fo.workflow]
+    summary: >
+      Generic app/configuration context for FO sections that need output items,
+      dispatch channels, recipients, form templates and retry/error handling.
+      Verify exact app/catalog and configuration availability in the target tenant.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Output-management FOs need channel, recipient, form/template, trigger and error-state checks in addition to document field mappings.
+        evidence: [sap.rule.sales-output-dispatch-readiness]
+    relations:
+      objects: [sap.object.sales-output-item]
+      decision_rules: [sap.rule.sales-output-dispatch-readiness]
+
+  - id: sap.object.sales-order-output
+    title: Sales order object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, order-to-cash, sales-order, sold-to-party, sales-area, delivery, billing]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Sales order object anchor for FO work: order/item identity, sales area,
+      sold-to/ship-to, material, quantity, net value, delivery hold, billing hold
+      and output relevance should be explicit.
+    freshness: *freshness_current
+    source: *sales_order_api
+    requires_source_specificity: high
+    claims:
+      - statement: Sales order context should distinguish order capture from delivery, billing and output dispatch readiness.
+        evidence: [sap.ref.api-sales-order-process]
+    relations:
+      fields: [sap.field-set.sales-order-core]
+      field_maps: [sap.field-map.sales-order-output-readiness]
+
+  - id: sap.object.billing-document
+    title: Billing document object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, billing, billing-document, invoice, payer, output-management]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Billing document object anchor for FO work: billing document identity, payer,
+      company code, billing type, amounts, currency, accounting status and output
+      dispatch context should be separated.
+    freshness: *freshness_current
+    source: *billing_document_api
+    requires_source_specificity: high
+    claims:
+      - statement: Billing document readiness should be modeled separately from output item dispatch success.
+        evidence: [sap.ref.api-billing-document-process]
+    relations:
+      fields: [sap.field-set.billing-output-core]
+      field_maps: [sap.field-map.billing-output-readiness]
+
+  - id: sap.object.sales-output-item
+    title: Sales output item object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, output-management, output-item, channel, recipient, form-template]
+    used_for: [fo.sap_configuration, fo.business_rules, fo.test_scenarios]
+    summary: >
+      Output item context for sales/billing FOs: business document, output type,
+      channel, recipient, form template, dispatch timing, processing status and
+      error handling must be explicit and tenant-verified.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Output dispatch is a separate readiness gate after sales or billing document creation.
+        evidence: [sap.rule.sales-output-dispatch-readiness]
+    relations:
+      field_maps: [sap.field-map.billing-output-readiness, sap.field-map.sales-order-output-readiness]
+
+  - id: sap.field-set.sales-order-core
+    title: Sales order core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, sales-order, order-to-cash, field-mapping, delivery, billing]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for sales order FOs: sales order/item, sales organization,
+      distribution channel, division, sold-to, ship-to, material, quantity, net
+      amount, delivery hold, billing hold and output relevance.
+    freshness: *freshness_current
+    source: *sales_order_api
+    requires_source_specificity: high
+    claims:
+      - statement: Sales order field maps should include sales area, party and hold/status fields when delivery, billing or output depends on them.
+        evidence: [sap.ref.api-sales-order-process]
+    relations:
+      objects: [sap.object.sales-order-output]
+      field_maps: [sap.field-map.sales-order-output-readiness]
+    field_definitions:
+      - key: SalesOrder.SalesOrder
+        description: Sales order identifier.
+        usage: Use as the primary order-to-cash trace key.
+      - key: SalesOrder.SalesOrderItem
+        description: Sales order item identifier.
+        usage: Keep material, quantity, delivery and billing relevance item-specific.
+      - key: SalesOrder.SalesOrganization
+        description: Sales organization context for sales area and output rules.
+        usage: Verify with distribution channel/division and target tenant rules.
+      - key: SalesOrder.SoldToParty
+        description: Customer/business partner that places the order.
+        usage: Relate to partner/output recipient assumptions.
+      - key: SalesOrder.BillingHoldReason
+        description: Hold reason preventing billing.
+        usage: Separate order capture from billing readiness.
+
+  - id: sap.field-set.billing-output-core
+    title: Billing and output core fields
+    kind: sap_field
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, billing, billing-document, output-management, field-mapping]
+    used_for: [fo.field_mapping, fo.test_data, fo.business_rules]
+    summary: >
+      Field-set context for billing/output FOs: billing document, payer, company
+      code, billing type, net/gross amount, currency, accounting status, output
+      type/channel/recipient and dispatch status.
+    freshness: *freshness_current
+    source: *billing_document_api
+    requires_source_specificity: high
+    claims:
+      - statement: Billing output maps should include both billing document fields and output dispatch fields when customer communication is in scope.
+        evidence: [sap.ref.api-billing-document-process]
+    relations:
+      objects: [sap.object.billing-document, sap.object.sales-output-item]
+      field_maps: [sap.field-map.billing-output-readiness]
+    field_definitions:
+      - key: BillingDocument.BillingDocument
+        description: Billing document identifier.
+        usage: Use as the billing/invoice trace key.
+      - key: BillingDocument.PayerParty
+        description: Payer/customer partner for billing.
+        usage: Verify output recipient and accounting assumptions.
+      - key: BillingDocument.AccountingPostingStatus
+        description: Accounting status for billing follow-on processing.
+        usage: Separate billing creation from accounting completion.
+      - key: OutputItem.Channel
+        description: Dispatch channel such as email, print or EDI.
+        usage: Verify tenant-specific output parameter determination.
+      - key: OutputItem.ProcessingStatus
+        description: Output item processing/dispatch status.
+        usage: Use to test retry/error handling rather than assuming dispatch success.
+
+  - id: sap.field-map.sales-order-output-readiness
+    title: Sales order output readiness field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, sales-order, output-management, field-mapping, billing-hold]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for sales order output readiness covering order/item,
+      sales area, sold-to party, delivery/billing holds and output relevance.
+    freshness: *freshness_current
+    source: *sales_order_api
+    requires_source_specificity: high
+    claims:
+      - statement: Sales order output mapping should explain why a created order is not yet ready for billing or output.
+        evidence: [sap.field-set.sales-order-core]
+    relations:
+      objects: [sap.object.sales-order-output, sap.object.sales-output-item]
+      fields: [sap.field-set.sales-order-core]
+    mapping_steps:
+      - source: sales_order
+        target: SalesOrder.SalesOrder
+        verification: Use for order-to-cash traceability.
+      - source: sales_order_item
+        target: SalesOrder.SalesOrderItem
+        verification: Keep delivery and billing relevance item-specific.
+      - source: sold_to_party
+        target: SalesOrder.SoldToParty
+        verification: Verify customer/partner recipient assumptions.
+      - source: sales_organization
+        target: SalesOrder.SalesOrganization
+        verification: Verify sales area and output parameter context.
+      - source: billing_hold_reason
+        target: SalesOrder.BillingHoldReason
+        verification: Billing/output cannot be treated as ready while hold remains.
+
+  - id: sap.field-map.billing-output-readiness
+    title: Billing output readiness field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, billing, output-management, output-item, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, fo.test_data]
+    summary: >
+      Field-map pattern for billing output readiness covering billing document,
+      payer, accounting status, output channel/recipient and processing status.
+    freshness: *freshness_current
+    source: *billing_document_api
+    requires_source_specificity: high
+    claims:
+      - statement: Billing output mapping should show whether document creation, accounting status and output dispatch have each passed.
+        evidence: [sap.field-set.billing-output-core]
+    relations:
+      objects: [sap.object.billing-document, sap.object.sales-output-item]
+      fields: [sap.field-set.billing-output-core]
+    mapping_steps:
+      - source: billing_document
+        target: BillingDocument.BillingDocument
+        verification: Use for invoice/output traceability.
+      - source: payer_party
+        target: BillingDocument.PayerParty
+        verification: Verify recipient and partner-role assumptions.
+      - source: accounting_status
+        target: BillingDocument.AccountingPostingStatus
+        verification: Separate billing creation from accounting completion.
+      - source: output_channel
+        target: OutputItem.Channel
+        verification: Verify output parameter/channel determination.
+      - source: output_processing_status
+        target: OutputItem.ProcessingStatus
+        verification: Use in retry/error acceptance tests.
+
+  - id: sap.rule.sales-output-dispatch-readiness
+    title: Sales output dispatch readiness rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, output-management, billing, output-item, recipient, channel]
+    used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Decision rule for sales/output FOs: sales or billing document creation is
+      necessary but not sufficient for successful output; recipient, channel,
+      form template, dispatch timing and processing status must be explicit.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Output dispatch readiness is a separate gate after document creation and should expose recipient/channel/template errors.
+        evidence: [sap.field-map.billing-output-readiness, sap.field-map.sales-order-output-readiness]
+    relations:
+      field_maps: [sap.field-map.billing-output-readiness, sap.field-map.sales-order-output-readiness]
+    rules:
+      - condition: billing document created but output recipient missing
+        outcome: output dispatch is held with recipient owner/action
+      - condition: sales order has billing hold
+        outcome: billing and output readiness stay held with visible reason
+      - condition: output channel and form template are available and document is eligible
+        outcome: include output dispatch success and retry/error scenarios
+
+  - id: sap.test-pattern.sales-output-readiness
+    title: Sales output readiness test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [sales, sales-order, billing, output-management, output-item, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, fo.test_data]
+    summary: >
+      Test pattern for sales order and billing output flows covering billing
+      hold, payer/recipient, channel/template determination, dispatch status and
+      retry/error handling.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Sales/output tests should verify sales order readiness, billing readiness and output dispatch independently.
+        evidence: [sap.rule.sales-output-dispatch-readiness]
+    relations:
+      objects: [sap.object.sales-order-output, sap.object.billing-document, sap.object.sales-output-item]
+      field_maps: [sap.field-map.sales-order-output-readiness, sap.field-map.billing-output-readiness]
+    test_scenarios:
+      - level: acceptance
+        case: Sales order has no billing hold, billing document is created, output recipient/channel/template are valid.
+        expected: Output item is eligible for dispatch and reaches success status.
+      - level: negative
+        case: Sales order has a billing hold.
+        expected: Billing and output dispatch are held with a visible reason.
+      - level: negative
+        case: Billing document exists but output recipient or channel is missing.
+        expected: Output item remains in error/held state with correction owner.

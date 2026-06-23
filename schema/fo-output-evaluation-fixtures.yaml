@@ -43,3 +43,20 @@ fixtures:
     limit: 8
     expected_status: ready
     required_access_labels: [gated]
+  - id: sales_order_output_management_ready
+    intent: fo.field_mapping
+    topic: sales order billing output management recipient channel billing hold dispatch status
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: ready
+    require_source_traceability: true
+    required_kinds: [sap_object, field_map, decision_rule, test_pattern]
+    required_item_ids:
+      - sap.object.sales-order-output
+      - sap.object.billing-document
+      - sap.field-map.billing-output-readiness
+      - sap.rule.sales-output-dispatch-readiness
+      - sap.test-pattern.sales-output-readiness
+    required_fields:
+      - sap.field-set.sales-order-core
+      - sap.field-set.billing-output-core
