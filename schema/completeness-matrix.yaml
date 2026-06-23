@@ -2,28 +2,33 @@ schema_version: 1
 scope:
   id: sap_fo_starter_coverage
   title: SAP FO starter coverage for McCoy implementation design
-  definition: >
-    Complete means no known critical or important gaps for generating McCoy
-    Functioneel Ontwerp context bundles across the representative SAP FO domains
-    listed here. It does not claim exhaustive global SAP product coverage.
+  definition: 'Complete means no known critical or important gaps for generating McCoy Functioneel Ontwerp context
+    bundles across the representative SAP FO domains listed here. It does not claim exhaustive global SAP product
+    coverage.
+
+    '
 minimums:
   items_total: 50
-  required_access_classes: [public, gated, internal_derived]
+  required_access_classes:
+  - public
+  - gated
+  - internal_derived
   required_kinds:
-    - access_policy
-    - decision_rule
-    - external_reference
-    - field_map
-    - fo_pattern
-    - sap_app
-    - sap_object
-    - sap_role
-    - scope_item
-    - test_pattern
+  - access_policy
+  - decision_rule
+  - external_reference
+  - field_map
+  - fo_pattern
+  - sap_app
+  - sap_object
+  - sap_role
+  - scope_item
+  - test_pattern
 quality_contract:
-  description: >
-    Representative bundles must prove that they can support concrete FO sections,
-    not only that they contain the right knowledge item kinds.
+  description: 'Representative bundles must prove that they can support concrete FO sections, not only that they
+    contain the right knowledge item kinds.
+
+    '
   dimensions:
     source_traceability: Public or gated citation with a concrete URL is present.
     configuration_app: A SAP app or configuration surface is selected.
@@ -35,94 +40,261 @@ quality_contract:
     authorization_role: A sap_role item is selected.
     access_policy: An access_policy item is selected.
 domains:
-  - id: finance_ap
-    title: Finance and Accounts Payable
-    topic_tokens: [finance, accounts, payable, ap, invoice, supplier]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-  - id: procurement
-    title: Procurement
-    topic_tokens: [procurement, purchase, requisition]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-  - id: sales
-    title: Sales
-    topic_tokens: [sales, order]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-  - id: master_data
-    title: Master Data
-    topic_tokens: [master, data, business, partner]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-  - id: migration
-    title: Data Migration
-    topic_tokens: [migration, data, cockpit]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-  - id: workflow
-    title: Workflow and Approvals
-    topic_tokens: [workflow, approval]
-    min_items: 5
-    required_kinds: [sap_app, sap_object, field_map, decision_rule, test_pattern]
-  - id: output
-    title: Output Management
-    topic_tokens: [output, form, channel]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-  - id: authorizations
-    title: Authorizations
-    topic_tokens: [authorization, role, catalog]
-    min_items: 5
-    required_kinds: [access_policy, sap_app, sap_object, sap_role, test_pattern]
-  - id: integrations
-    title: Integrations and APIs
-    topic_tokens: [integration, api, communication]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-  - id: extensibility
-    title: Extensibility
-    topic_tokens: [extensibility, extension, custom, field]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-  - id: analytics
-    title: Analytics and Reporting
-    topic_tokens: [analytics, reporting, report, kpi]
-    min_items: 5
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+- id: finance_ap
+  title: Finance and Accounts Payable
+  topic_tokens:
+  - finance
+  - accounts
+  - payable
+  - ap
+  - invoice
+  - supplier
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: procurement
+  title: Procurement
+  topic_tokens:
+  - procurement
+  - purchase
+  - requisition
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: sales
+  title: Sales
+  topic_tokens:
+  - sales
+  - order
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: master_data
+  title: Master Data
+  topic_tokens:
+  - master
+  - data
+  - business
+  - partner
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: migration
+  title: Data Migration
+  topic_tokens:
+  - migration
+  - data
+  - cockpit
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: workflow
+  title: Workflow and Approvals
+  topic_tokens:
+  - workflow
+  - approval
+  min_items: 5
+  required_kinds:
+  - sap_app
+  - sap_object
+  - field_map
+  - decision_rule
+  - test_pattern
+- id: output
+  title: Output Management
+  topic_tokens:
+  - output
+  - form
+  - channel
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: authorizations
+  title: Authorizations
+  topic_tokens:
+  - authorization
+  - role
+  - catalog
+  min_items: 5
+  required_kinds:
+  - access_policy
+  - sap_app
+  - sap_object
+  - sap_role
+  - test_pattern
+- id: integrations
+  title: Integrations and APIs
+  topic_tokens:
+  - integration
+  - api
+  - communication
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: extensibility
+  title: Extensibility
+  topic_tokens:
+  - extensibility
+  - extension
+  - custom
+  - field
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: analytics
+  title: Analytics and Reporting
+  topic_tokens:
+  - analytics
+  - reporting
+  - report
+  - kpi
+  min_items: 5
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+- id: sap_gui_eam_pm
+  title: SAP GUI EAM/PM Equipment starter coverage
+  topic_tokens:
+  - sap
+  - gui
+  - equipment
+  - eam
+  - plant
+  - maintenance
+  - ie01
+  - ie02
+  - ie03
+  - ih08
+  - status
+  min_items: 8
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - decision_rule
+  - test_pattern
 representative_queries:
-  - id: workflow_supplier_invoice
-    intent: fo.workflow
-    topic: supplier-invoice workflow
-    sap_product: s4hana_cloud_public
-    limit: 12
-    required_kinds: [sap_app, sap_object, field_map, test_pattern]
-    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, process_flow, decision_rule, test_coverage]
-  - id: procurement_configuration
-    intent: fo.sap_configuration
-    topic: procurement purchase requisition workflow
-    sap_product: s4hana_cloud_public
-    limit: 12
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, process_flow, test_coverage]
-  - id: master_data_field_mapping
-    intent: fo.field_mapping
-    topic: business partner master data
-    sap_product: s4hana_cloud_public
-    limit: 12
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, test_coverage]
-  - id: sales_output_tests
-    intent: fo.test_scenarios
-    topic: sales order output management
-    sap_product: s4hana_cloud_public
-    limit: 12
-    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
-    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, test_coverage]
-  - id: integration_authorization
-    intent: fo.authorization
-    topic: integration communication role authorization api
-    sap_product: s4hana_cloud_public
-    limit: 12
-    required_kinds: [external_reference, sap_app, sap_object, sap_role, test_pattern]
-    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, authorization_role, access_policy, test_coverage]
+- id: workflow_supplier_invoice
+  intent: fo.workflow
+  topic: supplier-invoice workflow
+  sap_product: s4hana_cloud_public
+  limit: 12
+  required_kinds:
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+  required_dimensions:
+  - source_traceability
+  - configuration_app
+  - business_object
+  - field_mapping
+  - process_flow
+  - decision_rule
+  - test_coverage
+- id: procurement_configuration
+  intent: fo.sap_configuration
+  topic: procurement purchase requisition workflow
+  sap_product: s4hana_cloud_public
+  limit: 12
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+  required_dimensions:
+  - source_traceability
+  - configuration_app
+  - business_object
+  - field_mapping
+  - process_flow
+  - test_coverage
+- id: master_data_field_mapping
+  intent: fo.field_mapping
+  topic: business partner master data
+  sap_product: s4hana_cloud_public
+  limit: 12
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+  required_dimensions:
+  - source_traceability
+  - configuration_app
+  - business_object
+  - field_mapping
+  - test_coverage
+- id: sales_output_tests
+  intent: fo.test_scenarios
+  topic: sales order output management
+  sap_product: s4hana_cloud_public
+  limit: 12
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - field_map
+  - test_pattern
+  required_dimensions:
+  - source_traceability
+  - configuration_app
+  - business_object
+  - field_mapping
+  - test_coverage
+- id: integration_authorization
+  intent: fo.authorization
+  topic: integration communication role authorization api
+  sap_product: s4hana_cloud_public
+  limit: 12
+  required_kinds:
+  - external_reference
+  - sap_app
+  - sap_object
+  - sap_role
+  - test_pattern
+  required_dimensions:
+  - source_traceability
+  - configuration_app
+  - business_object
+  - field_mapping
+  - authorization_role
+  - access_policy
+  - test_coverage
