@@ -1,0 +1,3239 @@
+pack_id: sap-field-mapping-atlas-bulk-pack
+title: SAP field mapping atlas bulk context pack
+description: Bulk generic field mapping atlas for representative SAP FO and migration mapping questions. Synthetic
+  patterns only; no customer mappings.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep mappings generic and owner/validation oriented; do not store customer values or proprietary
+    mappings.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.bulk.field-atlas.company-code-profit-center.field-set
+  title: Company code to profit center mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - controlling
+  - profit-center
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Company code to profit center mapping: CompanyCode, ProfitCenter, Segment, ControllingArea,
+    ValidityDate.'
+  freshness: *id001
+  source: &id002
+    kind: internal_pattern
+    title: Internal field mapping atlas pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived generic field mapping pattern; no customer mappings or copied SAP documentation.
+  claims:
+  - statement: Company code to profit center mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.company-code-profit-center.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.company-code-profit-center.field-map
+  field_definitions:
+  - key: Companycodetoprofitcentermapping.CompanyCode
+    description: CompanyCode semantic field in Company code to profit center mapping.
+    usage: Use CompanyCode to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Companycodetoprofitcentermapping.ProfitCenter
+    description: ProfitCenter semantic field in Company code to profit center mapping.
+    usage: Use ProfitCenter to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Companycodetoprofitcentermapping.Segment
+    description: Segment semantic field in Company code to profit center mapping.
+    usage: Use Segment to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Companycodetoprofitcentermapping.ControllingArea
+    description: ControllingArea semantic field in Company code to profit center mapping.
+    usage: Use ControllingArea to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Companycodetoprofitcentermapping.ValidityDate
+    description: ValidityDate semantic field in Company code to profit center mapping.
+    usage: Use ValidityDate to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.company-code-profit-center.field-map
+  title: Company code to profit center mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - controlling
+  - profit-center
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Company code to profit center mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Company code to profit center mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.company-code-profit-center.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.company-code-profit-center.field-set
+  field_map: &id003
+  - source: Source.CompanyCode
+    target: Target.CompanyCode
+    purpose: Map CompanyCode with owner, transformation rule and validation evidence.
+  - source: Source.ProfitCenter
+    target: Target.ProfitCenter
+    purpose: Map ProfitCenter with owner, transformation rule and validation evidence.
+  - source: Source.Segment
+    target: Target.Segment
+    purpose: Map Segment with owner, transformation rule and validation evidence.
+  - source: Source.ControllingArea
+    target: Target.ControllingArea
+    purpose: Map ControllingArea with owner, transformation rule and validation evidence.
+  - source: Source.ValidityDate
+    target: Target.ValidityDate
+    purpose: Map ValidityDate with owner, transformation rule and validation evidence.
+  mapping_steps: *id003
+- id: sap.bulk.field-atlas.company-code-profit-center.decision-rule
+  title: Company code to profit center mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - controlling
+  - profit-center
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Company code to profit center mapping: block final FO claims when source ownership,
+    transformation logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Company code to profit center mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.company-code-profit-center.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.company-code-profit-center.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.company-code-profit-center.test-pattern
+  title: Company code to profit center mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - finance
+  - controlling
+  - profit-center
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Company code to profit center mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Company code to profit center mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.company-code-profit-center.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.company-code-profit-center.field-map
+  test_scenarios:
+  - name: Company code to profit center mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.cost-center-order.field-set
+  title: Cost center to internal order mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - controlling
+  - cost-center
+  - internal-order
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Cost center to internal order mapping: CostCenter, InternalOrder, ResponsibleCostCenter,
+    CostElement, ValidityDate.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Cost center to internal order mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.cost-center-order.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.cost-center-order.field-map
+  field_definitions:
+  - key: Costcentertointernalordermapping.CostCenter
+    description: CostCenter semantic field in Cost center to internal order mapping.
+    usage: Use CostCenter to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Costcentertointernalordermapping.InternalOrder
+    description: InternalOrder semantic field in Cost center to internal order mapping.
+    usage: Use InternalOrder to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Costcentertointernalordermapping.ResponsibleCostCenter
+    description: ResponsibleCostCenter semantic field in Cost center to internal order mapping.
+    usage: Use ResponsibleCostCenter to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Costcentertointernalordermapping.CostElement
+    description: CostElement semantic field in Cost center to internal order mapping.
+    usage: Use CostElement to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Costcentertointernalordermapping.ValidityDate
+    description: ValidityDate semantic field in Cost center to internal order mapping.
+    usage: Use ValidityDate to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.cost-center-order.field-map
+  title: Cost center to internal order mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - controlling
+  - cost-center
+  - internal-order
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Cost center to internal order mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Cost center to internal order mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.cost-center-order.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.cost-center-order.field-set
+  field_map: &id004
+  - source: Source.CostCenter
+    target: Target.CostCenter
+    purpose: Map CostCenter with owner, transformation rule and validation evidence.
+  - source: Source.InternalOrder
+    target: Target.InternalOrder
+    purpose: Map InternalOrder with owner, transformation rule and validation evidence.
+  - source: Source.ResponsibleCostCenter
+    target: Target.ResponsibleCostCenter
+    purpose: Map ResponsibleCostCenter with owner, transformation rule and validation evidence.
+  - source: Source.CostElement
+    target: Target.CostElement
+    purpose: Map CostElement with owner, transformation rule and validation evidence.
+  - source: Source.ValidityDate
+    target: Target.ValidityDate
+    purpose: Map ValidityDate with owner, transformation rule and validation evidence.
+  mapping_steps: *id004
+- id: sap.bulk.field-atlas.cost-center-order.decision-rule
+  title: Cost center to internal order mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - controlling
+  - cost-center
+  - internal-order
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Cost center to internal order mapping: block final FO claims when source ownership,
+    transformation logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Cost center to internal order mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.cost-center-order.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.cost-center-order.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.cost-center-order.test-pattern
+  title: Cost center to internal order mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - controlling
+  - cost-center
+  - internal-order
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Cost center to internal order mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Cost center to internal order mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.cost-center-order.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.cost-center-order.field-map
+  test_scenarios:
+  - name: Cost center to internal order mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.customer-sales-area.field-set
+  title: Customer sales area mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - customer
+  - sales-area
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Customer sales area mapping: Customer, SalesOrganization, DistributionChannel, Division,
+    CustomerGroup.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Customer sales area mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.customer-sales-area.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.customer-sales-area.field-map
+  field_definitions:
+  - key: Customersalesareamapping.Customer
+    description: Customer semantic field in Customer sales area mapping.
+    usage: Use Customer to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Customersalesareamapping.SalesOrganization
+    description: SalesOrganization semantic field in Customer sales area mapping.
+    usage: Use SalesOrganization to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Customersalesareamapping.DistributionChannel
+    description: DistributionChannel semantic field in Customer sales area mapping.
+    usage: Use DistributionChannel to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Customersalesareamapping.Division
+    description: Division semantic field in Customer sales area mapping.
+    usage: Use Division to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Customersalesareamapping.CustomerGroup
+    description: CustomerGroup semantic field in Customer sales area mapping.
+    usage: Use CustomerGroup to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.customer-sales-area.field-map
+  title: Customer sales area mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - customer
+  - sales-area
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Customer sales area mapping; separates direct copy, derivation, validation owner
+    and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Customer sales area mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.customer-sales-area.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.customer-sales-area.field-set
+  field_map: &id005
+  - source: Source.Customer
+    target: Target.Customer
+    purpose: Map Customer with owner, transformation rule and validation evidence.
+  - source: Source.SalesOrganization
+    target: Target.SalesOrganization
+    purpose: Map SalesOrganization with owner, transformation rule and validation evidence.
+  - source: Source.DistributionChannel
+    target: Target.DistributionChannel
+    purpose: Map DistributionChannel with owner, transformation rule and validation evidence.
+  - source: Source.Division
+    target: Target.Division
+    purpose: Map Division with owner, transformation rule and validation evidence.
+  - source: Source.CustomerGroup
+    target: Target.CustomerGroup
+    purpose: Map CustomerGroup with owner, transformation rule and validation evidence.
+  mapping_steps: *id005
+- id: sap.bulk.field-atlas.customer-sales-area.decision-rule
+  title: Customer sales area mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - customer
+  - sales-area
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Customer sales area mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Customer sales area mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.customer-sales-area.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.customer-sales-area.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.customer-sales-area.test-pattern
+  title: Customer sales area mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sales
+  - customer
+  - sales-area
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Customer sales area mapping: synthetic source record, target field expectation, transformation
+    rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Customer sales area mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.customer-sales-area.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.customer-sales-area.field-map
+  test_scenarios:
+  - name: Customer sales area mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.supplier-purchasing-org.field-set
+  title: Supplier purchasing organization mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - procurement
+  - supplier
+  - purchasing-organization
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Supplier purchasing organization mapping: Supplier, PurchasingOrganization, CompanyCode,
+    PaymentTerms, Incoterms.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Supplier purchasing organization mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.supplier-purchasing-org.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.supplier-purchasing-org.field-map
+  field_definitions:
+  - key: Supplierpurchasingorganizationmapping.Supplier
+    description: Supplier semantic field in Supplier purchasing organization mapping.
+    usage: Use Supplier to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Supplierpurchasingorganizationmapping.PurchasingOrganization
+    description: PurchasingOrganization semantic field in Supplier purchasing organization mapping.
+    usage: Use PurchasingOrganization to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Supplierpurchasingorganizationmapping.CompanyCode
+    description: CompanyCode semantic field in Supplier purchasing organization mapping.
+    usage: Use CompanyCode to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Supplierpurchasingorganizationmapping.PaymentTerms
+    description: PaymentTerms semantic field in Supplier purchasing organization mapping.
+    usage: Use PaymentTerms to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Supplierpurchasingorganizationmapping.Incoterms
+    description: Incoterms semantic field in Supplier purchasing organization mapping.
+    usage: Use Incoterms to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.supplier-purchasing-org.field-map
+  title: Supplier purchasing organization mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - procurement
+  - supplier
+  - purchasing-organization
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Supplier purchasing organization mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Supplier purchasing organization mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.supplier-purchasing-org.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.supplier-purchasing-org.field-set
+  field_map: &id006
+  - source: Source.Supplier
+    target: Target.Supplier
+    purpose: Map Supplier with owner, transformation rule and validation evidence.
+  - source: Source.PurchasingOrganization
+    target: Target.PurchasingOrganization
+    purpose: Map PurchasingOrganization with owner, transformation rule and validation evidence.
+  - source: Source.CompanyCode
+    target: Target.CompanyCode
+    purpose: Map CompanyCode with owner, transformation rule and validation evidence.
+  - source: Source.PaymentTerms
+    target: Target.PaymentTerms
+    purpose: Map PaymentTerms with owner, transformation rule and validation evidence.
+  - source: Source.Incoterms
+    target: Target.Incoterms
+    purpose: Map Incoterms with owner, transformation rule and validation evidence.
+  mapping_steps: *id006
+- id: sap.bulk.field-atlas.supplier-purchasing-org.decision-rule
+  title: Supplier purchasing organization mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - procurement
+  - supplier
+  - purchasing-organization
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Supplier purchasing organization mapping: block final FO claims when source ownership,
+    transformation logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Supplier purchasing organization mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.supplier-purchasing-org.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.supplier-purchasing-org.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.supplier-purchasing-org.test-pattern
+  title: Supplier purchasing organization mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - procurement
+  - supplier
+  - purchasing-organization
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Supplier purchasing organization mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Supplier purchasing organization mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.supplier-purchasing-org.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.supplier-purchasing-org.field-map
+  test_scenarios:
+  - name: Supplier purchasing organization mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.material-plant-storage.field-set
+  title: Material plant storage mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - plant
+  - storage-location
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Material plant storage mapping: Material, Plant, StorageLocation, MRPType, ValuationClass.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Material plant storage mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.material-plant-storage.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.material-plant-storage.field-map
+  field_definitions:
+  - key: Materialplantstoragemapping.Material
+    description: Material semantic field in Material plant storage mapping.
+    usage: Use Material to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Materialplantstoragemapping.Plant
+    description: Plant semantic field in Material plant storage mapping.
+    usage: Use Plant to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Materialplantstoragemapping.StorageLocation
+    description: StorageLocation semantic field in Material plant storage mapping.
+    usage: Use StorageLocation to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Materialplantstoragemapping.MRPType
+    description: MRPType semantic field in Material plant storage mapping.
+    usage: Use MRPType to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Materialplantstoragemapping.ValuationClass
+    description: ValuationClass semantic field in Material plant storage mapping.
+    usage: Use ValuationClass to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.material-plant-storage.field-map
+  title: Material plant storage mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - plant
+  - storage-location
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Material plant storage mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Material plant storage mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.material-plant-storage.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.material-plant-storage.field-set
+  field_map: &id007
+  - source: Source.Material
+    target: Target.Material
+    purpose: Map Material with owner, transformation rule and validation evidence.
+  - source: Source.Plant
+    target: Target.Plant
+    purpose: Map Plant with owner, transformation rule and validation evidence.
+  - source: Source.StorageLocation
+    target: Target.StorageLocation
+    purpose: Map StorageLocation with owner, transformation rule and validation evidence.
+  - source: Source.MRPType
+    target: Target.MRPType
+    purpose: Map MRPType with owner, transformation rule and validation evidence.
+  - source: Source.ValuationClass
+    target: Target.ValuationClass
+    purpose: Map ValuationClass with owner, transformation rule and validation evidence.
+  mapping_steps: *id007
+- id: sap.bulk.field-atlas.material-plant-storage.decision-rule
+  title: Material plant storage mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - plant
+  - storage-location
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Material plant storage mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Material plant storage mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.material-plant-storage.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.material-plant-storage.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.material-plant-storage.test-pattern
+  title: Material plant storage mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - material
+  - plant
+  - storage-location
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Material plant storage mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Material plant storage mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.material-plant-storage.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.material-plant-storage.field-map
+  test_scenarios:
+  - name: Material plant storage mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.product-unit-classification.field-set
+  title: Product unit classification mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product
+  - unit
+  - classification
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Product unit classification mapping: Product, BaseUnit, ProductGroup, ProductHierarchy,
+    ClassType.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Product unit classification mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.product-unit-classification.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.product-unit-classification.field-map
+  field_definitions:
+  - key: Productunitclassificationmapping.Product
+    description: Product semantic field in Product unit classification mapping.
+    usage: Use Product to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Productunitclassificationmapping.BaseUnit
+    description: BaseUnit semantic field in Product unit classification mapping.
+    usage: Use BaseUnit to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Productunitclassificationmapping.ProductGroup
+    description: ProductGroup semantic field in Product unit classification mapping.
+    usage: Use ProductGroup to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Productunitclassificationmapping.ProductHierarchy
+    description: ProductHierarchy semantic field in Product unit classification mapping.
+    usage: Use ProductHierarchy to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Productunitclassificationmapping.ClassType
+    description: ClassType semantic field in Product unit classification mapping.
+    usage: Use ClassType to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.product-unit-classification.field-map
+  title: Product unit classification mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product
+  - unit
+  - classification
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Product unit classification mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Product unit classification mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.product-unit-classification.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.product-unit-classification.field-set
+  field_map: &id008
+  - source: Source.Product
+    target: Target.Product
+    purpose: Map Product with owner, transformation rule and validation evidence.
+  - source: Source.BaseUnit
+    target: Target.BaseUnit
+    purpose: Map BaseUnit with owner, transformation rule and validation evidence.
+  - source: Source.ProductGroup
+    target: Target.ProductGroup
+    purpose: Map ProductGroup with owner, transformation rule and validation evidence.
+  - source: Source.ProductHierarchy
+    target: Target.ProductHierarchy
+    purpose: Map ProductHierarchy with owner, transformation rule and validation evidence.
+  - source: Source.ClassType
+    target: Target.ClassType
+    purpose: Map ClassType with owner, transformation rule and validation evidence.
+  mapping_steps: *id008
+- id: sap.bulk.field-atlas.product-unit-classification.decision-rule
+  title: Product unit classification mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product
+  - unit
+  - classification
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Product unit classification mapping: block final FO claims when source ownership,
+    transformation logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Product unit classification mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.product-unit-classification.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.product-unit-classification.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.product-unit-classification.test-pattern
+  title: Product unit classification mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - product
+  - unit
+  - classification
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Product unit classification mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Product unit classification mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.product-unit-classification.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.product-unit-classification.field-map
+  test_scenarios:
+  - name: Product unit classification mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.bp-customer-supplier-role.field-set
+  title: BP customer supplier role mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp
+  - customer
+  - supplier
+  - role
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for BP customer supplier role mapping: BusinessPartner, Customer, Supplier, BusinessPartnerRole,
+    AuthorizationGroup.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: BP customer supplier role mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.bp-customer-supplier-role.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.bp-customer-supplier-role.field-map
+  field_definitions:
+  - key: BPcustomersupplierrolemapping.BusinessPartner
+    description: BusinessPartner semantic field in BP customer supplier role mapping.
+    usage: Use BusinessPartner to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: BPcustomersupplierrolemapping.Customer
+    description: Customer semantic field in BP customer supplier role mapping.
+    usage: Use Customer to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: BPcustomersupplierrolemapping.Supplier
+    description: Supplier semantic field in BP customer supplier role mapping.
+    usage: Use Supplier to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: BPcustomersupplierrolemapping.BusinessPartnerRole
+    description: BusinessPartnerRole semantic field in BP customer supplier role mapping.
+    usage: Use BusinessPartnerRole to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: BPcustomersupplierrolemapping.AuthorizationGroup
+    description: AuthorizationGroup semantic field in BP customer supplier role mapping.
+    usage: Use AuthorizationGroup to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.bp-customer-supplier-role.field-map
+  title: BP customer supplier role mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp
+  - customer
+  - supplier
+  - role
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for BP customer supplier role mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: BP customer supplier role mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.bp-customer-supplier-role.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.bp-customer-supplier-role.field-set
+  field_map: &id009
+  - source: Source.BusinessPartner
+    target: Target.BusinessPartner
+    purpose: Map BusinessPartner with owner, transformation rule and validation evidence.
+  - source: Source.Customer
+    target: Target.Customer
+    purpose: Map Customer with owner, transformation rule and validation evidence.
+  - source: Source.Supplier
+    target: Target.Supplier
+    purpose: Map Supplier with owner, transformation rule and validation evidence.
+  - source: Source.BusinessPartnerRole
+    target: Target.BusinessPartnerRole
+    purpose: Map BusinessPartnerRole with owner, transformation rule and validation evidence.
+  - source: Source.AuthorizationGroup
+    target: Target.AuthorizationGroup
+    purpose: Map AuthorizationGroup with owner, transformation rule and validation evidence.
+  mapping_steps: *id009
+- id: sap.bulk.field-atlas.bp-customer-supplier-role.decision-rule
+  title: BP customer supplier role mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp
+  - customer
+  - supplier
+  - role
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for BP customer supplier role mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: BP customer supplier role mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.bp-customer-supplier-role.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.bp-customer-supplier-role.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.bp-customer-supplier-role.test-pattern
+  title: BP customer supplier role mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - bp
+  - customer
+  - supplier
+  - role
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for BP customer supplier role mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: BP customer supplier role mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.bp-customer-supplier-role.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.bp-customer-supplier-role.field-map
+  test_scenarios:
+  - name: BP customer supplier role mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.invoice-payment-block.field-set
+  title: Invoice payment block mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - accounts-payable
+  - invoice
+  - payment-block
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Invoice payment block mapping: SupplierInvoice, PaymentBlockingReason, DueCalculationBaseDate,
+    PaymentMethod, ExceptionOwner.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Invoice payment block mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.invoice-payment-block.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.invoice-payment-block.field-map
+  field_definitions:
+  - key: Invoicepaymentblockmapping.SupplierInvoice
+    description: SupplierInvoice semantic field in Invoice payment block mapping.
+    usage: Use SupplierInvoice to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Invoicepaymentblockmapping.PaymentBlockingReason
+    description: PaymentBlockingReason semantic field in Invoice payment block mapping.
+    usage: Use PaymentBlockingReason to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Invoicepaymentblockmapping.DueCalculationBaseDate
+    description: DueCalculationBaseDate semantic field in Invoice payment block mapping.
+    usage: Use DueCalculationBaseDate to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Invoicepaymentblockmapping.PaymentMethod
+    description: PaymentMethod semantic field in Invoice payment block mapping.
+    usage: Use PaymentMethod to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Invoicepaymentblockmapping.ExceptionOwner
+    description: ExceptionOwner semantic field in Invoice payment block mapping.
+    usage: Use ExceptionOwner to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.invoice-payment-block.field-map
+  title: Invoice payment block mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - accounts-payable
+  - invoice
+  - payment-block
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Invoice payment block mapping; separates direct copy, derivation, validation owner
+    and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Invoice payment block mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.invoice-payment-block.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.invoice-payment-block.field-set
+  field_map: &id010
+  - source: Source.SupplierInvoice
+    target: Target.SupplierInvoice
+    purpose: Map SupplierInvoice with owner, transformation rule and validation evidence.
+  - source: Source.PaymentBlockingReason
+    target: Target.PaymentBlockingReason
+    purpose: Map PaymentBlockingReason with owner, transformation rule and validation evidence.
+  - source: Source.DueCalculationBaseDate
+    target: Target.DueCalculationBaseDate
+    purpose: Map DueCalculationBaseDate with owner, transformation rule and validation evidence.
+  - source: Source.PaymentMethod
+    target: Target.PaymentMethod
+    purpose: Map PaymentMethod with owner, transformation rule and validation evidence.
+  - source: Source.ExceptionOwner
+    target: Target.ExceptionOwner
+    purpose: Map ExceptionOwner with owner, transformation rule and validation evidence.
+  mapping_steps: *id010
+- id: sap.bulk.field-atlas.invoice-payment-block.decision-rule
+  title: Invoice payment block mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - accounts-payable
+  - invoice
+  - payment-block
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Invoice payment block mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Invoice payment block mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.invoice-payment-block.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.invoice-payment-block.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.invoice-payment-block.test-pattern
+  title: Invoice payment block mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - accounts-payable
+  - invoice
+  - payment-block
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Invoice payment block mapping: synthetic source record, target field expectation, transformation
+    rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Invoice payment block mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.invoice-payment-block.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.invoice-payment-block.field-map
+  test_scenarios:
+  - name: Invoice payment block mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.purchasing-cost-object.field-set
+  title: Purchasing commitment object mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchasing-commitment
+  - cost-object
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Purchasing cost-object mapping: commitment object, commitment objectItem, commitment object,
+    commitment object, commitment object.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Purchasing cost-object mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.purchasing-cost-object.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.purchasing-cost-object.field-map
+  field_definitions:
+  - key: POaccountassignmentmapping.GenericMappingAttribute
+    description: generic mapping attribute semantic field in PO account assignment mapping.
+    usage: Use PurchaseOrder to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: POaccountassignmentmapping.GenericMappingAttributeItem
+    description: generic mapping attributeItem semantic field in PO account assignment mapping.
+    usage: Use PurchaseOrderItem to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: POaccountassignmentmapping.GenericMappingAttribute
+    description: generic mapping attribute semantic field in PO account assignment mapping.
+    usage: Use AccountAssignmentCategory to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: POaccountassignmentmapping.GenericMappingAttribute
+    description: generic mapping attribute semantic field in PO account assignment mapping.
+    usage: Use CostCenter to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: POaccountassignmentmapping.GenericMappingAttribute
+    description: generic mapping attribute semantic field in PO account assignment mapping.
+    usage: Use WBSElement to trace source-to-target mapping, validation ownership and test-data expectations.
+  mapping_steps: []
+- id: sap.bulk.field-atlas.purchasing-cost-object.field-map
+  title: Purchasing commitment object mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchasing-commitment
+  - cost-object
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Purchasing cost-object mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Purchasing cost-object mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.purchasing-cost-object.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.purchasing-cost-object.field-set
+  field_map: &id011
+  - source: Source.GenericMappingAttribute
+    target: Target.GenericMappingAttribute
+    purpose: Map PurchaseOrder with owner, transformation rule and validation evidence.
+  - source: Source.GenericMappingAttributeItem
+    target: Target.GenericMappingAttributeItem
+    purpose: Map PurchaseOrderItem with owner, transformation rule and validation evidence.
+  - source: Source.GenericMappingAttribute
+    target: Target.GenericMappingAttribute
+    purpose: Map AccountAssignmentCategory with owner, transformation rule and validation evidence.
+  - source: Source.GenericMappingAttribute
+    target: Target.GenericMappingAttribute
+    purpose: Map CostCenter with owner, transformation rule and validation evidence.
+  - source: Source.GenericMappingAttribute
+    target: Target.GenericMappingAttribute
+    purpose: Map WBSElement with owner, transformation rule and validation evidence.
+  mapping_steps: *id011
+- id: sap.bulk.field-atlas.purchasing-cost-object.decision-rule
+  title: Purchasing commitment object mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchasing-commitment
+  - cost-object
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Purchasing cost-object mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Purchasing cost-object mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.purchasing-cost-object.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.purchasing-cost-object.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+  mapping_steps: []
+- id: sap.bulk.field-atlas.purchasing-cost-object.test-pattern
+  title: Purchasing commitment object mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - purchasing-commitment
+  - cost-object
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Purchasing cost-object mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Purchasing cost-object mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.purchasing-cost-object.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.purchasing-cost-object.field-map
+  test_scenarios:
+  - name: PO account assignment mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+  mapping_steps: []
+- id: sap.bulk.field-atlas.request-sourcing-pattern.field-set
+  title: Request sourcing mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - request-sourcing-pattern
+  - sourcing-pattern
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for request sourcing pattern mapping: request sourcing pattern, request sourcing patternItem,
+    request sourcing pattern, request sourcing pattern, request sourcing pattern.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: PR source of supply mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.request-sourcing-pattern.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.request-sourcing-pattern.field-map
+  field_definitions:
+  - key: PRsourceofsupplymapping.GenericMappingAttribute
+    description: generic mapping attribute semantic field in PR source of supply mapping.
+    usage: Use PurchaseRequisition to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: PRsourceofsupplymapping.GenericMappingAttributeItem
+    description: generic mapping attributeItem semantic field in PR source of supply mapping.
+    usage: Use PurchaseRequisitionItem to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: PRsourceofsupplymapping.GenericMappingAttribute
+    description: generic mapping attribute semantic field in PR source of supply mapping.
+    usage: Use FixedSupplier to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: PRsourceofsupplymapping.GenericMappingAttribute
+    description: generic mapping attribute semantic field in PR source of supply mapping.
+    usage: Use PurchasingInfoRecord to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: PRsourceofsupplymapping.GenericMappingAttribute
+    description: generic mapping attribute semantic field in PR source of supply mapping.
+    usage: Use SourceList to trace source-to-target mapping, validation ownership and test-data expectations.
+  mapping_steps: []
+- id: sap.bulk.field-atlas.request-sourcing-pattern.field-map
+  title: Request sourcing mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - request-sourcing-pattern
+  - sourcing-pattern
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for request sourcing pattern mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: PR source of supply mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.request-sourcing-pattern.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.request-sourcing-pattern.field-set
+  field_map: &id012
+  - source: Source.GenericMappingAttribute
+    target: Target.GenericMappingAttribute
+    purpose: Map PurchaseRequisition with owner, transformation rule and validation evidence.
+  - source: Source.GenericMappingAttributeItem
+    target: Target.GenericMappingAttributeItem
+    purpose: Map PurchaseRequisitionItem with owner, transformation rule and validation evidence.
+  - source: Source.GenericMappingAttribute
+    target: Target.GenericMappingAttribute
+    purpose: Map FixedSupplier with owner, transformation rule and validation evidence.
+  - source: Source.GenericMappingAttribute
+    target: Target.GenericMappingAttribute
+    purpose: Map PurchasingInfoRecord with owner, transformation rule and validation evidence.
+  - source: Source.GenericMappingAttribute
+    target: Target.GenericMappingAttribute
+    purpose: Map SourceList with owner, transformation rule and validation evidence.
+  mapping_steps: *id012
+- id: sap.bulk.field-atlas.request-sourcing-pattern.decision-rule
+  title: Request sourcing mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - request-sourcing-pattern
+  - sourcing-pattern
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for request sourcing pattern mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: PR source of supply mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.request-sourcing-pattern.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.request-sourcing-pattern.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+  mapping_steps: []
+- id: sap.bulk.field-atlas.request-sourcing-pattern.test-pattern
+  title: Request sourcing mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - request-sourcing-pattern
+  - sourcing-pattern
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for request sourcing pattern mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: PR source of supply mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.request-sourcing-pattern.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.request-sourcing-pattern.field-map
+  test_scenarios:
+  - name: PR source of supply mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+  mapping_steps: []
+- id: sap.bulk.field-atlas.delivery-picking-status.field-set
+  title: Delivery picking status mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - delivery
+  - picking
+  - goods-issue
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Delivery picking status mapping: DeliveryDocument, DeliveryDocumentItem, PickingStatus,
+    GoodsIssueStatus, ShippingPoint.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Delivery picking status mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.delivery-picking-status.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.delivery-picking-status.field-map
+  field_definitions:
+  - key: Deliverypickingstatusmapping.DeliveryDocument
+    description: DeliveryDocument semantic field in Delivery picking status mapping.
+    usage: Use DeliveryDocument to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Deliverypickingstatusmapping.DeliveryDocumentItem
+    description: DeliveryDocumentItem semantic field in Delivery picking status mapping.
+    usage: Use DeliveryDocumentItem to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Deliverypickingstatusmapping.PickingStatus
+    description: PickingStatus semantic field in Delivery picking status mapping.
+    usage: Use PickingStatus to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Deliverypickingstatusmapping.GoodsIssueStatus
+    description: GoodsIssueStatus semantic field in Delivery picking status mapping.
+    usage: Use GoodsIssueStatus to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Deliverypickingstatusmapping.ShippingPoint
+    description: ShippingPoint semantic field in Delivery picking status mapping.
+    usage: Use ShippingPoint to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.delivery-picking-status.field-map
+  title: Delivery picking status mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - delivery
+  - picking
+  - goods-issue
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Delivery picking status mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Delivery picking status mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.delivery-picking-status.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.delivery-picking-status.field-set
+  field_map: &id013
+  - source: Source.DeliveryDocument
+    target: Target.DeliveryDocument
+    purpose: Map DeliveryDocument with owner, transformation rule and validation evidence.
+  - source: Source.DeliveryDocumentItem
+    target: Target.DeliveryDocumentItem
+    purpose: Map DeliveryDocumentItem with owner, transformation rule and validation evidence.
+  - source: Source.PickingStatus
+    target: Target.PickingStatus
+    purpose: Map PickingStatus with owner, transformation rule and validation evidence.
+  - source: Source.GoodsIssueStatus
+    target: Target.GoodsIssueStatus
+    purpose: Map GoodsIssueStatus with owner, transformation rule and validation evidence.
+  - source: Source.ShippingPoint
+    target: Target.ShippingPoint
+    purpose: Map ShippingPoint with owner, transformation rule and validation evidence.
+  mapping_steps: *id013
+- id: sap.bulk.field-atlas.delivery-picking-status.decision-rule
+  title: Delivery picking status mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - delivery
+  - picking
+  - goods-issue
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Delivery picking status mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Delivery picking status mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.delivery-picking-status.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.delivery-picking-status.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.delivery-picking-status.test-pattern
+  title: Delivery picking status mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - delivery
+  - picking
+  - goods-issue
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Delivery picking status mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Delivery picking status mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.delivery-picking-status.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.delivery-picking-status.field-map
+  test_scenarios:
+  - name: Delivery picking status mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.billing-output-channel.field-set
+  title: Billing output channel mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing
+  - output
+  - channel
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Billing output channel mapping: BillingDocument, OutputType, OutputChannel, Recipient,
+    ProcessingStatus.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Billing output channel mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.billing-output-channel.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.billing-output-channel.field-map
+  field_definitions:
+  - key: Billingoutputchannelmapping.BillingDocument
+    description: BillingDocument semantic field in Billing output channel mapping.
+    usage: Use BillingDocument to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Billingoutputchannelmapping.OutputType
+    description: OutputType semantic field in Billing output channel mapping.
+    usage: Use OutputType to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Billingoutputchannelmapping.OutputChannel
+    description: OutputChannel semantic field in Billing output channel mapping.
+    usage: Use OutputChannel to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Billingoutputchannelmapping.Recipient
+    description: Recipient semantic field in Billing output channel mapping.
+    usage: Use Recipient to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Billingoutputchannelmapping.ProcessingStatus
+    description: ProcessingStatus semantic field in Billing output channel mapping.
+    usage: Use ProcessingStatus to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.billing-output-channel.field-map
+  title: Billing output channel mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing
+  - output
+  - channel
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Billing output channel mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Billing output channel mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.billing-output-channel.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.billing-output-channel.field-set
+  field_map: &id014
+  - source: Source.BillingDocument
+    target: Target.BillingDocument
+    purpose: Map BillingDocument with owner, transformation rule and validation evidence.
+  - source: Source.OutputType
+    target: Target.OutputType
+    purpose: Map OutputType with owner, transformation rule and validation evidence.
+  - source: Source.OutputChannel
+    target: Target.OutputChannel
+    purpose: Map OutputChannel with owner, transformation rule and validation evidence.
+  - source: Source.Recipient
+    target: Target.Recipient
+    purpose: Map Recipient with owner, transformation rule and validation evidence.
+  - source: Source.ProcessingStatus
+    target: Target.ProcessingStatus
+    purpose: Map ProcessingStatus with owner, transformation rule and validation evidence.
+  mapping_steps: *id014
+- id: sap.bulk.field-atlas.billing-output-channel.decision-rule
+  title: Billing output channel mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing
+  - output
+  - channel
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Billing output channel mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Billing output channel mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.billing-output-channel.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.billing-output-channel.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.billing-output-channel.test-pattern
+  title: Billing output channel mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - billing
+  - output
+  - channel
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Billing output channel mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Billing output channel mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.billing-output-channel.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.billing-output-channel.field-map
+  test_scenarios:
+  - name: Billing output channel mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.production-order-confirmation.field-set
+  title: Production order confirmation mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - confirmation
+  - yield
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Production order confirmation mapping: ProductionOrder, Operation, ConfirmedYieldQuantity,
+    ScrapQuantity, ConfirmationStatus.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Production order confirmation mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.production-order-confirmation.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.production-order-confirmation.field-map
+  field_definitions:
+  - key: Productionorderconfirmationmapping.ProductionOrder
+    description: ProductionOrder semantic field in Production order confirmation mapping.
+    usage: Use ProductionOrder to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Productionorderconfirmationmapping.Operation
+    description: Operation semantic field in Production order confirmation mapping.
+    usage: Use Operation to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Productionorderconfirmationmapping.ConfirmedYieldQuantity
+    description: ConfirmedYieldQuantity semantic field in Production order confirmation mapping.
+    usage: Use ConfirmedYieldQuantity to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Productionorderconfirmationmapping.ScrapQuantity
+    description: ScrapQuantity semantic field in Production order confirmation mapping.
+    usage: Use ScrapQuantity to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Productionorderconfirmationmapping.ConfirmationStatus
+    description: ConfirmationStatus semantic field in Production order confirmation mapping.
+    usage: Use ConfirmationStatus to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.production-order-confirmation.field-map
+  title: Production order confirmation mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - confirmation
+  - yield
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Production order confirmation mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Production order confirmation mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.production-order-confirmation.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.production-order-confirmation.field-set
+  field_map: &id015
+  - source: Source.ProductionOrder
+    target: Target.ProductionOrder
+    purpose: Map ProductionOrder with owner, transformation rule and validation evidence.
+  - source: Source.Operation
+    target: Target.Operation
+    purpose: Map Operation with owner, transformation rule and validation evidence.
+  - source: Source.ConfirmedYieldQuantity
+    target: Target.ConfirmedYieldQuantity
+    purpose: Map ConfirmedYieldQuantity with owner, transformation rule and validation evidence.
+  - source: Source.ScrapQuantity
+    target: Target.ScrapQuantity
+    purpose: Map ScrapQuantity with owner, transformation rule and validation evidence.
+  - source: Source.ConfirmationStatus
+    target: Target.ConfirmationStatus
+    purpose: Map ConfirmationStatus with owner, transformation rule and validation evidence.
+  mapping_steps: *id015
+- id: sap.bulk.field-atlas.production-order-confirmation.decision-rule
+  title: Production order confirmation mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - confirmation
+  - yield
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Production order confirmation mapping: block final FO claims when source ownership,
+    transformation logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Production order confirmation mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.production-order-confirmation.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.production-order-confirmation.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.production-order-confirmation.test-pattern
+  title: Production order confirmation mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - production-order
+  - confirmation
+  - yield
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Production order confirmation mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Production order confirmation mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.production-order-confirmation.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.production-order-confirmation.field-map
+  test_scenarios:
+  - name: Production order confirmation mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.inspection-usage-decision.field-set
+  title: Inspection usage decision mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection
+  - usage-decision
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Inspection usage decision mapping: InspectionLot, InspectionCharacteristic, ValuationResult,
+    UsageDecisionCode, Batch.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Inspection usage decision mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.inspection-usage-decision.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.inspection-usage-decision.field-map
+  field_definitions:
+  - key: Inspectionusagedecisionmapping.InspectionLot
+    description: InspectionLot semantic field in Inspection usage decision mapping.
+    usage: Use InspectionLot to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Inspectionusagedecisionmapping.InspectionCharacteristic
+    description: InspectionCharacteristic semantic field in Inspection usage decision mapping.
+    usage: Use InspectionCharacteristic to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Inspectionusagedecisionmapping.ValuationResult
+    description: ValuationResult semantic field in Inspection usage decision mapping.
+    usage: Use ValuationResult to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Inspectionusagedecisionmapping.UsageDecisionCode
+    description: UsageDecisionCode semantic field in Inspection usage decision mapping.
+    usage: Use UsageDecisionCode to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Inspectionusagedecisionmapping.Batch
+    description: Batch semantic field in Inspection usage decision mapping.
+    usage: Use Batch to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.inspection-usage-decision.field-map
+  title: Inspection usage decision mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection
+  - usage-decision
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Inspection usage decision mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Inspection usage decision mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.inspection-usage-decision.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.inspection-usage-decision.field-set
+  field_map: &id016
+  - source: Source.InspectionLot
+    target: Target.InspectionLot
+    purpose: Map InspectionLot with owner, transformation rule and validation evidence.
+  - source: Source.InspectionCharacteristic
+    target: Target.InspectionCharacteristic
+    purpose: Map InspectionCharacteristic with owner, transformation rule and validation evidence.
+  - source: Source.ValuationResult
+    target: Target.ValuationResult
+    purpose: Map ValuationResult with owner, transformation rule and validation evidence.
+  - source: Source.UsageDecisionCode
+    target: Target.UsageDecisionCode
+    purpose: Map UsageDecisionCode with owner, transformation rule and validation evidence.
+  - source: Source.Batch
+    target: Target.Batch
+    purpose: Map Batch with owner, transformation rule and validation evidence.
+  mapping_steps: *id016
+- id: sap.bulk.field-atlas.inspection-usage-decision.decision-rule
+  title: Inspection usage decision mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection
+  - usage-decision
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Inspection usage decision mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Inspection usage decision mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.inspection-usage-decision.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.inspection-usage-decision.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.inspection-usage-decision.test-pattern
+  title: Inspection usage decision mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - quality
+  - inspection
+  - usage-decision
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Inspection usage decision mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Inspection usage decision mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.inspection-usage-decision.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.inspection-usage-decision.field-map
+  test_scenarios:
+  - name: Inspection usage decision mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.maintenance-technical-object.field-set
+  title: Maintenance technical object mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - equipment
+  - functional-location
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Maintenance technical object mapping: MaintenanceOrder, Equipment, FunctionalLocation,
+    PlannerGroup, SystemStatus.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Maintenance technical object mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.maintenance-technical-object.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.maintenance-technical-object.field-map
+  field_definitions:
+  - key: Maintenancetechnicalobjectmapping.MaintenanceOrder
+    description: MaintenanceOrder semantic field in Maintenance technical object mapping.
+    usage: Use MaintenanceOrder to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Maintenancetechnicalobjectmapping.Equipment
+    description: Equipment semantic field in Maintenance technical object mapping.
+    usage: Use Equipment to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Maintenancetechnicalobjectmapping.FunctionalLocation
+    description: FunctionalLocation semantic field in Maintenance technical object mapping.
+    usage: Use FunctionalLocation to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Maintenancetechnicalobjectmapping.PlannerGroup
+    description: PlannerGroup semantic field in Maintenance technical object mapping.
+    usage: Use PlannerGroup to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Maintenancetechnicalobjectmapping.SystemStatus
+    description: SystemStatus semantic field in Maintenance technical object mapping.
+    usage: Use SystemStatus to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.maintenance-technical-object.field-map
+  title: Maintenance technical object mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - equipment
+  - functional-location
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Maintenance technical object mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Maintenance technical object mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.maintenance-technical-object.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.maintenance-technical-object.field-set
+  field_map: &id017
+  - source: Source.MaintenanceOrder
+    target: Target.MaintenanceOrder
+    purpose: Map MaintenanceOrder with owner, transformation rule and validation evidence.
+  - source: Source.Equipment
+    target: Target.Equipment
+    purpose: Map Equipment with owner, transformation rule and validation evidence.
+  - source: Source.FunctionalLocation
+    target: Target.FunctionalLocation
+    purpose: Map FunctionalLocation with owner, transformation rule and validation evidence.
+  - source: Source.PlannerGroup
+    target: Target.PlannerGroup
+    purpose: Map PlannerGroup with owner, transformation rule and validation evidence.
+  - source: Source.SystemStatus
+    target: Target.SystemStatus
+    purpose: Map SystemStatus with owner, transformation rule and validation evidence.
+  mapping_steps: *id017
+- id: sap.bulk.field-atlas.maintenance-technical-object.decision-rule
+  title: Maintenance technical object mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - equipment
+  - functional-location
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Maintenance technical object mapping: block final FO claims when source ownership,
+    transformation logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Maintenance technical object mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.maintenance-technical-object.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.maintenance-technical-object.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.maintenance-technical-object.test-pattern
+  title: Maintenance technical object mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - maintenance
+  - equipment
+  - functional-location
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Maintenance technical object mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Maintenance technical object mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.maintenance-technical-object.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.maintenance-technical-object.field-map
+  test_scenarios:
+  - name: Maintenance technical object mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.service-order-billing.field-set
+  title: Service order billing mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - billing
+  - service-order
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Service order billing mapping: ServiceOrder, ServiceProduct, SoldToParty, ServiceStatus,
+    BillingRelevance.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Service order billing mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.service-order-billing.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.service-order-billing.field-map
+  field_definitions:
+  - key: Serviceorderbillingmapping.ServiceOrder
+    description: ServiceOrder semantic field in Service order billing mapping.
+    usage: Use ServiceOrder to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Serviceorderbillingmapping.ServiceProduct
+    description: ServiceProduct semantic field in Service order billing mapping.
+    usage: Use ServiceProduct to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Serviceorderbillingmapping.SoldToParty
+    description: SoldToParty semantic field in Service order billing mapping.
+    usage: Use SoldToParty to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Serviceorderbillingmapping.ServiceStatus
+    description: ServiceStatus semantic field in Service order billing mapping.
+    usage: Use ServiceStatus to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Serviceorderbillingmapping.BillingRelevance
+    description: BillingRelevance semantic field in Service order billing mapping.
+    usage: Use BillingRelevance to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.service-order-billing.field-map
+  title: Service order billing mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - billing
+  - service-order
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Service order billing mapping; separates direct copy, derivation, validation owner
+    and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Service order billing mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.service-order-billing.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.service-order-billing.field-set
+  field_map: &id018
+  - source: Source.ServiceOrder
+    target: Target.ServiceOrder
+    purpose: Map ServiceOrder with owner, transformation rule and validation evidence.
+  - source: Source.ServiceProduct
+    target: Target.ServiceProduct
+    purpose: Map ServiceProduct with owner, transformation rule and validation evidence.
+  - source: Source.SoldToParty
+    target: Target.SoldToParty
+    purpose: Map SoldToParty with owner, transformation rule and validation evidence.
+  - source: Source.ServiceStatus
+    target: Target.ServiceStatus
+    purpose: Map ServiceStatus with owner, transformation rule and validation evidence.
+  - source: Source.BillingRelevance
+    target: Target.BillingRelevance
+    purpose: Map BillingRelevance with owner, transformation rule and validation evidence.
+  mapping_steps: *id018
+- id: sap.bulk.field-atlas.service-order-billing.decision-rule
+  title: Service order billing mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - billing
+  - service-order
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Service order billing mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Service order billing mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.service-order-billing.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.service-order-billing.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.service-order-billing.test-pattern
+  title: Service order billing mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - service
+  - billing
+  - service-order
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Service order billing mapping: synthetic source record, target field expectation, transformation
+    rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Service order billing mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.service-order-billing.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.service-order-billing.field-map
+  test_scenarios:
+  - name: Service order billing mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.project-wbs-budget.field-set
+  title: Project WBS budget mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - budget
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Project WBS budget mapping: Project, WBSElement, BudgetAvailabilityControl, ResponsibleCostCenter,
+    Milestone.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Project WBS budget mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.project-wbs-budget.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.project-wbs-budget.field-map
+  field_definitions:
+  - key: ProjectWBSbudgetmapping.Project
+    description: Project semantic field in Project WBS budget mapping.
+    usage: Use Project to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: ProjectWBSbudgetmapping.WBSElement
+    description: WBSElement semantic field in Project WBS budget mapping.
+    usage: Use WBSElement to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: ProjectWBSbudgetmapping.BudgetAvailabilityControl
+    description: BudgetAvailabilityControl semantic field in Project WBS budget mapping.
+    usage: Use BudgetAvailabilityControl to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: ProjectWBSbudgetmapping.ResponsibleCostCenter
+    description: ResponsibleCostCenter semantic field in Project WBS budget mapping.
+    usage: Use ResponsibleCostCenter to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: ProjectWBSbudgetmapping.Milestone
+    description: Milestone semantic field in Project WBS budget mapping.
+    usage: Use Milestone to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.project-wbs-budget.field-map
+  title: Project WBS budget mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - budget
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Project WBS budget mapping; separates direct copy, derivation, validation owner
+    and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Project WBS budget mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.project-wbs-budget.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.project-wbs-budget.field-set
+  field_map: &id019
+  - source: Source.Project
+    target: Target.Project
+    purpose: Map Project with owner, transformation rule and validation evidence.
+  - source: Source.WBSElement
+    target: Target.WBSElement
+    purpose: Map WBSElement with owner, transformation rule and validation evidence.
+  - source: Source.BudgetAvailabilityControl
+    target: Target.BudgetAvailabilityControl
+    purpose: Map BudgetAvailabilityControl with owner, transformation rule and validation evidence.
+  - source: Source.ResponsibleCostCenter
+    target: Target.ResponsibleCostCenter
+    purpose: Map ResponsibleCostCenter with owner, transformation rule and validation evidence.
+  - source: Source.Milestone
+    target: Target.Milestone
+    purpose: Map Milestone with owner, transformation rule and validation evidence.
+  mapping_steps: *id019
+- id: sap.bulk.field-atlas.project-wbs-budget.decision-rule
+  title: Project WBS budget mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - budget
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Project WBS budget mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Project WBS budget mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.project-wbs-budget.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.project-wbs-budget.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.project-wbs-budget.test-pattern
+  title: Project WBS budget mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - project
+  - wbs
+  - budget
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Project WBS budget mapping: synthetic source record, target field expectation, transformation
+    rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Project WBS budget mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.project-wbs-budget.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.project-wbs-budget.field-map
+  test_scenarios:
+  - name: Project WBS budget mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.tax-code-jurisdiction.field-set
+  title: Tax code jurisdiction mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - jurisdiction
+  - vat
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Tax code jurisdiction mapping: CompanyCode, Country, TaxCode, TaxJurisdiction, TaxAmount.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Tax code jurisdiction mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.tax-code-jurisdiction.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.tax-code-jurisdiction.field-map
+  field_definitions:
+  - key: Taxcodejurisdictionmapping.CompanyCode
+    description: CompanyCode semantic field in Tax code jurisdiction mapping.
+    usage: Use CompanyCode to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Taxcodejurisdictionmapping.Country
+    description: Country semantic field in Tax code jurisdiction mapping.
+    usage: Use Country to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Taxcodejurisdictionmapping.TaxCode
+    description: TaxCode semantic field in Tax code jurisdiction mapping.
+    usage: Use TaxCode to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Taxcodejurisdictionmapping.TaxJurisdiction
+    description: TaxJurisdiction semantic field in Tax code jurisdiction mapping.
+    usage: Use TaxJurisdiction to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Taxcodejurisdictionmapping.TaxAmount
+    description: TaxAmount semantic field in Tax code jurisdiction mapping.
+    usage: Use TaxAmount to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.tax-code-jurisdiction.field-map
+  title: Tax code jurisdiction mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - jurisdiction
+  - vat
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Tax code jurisdiction mapping; separates direct copy, derivation, validation owner
+    and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Tax code jurisdiction mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.tax-code-jurisdiction.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.tax-code-jurisdiction.field-set
+  field_map: &id020
+  - source: Source.CompanyCode
+    target: Target.CompanyCode
+    purpose: Map CompanyCode with owner, transformation rule and validation evidence.
+  - source: Source.Country
+    target: Target.Country
+    purpose: Map Country with owner, transformation rule and validation evidence.
+  - source: Source.TaxCode
+    target: Target.TaxCode
+    purpose: Map TaxCode with owner, transformation rule and validation evidence.
+  - source: Source.TaxJurisdiction
+    target: Target.TaxJurisdiction
+    purpose: Map TaxJurisdiction with owner, transformation rule and validation evidence.
+  - source: Source.TaxAmount
+    target: Target.TaxAmount
+    purpose: Map TaxAmount with owner, transformation rule and validation evidence.
+  mapping_steps: *id020
+- id: sap.bulk.field-atlas.tax-code-jurisdiction.decision-rule
+  title: Tax code jurisdiction mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - jurisdiction
+  - vat
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Tax code jurisdiction mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Tax code jurisdiction mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.tax-code-jurisdiction.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.tax-code-jurisdiction.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.tax-code-jurisdiction.test-pattern
+  title: Tax code jurisdiction mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - tax
+  - jurisdiction
+  - vat
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Tax code jurisdiction mapping: synthetic source record, target field expectation, transformation
+    rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Tax code jurisdiction mapping should keep source field, SAP target field, owner, transformation rule
+      and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.tax-code-jurisdiction.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.tax-code-jurisdiction.field-map
+  test_scenarios:
+  - name: Tax code jurisdiction mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.analytics-measure-filter.field-set
+  title: Analytics measure filter mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytics
+  - measure
+  - filter
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Analytics measure filter mapping: AnalyticalQuery, Measure, Dimension, Filter, RefreshTimestamp.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Analytics measure filter mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.analytics-measure-filter.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.analytics-measure-filter.field-map
+  field_definitions:
+  - key: Analyticsmeasurefiltermapping.AnalyticalQuery
+    description: AnalyticalQuery semantic field in Analytics measure filter mapping.
+    usage: Use AnalyticalQuery to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Analyticsmeasurefiltermapping.Measure
+    description: Measure semantic field in Analytics measure filter mapping.
+    usage: Use Measure to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Analyticsmeasurefiltermapping.Dimension
+    description: Dimension semantic field in Analytics measure filter mapping.
+    usage: Use Dimension to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Analyticsmeasurefiltermapping.Filter
+    description: Filter semantic field in Analytics measure filter mapping.
+    usage: Use Filter to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Analyticsmeasurefiltermapping.RefreshTimestamp
+    description: RefreshTimestamp semantic field in Analytics measure filter mapping.
+    usage: Use RefreshTimestamp to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.analytics-measure-filter.field-map
+  title: Analytics measure filter mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytics
+  - measure
+  - filter
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Analytics measure filter mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Analytics measure filter mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.analytics-measure-filter.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.analytics-measure-filter.field-set
+  field_map: &id021
+  - source: Source.AnalyticalQuery
+    target: Target.AnalyticalQuery
+    purpose: Map AnalyticalQuery with owner, transformation rule and validation evidence.
+  - source: Source.Measure
+    target: Target.Measure
+    purpose: Map Measure with owner, transformation rule and validation evidence.
+  - source: Source.Dimension
+    target: Target.Dimension
+    purpose: Map Dimension with owner, transformation rule and validation evidence.
+  - source: Source.Filter
+    target: Target.Filter
+    purpose: Map Filter with owner, transformation rule and validation evidence.
+  - source: Source.RefreshTimestamp
+    target: Target.RefreshTimestamp
+    purpose: Map RefreshTimestamp with owner, transformation rule and validation evidence.
+  mapping_steps: *id021
+- id: sap.bulk.field-atlas.analytics-measure-filter.decision-rule
+  title: Analytics measure filter mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytics
+  - measure
+  - filter
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Analytics measure filter mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Analytics measure filter mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.analytics-measure-filter.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.analytics-measure-filter.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.analytics-measure-filter.test-pattern
+  title: Analytics measure filter mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - analytics
+  - measure
+  - filter
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Analytics measure filter mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Analytics measure filter mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.analytics-measure-filter.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.analytics-measure-filter.field-map
+  test_scenarios:
+  - name: Analytics measure filter mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
+- id: sap.bulk.field-atlas.extension-field-exposure.field-set
+  title: Extension field exposure mapping field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - extensibility
+  - custom-field
+  - exposure
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.test_data
+  summary: 'Field set for Extension field exposure mapping: BusinessContext, CustomField, FieldType, UIExposure,
+    APIExposure.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Extension field exposure mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.extension-field-exposure.test-pattern
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.extension-field-exposure.field-map
+  field_definitions:
+  - key: Extensionfieldexposuremapping.BusinessContext
+    description: BusinessContext semantic field in Extension field exposure mapping.
+    usage: Use BusinessContext to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Extensionfieldexposuremapping.CustomField
+    description: CustomField semantic field in Extension field exposure mapping.
+    usage: Use CustomField to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Extensionfieldexposuremapping.FieldType
+    description: FieldType semantic field in Extension field exposure mapping.
+    usage: Use FieldType to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Extensionfieldexposuremapping.UIExposure
+    description: UIExposure semantic field in Extension field exposure mapping.
+    usage: Use UIExposure to trace source-to-target mapping, validation ownership and test-data expectations.
+  - key: Extensionfieldexposuremapping.APIExposure
+    description: APIExposure semantic field in Extension field exposure mapping.
+    usage: Use APIExposure to trace source-to-target mapping, validation ownership and test-data expectations.
+- id: sap.bulk.field-atlas.extension-field-exposure.field-map
+  title: Extension field exposure mapping transformation map
+  kind: field_map
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - extensibility
+  - custom-field
+  - exposure
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.field_mapping
+  - migration.analysis
+  - fo.business_rules
+  summary: Transformation map for Extension field exposure mapping; separates direct copy, derivation, validation
+    owner and reconciliation evidence.
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Extension field exposure mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.extension-field-exposure.field-set
+  relations:
+    fields:
+    - sap.bulk.field-atlas.extension-field-exposure.field-set
+  field_map: &id022
+  - source: Source.BusinessContext
+    target: Target.BusinessContext
+    purpose: Map BusinessContext with owner, transformation rule and validation evidence.
+  - source: Source.CustomField
+    target: Target.CustomField
+    purpose: Map CustomField with owner, transformation rule and validation evidence.
+  - source: Source.FieldType
+    target: Target.FieldType
+    purpose: Map FieldType with owner, transformation rule and validation evidence.
+  - source: Source.UIExposure
+    target: Target.UIExposure
+    purpose: Map UIExposure with owner, transformation rule and validation evidence.
+  - source: Source.APIExposure
+    target: Target.APIExposure
+    purpose: Map APIExposure with owner, transformation rule and validation evidence.
+  mapping_steps: *id022
+- id: sap.bulk.field-atlas.extension-field-exposure.decision-rule
+  title: Extension field exposure mapping mapping decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - extensibility
+  - custom-field
+  - exposure
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.business_rules
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Decision rule for Extension field exposure mapping: block final FO claims when source ownership, transformation
+    logic, validation evidence or privacy boundary is unclear.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Extension field exposure mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.extension-field-exposure.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.extension-field-exposure.field-map
+  rules:
+  - if: source field owner or validation evidence is missing
+    then: mark mapping needs_curation
+    outcome: request owner and sample/test-data evidence
+  - if: mapping relies on client-specific transformation
+    then: keep public repo generic
+    outcome: store only pattern, not customer value
+- id: sap.bulk.field-atlas.extension-field-exposure.test-pattern
+  title: Extension field exposure mapping mapping test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - extensibility
+  - custom-field
+  - exposure
+  - field-atlas
+  - mapping-atlas
+  used_for:
+  - fo.test_scenarios
+  - fo.quality_gate
+  - fo.field_mapping
+  summary: 'Test pattern for Extension field exposure mapping: synthetic source record, target field expectation,
+    transformation rule and reconciliation evidence.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: Extension field exposure mapping should keep source field, SAP target field, owner, transformation
+      rule and validation scenario explicit before an agent uses the mapping in an FO or migration design.
+    evidence:
+    - sap.bulk.field-atlas.extension-field-exposure.field-set
+  relations:
+    field_maps:
+    - sap.bulk.field-atlas.extension-field-exposure.field-map
+  test_scenarios:
+  - name: Extension field exposure mapping mapping validation
+    given: Synthetic source and target records with no customer values.
+    when: The mapping is used in an FO or migration design.
+    then: The design names owner, transformation rule, expected target field and validation evidence.
