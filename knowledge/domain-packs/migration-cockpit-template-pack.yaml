@@ -1,0 +1,518 @@
+pack_id: sap-migration-cockpit-template-pack
+title: SAP migration cockpit template-label context pack
+description: >
+  Source-backed SAP Agent Context pack for migration cockpit and template-label
+  FO context. It preserves Field Atlas provenance, keeps ambiguous labels in
+  needs_verification/needs_curation mode, and separates source extraction,
+  target field mapping, validation, simulation/load and reconciliation.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep template labels release-aware. Do not infer tenant-specific Migration
+    Cockpit fields from generic labels; record the verification work needed.
+freshness_current: &freshness_current
+  valid_from: 2026-06-23
+  review_after: 2026-12-23
+  expires_at: 2027-06-23
+  retrieved_at: 2026-06-23
+field_atlas_templates: &field_atlas_templates
+  kind: public_url
+  title: SAP Field Atlas migration templates seed
+  url: https://github.com/viggomeesters/sap-field-atlas/blob/main/data/migration_templates.yaml
+  retrieved_at: 2026-06-23
+  specificity: exact_page
+  license_note: Public MIT metadata from archived Field Atlas; no copied SAP documentation.
+field_atlas_relationships: &field_atlas_relationships
+  kind: public_url
+  title: SAP Field Atlas migration relationships seed
+  url: https://github.com/viggomeesters/sap-field-atlas/blob/main/data/relationships.yaml
+  retrieved_at: 2026-06-23
+  specificity: exact_page
+  license_note: Public MIT metadata from archived Field Atlas; no copied SAP documentation.
+sap_help_migration: &sap_help_migration
+  kind: public_url
+  title: SAP Help Portal - S/4HANA Cloud migration documentation pointer
+  url: https://help.sap.com/docs/SAP_S4HANA_CLOUD
+  retrieved_at: 2026-06-23
+  specificity: root_pointer
+  license_note: Link-first public SAP Help pointer; verify exact release page and do not mirror SAP text.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal migration cockpit FO pattern
+  url: ""
+  retrieved_at: 2026-06-23
+  specificity: internal_pattern
+  license_note: Internal-derived implementation pattern; no customer data or copied SAP documentation.
+items:
+  - id: sap.ref.field-atlas-migration-templates
+    title: Field Atlas migration templates source pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: cross_sap
+    topics: [migration, cockpit, template, source, target, upload, field-mapping]
+    used_for: [fo.source_traceability, migration.analysis, fo.field_mapping]
+    summary: >
+      Public archived Field Atlas pointer for generic migration-template seed
+      labels, including the Product Number seed. Treat entries as provenance and
+      verify release-specific Migration Cockpit behavior before use.
+    freshness: *freshness_current
+    source: *field_atlas_templates
+    claims:
+      - statement: Field Atlas migration-template labels can seed mapping discussion, but ambiguous labels remain needs_verification until release and tenant behavior are checked.
+        evidence: [https://github.com/viggomeesters/sap-field-atlas/blob/main/data/migration_templates.yaml]
+    relations:
+      field_maps: [sap.field-map.product-number-template-verification, sap.field-map.migration-source-target-template]
+
+  - id: sap.ref.field-atlas-migration-relationships
+    title: Field Atlas migration relationship source pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: cross_sap
+    topics: [migration, cockpit, relationship, template, field, source, target]
+    used_for: [fo.source_traceability, migration.analysis, fo.field_mapping]
+    summary: >
+      Public archived Field Atlas pointer for reviewed relationships such as
+      template-label to target-field mappings and customizing value-source notes.
+    freshness: *freshness_current
+    source: *field_atlas_relationships
+    claims:
+      - statement: Relationship seeds should be imported as cross-item relations and verification caveats, not as proof of tenant-specific mappings.
+        evidence: [https://github.com/viggomeesters/sap-field-atlas/blob/main/data/relationships.yaml]
+    relations:
+      field_maps: [sap.field-map.product-number-template-verification, sap.field-map.migration-value-source-transform]
+
+  - id: sap.ref.sap-help-migration-cockpit-public
+    title: SAP Help migration cockpit release pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, migrate, data, release, verification]
+    used_for: [fo.source_traceability, fo.sap_configuration, migration.analysis]
+    summary: >
+      Public SAP Help Portal root pointer used only as a release-verification
+      reminder for Migration Cockpit behavior. It is not enough on its own for
+      exact template-field claims.
+    freshness: *freshness_current
+    source: *sap_help_migration
+    claims:
+      - statement: Migration cockpit behavior and template availability should be checked against the relevant public release documentation or tenant evidence.
+        evidence: [https://help.sap.com/docs/SAP_S4HANA_CLOUD]
+    relations:
+      apps: [sap.app.migration-cockpit-template-review, sap.app.migration-cockpit-simulation-review]
+
+  - id: sap.app.migration-cockpit-template-review
+    title: Migration cockpit template review surface
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, template, upload, validation]
+    used_for: [fo.sap_configuration, fo.field_mapping, migration.analysis]
+    summary: >
+      Derived review surface for the Migrate Your Data flow: identify migration
+      object, template version, source owner, mandatory columns and validation
+      cycle before designing mappings.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration FOs should name the template owner/version and whether mappings were verified against downloaded template columns.
+        evidence: [sap.ref.field-atlas-migration-templates]
+    relations:
+      objects: [sap.object.migration-template, sap.object.migration-project-run]
+
+  - id: sap.app.migration-cockpit-simulation-review
+    title: Migration cockpit simulation and load review surface
+    kind: sap_app
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, simulation, load, reconciliation]
+    used_for: [fo.sap_configuration, fo.test_scenarios, migration.analysis]
+    summary: >
+      Derived review surface for simulation, load, error correction and
+      reconciliation phases in a migration FO.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration FOs should separate validation/simulation errors from post-load reconciliation findings.
+        evidence: [sap.test-pattern.migration-template-validation, sap.test-pattern.migration-reconciliation-and-delta]
+    relations:
+      objects: [sap.object.migration-project-run]
+
+  - id: sap.object.migration-template
+    title: Migration template object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, template, upload, field-mapping]
+    used_for: [fo.field_mapping, migration.analysis, fo.test_data]
+    summary: >
+      Object anchor for a downloaded migration template: template label, source
+      column, target key, transformation rule, mandatory flag and verification
+      note.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Template labels are not sufficient proof of target-field semantics; they require target-key and verification notes.
+        evidence: [sap.field-map.migration-source-target-template]
+    relations:
+      fields: [sap.field-set.migration-template-core]
+      field_maps: [sap.field-map.migration-source-target-template]
+
+  - id: sap.object.migration-project-run
+    title: Migration project run object anchor
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, project, simulation, load, reconciliation]
+    used_for: [fo.process_flow, fo.test_scenarios, migration.analysis]
+    summary: >
+      Object anchor for migration project run phases: prepare/extract, map,
+      validate, simulate, load, correct errors and reconcile.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration acceptance should include pre-load validation and post-load reconciliation, not only uploaded-file success.
+        evidence: [sap.test-pattern.migration-reconciliation-and-delta]
+    relations:
+      fields: [sap.field-set.migration-validation-results, sap.field-set.migration-reconciliation]
+
+  - id: sap.object.migration-value-mapping
+    title: Migration value-source mapping object anchor
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, value-source, customizing, field-mapping]
+    used_for: [fo.field_mapping, fo.business_rules, migration.analysis]
+    summary: >
+      Object anchor for value-source and customizing-controlled migration fields,
+      such as company code. Values should be checked against the target tenant
+      before migration use.
+    freshness: *freshness_current
+    source: *field_atlas_relationships
+    claims:
+      - statement: Customizing-controlled values in migration templates should be checked against target-system customizing before they are used as accepted values.
+        evidence: [sap.field-set.company-code-master-data-use, sap.ref.field-atlas-migration-relationships]
+    relations:
+      fields: [sap.field-set.migration-template-core, sap.field-set.company-code-master-data-use]
+      field_maps: [sap.field-map.migration-value-source-transform]
+
+  - id: sap.field-set.migration-template-core
+    title: Migration template core fields
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, template, source, target, upload, field-mapping]
+    used_for: [fo.field_mapping, migration.analysis, fo.test_data]
+    summary: >
+      Core field-set for migration template design: source field/label, target
+      key, mandatory flag, transformation method, confidence and verification
+      note.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Template mappings should retain both business label and target key so agents do not confuse labels with SAP semantics.
+        evidence: [sap.ref.field-atlas-migration-templates]
+    relations:
+      objects: [sap.object.migration-template]
+      field_maps: [sap.field-map.migration-source-target-template]
+    field_definitions:
+      - key: MigrationTemplate.SourceField
+        description: Legacy/source-system field name or extract column.
+        usage: Include source owner and transformation assumption in mapping FOs.
+      - key: MigrationTemplate.TemplateLabel
+        description: Downloaded template label visible to migration users.
+        usage: Preserve label variance and map it to a target key rather than treating it as the target field.
+      - key: MigrationTemplate.TargetKey
+        description: Canonical SAP target key or item id used by SAP Agent Context.
+        usage: Use for relations to sap_field or field_map items.
+      - key: MigrationTemplate.MandatoryFlag
+        description: Required/optional flag for template validation.
+        usage: Use in negative tests and missing-field checks.
+      - key: MigrationTemplate.TransformMethod
+        description: Method used to convert or enrich the source value before target load.
+        usage: Mark direct, derived, lookup or manual enrichment so reviewers can test the transform.
+      - key: MigrationTemplate.SourceValue
+        description: Source-side value before value mapping or customizing lookup.
+        usage: Include when the mapping depends on controlled values or code lists.
+      - key: MigrationTemplate.TargetValue
+        description: Target-side value expected after mapping or customizing lookup.
+        usage: Verify against target tenant customizing before accepting the mapping.
+      - key: MigrationTemplate.CorrectionOwner
+        description: Owner responsible for correcting source, mapping or target customizing issue.
+        usage: Include in exception handling and migration issue triage.
+      - key: MigrationTemplate.VerificationNote
+        description: Release/tenant verification caveat for ambiguous labels.
+        usage: Set when confidence is needs_verification or needs_curation.
+
+  - id: sap.field-set.migration-validation-results
+    title: Migration validation and load result fields
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, validation, simulation, load, error]
+    used_for: [fo.test_data, fo.test_scenarios, migration.analysis]
+    summary: >
+      Field-set for validation/simulation/load result context: row id, message,
+      severity, correction owner, retry status and final load status.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration FO tests should distinguish template validation errors, simulation findings and final load status.
+        evidence: [sap.object.migration-project-run]
+    relations:
+      objects: [sap.object.migration-project-run]
+    field_definitions:
+      - key: MigrationRun.RowIdentifier
+        description: Stable row/key used to trace validation and load errors back to source data.
+        usage: Include in reconciliation and error-correction test data.
+      - key: MigrationRun.MessageSeverity
+        description: Severity of validation/simulation/load message.
+        usage: Separate blocking errors from warnings that need consultant review.
+      - key: MigrationRun.CorrectionOwner
+        description: Owner responsible for correcting source, mapping or target customizing issue.
+        usage: Include in FO responsibilities and exception handling.
+      - key: MigrationRun.LoadStatus
+        description: Final or intermediate status for the migrated row/object.
+        usage: Use in acceptance criteria and reconciliation evidence.
+
+  - id: sap.field-set.migration-reconciliation
+    title: Migration reconciliation fields
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, reconciliation, source, target, count]
+    used_for: [fo.test_data, fo.quality_gate, migration.analysis]
+    summary: >
+      Field-set for migration reconciliation: source count, accepted count,
+      rejected count, target count and material discrepancy explanation.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Reconciliation should compare agreed source/target counts and key fields, not only a successful upload status.
+        evidence: [sap.test-pattern.migration-reconciliation-and-delta]
+    relations:
+      objects: [sap.object.migration-project-run]
+    field_definitions:
+      - key: MigrationReconciliation.SourceCount
+        description: Count of source rows or objects in migration scope.
+        usage: Baseline for acceptance and discrepancy analysis.
+      - key: MigrationReconciliation.AcceptedCount
+        description: Count accepted by validation/load process.
+        usage: Compare against source and target object count.
+      - key: MigrationReconciliation.RejectedCount
+        description: Count rejected with known correction reason.
+        usage: Use to block go-live or create remediation tasks.
+      - key: MigrationReconciliation.TargetCount
+        description: Count observed in target after load.
+        usage: Reconcile with source and accepted counts.
+
+  - id: sap.field-map.migration-source-target-template
+    title: Migration source-to-target template field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, template, source, target, field-mapping]
+    used_for: [fo.field_mapping, migration.analysis, fo.test_data]
+    summary: >
+      Field-map pattern for migration templates: preserve source field, template
+      label, target key, transform method, confidence and verification note.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Source-to-target mapping should explicitly track when a mapping is verified, inferred, or needs curation.
+        evidence: [sap.field-set.migration-template-core]
+    relations:
+      objects: [sap.object.migration-template]
+      fields: [sap.field-set.migration-template-core]
+    mapping_steps:
+      - source: source_field
+        target: MigrationTemplate.SourceField
+        verification: Confirm source owner and extract semantics.
+      - source: template_label
+        target: MigrationTemplate.TemplateLabel
+        verification: Compare downloaded template label against target release.
+      - source: target_field
+        target: MigrationTemplate.TargetKey
+        verification: Link to sap_field or field_map item when known.
+      - source: transform_method
+        target: MigrationTemplate.TransformMethod
+        verification: Mark direct, derived, lookup or manual enrichment.
+      - source: mapping_confidence
+        target: MigrationTemplate.VerificationNote
+        verification: Use needs_verification/needs_curation for ambiguous labels.
+
+  - id: sap.field-map.migration-value-source-transform
+    title: Migration value-source and customizing transform field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, value-source, customizing, source, target]
+    used_for: [fo.field_mapping, fo.business_rules, migration.analysis]
+    summary: >
+      Field-map pattern for values that come from customizing or controlled value
+      sources. It links template values to target-system checks instead of
+      accepting values from the extract blindly.
+    freshness: *freshness_current
+    source: *field_atlas_relationships
+    claims:
+      - statement: Migration fields with customizing-controlled values should include source value, target value, lookup owner and fallback behavior.
+        evidence: [sap.object.migration-value-mapping]
+    relations:
+      objects: [sap.object.migration-value-mapping]
+      fields: [sap.field-set.migration-template-core]
+    mapping_steps:
+      - source: source_value
+        target: MigrationTemplate.SourceValue
+        verification: Verify source-system meaning and owner.
+      - source: target_value
+        target: MigrationTemplate.TargetValue
+        verification: Verify target-system customizing exists.
+      - source: lookup_owner
+        target: MigrationTemplate.CorrectionOwner
+        verification: Assign correction owner for missing value mappings.
+      - source: fallback_rule
+        target: MigrationTemplate.VerificationNote
+        verification: Document whether fallback is allowed or must block.
+
+  - id: sap.field-map.product-number-template-verification
+    title: Product Number template-label verification field map
+    kind: field_map
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, template, product, material-master, field-mapping]
+    used_for: [fo.field_mapping, migration.analysis, fo.test_data]
+    summary: >
+      Product Number template-label field map that keeps Field Atlas MARA/MATNR
+      provenance but requires release-specific Migration Cockpit verification.
+    freshness: *freshness_current
+    source: *field_atlas_templates
+    claims:
+      - statement: Product Number can seed product/material identifier mapping, but it must remain needs_verification until the downloaded template and target API/structure are checked.
+        evidence: [sap.field-map.product-number-migration-seed, sap.ref.field-atlas-migration-templates]
+    relations:
+      objects: [sap.object.product-master, sap.object.material-master, sap.object.migration-template]
+      fields: [sap.field-set.product-master-core, sap.field-set.core-master-data-identifiers, sap.field-set.migration-template-core]
+    field_map:
+      - source_label: Product Number
+        target_key: Product.Product
+        fallback_target_key: MARA.MATNR
+        transform_method: direct_identifier_mapping
+        confidence: needs_verification
+        verification_note: >
+          Verify the relevant Migration Cockpit template, release and target
+          API/structure before treating Product Number as a ready mapping.
+
+  - id: sap.rule.ambiguous-migration-template-labels
+    title: Ambiguous migration template labels require verification
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, template, ambiguous-label, needs-verification]
+    used_for: [fo.business_rules, migration.analysis, fo.quality_gate]
+    summary: >
+      Decision rule for ambiguous template labels: if a template label cannot be
+      tied to a source field, target key and release-specific evidence, the
+      bundle must stay needs_curation/needs_verification.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Ambiguous labels should block ready status unless the FO records target key, verification evidence and curation owner.
+        evidence: [sap.field-map.migration-source-target-template]
+    relations:
+      field_maps: [sap.field-map.migration-source-target-template, sap.field-map.product-number-template-verification]
+    rules:
+      - condition: template label has no target key or target evidence
+        outcome: mark mapping needs_curation
+      - condition: template label maps to a known seed but release behavior is not checked
+        outcome: mark mapping needs_verification and include verification note
+
+  - id: sap.test-pattern.migration-template-validation
+    title: Migration template validation test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, template, validation, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, migration.analysis]
+    summary: >
+      Test pattern for validating migration template columns, mandatory fields,
+      transforms and ambiguous labels before simulation/load.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration tests should prove that ambiguous labels and missing mandatory fields are caught before load.
+        evidence: [sap.rule.ambiguous-migration-template-labels]
+    relations:
+      objects: [sap.object.migration-template]
+      field_maps: [sap.field-map.migration-source-target-template]
+    test_scenarios:
+      - level: unit
+        case: Template column has source field, target key and transform method.
+        expected: Mapping is accepted for simulation.
+      - level: negative
+        case: Product Number label exists but target key/release evidence is missing.
+        expected: Mapping stays needs_verification with a consultant action.
+      - level: negative
+        case: Mandatory target field is missing from the input file.
+        expected: Validation blocks load with an actionable row/key error.
+
+  - id: sap.test-pattern.migration-reconciliation-and-delta
+    title: Migration reconciliation and delta test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, reconciliation, delta, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, migration.analysis]
+    summary: >
+      Test pattern for source/target count reconciliation, rejected-row handling,
+      correction ownership and delta/re-run behavior.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Migration acceptance should include reconciliation and repeat-run behavior, not only an uploaded file status.
+        evidence: [sap.field-set.migration-reconciliation]
+    relations:
+      objects: [sap.object.migration-project-run]
+      fields: [sap.field-set.migration-reconciliation, sap.field-set.migration-validation-results]
+    test_scenarios:
+      - level: acceptance
+        case: Source count, accepted count, rejected count and target count reconcile after load.
+        expected: Counts match the agreed tolerance or a discrepancy owner is assigned.
+      - level: negative
+        case: A corrected row is re-run after initial rejection.
+        expected: Re-run behavior is documented and duplicate prevention is verified.
+      - level: regression
+        case: Mapping changes between simulation and load.
+        expected: FO identifies retest and reconciliation impact before go-live.

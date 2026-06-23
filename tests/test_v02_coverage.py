@@ -26,7 +26,7 @@ def test_v02_coverage_matrix_truthfully_reports_current_fill_gaps() -> None:
     assert report["status"] == "failed"
     assert report["items"] >= 64
     assert "domain:master_data_material_bp" not in areas
-    assert "domain:migration_cockpit" in areas
+    assert "domain:migration_cockpit" not in areas
     assert "source_traceability" in areas
     assert "sap_field" in messages
 
