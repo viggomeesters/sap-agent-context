@@ -160,6 +160,8 @@ def test_generic_root_source_fails_when_high_specificity_is_required() -> None:
     )
     payload = deepcopy(item.data)
     payload["requires_source_specificity"] = "high"
+    payload["source"]["url"] = "https://help.sap.com/docs/SAP_S4HANA_CLOUD?locale=en-US"
+    payload["source"]["specificity"] = "exact_page"
     mutated = KnowledgeItem(path=item.path, data=payload)
 
     issues = validate_items([mutated], current_date=date(2026, 6, 22))

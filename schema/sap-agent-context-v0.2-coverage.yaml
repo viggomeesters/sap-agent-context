@@ -1,0 +1,168 @@
+schema_version: 1
+scope:
+  id: sap_agent_context_v0_2_full_fill_coverage
+  title: SAP Agent Context v0.2 full-fill readiness coverage
+  definition: >
+    Full-fill v0.2 readiness means the repository contains enough source-backed,
+    freshness-labelled SAP context for representative AI-agent consumer bundles
+    across FO workflow, field mapping, migration cockpit, authorization,
+    integration, extensibility, analytics, and core business domains. This is a
+    stricter campaign gate than the starter coverage matrix and is expected to
+    fail until the fill campaign completes.
+minimums:
+  items_total: 120
+  required_access_classes: [public, gated, internal_derived]
+  required_kinds:
+    - access_policy
+    - decision_rule
+    - external_reference
+    - field_map
+    - fo_pattern
+    - sap_app
+    - sap_field
+    - sap_object
+    - sap_role
+    - scope_item
+    - test_pattern
+  required_kind_counts:
+    external_reference: 20
+    sap_app: 18
+    sap_object: 22
+    sap_field: 18
+    field_map: 22
+    test_pattern: 18
+    sap_role: 8
+    access_policy: 4
+    decision_rule: 8
+  required_source_specificity_counts:
+    exact_page: 40
+    catalog_entry: 8
+    internal_pattern: 20
+  release_applicability_items: 40
+quality_contract:
+  description: >
+    The v0.2 gate is intentionally stricter than starter coverage. It should
+    expose shallow YAML filler, generic root SAP links, missing field/table
+    relations, and representative queries that are ready only because they
+    retrieve domain-adjacent items.
+  dimensions:
+    source_traceability: Public or gated citation with a concrete URL is present.
+    exact_source_traceability: Enough claims are backed by exact pages/catalog entries, not only root pointers.
+    release_applicability: Items describe release/applicability boundaries.
+    configuration_app: A SAP app or configuration surface is selected.
+    business_object: A SAP business object or comparable object anchor is selected.
+    sap_field: A concrete SAP field definition is selected where a field pack is claimed.
+    field_mapping: A field_map item is selected.
+    process_flow: At least one selected item is explicitly useful for fo.process_flow.
+    decision_rule: A decision_rule item is selected.
+    test_coverage: A test_pattern item is selected.
+    authorization_role: A sap_role item is selected.
+    access_policy: An access_policy item is selected.
+domains:
+  - id: master_data_material_bp
+    title: Master Data, Material/Product, and Business Partner
+    topic_tokens: [master, data, material, product, business, partner, customer, supplier, vendor]
+    min_items: 20
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, test_pattern]
+    required_kind_counts:
+      sap_field: 6
+      field_map: 6
+      sap_object: 5
+      external_reference: 3
+    required_source_specificity_counts:
+      exact_page: 5
+  - id: migration_cockpit
+    title: Migration Cockpit and Template Labels
+    topic_tokens: [migration, cockpit, template, upload, field, source, target]
+    min_items: 16
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, test_pattern]
+    required_kind_counts:
+      sap_field: 6
+      field_map: 6
+      sap_object: 3
+      external_reference: 3
+    required_source_specificity_counts:
+      exact_page: 4
+  - id: finance_ap
+    title: Finance and Accounts Payable
+    topic_tokens: [finance, accounts, payable, ap, invoice, supplier]
+    min_items: 12
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, decision_rule, test_pattern]
+    required_kind_counts:
+      field_map: 3
+      decision_rule: 2
+      test_pattern: 2
+  - id: procurement
+    title: Procurement PR/PO
+    topic_tokens: [procurement, purchase, requisition, po, pr]
+    min_items: 12
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, test_pattern]
+    required_kind_counts:
+      sap_field: 3
+      field_map: 3
+      test_pattern: 2
+  - id: sales_output
+    title: Sales Order and Output Management
+    topic_tokens: [sales, order, output, form, channel]
+    min_items: 12
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, test_pattern]
+    required_kind_counts:
+      sap_field: 3
+      field_map: 3
+      test_pattern: 2
+  - id: authorizations
+    title: Authorizations, Roles, Catalogs
+    topic_tokens: [authorization, authorizations, role, catalog, access]
+    min_items: 12
+    required_kinds: [access_policy, sap_app, sap_object, sap_role, test_pattern]
+    required_kind_counts:
+      access_policy: 3
+      sap_role: 5
+      test_pattern: 2
+  - id: integrations_api
+    title: Integrations, APIs, Communication Arrangements
+    topic_tokens: [integration, integrations, api, communication, arrangement, oauth]
+    min_items: 12
+    required_kinds: [external_reference, sap_app, sap_object, field_map, test_pattern]
+    required_kind_counts:
+      external_reference: 3
+      field_map: 3
+      test_pattern: 2
+  - id: extensibility_analytics
+    title: Extensibility, Custom Fields, Analytics, Reporting
+    topic_tokens: [extensibility, extension, custom, field, analytics, reporting, report, kpi]
+    min_items: 16
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, test_pattern]
+    required_kind_counts:
+      sap_field: 4
+      field_map: 4
+      test_pattern: 3
+representative_queries:
+  - id: v02_material_product_migration
+    intent: fo.field_mapping
+    topic: material product master data migration cockpit template fields
+    sap_product: s4hana_cloud_public
+    limit: 16
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, test_coverage]
+  - id: v02_business_partner_master_data
+    intent: fo.field_mapping
+    topic: business partner customer supplier vendor master data field mapping
+    sap_product: s4hana_cloud_public
+    limit: 16
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, test_coverage]
+  - id: v02_finance_ap_supplier_invoice
+    intent: fo.workflow
+    topic: supplier invoice accounts payable approval workflow finance fields
+    sap_product: s4hana_cloud_public
+    limit: 16
+    required_kinds: [external_reference, sap_app, sap_object, sap_field, field_map, decision_rule, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, field_mapping, process_flow, decision_rule, test_coverage]
+  - id: v02_authorization_integration
+    intent: fo.authorization
+    topic: communication arrangement api integration role authorization catalog
+    sap_product: s4hana_cloud_public
+    limit: 16
+    required_kinds: [external_reference, sap_app, sap_object, sap_role, access_policy, test_pattern]
+    required_dimensions: [source_traceability, configuration_app, business_object, authorization_role, access_policy, test_coverage]

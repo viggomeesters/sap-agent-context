@@ -346,13 +346,10 @@ def _is_url_evidence(value: str) -> bool:
 
 
 def _source_specificity(source: dict[str, Any]) -> str:
-    explicit = source.get("specificity")
-    if explicit in ALLOWED_SOURCE_SPECIFICITY:
-        return str(explicit)
     kind = str(source.get("kind") or "")
     if kind in {"internal_pattern", "derived_summary"}:
         return "internal_pattern"
-    url = str(source.get("url") or "").rstrip("/")
+    url = _canonical_source_url(source.get("url"))
     root_urls = {
         "https://help.sap.com/docs/SAP_S4HANA_CLOUD",
         "https://api.sap.com",
@@ -360,9 +357,16 @@ def _source_specificity(source: dict[str, Any]) -> str:
     }
     if url in root_urls:
         return "root_pointer"
+    explicit = source.get("specificity")
+    if explicit in ALLOWED_SOURCE_SPECIFICITY:
+        return str(explicit)
     if url:
         return "exact_page"
     return "root_pointer"
+
+
+def _canonical_source_url(value: Any) -> str:
+    return str(value or "").split("#", 1)[0].split("?", 1)[0].rstrip("/")
 
 
 def _parse_date(value: Any) -> date | None:

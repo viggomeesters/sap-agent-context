@@ -109,6 +109,52 @@ def _audit_minimums(
             )
         )
 
+    kind_counts = _counts_by(items, lambda item: item.kind)
+    for kind, minimum in _int_mapping(minimums.get("required_kind_counts")).items():
+        actual = kind_counts.get(kind, 0)
+        if actual < minimum:
+            findings.append(
+                CompletenessFinding(
+                    severity="important",
+                    area="coverage",
+                    message=f"Knowledge kind {kind} has fewer than {minimum} items.",
+                    evidence=f"actual={actual}",
+                )
+            )
+
+    specificity_counts = _counts_by(items, _source_specificity)
+    for specificity, minimum in _int_mapping(
+        minimums.get("required_source_specificity_counts")
+    ).items():
+        actual = specificity_counts.get(specificity, 0)
+        if actual < minimum:
+            findings.append(
+                CompletenessFinding(
+                    severity="important",
+                    area="source_traceability",
+                    message=(
+                        f"Source specificity {specificity} has fewer than {minimum} items."
+                    ),
+                    evidence=f"actual={actual}",
+                )
+            )
+
+    min_release_items = int(minimums.get("release_applicability_items") or 0)
+    release_items = [
+        item for item in items if isinstance(item.data.get("release_applicability"), dict)
+    ]
+    if len(release_items) < min_release_items:
+        findings.append(
+            CompletenessFinding(
+                severity="important",
+                area="release_applicability",
+                message=(
+                    f"Fewer than {min_release_items} items declare release applicability."
+                ),
+                evidence=f"actual={len(release_items)}",
+            )
+        )
+
     required_access = set(_strings(minimums.get("required_access_classes")))
     present_access = {item.access for item in items}
     for missing in sorted(required_access - present_access):
@@ -157,6 +203,35 @@ def _audit_domains(
                     evidence=f"present={sorted(present_kinds)}",
                 )
             )
+        domain_kind_counts = _counts_by(domain_items, lambda item: item.kind)
+        for kind, minimum in _int_mapping(domain.get("required_kind_counts")).items():
+            actual = domain_kind_counts.get(kind, 0)
+            if actual < minimum:
+                findings.append(
+                    CompletenessFinding(
+                        severity="important",
+                        area=f"domain:{domain_id}",
+                        message=f"Domain kind {kind} has fewer than {minimum} items.",
+                        evidence=f"actual={actual} tokens={sorted(topic_tokens)}",
+                    )
+                )
+        domain_specificity_counts = _counts_by(domain_items, _source_specificity)
+        for specificity, minimum in _int_mapping(
+            domain.get("required_source_specificity_counts")
+        ).items():
+            actual = domain_specificity_counts.get(specificity, 0)
+            if actual < minimum:
+                findings.append(
+                    CompletenessFinding(
+                        severity="important",
+                        area=f"domain:{domain_id}",
+                        message=(
+                            f"Domain source specificity {specificity} has fewer than "
+                            f"{minimum} items."
+                        ),
+                        evidence=f"actual={actual} tokens={sorted(topic_tokens)}",
+                    )
+                )
 
 
 def _audit_representative_queries(
@@ -274,3 +349,48 @@ def _strings(value: Any) -> list[str]:
     if not isinstance(value, list):
         return []
     return [str(item) for item in value if str(item).strip()]
+
+
+def _int_mapping(value: Any) -> dict[str, int]:
+    if not isinstance(value, dict):
+        return {}
+    result: dict[str, int] = {}
+    for key, raw in value.items():
+        try:
+            count = int(raw)
+        except (TypeError, ValueError):
+            continue
+        if str(key).strip() and count > 0:
+            result[str(key)] = count
+    return result
+
+
+def _counts_by(items: list[KnowledgeItem], classifier: Any) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in items:
+        key = str(classifier(item) or "")
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def _source_specificity(item: KnowledgeItem) -> str:
+    source = item.data.get("source") if isinstance(item.data.get("source"), dict) else {}
+    if item.access == "internal_derived":
+        return "internal_pattern"
+    url = _canonical_source_url(source.get("url"))
+    if url in {
+        "https://help.sap.com/docs/SAP_S4HANA_CLOUD",
+        "https://api.sap.com",
+        "https://me.sap.com",
+    }:
+        return "root_pointer"
+    specificity = source.get("specificity")
+    if specificity:
+        return str(specificity)
+    if url:
+        return "exact_page"
+    return "root_pointer"
+
+
+def _canonical_source_url(value: Any) -> str:
+    return str(value or "").split("#", 1)[0].split("?", 1)[0].rstrip("/")
