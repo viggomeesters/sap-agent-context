@@ -57,3 +57,25 @@ queries:
     limit: 12
     expected_status: needs_curation
     expected_gap_contains: Low topic precision
+  - id: positive_integration_api_communication
+    class: positive
+    intent: fo.integration
+    topic: integration api communication arrangement credentials tenant url payload business key error handling no secrets
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: ready
+  - id: positive_extensibility_analytics_rules
+    class: positive
+    intent: fo.business_rules
+    topic: custom field tenant boundary exposure analytics reporting readiness filter freshness
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: ready
+  - id: negative_generic_executive_dashboard
+    class: negative
+    intent: fo.analytics
+    topic: generic executive dashboard performance report
+    sap_product: s4hana_cloud_public
+    limit: 12
+    expected_status: needs_curation
+    expected_gap_contains: Low topic precision
