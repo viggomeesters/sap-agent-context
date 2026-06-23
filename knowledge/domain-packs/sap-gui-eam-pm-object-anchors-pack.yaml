@@ -34,6 +34,10 @@ items:
   - user-status
   - status-profile
   - tenant-verification
+  - equipment-list
+  - equipment-search
+  - zoeken
+  - transaction
   used_for:
   - fo.navigation
   - fo.field_mapping
@@ -42,7 +46,8 @@ items:
   summary: 'Equipment is a maintainable technical object in EAM/Plant Maintenance context. Treat equipment identifiers,
     category, planning plant, planner group, location/account assignment and status as tenant-verified fields, not
     universal values. Confidence: medium internal_derived starter anchor. For status questions, keep the equipment
-    anchor selected together with system status, user status and status profile caveats.'
+    anchor selected together with system status, user status and status profile caveats. Supports IH08 equipment
+    list/search questions so the equipment object anchor remains selected with the transaction context.'
   freshness: *id001
   source: &id002
     kind: internal_pattern

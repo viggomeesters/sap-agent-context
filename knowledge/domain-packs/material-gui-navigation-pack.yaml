@@ -1,0 +1,317 @@
+pack_id: sap-material-gui-navigation-pack
+title: SAP Material SAP GUI transaction navigation pack
+description: SAP GUI Material/Product Master starter navigation context for MM01, MM02, MM03, MM60, MMBE and command-field
+  prefixes /n and /o.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Transaction semantics remain internal_derived; verify availability/authorization in target tenant/system.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.app.material.mm01
+  title: "MM01 \u2014 Create material/product master"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - material
+  - product-master
+  - material-master
+  - mm01
+  - mm01
+  - transaction
+  - navigation
+  - voorraad
+  - stock
+  - material-open
+  - material-search
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'MM01 is represented as SAP GUI navigation context for create material/product master data. Confidence:
+    medium internal_derived; verify transaction availability, authorizations, Fiori/SAP GUI entry points and exact
+    screen fields in the target tenant/system.'
+  freshness: *id001
+  source: &id002
+    kind: internal_pattern
+    title: Internal SAP GUI material transaction navigation starter pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived SAP GUI consultant navigation semantics; verify exact transaction availability,
+      authorizations and screen behavior in target tenant/system.
+  claims:
+  - statement: MM01 is a SAP GUI material transaction context for create material/product master data; do not treat
+      screen layout, menu path or authorization result as universal.
+    evidence:
+    - sap.ref.material-product-master-learning
+    - sap.rule.material-gui-prefix-not-tcode
+  relations:
+    objects:
+    - sap.object.material-product-master-anchor
+- id: sap.app.material.mm02
+  title: "MM02 \u2014 Change material/product master"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - material
+  - product-master
+  - material-master
+  - mm02
+  - mm02
+  - transaction
+  - navigation
+  - voorraad
+  - stock
+  - material-open
+  - material-search
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'MM02 is represented as SAP GUI navigation context for change material/product master data. Confidence:
+    medium internal_derived; verify transaction availability, authorizations, Fiori/SAP GUI entry points and exact
+    screen fields in the target tenant/system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: MM02 is a SAP GUI material transaction context for change material/product master data; do not treat
+      screen layout, menu path or authorization result as universal.
+    evidence:
+    - sap.ref.material-product-master-learning
+    - sap.rule.material-gui-prefix-not-tcode
+  relations:
+    objects:
+    - sap.object.material-product-master-anchor
+- id: sap.app.material.mm03
+  title: "MM03 \u2014 Display/open material/product master"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - material
+  - product-master
+  - material-master
+  - mm03
+  - mm03
+  - transaction
+  - navigation
+  - voorraad
+  - stock
+  - material-open
+  - material-search
+  - welke
+  - transactie
+  - openen
+  - nmm03
+  - nmm03-correctie
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'MM03 is represented as SAP GUI navigation context for display/open material/product master data. Confidence:
+    medium internal_derived; verify transaction availability, authorizations, Fiori/SAP GUI entry points and exact
+    screen fields in the target tenant/system. Supports Dutch consultant questions such as welke transactie om material
+    te openen NMM03 /nMM03.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: MM03 is a SAP GUI material transaction context for display/open material/product master data; do
+      not treat screen layout, menu path or authorization result as universal.
+    evidence:
+    - sap.ref.material-product-master-learning
+    - sap.rule.material-gui-prefix-not-tcode
+  relations:
+    objects:
+    - sap.object.material-product-master-anchor
+- id: sap.app.material.mm60
+  title: "MM60 \u2014 Material list/search"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - material
+  - product-master
+  - material-master
+  - mm60
+  - mm60
+  - transaction
+  - navigation
+  - voorraad
+  - stock
+  - material-open
+  - material-search
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'MM60 is represented as SAP GUI navigation context for list/search material master records. Confidence:
+    medium internal_derived; verify transaction availability, authorizations, Fiori/SAP GUI entry points and exact
+    screen fields in the target tenant/system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: MM60 is a SAP GUI material transaction context for list/search material master records; do not treat
+      screen layout, menu path or authorization result as universal.
+    evidence:
+    - sap.ref.material-product-master-learning
+    - sap.rule.material-gui-prefix-not-tcode
+  relations:
+    objects:
+    - sap.object.material-product-master-anchor
+- id: sap.app.material.mmbe
+  title: "MMBE \u2014 Stock overview"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - material
+  - product-master
+  - material-master
+  - mmbe
+  - mmbe
+  - transaction
+  - navigation
+  - voorraad
+  - stock
+  - material-open
+  - material-search
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'MMBE is represented as SAP GUI navigation context for display stock overview for material/plant/storage-location
+    context. Confidence: medium internal_derived; verify transaction availability, authorizations, Fiori/SAP GUI
+    entry points and exact screen fields in the target tenant/system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: MMBE is a SAP GUI material transaction context for display stock overview for material/plant/storage-location
+      context; do not treat screen layout, menu path or authorization result as universal.
+    evidence:
+    - sap.ref.material-product-master-learning
+    - sap.rule.material-gui-prefix-not-tcode
+  relations:
+    objects:
+    - sap.object.material-product-master-anchor
+- id: sap.rule.material-gui-prefix-not-tcode
+  title: Material SAP GUI /n and /o prefixes are not transaction-code characters
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - material
+  - command-field
+  - /n
+  - /o
+  - nmm03
+  - /nmm03
+  - mm03
+  - fake-tcode
+  - prefix
+  - welke
+  - transactie
+  - openen
+  - nmm03-correctie
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule: treat /n and /o as SAP GUI command-field prefixes. NMM03 is not the transaction code;
+    /nMM03 means /n prefix plus MM03. /oMM03 means /o prefix plus MM03 where available. Confidence: medium internal_derived;
+    verify target GUI/client behavior. Supports Dutch consultant questions such as welke transactie om material
+    te openen NMM03 /nMM03.'
+  freshness: *id001
+  source: *id002
+  rules:
+  - if: question says /nMM03 or /n MM03
+    then: explain /n command prefix plus MM03 transaction
+    outcome: ready with prefix caveat
+  - if: question says NMM03 as a standalone transaction
+    then: do not claim NMM03 is a valid transaction
+    outcome: answer that it likely means /n + MM03 or request clarification
+  - if: question asks /oMM03
+    then: explain /o prefix plus MM03 in another session/window where available
+    outcome: ready with GUI/client caveat
+  claims:
+  - statement: SAP GUI prefix semantics prevent fake material transaction-code answers such as treating NMM03 as
+      a distinct tcode.
+    evidence:
+    - sap.app.material.mm03
+  relations:
+    apps:
+    - sap.app.material.mm01
+    - sap.app.material.mm02
+    - sap.app.material.mm03
+    - sap.app.material.mm60
+    - sap.app.material.mmbe
+- id: sap.test-pattern.material-gui-navigation
+  title: Material SAP GUI transaction navigation test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - material
+  - mm01
+  - mm02
+  - mm03
+  - mm60
+  - mmbe
+  - /n
+  - /o
+  - nmm03
+  - test-pattern
+  - welke
+  - transactie
+  - openen
+  - nmm03-correctie
+  used_for:
+  - fo.test_scenarios
+  - fo.navigation
+  - fo.quality_gate
+  summary: 'Test pattern: material navigation answers must identify MM01 create, MM02 change, MM03 display, MM60
+    list/search and MMBE stock overview, while correcting NMM03 versus /nMM03. Supports Dutch consultant questions
+    such as welke transactie om material te openen NMM03 /nMM03.'
+  freshness: *id001
+  source: *id002
+  test_scenarios:
+  - name: Material transaction list
+    given: A consultant asks which SAP GUI transactions open/search material.
+    when: Bundle is built for MM01 MM02 MM03 MM60 MMBE material transaction.
+    then: The answer includes create/change/display/list-search/stock overview semantics.
+  - name: NMM03 prefix ambiguity
+    given: A consultant asks whether NMM03 or /nMM03 is correct.
+    when: Bundle is built for NMM03 /nMM03.
+    then: The answer says /n + MM03 is a prefix plus transaction, not a distinct NMM03 transaction.
+  claims:
+  - statement: Navigation tests protect against wrong material tcode semantics and first-green hallucinations.
+    evidence:
+    - sap.rule.material-gui-prefix-not-tcode
+  relations:
+    apps:
+    - sap.app.material.mm01
+    - sap.app.material.mm02
+    - sap.app.material.mm03
+    - sap.app.material.mm60
+    - sap.app.material.mmbe
