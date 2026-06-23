@@ -31,7 +31,7 @@ sources through access-labelled pointers.
 Install `uv` and clone the repository:
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/viggomeesters/sap-agent-context.git
 cd sap-agent-context
 uv sync
 ```
@@ -81,7 +81,7 @@ For local AI workflows, each colleague can clone the repository and register the
 generated bundle directory with their agent or source-provider layer:
 
 ```bash
-git clone <repo-url> sap-agent-context
+git clone https://github.com/viggomeesters/sap-agent-context.git sap-agent-context
 cd sap-agent-context
 uv sync
 uv run sap-agent-context query \
