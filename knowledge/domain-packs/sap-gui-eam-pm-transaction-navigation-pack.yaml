@@ -1,0 +1,361 @@
+pack_id: sap-gui-eam-pm-transaction-navigation-pack
+title: SAP GUI EAM/PM transaction navigation pack
+description: SAP GUI Equipment/EAM/PM starter navigation context for IE01, IE02, IE03, IH08 and command-field prefixes
+  /n and /o.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Internal-derived tcode semantics must keep confidence/caveats and avoid fake tcode claims.
+freshness_current: &id001
+  valid_from: '2026-06-23'
+  review_after: '2026-12-23'
+  expires_at: '2027-06-23'
+  retrieved_at: '2026-06-23'
+items:
+- id: sap.app.eam.pm.ie01
+  title: "IE01 \u2014 Create equipment"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - ie01
+  - ie01
+  - transaction
+  - navigation
+  - technical-object
+  - welke
+  - transacties
+  - openen
+  - zoeken
+  - equipment-openen
+  - sap-gui-vraag
+  - nie01
+  - nnie01
+  used_for:
+  - fo.process_flow
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IE01 is represented as SAP GUI transaction/navigation context for create equipment master data. Confidence:
+    medium internal_derived; verify in target SAP system and authorizations. Supports Dutch consultant questions
+    such as welke transacties om equipment te openen/zoeken in SAP GUI, including NIE01 versus /nIE01 correction.'
+  freshness: *id001
+  source: &id002
+    kind: internal_pattern
+    title: Internal SAP GUI transaction navigation starter pattern
+    url: ''
+    retrieved_at: '2026-06-23'
+    specificity: internal_pattern
+    license_note: Internal-derived SAP GUI consultant navigation semantics; verify exact transaction availability,
+      authorizations, menu paths and screen layout in target tenant/system.
+  claims:
+  - statement: IE01 is a SAP GUI transaction context for create equipment master data; do not treat screen layout,
+      menu path or authorization result as universal.
+    evidence:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    source_references:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+- id: sap.app.eam.pm.ie02
+  title: "IE02 \u2014 Change equipment"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - ie02
+  - ie02
+  - transaction
+  - navigation
+  - technical-object
+  - welke
+  - transacties
+  - openen
+  - zoeken
+  - equipment-openen
+  - sap-gui-vraag
+  - nie01
+  - nnie01
+  used_for:
+  - fo.navigation
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IE02 is represented as SAP GUI transaction/navigation context for change equipment master data. Confidence:
+    medium internal_derived; verify in target SAP system and authorizations. Supports Dutch consultant questions
+    such as welke transacties om equipment te openen/zoeken in SAP GUI, including NIE01 versus /nIE01 correction.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IE02 is a SAP GUI transaction context for change equipment master data; do not treat screen layout,
+      menu path or authorization result as universal.
+    evidence:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    source_references:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+- id: sap.app.eam.pm.ie03
+  title: "IE03 \u2014 Display/open equipment"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - ie03
+  - ie03
+  - transaction
+  - navigation
+  - technical-object
+  - welke
+  - transacties
+  - openen
+  - zoeken
+  - equipment-openen
+  - sap-gui-vraag
+  - nie01
+  - nnie01
+  used_for:
+  - fo.navigation
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IE03 is represented as SAP GUI transaction/navigation context for display/open equipment master data.
+    Confidence: medium internal_derived; verify in target SAP system and authorizations. Supports Dutch consultant
+    questions such as welke transacties om equipment te openen/zoeken in SAP GUI, including NIE01 versus /nIE01
+    correction.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IE03 is a SAP GUI transaction context for display/open equipment master data; do not treat screen
+      layout, menu path or authorization result as universal.
+    evidence:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    source_references:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+- id: sap.app.eam.pm.ih08
+  title: "IH08 \u2014 Equipment list/search"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - ih08
+  - ih08
+  - transaction
+  - navigation
+  - technical-object
+  - welke
+  - transacties
+  - openen
+  - zoeken
+  - equipment-openen
+  - sap-gui-vraag
+  - nie01
+  - nnie01
+  used_for:
+  - fo.navigation
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IH08 is represented as SAP GUI transaction/navigation context for list/search equipment and open selected
+    equipment display/change depending on authorizations. Confidence: medium internal_derived; verify in target
+    SAP system and authorizations. Supports Dutch consultant questions such as welke transacties om equipment te
+    openen/zoeken in SAP GUI, including NIE01 versus /nIE01 correction.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IH08 is a SAP GUI transaction context for list/search equipment and open selected equipment display/change
+      depending on authorizations; do not treat screen layout, menu path or authorization result as universal.
+    evidence:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    source_references:
+    - sap.ref.eam.pm.transaction-code-public-cross-check
+- id: sap.object.eam.pm.sap-gui-command-field
+  title: SAP GUI command field navigation prefix context
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - command-field
+  - /n
+  - /o
+  - prefix
+  - transaction
+  - navigation
+  - ie01
+  - ie02
+  - ie03
+  - ih08
+  - welke
+  - transacties
+  - openen
+  - zoeken
+  - equipment-openen
+  - sap-gui-vraag
+  - nie01
+  - nnie01
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: 'SAP GUI command-field prefixes such as /n and /o modify navigation behavior: /n starts a transaction
+    in the current session, /o opens/starts a transaction in another session/window where available. They are prefixes,
+    not part of the transaction code. Confidence: medium internal_derived; verify in target GUI/client behavior.
+    Supports Dutch consultant questions such as welke transacties om equipment te openen/zoeken in SAP GUI, including
+    NIE01 versus /nIE01 correction.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: /nIE01 means command prefix /n plus transaction IE01; NIE01 is not the transaction code. /oIE03 means
+      /o prefix plus IE03, not a separate OIE03 tcode.
+    evidence:
+    - sap.rule.eam.pm.command-prefix-not-tcode
+    - sap.ref.eam.pm.gui-help-gated
+  relations:
+    apps:
+    - sap.app.eam.pm.ie01
+    - sap.app.eam.pm.ie02
+    - sap.app.eam.pm.ie03
+    - sap.app.eam.pm.ih08
+- id: sap.rule.eam.pm.command-prefix-not-tcode
+  title: SAP GUI /n and /o prefixes are not transaction-code characters
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - command-field
+  - /n
+  - /o
+  - nie01
+  - /nie01
+  - /nie03
+  - transaction-prefix
+  - fake-tcode
+  - welke
+  - transacties
+  - openen
+  - zoeken
+  - equipment-openen
+  - sap-gui-vraag
+  - nnie01
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule: treat /n and /o as command-field prefixes. Do not normalize NIE01, N/IE01 or OIE03 as
+    real transaction codes; explain prefix plus transaction instead. Supports Dutch consultant questions such as
+    welke transacties om equipment te openen/zoeken in SAP GUI, including NIE01 versus /nIE01 correction. NIE01
+    is not the transaction code; /nIE01 is /n prefix plus IE01.'
+  freshness: *id001
+  source: *id002
+  rules:
+  - if: question says /nIE01 or /n IE01
+    then: explain /n command prefix plus IE01 transaction
+    outcome: ready with prefix caveat
+  - if: question says NIE01 as a standalone transaction
+    then: do not claim NIE01 is a valid transaction
+    outcome: answer that likely means /n + IE01 or request clarification
+  - if: question says /oIE03
+    then: explain /o opens IE03 in another session/window where available
+    outcome: ready with GUI/client caveat
+  claims:
+  - statement: SAP GUI prefix semantics prevent fake transaction-code answers such as treating NIE01 as a distinct
+      tcode.
+    evidence:
+    - sap.object.eam.pm.sap-gui-command-field
+  relations:
+    apps:
+    - sap.app.eam.pm.ie01
+    - sap.app.eam.pm.ie02
+    - sap.app.eam.pm.ie03
+    - sap.app.eam.pm.ih08
+- id: sap.test-pattern.eam.pm-transaction-navigation
+  title: SAP GUI EAM/PM transaction navigation test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - ie01
+  - ie02
+  - ie03
+  - ih08
+  - /n
+  - /o
+  - nie01
+  - test-pattern
+  - welke
+  - transacties
+  - openen
+  - zoeken
+  - equipment-openen
+  - sap-gui-vraag
+  - nnie01
+  used_for:
+  - fo.test_scenarios
+  - fo.navigation
+  - fo.quality_gate
+  summary: 'Test pattern: transaction navigation answers must identify IE01 create, IE02 change, IE03 display/open,
+    IH08 list/search and explain /n and /o as prefixes, while rejecting fake standalone NIE01. Supports Dutch consultant
+    questions such as welke transacties om equipment te openen/zoeken in SAP GUI, including NIE01 versus /nIE01
+    correction.'
+  freshness: *id001
+  source: *id002
+  test_scenarios:
+  - name: Equipment transaction list
+    given: A consultant asks which SAP GUI transactions open/search equipment.
+    when: Bundle is built for IE01 IE02 IE03 IH08 equipment transaction.
+    then: The answer includes IE01, IE02, IE03, IH08 with create/change/display/list-search semantics.
+  - name: NIE01 prefix ambiguity
+    given: A consultant asks whether NIE01 or /nNIE01 is correct.
+    when: Bundle is built for NIE01 /nIE01.
+    then: The answer says /n + IE01 is a prefix plus transaction, not a distinct NIE01 transaction.
+  claims:
+  - statement: Navigation tests protect against wrong tcode semantics and first-green hallucinations.
+    evidence:
+    - sap.rule.eam.pm.command-prefix-not-tcode
+  relations:
+    apps:
+    - sap.app.eam.pm.ie01
+    - sap.app.eam.pm.ie02
+    - sap.app.eam.pm.ie03
+    - sap.app.eam.pm.ih08
