@@ -17,7 +17,7 @@ sources through access-labelled pointers.
 - Canonical YAML knowledge items under `knowledge/**/*.yaml`.
 - Canonical context layout documented in
   [Context Structure](docs/context-structure.md).
-- Rebuildable SQLite, JSONL, and vector-ready indexes under `build/`.
+- Rebuildable SQLite, FTS5, JSONL, and vector-ready indexes under `build/`.
 - Context bundle generation through the `sap-agent-context` CLI.
 - Completeness, evidence integrity, retrieval precision, and FO-output
   evaluation gates.
@@ -65,7 +65,14 @@ Build runtime indexes:
 
 ```bash
 uv run sap-agent-context build-index
+uv run sap-agent-context evaluate-runtime-retrieval
+uv run sap-agent-context runtime-search "IE03 equipment display" --kind sap_app --limit 5
 ```
+
+Runtime artifacts under `build/` are generated from canonical `records/*.jsonl`.
+SQLite + FTS5 is the primary local agent runtime; sqlite-vec is optional and
+local-only. DuckDB is an optional analytics/coverage companion, not the primary
+runtime store. See [Local runtime index](docs/local-runtime-index.md).
 
 Generate a context bundle:
 
@@ -142,6 +149,8 @@ Run the full local quality gate:
 uv run sap-agent-context validate
 uv run sap-agent-context audit-completeness
 uv run sap-agent-context evaluate-fixtures
+uv run sap-agent-context build-index
+uv run sap-agent-context evaluate-runtime-retrieval
 uv run pytest -q
 uv run ruff check .
 ```

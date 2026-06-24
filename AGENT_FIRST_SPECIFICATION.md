@@ -198,23 +198,34 @@ decline unsupported claims.
 Generated outputs should be deterministic and rebuildable:
 
 ```text
-dist/
-  sap-agent-context.sqlite
-  sap-agent-context.duckdb
-  sap-agent-context-bundle.json
-  embeddings/
-    items.jsonl
-    claims.jsonl
+build/
+  context.sqlite
+  items.jsonl
+  vector-corpus.jsonl
+records/
+  apps.jsonl
+  tables.jsonl
+  fields.jsonl
+  workflows.jsonl
+  roles.jsonl
+  claims.jsonl
+  sources.jsonl
+  relations.jsonl
 ```
 
-Recommended roles:
+Current runtime contract:
 
-- SQLite/libSQL: local clone-and-go runtime database.
-- DuckDB: analytics, audits, coverage, and quality reporting.
-- Turso Cloud: optional hosted/synced deployment target.
-- Vector indexes: generated retrieval accelerators.
+- `records/*.jsonl` is the canonical agent record surface.
+- `build/context.sqlite` is the primary local clone-and-go runtime database.
+  It contains item/claim/source/relation tables and FTS5 indexes.
+- `build/vector-corpus.jsonl` is the deterministic local embedding input.
+- `sqlite-vec` is optional and local-only. `build-index --sqlite-vec auto`
+  reports skipped when unavailable; `--sqlite-vec required` fails clearly.
+- DuckDB is an optional analytics, audit, coverage, and embedding-quality
+  companion. It is not the primary agent runtime store.
 
-No hosted service should be required for the base repository workflow.
+No hosted service should be required for the base repository workflow, and cloud
+vector dependencies must not be introduced as a default path.
 
 ## Evaluation Contract
 
