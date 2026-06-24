@@ -1,0 +1,196 @@
+id: sap.object.ecc-anonymous-ddic-table-catalog
+title: SAP ECC DDIC table catalog from anonymized DD02T and DD02L extracts
+kind: sap_object
+status: active
+access: gated
+requires_login: true
+sap_product: sap_ecc
+topics:
+- sap-ecc
+- sap-ddic
+- dd02t
+- dd02l
+- table-catalog
+- data-migration
+used_for:
+- agent.context
+- fo.field_mapping
+- migration.analysis
+- source_traceability
+summary: An anonymized SAP ECC DDIC table catalog variant for table/view descriptions and technical table metadata, filtered
+  to the DD03VT field-catalog scope curated in this repository.
+freshness:
+  valid_from: '2026-06-24'
+  review_after: '2026-12-24'
+  expires_at: '2027-06-24'
+  retrieved_at: '2026-06-24'
+source:
+  kind: gated_url
+  title: Anonymized SAP ECC DD02T and DD02L extracts
+  url: sap-gui://table/DD02T,DD02L?variant=ecc-anonymous-source-system-01
+  retrieved_at: '2026-06-24'
+  specificity: catalog_entry
+  license_note: In-system SAP DDIC metadata extract curated into generic table metadata; no tenant records, customer identifiers,
+    screenshots, raw exports or project-specific values are stored.
+release_applicability:
+  edition: SAP ECC
+  verification: Generated from anonymized ECC source-system DD02T/DD02L extracts dated 2026-06-24; compare with the target
+    tenant DDIC before relying on table availability or labels.
+  variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+claims:
+- statement: This table catalog preserves generic SAP ECC DDIC table text and technical metadata for the curated field-catalog
+    scope.
+  evidence:
+  - sap.ref.ddic-table-and-transaction-catalogs
+- statement: The curated variant is filtered to metadata and omits tenant table contents, customer-specific values and project-specific
+    details.
+  evidence:
+  - sap.ref.ddic-table-and-transaction-catalogs
+relations:
+  source_references:
+  - sap.ref.ddic-table-and-transaction-catalogs
+table_catalog:
+- table: DD02L
+  texts:
+    de: SAP-Tabellen
+    en: SAP Tables
+    nl: SAP-tabellen
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-dd02l-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: DD02T
+  texts:
+    de: 'R/3-DD: Texte zu SAP-Tabellen'
+    en: 'SAP DD: SAP Table Texts'
+    nl: 'R/3-DD: teksten van SAP-tabellen'
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-dd02t-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: DD03VT
+  texts:
+    de: Generierte Tabelle zum View DD03VT
+    en: Generated Table for View
+    nl: Generated Table for View
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-dd03vt-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: EQKT
+  texts:
+    de: Equipmentkurztexte
+    en: Equipment Short Texts
+    nl: Korte equipmentteksten
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-eqkt-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: EQUI
+  texts:
+    de: Equipment Stammdaten
+    en: Equipment master data
+    nl: Equipment stamgegevens
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: ITOB
+  texts:
+    de: Generierte Tabelle zum View ITOB
+    en: Generated Table for View
+    nl: Generated Table for View
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-itob-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: JCDS
+  texts:
+    de: Änderungsbelege für System-/Anwenderstatus (Tabelle JEST)
+    en: Change Documents for System/User Statuses (Table JEST)
+    nl: Wijzigingsdocumenten systeem-/gebruikerstatus (tabel JEST)
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-jcds-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: JEST
+  texts:
+    de: Einzelstatus pro Objekt
+    en: Individual Object Status
+    nl: Status per object
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-jest-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: JSTO
+  texts:
+    de: Informationen zum Statusobjekt
+    en: Status object information
+    nl: Informatie over statusobject
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-jsto-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: MAKT
+  texts:
+    de: Materialkurztexte
+    en: Material Descriptions
+    nl: Artikelomschrijvingen
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-makt-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: MARA
+  texts:
+    de: Allgemeine Materialdaten
+    en: General Material Data
+    nl: Algemene artikelgegevens
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: MARC
+  texts:
+    de: Werksdaten zum Material
+    en: Plant Data for Material
+    nl: Vestigingsgegevens van artikel
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-marc-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: T370K
+  texts:
+    de: Art des technischen Objekts
+    en: Type of technical object
+    nl: Soort technisch object
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-t370k-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: T370T
+  texts:
+    de: Equipmenttypen
+    en: Equipment categories
+    nl: Equipmenttypen
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-t370t-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: TJ02T
+  texts:
+    de: Texte zu Systemstatus
+    en: System status texts
+    nl: Teksten van systeemstatus
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-tj02t-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: TJ30T
+  texts:
+    de: Texte zu Anwenderstatus
+    en: Texts for User Status
+    nl: Teksten van gebruikerstatus
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-tj30t-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: TSTC
+  texts:
+    de: SAP-Transaktions-Codes
+    en: SAP Transaction Codes
+    nl: SAP-transactiecodes
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-tstc-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624
+- table: TSTCP
+  texts:
+    de: Parameter zu Transaktionen
+    en: Parameters for Transactions
+    nl: Parameters van transacties
+  technical: {}
+  field_catalog_item: sap.field-set.ecc-anonymous-tstcp-dd03vt-field-catalog
+  source_variant: ecc-anonymous-source-system-01-dd02t-dd02l-20260624

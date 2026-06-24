@@ -1,0 +1,65 @@
+id: sap.ref.ddic-table-and-transaction-catalogs
+title: SAP DDIC table text and transaction catalog lookup tables
+kind: external_reference
+status: active
+access: gated
+requires_login: true
+sap_product: cross_sap
+topics:
+  - sap-ddic
+  - sap-dictionary
+  - dd03vt
+  - dd02t
+  - dd02l
+  - tstc
+  - tstct
+  - transaction-codes
+  - source-registry
+used_for:
+  - agent.context
+  - migration.analysis
+  - source_traceability
+  - consultant_verification
+summary: >
+  In-system SAP Dictionary and transaction catalog tables can be used as
+  lookup routes for generic SAP metadata. DD03VT is useful for table field
+  catalogs and field labels; DD02T is useful for language-dependent table or
+  view texts; DD02L is useful for technical table or view metadata; TSTC is
+  useful for transaction code definitions; TSTCT is useful for
+  language-dependent transaction texts; TSTCP is useful for parameter
+  transaction definitions. Store only curated generic metadata in this
+  repository; do not store tenant exports, table contents, screenshots,
+  transaction usage evidence from a customer system or project-specific values.
+freshness:
+  valid_from: 2026-06-24
+  review_after: 2026-12-24
+  expires_at: 2027-06-24
+  retrieved_at: 2026-06-24
+source:
+  kind: gated_url
+  title: SAP GUI / in-system DDIC and transaction catalog tables
+  url: sap-gui://table/DD03VT,DD02T,DD02L,TSTC,TSTCT,TSTCP
+  retrieved_at: 2026-06-24
+  specificity: catalog_entry
+  license_note: >
+    In-system SAP metadata lookup pointer; do not copy protected SAP
+    documentation, tenant exports, customer data or project-specific values into
+    the public repository.
+claims:
+  - statement: DD03VT is a useful in-system source for generic SAP table field metadata, including technical field names and language-dependent field labels.
+    evidence:
+      - sap.ref.ddic-dd03vt-field-catalog-extract
+  - statement: DD02T is a useful in-system source for language-dependent SAP table and view texts, especially when agents need table labels for SE16N-driven analysis.
+    evidence:
+      - sap.ref.ddic-table-and-transaction-catalogs
+  - statement: DD02L is a useful companion source for technical SAP table and view metadata when DD02T provides the language-dependent text.
+    evidence:
+      - sap.ref.ddic-table-and-transaction-catalogs
+  - statement: TSTC and TSTCT are useful in-system sources for SAP transaction code definitions and language-dependent transaction labels; TSTCP is a useful companion source for parameter transactions.
+    evidence:
+      - sap.ref.ddic-table-and-transaction-catalogs
+relations:
+  source_references:
+    - sap.ref.ddic-dd03vt-field-catalog-extract
+  fo_patterns:
+    - sap.fo-pattern.source-access-governance
