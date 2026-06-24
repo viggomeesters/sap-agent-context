@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import sqlite3
 from pathlib import Path
@@ -11,7 +12,17 @@ IDENTIFIER_RE = re.compile(r"\b[A-Z][A-Z0-9_/-]{2,}\b")
 WORD_RE = re.compile(r"[A-Za-z0-9_/-]+")
 
 
-def search_runtime_index(sqlite_path: Path, query: str, *, limit: int = 12) -> list[dict[str, Any]]:
+def search_runtime_index(
+    sqlite_path: Path,
+    query: str,
+    *,
+    limit: int = 12,
+    kind: str | None = None,
+    sap_product: str | None = None,
+    access: str | None = None,
+    used_for: str | None = None,
+    topic: str | None = None,
+) -> list[dict[str, Any]]:
     """Search the generated runtime SQLite index.
 
     Exact SAP identifiers (transactions, tables, fields, scope ids) get a
@@ -34,7 +45,8 @@ def search_runtime_index(sqlite_path: Path, query: str, *, limit: int = 12) -> l
               items.summary AS text,
               'item_fts' AS source,
               bm25(item_fts) AS bm25_score,
-              item_fts.retrieval_text AS search_text
+              item_fts.retrieval_text AS search_text,
+              items.payload_json AS payload_json
             FROM item_fts
             JOIN items ON items.id = item_fts.id
             WHERE item_fts MATCH ?
@@ -52,7 +64,8 @@ def search_runtime_index(sqlite_path: Path, query: str, *, limit: int = 12) -> l
               claims.statement AS text,
               'claim_fts' AS source,
               bm25(claim_fts) AS bm25_score,
-              claim_fts.statement || ' ' || claim_fts.evidence_text AS search_text
+              claim_fts.statement || ' ' || claim_fts.evidence_text AS search_text,
+              claims.payload_json AS payload_json
             FROM claim_fts
             JOIN claims ON claims.id = claim_fts.id
             WHERE claim_fts MATCH ?
@@ -61,7 +74,19 @@ def search_runtime_index(sqlite_path: Path, query: str, *, limit: int = 12) -> l
             (match_query, max(limit * 2, 10)),
         ).fetchall()
     results = [_ranked(row, exact_terms) for row in [*item_rows, *exact_item_rows, *claim_rows]]
-    deduped = {result["id"]: result for result in sorted(results, key=lambda row: -row["score"])}
+    filtered = [
+        result
+        for result in results
+        if _passes_filters(
+            result,
+            kind=kind,
+            sap_product=sap_product,
+            access=access,
+            used_for=used_for,
+            topic=topic,
+        )
+    ]
+    deduped = {result["id"]: result for result in sorted(filtered, key=lambda row: -row["score"])}
     ordered = sorted(
         deduped.values(), key=lambda row: (-row["score"], row["bm25_score"], row["id"])
     )
@@ -101,7 +126,8 @@ def _exact_item_rows(
           items.summary AS text,
           'item_exact' AS source,
           0.0 AS bm25_score,
-          items.payload_json AS search_text
+          items.payload_json AS search_text,
+          items.payload_json AS payload_json
         FROM items
         WHERE {' OR '.join(predicates)}
         LIMIT ?
@@ -116,6 +142,7 @@ def _ranked(row: sqlite3.Row, exact_terms: list[str]) -> dict[str, Any]:
     exact_hits = sum(1 for term in exact_terms if term.lower() in haystack)
     bm25_score = float(row["bm25_score"] or 0.0)
     source_boost = 100 if str(row["source"]).startswith("item_") else 0
+    payload = _json_payload(str(row["payload_json"] or ""))
     return {
         "id": str(row["id"]),
         "title": str(row["title"]),
@@ -125,7 +152,56 @@ def _ranked(row: sqlite3.Row, exact_terms: list[str]) -> dict[str, Any]:
         "exact_token_hits": exact_hits,
         "bm25_score": bm25_score,
         "score": exact_hits * 1000 + source_boost - bm25_score,
+        "claim_ids": _claim_ids(row, payload),
+        "source_ids": _source_ids(row, payload),
+        "metadata": payload,
     }
+
+
+def _json_payload(raw: str) -> dict[str, Any]:
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _claim_ids(row: sqlite3.Row, payload: dict[str, Any]) -> list[str]:
+    if str(row["source"]) == "claim_fts":
+        return [str(row["id"])]
+    raw = payload.get("claim_ids")
+    return [str(value) for value in raw] if isinstance(raw, list) else []
+
+
+def _source_ids(row: sqlite3.Row, payload: dict[str, Any]) -> list[str]:
+    if str(row["source"]) == "claim_fts":
+        raw = payload.get("evidence_ids")
+        return [str(value) for value in raw] if isinstance(raw, list) else []
+    raw = payload.get("source_ids")
+    return [str(value) for value in raw] if isinstance(raw, list) else []
+
+
+def _passes_filters(
+    result: dict[str, Any],
+    *,
+    kind: str | None,
+    sap_product: str | None,
+    access: str | None,
+    used_for: str | None,
+    topic: str | None,
+) -> bool:
+    metadata = result.get("metadata") if isinstance(result.get("metadata"), dict) else {}
+    if result["source"] == "claim_fts":
+        return True
+    if kind and metadata.get("kind") != kind:
+        return False
+    if sap_product and metadata.get("sap_product") != sap_product:
+        return False
+    if access and metadata.get("access") != access:
+        return False
+    if used_for and used_for not in _strings(metadata.get("used_for")):
+        return False
+    return not (topic and topic not in _strings(metadata.get("topics")))
 
 
 def _tokens(query: str) -> list[str]:
@@ -157,6 +233,12 @@ def _fts_query(tokens: list[str]) -> str:
 
 def _quote_fts(token: str) -> str:
     return '"' + token.replace('"', '""') + '"'
+
+
+def _strings(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item) for item in value if str(item).strip()]
 
 
 def _dedupe(values: list[str]) -> list[str]:

@@ -13,6 +13,7 @@ from sap_agent_context.completeness import audit_completeness
 from sap_agent_context.evaluation import evaluate_fo_output_fixtures
 from sap_agent_context.index import build_indexes
 from sap_agent_context.repository import load_items
+from sap_agent_context.runtime_search import search_runtime_index
 from sap_agent_context.validation import has_errors, validate_items
 
 DEFAULT_SQLITE = "build/context.sqlite"
@@ -58,6 +59,17 @@ def build_parser() -> argparse.ArgumentParser:
     query.add_argument("--sap-product", default="")
     query.add_argument("--limit", type=int, default=8)
     query.add_argument("--output", type=Path)
+
+    runtime_search = subparsers.add_parser("runtime-search")
+    runtime_search.add_argument("query")
+    runtime_search.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
+    runtime_search.add_argument("--limit", type=int, default=12)
+    runtime_search.add_argument("--kind", default=None)
+    runtime_search.add_argument("--sap-product", default=None)
+    runtime_search.add_argument("--access", default=None)
+    runtime_search.add_argument("--used-for", default=None)
+    runtime_search.add_argument("--topic", default=None)
+    runtime_search.add_argument("--output", type=Path)
 
     provider = subparsers.add_parser("mccoy-provider")
     provider.add_argument("bundle", type=Path)
@@ -187,6 +199,41 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
         print(json.dumps(bundle, indent=2, sort_keys=True, default=str))
         return 0 if bundle["status"] == "ready" else 2
+
+    if args.command == "runtime-search":
+        sqlite_path = _resolve_output(root, args.sqlite)
+        results = search_runtime_index(
+            sqlite_path,
+            args.query,
+            limit=args.limit,
+            kind=args.kind,
+            sap_product=args.sap_product,
+            access=args.access,
+            used_for=args.used_for,
+            topic=args.topic,
+        )
+        payload = {
+            "status": "passed" if results else "empty",
+            "query": args.query,
+            "sqlite": str(sqlite_path),
+            "filters": {
+                "kind": args.kind,
+                "sap_product": args.sap_product,
+                "access": args.access,
+                "used_for": args.used_for,
+                "topic": args.topic,
+            },
+            "results": results,
+        }
+        if args.output:
+            output = _resolve_output(root, args.output)
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_text(
+                json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n",
+                encoding="utf-8",
+            )
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0 if results else 2
 
     if args.command == "mccoy-provider":
         bundle_path = _resolve_output(root, args.bundle)
