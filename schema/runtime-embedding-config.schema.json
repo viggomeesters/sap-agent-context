@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SAP Agent Context local embedding runtime config",
+  "type": "object",
+  "required": ["provider", "model", "dimension", "cache_path"],
+  "properties": {
+    "provider": {
+      "type": "string",
+      "enum": ["fastembed", "sentence-transformers", "ollama", "custom-local"]
+    },
+    "model": {"type": "string"},
+    "dimension": {"type": "number"},
+    "cache_path": {"type": "string"},
+    "batch_size": {"type": "number"},
+    "normalize": {"type": "boolean"},
+    "offline_only": {"type": "boolean"}
+  },
+  "additionalProperties": false
+}

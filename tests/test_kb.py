@@ -75,8 +75,9 @@ def test_build_indexes_writes_sqlite_jsonl_and_vector_ready_chunks(tmp_path: Pat
     item_lines = (tmp_path / "items.jsonl").read_text(encoding="utf-8").splitlines()
     vector_lines = (tmp_path / "vector-corpus.jsonl").read_text(encoding="utf-8").splitlines()
     assert len(item_lines) == len(items)
-    assert len(vector_lines) == len(items)
+    assert len(vector_lines) > len(items)
     assert json.loads(vector_lines[0])["text"]
+    assert any(json.loads(line)["id"].endswith("#statement") for line in vector_lines)
 
 
 def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:

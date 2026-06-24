@@ -40,13 +40,18 @@ def build_indexes(
         item_records = _item_records(records)
         _build_sqlite(sqlite_path, item_records=item_records, records=records)
         _write_jsonl(jsonl_path, item_records)
-        _write_jsonl(vector_jsonl_path, (_vector_record(record) for record in item_records))
+        vector_records = [
+            *(_vector_record(record) for record in item_records),
+            *(_claim_vector_record(record) for record in records["claims"]),
+        ]
+        _write_jsonl(vector_jsonl_path, vector_records)
         return {
             "status": "built",
             "items": len(item_records),
             "claims": len(records["claims"]),
             "sources": len(records["sources"]),
             "relations": len(records["relations"]),
+            "vector_records": len(vector_records),
             "sqlite": str(sqlite_path),
             "items_jsonl": str(jsonl_path),
             "vector_jsonl": str(vector_jsonl_path),
@@ -318,6 +323,7 @@ def _vector_record(record: dict[str, Any]) -> dict[str, Any]:
             " ".join(_strings(record.get("topics"))),
             " ".join(_strings(record.get("used_for"))),
             " ".join(_strings(retrieval.get("keywords"))),
+            " ".join(_strings(retrieval.get("queries"))),
         ]
     )
     return {
@@ -325,13 +331,44 @@ def _vector_record(record: dict[str, Any]) -> dict[str, Any]:
         "item_id": record["id"],
         "text": text,
         "metadata": {
+            "record_type": "item",
+            "canonical_record_id": record["id"],
             "title": record["title"],
             "kind": record["kind"],
             "access": record["access"],
             "requires_login": record.get("requires_login"),
+            "sap_product": str(record.get("sap_product") or ""),
             "topics": _strings(record.get("topics")),
             "used_for": _strings(record.get("used_for")),
-            "path": str(record.get("source_path") or ""),
+            "source_path": str(record.get("source_path") or ""),
+        },
+    }
+
+
+def _claim_vector_record(record: dict[str, Any]) -> dict[str, Any]:
+    evidence_ids = _strings(record.get("evidence_ids"))
+    constraints = _strings(record.get("usage_constraints"))
+    text = " ".join(
+        [
+            str(record["id"]),
+            str(record["subject_id"]),
+            str(record["statement"]),
+            f"confidence {record['confidence']}",
+            "evidence " + " ".join(evidence_ids),
+            " ".join(constraints),
+        ]
+    )
+    return {
+        "id": f"{record['id']}#statement",
+        "claim_id": record["id"],
+        "text": text,
+        "metadata": {
+            "record_type": "claim",
+            "canonical_record_id": record["id"],
+            "subject_id": record["subject_id"],
+            "kind": "claim",
+            "confidence": record["confidence"],
+            "evidence_ids": evidence_ids,
         },
     }
 
