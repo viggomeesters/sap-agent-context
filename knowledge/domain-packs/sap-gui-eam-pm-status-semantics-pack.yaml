@@ -154,6 +154,75 @@ items:
     - sap.object.eam-system-status
     - sap.object.eam-user-status
     - sap.object.eam-status-profile
+- id: sap.pattern.eam.pm-equipment-status-profile-ddic
+  title: Equipment status profile DDIC lookup pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - equipment
+  - status-profile
+  - user-status
+  - system-status
+  - ddic
+  - jsto
+  - jest
+  - tj20t
+  - tj30
+  - tj30t
+  - tj02t
+  - stsma
+  - estat
+  - objnr
+  - jostd
+  - sstxt
+  used_for:
+  - fo.field_mapping
+  - fo.business_rules
+  - fo.navigation
+  - fo.quality_gate
+  summary: 'Equipment status profile lookup pattern: use the equipment object number to read status object context
+    and active statuses. EQUI-OBJNR links to JSTO-OBJNR; JSTO-STSMA stores the assigned status profile key. EQUI-OBJNR
+    also links through the same object number to JEST-OBJNR
+    for active status records. Status profile descriptions are looked up by STSMA in status-profile text tables such
+    as TJ20T with the required language. User status labels must be joined through STSMA plus ESTAT and language in
+    TJ30/TJ30T; do not join TJ30T by ESTAT alone. System status labels use TJ02T for I* status codes. Screen fields
+    such as JOSTD-SSTXT are display/dynpro structures, not the durable storage table for the status profile name.
+    Confidence: medium internal_derived; verify exact DDIC availability and language/client handling in the target
+    SAP system.'
+  freshness: *id001
+  source: *id002
+  rules:
+  - if: question asks where an equipment status profile key or profile description is stored
+    then: start from EQUI-OBJNR, inspect JSTO-STSMA for the assigned profile key, and use STSMA text/customizing tables for profile descriptions
+    outcome: ready as generic DDIC lookup guidance with tenant verification
+  - if: question asks how to label user status codes from JEST
+    then: join JEST E* status codes to TJ30/TJ30T using the object's status profile STSMA plus ESTAT and language
+    outcome: avoids cross-profile E000x label collisions
+  - if: SAP GUI technical information shows JOSTD-SSTXT or another screen structure field
+    then: treat it as screen/display context and trace back to persistent DDIC tables before documenting storage
+    outcome: prevents mistaking dynpro structures for source tables
+  claims:
+  - statement: Equipment status profile lookup should use object status tables and STSMA, not a screen structure field such as JOSTD-SSTXT as the storage source.
+    evidence:
+    - sap.object.eam-equipment
+    - sap.object.eam-status-profile
+    - sap.object.eam-user-status
+  - statement: User status text lookup must include the status profile key STSMA together with ESTAT and language, because E* status numbers can repeat across profiles.
+    evidence:
+    - sap.object.eam-user-status
+    - sap.rule.eam.pm.tenant-status-profile-caveat
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    - sap.object.eam-technical-object-status
+    - sap.object.eam-system-status
+    - sap.object.eam-user-status
+    - sap.object.eam-status-profile
 - id: sap.test-pattern.eam.pm-ie03-status-question
   title: IE03 equipment status question test pattern
   kind: test_pattern
