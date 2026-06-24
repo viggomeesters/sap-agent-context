@@ -41,7 +41,36 @@ def test_build_indexes_writes_sqlite_jsonl_and_vector_ready_chunks(tmp_path: Pat
             "SELECT title, expires_at FROM items WHERE id = ?",
             ("sap.app.manage-workflows-supplier-invoices",),
         ).fetchone()
+        table_rows = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type IN ('table', 'view')"
+        )
+        tables = {row[0] for row in table_rows}
+        counts = dict(
+            conn.execute(
+                """
+                SELECT 'items', count(*) FROM items
+                UNION ALL SELECT 'claims', count(*) FROM claims
+                UNION ALL SELECT 'sources', count(*) FROM sources
+                UNION ALL SELECT 'relations', count(*) FROM relations
+                """
+            ).fetchall()
+        )
+        claim_payload = conn.execute(
+            "SELECT payload_json FROM claims WHERE subject_id = ? LIMIT 1",
+            ("sap.app.eam.pm.ie03",),
+        ).fetchone()
+        source_payload = conn.execute(
+            "SELECT payload_json FROM sources WHERE subject_id = ? LIMIT 1",
+            ("sap.app.eam.pm.ie03",),
+        ).fetchone()
     assert row == ("Manage Workflows for Supplier Invoices", "2026-12-21")
+    assert {"items", "claims", "sources", "relations", "item_topics", "item_used_for"} <= tables
+    assert counts["items"] == len(items)
+    assert counts["claims"] > counts["items"]
+    assert counts["sources"] == len(items)
+    assert counts["relations"] > 0
+    assert json.loads(claim_payload[0])["subject_id"] == "sap.app.eam.pm.ie03"
+    assert json.loads(source_payload[0])["subject_id"] == "sap.app.eam.pm.ie03"
 
     item_lines = (tmp_path / "items.jsonl").read_text(encoding="utf-8").splitlines()
     vector_lines = (tmp_path / "vector-corpus.jsonl").read_text(encoding="utf-8").splitlines()
