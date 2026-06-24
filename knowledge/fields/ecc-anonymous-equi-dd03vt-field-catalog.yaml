@@ -1,0 +1,4928 @@
+id: sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog
+title: SAP ECC EQUI field catalog from anonymized DD03VT extract
+kind: sap_field
+status: active
+access: gated
+requires_login: true
+sap_product: sap_ecc
+topics:
+- sap-ecc
+- sap-ddic
+- dd03vt
+- equi
+- equipment
+- field-catalog
+- data-migration
+used_for:
+- agent.context
+- fo.field_mapping
+- migration.analysis
+- source_traceability
+summary: An anonymized SAP ECC DD03VT extract variant for EQUI equipment master field metadata. It preserves generic SAP Dictionary
+  field structure and multilingual labels without tenant records, equipment numbers, customer names or project-specific values.
+freshness:
+  valid_from: '2026-06-24'
+  review_after: '2026-12-24'
+  expires_at: '2027-06-24'
+  retrieved_at: '2026-06-24'
+source:
+  kind: gated_url
+  title: Anonymized SAP ECC DD03VT extract for EQUI
+  url: sap-gui://table/DD03VT?tabname=EQUI&variant=ecc-anonymous-source-system-01
+  retrieved_at: '2026-06-24'
+  specificity: catalog_entry
+  license_note: In-system SAP DDIC metadata extract curated into generic field metadata; no tenant records, customer identifiers,
+    screenshots, raw exports or project-specific values are stored.
+release_applicability:
+  edition: SAP ECC
+  verification: Generated from an anonymized ECC source-system DD03VT extract dated 2026-06-24; compare with the target tenant
+    DDIC before relying on field availability or labels.
+  variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+claims:
+- statement: This EQUI field catalog preserves generic SAP ECC DDIC metadata useful for equipment master mapping and migration
+    analysis.
+  evidence:
+  - sap.ref.ddic-dd03vt-field-catalog-extract
+- statement: The curated variant intentionally omits tenant records and customer-specific values while retaining table, field,
+    data element, domain and label metadata.
+  evidence:
+  - sap.ref.ddic-dd03vt-field-catalog-extract
+relations:
+  objects:
+  - sap.object.eam-equipment
+  source_references:
+  - sap.ref.ddic-dd03vt-field-catalog-extract
+field_definitions:
+- key: EQUI.MANDT
+  sap_structure: EQUI
+  sap_field: MANDT
+  position: 1
+  key_field: true
+  required_field: false
+  data_element: MANDT
+  domain: MANDT
+  check_table: T000
+  abap_type: C
+  data_type: CLNT
+  internal_length: 3
+  characters: 3
+  description: EQUI field MANDT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Mandant
+      heading: Mdt
+      short: Mandant
+      medium: Mandant
+      long: Mandant
+    en:
+      short_description: Client
+      heading: Cl.
+      short: Client
+      medium: Client
+      long: Client
+    nl:
+      short_description: Mandant
+      heading: Mdt
+      short: Mandant
+      medium: Mandant
+      long: Mandant
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQUNR
+  sap_structure: EQUI
+  sap_field: EQUNR
+  position: 2
+  key_field: true
+  required_field: false
+  data_element: EQUNR
+  domain: EQUNR
+  abap_type: C
+  data_type: CHAR
+  internal_length: 18
+  characters: 18
+  description: EQUI field EQUNR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Equipmentnummer
+      heading: Equipment
+      short: Equipment
+      medium: Equipment
+      long: Equipment
+    en:
+      short_description: Equipment Number
+      heading: Equipment
+      short: Equipment
+      medium: Equipment
+      long: Equipment
+    nl:
+      short_description: Equipmentnummer
+      heading: Equipment
+      short: Equipment
+      medium: Equipment
+      long: Equipment
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ERDAT
+  sap_structure: EQUI
+  sap_field: ERDAT
+  position: 3
+  key_field: false
+  required_field: false
+  data_element: ERDAT
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field ERDAT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Datum, an dem der Satz hinzugefügt wurde
+      heading: Angel.am
+      short: Am
+      medium: Angelegt am
+      long: Angelegt am
+    en:
+      short_description: Record Creation Date
+      heading: Created On
+      short: 'On'
+      medium: Created On
+      long: Created On
+    nl:
+      short_description: Aanmaakdatum record
+      heading: Gecr. op
+      short: Op
+      medium: Gecreëerd op
+      long: Gecreëerd op
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ERNAM
+  sap_structure: EQUI
+  sap_field: ERNAM
+  position: 4
+  key_field: false
+  required_field: false
+  data_element: ERNAM
+  domain: USNAM
+  abap_type: C
+  data_type: CHAR
+  internal_length: 12
+  characters: 12
+  description: EQUI field ERNAM from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Name des Sachbearbeiters, der das Objekt hinzugefügt hat
+      heading: Angel.von
+      short: Angelegt
+      medium: Angelegt von
+      long: Angelegt von
+    en:
+      short_description: Name of Person Responsible for Creating the Object
+      heading: Created By
+      short: Created
+      medium: Created By
+      long: Created By
+    nl:
+      short_description: Naam van persoon die object heeft gecreëerd
+      heading: Gecr. door
+      short: Gecreëerd
+      medium: Gecreëerd door
+      long: Gecreëerd door
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQASP
+  sap_structure: EQUI
+  sap_field: EQASP
+  position: 5
+  key_field: false
+  required_field: false
+  data_element: EQASP
+  domain: SPRAS
+  check_table: T002
+  abap_type: C
+  data_type: LANG
+  internal_length: 1
+  characters: 1
+  description: EQUI field EQASP from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Sprache, in der das Objekt erfaßt wurde
+      heading: S
+      short: Sprache
+      medium: Leitsprache
+      long: Leitsprache
+    en:
+      short_description: Language in Which the Piece of Equipment was Entered
+      heading: L
+      short: Language
+      medium: Primary lang.
+      long: Primary language
+    nl:
+      short_description: Taal waarin het object is ingevoerd
+      heading: T
+      short: Taal
+      medium: Hoofdtaal
+      long: Hoofdtaal
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.AEDAT
+  sap_structure: EQUI
+  sap_field: AEDAT
+  position: 6
+  key_field: false
+  required_field: false
+  data_element: AEDAT
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field AEDAT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Datum der letzten Änderung
+      heading: Geänd.am
+      short: Ändg.
+      medium: Geändert am
+      long: Geändert am
+    en:
+      short_description: Last Changed On
+      heading: Chngd on
+      short: Chngd
+      medium: Changed on
+      long: Changed on
+    nl:
+      short_description: Laatst gewijzigd op
+      heading: Wijz. op
+      short: Gwzgd
+      medium: Gewijzigd op
+      long: Gewijzigd op
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.AENAM
+  sap_structure: EQUI
+  sap_field: AENAM
+  position: 7
+  key_field: false
+  required_field: false
+  data_element: AENAM
+  domain: USNAM
+  abap_type: C
+  data_type: CHAR
+  internal_length: 12
+  characters: 12
+  description: EQUI field AENAM from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Name des Sachbearbeiters, der das Objekt geändert hat.
+      heading: Geändert von
+      short: Von
+      medium: Geändert von
+      long: Geändert von
+    en:
+      short_description: Name of Person Who Changed Object
+      heading: Changed By
+      short: By
+      medium: Changed By
+      long: Changed By
+    nl:
+      short_description: Naam persoon die object heeft gewijzigd
+      heading: Gewijz. door
+      short: Door
+      medium: Gewijzigd door
+      long: Gewijzigd door
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.BEGRU
+  sap_structure: EQUI
+  sap_field: BEGRU
+  position: 8
+  key_field: false
+  required_field: false
+  data_element: IAUTG
+  domain: IAUTG
+  check_table: T370B
+  abap_type: C
+  data_type: CHAR
+  internal_length: 4
+  characters: 4
+  description: EQUI field BEGRU from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Berechtigungsgruppe zum Technischen Objekt
+      heading: BGrp
+      short: BerGrp.
+      medium: BerechtGruppe
+      long: BerechtigGruppe
+    en:
+      short_description: Technical object authorization group
+      heading: AGrp
+      short: AuthGrp
+      medium: AuthorizGroup
+      long: AuthorizGroup
+    nl:
+      short_description: Bevoegdheidsgroep voor technisch object
+      heading: BGrp
+      short: Bev.groep
+      medium: Bevoegdheidsgrp
+      long: Bevoegdheidsgroep
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQTYP
+  sap_structure: EQUI
+  sap_field: EQTYP
+  position: 9
+  key_field: false
+  required_field: false
+  data_element: EQTYP
+  domain: EQTYP
+  check_table: T370T
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field EQTYP from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Equipmenttyp
+      heading: T
+      short: Typ
+      medium: Equipmenttyp
+      long: Equipmenttyp
+    en:
+      short_description: Equipment category
+      heading: C
+      short: Category
+      medium: EquipCategory
+      long: Equipment category
+    nl:
+      short_description: Equipmenttype
+      heading: T
+      short: Type
+      medium: Equipmenttype
+      long: Equipmenttype
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQART
+  sap_structure: EQUI
+  sap_field: EQART
+  position: 10
+  key_field: false
+  required_field: false
+  data_element: EQART
+  domain: EQART
+  check_table: T370K
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field EQART from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Art des technischen Objekts
+      heading: Objektart
+      short: Objektart
+      medium: Objektart
+      long: Art techn. Objekt
+    en:
+      short_description: Type of Technical Object
+      heading: ObjectType
+      short: ObjectType
+      medium: Object type
+      long: Technical obj. type
+    nl:
+      short_description: Soort technisch object
+      heading: Obj.srt
+      short: Obj.srt
+      medium: Objectsoort
+      long: Srt technisch object
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.LVORM
+  sap_structure: EQUI
+  sap_field: LVORM
+  position: 11
+  key_field: false
+  required_field: false
+  data_element: RESERVE_CHAR_001
+  domain: CHAR1
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field LVORM from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: 'SAP-Entwicklungsreserve: Format CHAR, Länge 1'
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    en:
+      short_description: 'SAP Development Reserve: Format CHAR, Length 1'
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    nl:
+      short_description: 'SAP-ontwikkelreserve: formaat CHAR, lengte 1'
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.INVNR
+  sap_structure: EQUI
+  sap_field: INVNR
+  position: 12
+  key_field: false
+  required_field: false
+  data_element: INVNR
+  domain: INVNR_ANLA
+  abap_type: C
+  data_type: CHAR
+  internal_length: 25
+  characters: 25
+  description: EQUI field INVNR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Inventarnummer
+      heading: Inventarnummer
+      short: InventNr
+      medium: InventarNr
+      long: Inventarnummer
+    en:
+      short_description: Inventory number
+      heading: Inventory number
+      short: InvNo.
+      medium: Inventory no.
+      long: Inventory number
+    nl:
+      short_description: Inventarisnummer
+      heading: Inventarisnummer
+      short: InventNr
+      medium: Inventarisnr
+      long: Inventarisnummer
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.GROES
+  sap_structure: EQUI
+  sap_field: GROES
+  position: 13
+  key_field: false
+  required_field: false
+  data_element: GROSS
+  domain: GROES
+  abap_type: C
+  data_type: CHAR
+  internal_length: 18
+  characters: 18
+  description: EQUI field GROES from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Größe/Abmessung
+      heading: Größe/Abmessung
+      short: Größe
+      medium: Größe/Abmess.
+      long: Größe/Abmessung
+    en:
+      short_description: Size/dimension
+      heading: Size/dimension
+      short: Size
+      medium: Size/dimens.
+      long: Size/dimension
+    nl:
+      short_description: Grootte/afmeting
+      heading: Grootte/afmeting
+      short: Grootte
+      medium: Grootte/afmet.
+      long: Grootte/afmeting
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.BRGEW
+  sap_structure: EQUI
+  sap_field: BRGEW
+  position: 14
+  key_field: false
+  required_field: false
+  data_element: OBJ_WEIGHT
+  domain: MENG13
+  abap_type: P
+  data_type: QUAN
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: GEWEI
+  description: EQUI field BRGEW from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Gewicht des Objekts
+      heading: Gewicht
+      short: Gewicht
+      medium: Gewicht
+      long: Gewicht des Objektes
+    en:
+      short_description: Weight of object
+      heading: Weight
+      short: Weight
+      medium: Weight
+      long: Weight of object
+    nl:
+      short_description: Gewicht van object
+      heading: Gewicht
+      short: Gewicht
+      medium: Gewicht
+      long: Gewicht van object
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.GEWEI
+  sap_structure: EQUI
+  sap_field: GEWEI
+  position: 15
+  key_field: false
+  required_field: false
+  data_element: WEIGHT_UNIT
+  domain: MEINS
+  check_table: T006
+  abap_type: C
+  data_type: UNIT
+  internal_length: 3
+  characters: 3
+  description: EQUI field GEWEI from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Gewichtseinheit
+      heading: Eh
+      short: Einheit
+      medium: Gewichtseinheit
+      long: Gewichtseinheit
+    en:
+      short_description: Unit of weight
+      heading: Un.
+      short: Unit
+      medium: Unit of weight
+      long: Unit of weight
+    nl:
+      short_description: Gewichtseenheid
+      heading: Eh
+      short: Eenheid
+      medium: Gewichtseenheid
+      long: Gewichtseenheid
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ANSDT
+  sap_structure: EQUI
+  sap_field: ANSDT
+  position: 16
+  key_field: false
+  required_field: false
+  data_element: ANDTI
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field ANSDT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Anschaffungsdatum
+      heading: Datum
+      short: AnschDat
+      medium: AnschaffDatum
+      long: Anschaffungsdatum
+    en:
+      short_description: Acquisition date
+      heading: Date
+      short: AcqDate
+      medium: Acquistion date
+      long: Acquisition date
+    nl:
+      short_description: Aanschafdatum
+      heading: Datum
+      short: AanschDat
+      medium: Aanschafdatum
+      long: Aanschafdatum
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ANSWT
+  sap_structure: EQUI
+  sap_field: ANSWT
+  position: 17
+  key_field: false
+  required_field: false
+  data_element: ANSWT
+  domain: WERT
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: WAERS
+  description: EQUI field ANSWT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Anschaffungswert
+      heading: Anschaffungswert
+      short: AnschWert
+      medium: AnschaffWert
+      long: Anschaffungswert
+    en:
+      short_description: Acquisition Value
+      heading: Acquisition Value
+      short: Acq.value
+      medium: AcquistnValue
+      long: Acquisition Value
+    nl:
+      short_description: Aanschafwaarde
+      heading: Aanschafwaarde
+      short: AanschWrde
+      medium: Aanschafwaarde
+      long: Aanschafwaarde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.WAERS
+  sap_structure: EQUI
+  sap_field: WAERS
+  position: 18
+  key_field: false
+  required_field: false
+  data_element: WAERS
+  domain: WAERS
+  check_table: TCURC
+  abap_type: C
+  data_type: CUKY
+  internal_length: 5
+  characters: 5
+  description: EQUI field WAERS from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Währungsschlüssel
+      heading: Währg
+      short: Währung
+      medium: Währung
+      long: Währung
+    en:
+      short_description: Currency Key
+      heading: Crcy
+      short: Currency
+      medium: Currency
+      long: Currency
+    nl:
+      short_description: Valutacode
+      heading: Val.
+      short: Valuta
+      medium: Valuta
+      long: Valuta
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ELIEF
+  sap_structure: EQUI
+  sap_field: ELIEF
+  position: 19
+  key_field: false
+  required_field: false
+  data_element: ELIEF
+  domain: LIFNR
+  check_table: LFA1
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field ELIEF from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Lieferantennummer
+      heading: Lieferant
+      short: Lieferant
+      medium: Lieferant
+      long: Lieferant
+    en:
+      short_description: Vendor number
+      heading: Vendor
+      short: Vendor
+      medium: Vendor
+      long: Vendor
+    nl:
+      short_description: Leveranciernummer
+      heading: Leveranc.
+      short: Leveranc.
+      medium: Leverancier
+      long: Leverancier
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.GWLEN
+  sap_structure: EQUI
+  sap_field: GWLEN
+  position: 20
+  key_field: false
+  required_field: false
+  data_element: GWLEN
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field GWLEN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Datum, an dem die Gewährleistung endet
+      heading: Ende Gew.
+      short: Ende Gew.
+      medium: GewährlEnde
+      long: Gewährleistungsende
+    en:
+      short_description: Date on which the warranty ends
+      heading: WtyEnd
+      short: WtyEnd
+      medium: Warranty end
+      long: Warranty end date
+    nl:
+      short_description: Datum waarop de garantie eindigt
+      heading: Einde gar.
+      short: Einde gar.
+      medium: Garantie-einde
+      long: Garantie-einde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.GWLDT
+  sap_structure: EQUI
+  sap_field: GWLDT
+  position: 21
+  key_field: false
+  required_field: false
+  data_element: GWLDT
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field GWLDT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Gewährleistungsdatum
+      heading: Gewähr.dat
+      short: Gewährlei.
+      medium: GewährlBeginn
+      long: Gewährleistung
+    en:
+      short_description: Warranty Date
+      heading: Warr. Date
+      short: Warr.Start
+      medium: Warranty Start
+      long: Warranty
+    nl:
+      short_description: Garantiedatum
+      heading: Garantie
+      short: Garantie
+      medium: Garantiebegin
+      long: Garantie
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.WDBWT
+  sap_structure: EQUI
+  sap_field: WDBWT
+  position: 22
+  key_field: false
+  required_field: false
+  data_element: WDBWT
+  domain: WERT
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: T001
+  reference_field: WAERS
+  description: EQUI field WDBWT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Wiederbeschaffungswert des Equipments
+      heading: WiedBeschWert
+      short: WdbWert
+      medium: WiedBeschWert
+      long: WiederbeschaffWert
+    en:
+      short_description: Equipment replacement value
+      heading: ReplVal.
+      short: ReplVal.
+      medium: ReplValue
+      long: Replacement value
+    nl:
+      short_description: Vervangingswaarde van het equipment
+      heading: Vervang.wrde
+      short: Verv.wrde
+      medium: Vervangingswrde
+      long: Vervangingswaarde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.HERST
+  sap_structure: EQUI
+  sap_field: HERST
+  position: 23
+  key_field: false
+  required_field: false
+  data_element: HERST
+  domain: TEXT30
+  abap_type: C
+  data_type: CHAR
+  internal_length: 30
+  characters: 30
+  description: EQUI field HERST from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Hersteller der Anlage
+      heading: Hersteller der Anlage
+      short: Hersteller
+      medium: Hersteller
+      long: Hersteller
+    en:
+      short_description: Manufacturer of asset
+      heading: Manufacturer of asset
+      short: Mfr
+      medium: Manufacturer
+      long: Manufacturer
+    nl:
+      short_description: Producent van het vast actief
+      heading: Producent van het vast actief
+      short: Producent
+      medium: Producent
+      long: Producent
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.HERLD
+  sap_structure: EQUI
+  sap_field: HERLD
+  position: 24
+  key_field: false
+  required_field: false
+  data_element: HERLD
+  domain: LAND1
+  check_table: T005
+  abap_type: C
+  data_type: CHAR
+  internal_length: 3
+  characters: 3
+  description: EQUI field HERLD from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Herstellerland
+      heading: HLand
+      short: HrstLand
+      medium: HerstellLand
+      long: Herstellerland
+    en:
+      short_description: Country of manufacture
+      heading: MCtry
+      short: ManCtry
+      medium: ManufCountry
+      long: Country of manufact.
+    nl:
+      short_description: Productieland
+      heading: PLand
+      short: Prod.land
+      medium: Productieland
+      long: Productieland
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.HZEIN
+  sap_structure: EQUI
+  sap_field: HZEIN
+  position: 25
+  key_field: false
+  required_field: false
+  data_element: HZEIN
+  domain: HZEIN
+  abap_type: C
+  data_type: CHAR
+  internal_length: 30
+  characters: 30
+  description: EQUI field HZEIN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Zeichnungsnummer laut Hersteller
+      heading: Herstellerzeichnungsnummer
+      short: Zeichnung
+      medium: HerstZeichgNr
+      long: HerstZeichngNummer
+    en:
+      short_description: Manufacturer drawing number
+      heading: Manufacturer drawing number
+      short: Drawing
+      medium: Drawing no.
+      long: ManufDrawingNumber
+    nl:
+      short_description: Tekeningnummer van de producent
+      heading: Producent-tekeningnummer
+      short: Tekening
+      medium: Prod.tekeningnr
+      long: Producent-tekeningnr
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.SERGE
+  sap_structure: EQUI
+  sap_field: SERGE
+  position: 26
+  key_field: false
+  required_field: false
+  data_element: SERGE
+  domain: CHAR30
+  abap_type: C
+  data_type: CHAR
+  internal_length: 30
+  characters: 30
+  description: EQUI field SERGE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Serialnummer gemäß Hersteller
+      heading: Hersteller Serialnummer
+      short: SerialNr
+      medium: HerstSerialNr
+      long: Hersteller SerialNr
+    en:
+      short_description: Manufacturer serial number
+      heading: ManufactSerialNumber
+      short: SerNo.
+      medium: ManufSerialNo.
+      long: ManufSerialNumber
+    nl:
+      short_description: Serienummer volgens producent
+      heading: Producent serienummer
+      short: Serienr.
+      medium: Serienummer
+      long: Producent serienr.
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.TYPBZ
+  sap_structure: EQUI
+  sap_field: TYPBZ
+  position: 27
+  key_field: false
+  required_field: false
+  data_element: TYPBZ
+  domain: TYPBZ
+  abap_type: C
+  data_type: CHAR
+  internal_length: 20
+  characters: 20
+  description: EQUI field TYPBZ from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Typenbezeichnung des Herstellers
+      heading: Typenbezeichnung
+      short: TypBez
+      medium: Typbezeichng
+      long: Typenbezeichnung
+    en:
+      short_description: Manufacturer model number
+      heading: Model number
+      short: Model no.
+      medium: Model number
+      long: Model number
+    nl:
+      short_description: Typebenaming van producent
+      heading: Typeomschrijving
+      short: TypeOmschr
+      medium: Type-omschrijv.
+      long: Typeomschrijving
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.BAUJJ
+  sap_structure: EQUI
+  sap_field: BAUJJ
+  position: 28
+  key_field: false
+  required_field: false
+  data_element: BAUJJ
+  domain: CJAHR
+  abap_type: C
+  data_type: CHAR
+  internal_length: 4
+  characters: 4
+  description: EQUI field BAUJJ from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Baujahr
+      heading: BauJ
+      short: Baujahr
+      medium: Baujahr
+      long: Baujahr
+    en:
+      short_description: Year of construction
+      heading: ConY
+      short: ConstYr
+      medium: ConstructYear
+      long: Construction year
+    nl:
+      short_description: Bouwjaar
+      heading: BwJr
+      short: Bouwjaar
+      medium: Bouwjaar
+      long: Bouwjaar
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.BAUMM
+  sap_structure: EQUI
+  sap_field: BAUMM
+  position: 29
+  key_field: false
+  required_field: false
+  data_element: BAUMM
+  domain: BAUMM
+  abap_type: C
+  data_type: CHAR
+  internal_length: 2
+  characters: 2
+  description: EQUI field BAUMM from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Baumonat
+      heading: BM
+      short: Baumonat
+      medium: Baumonat
+      long: Baumonat
+    en:
+      short_description: Month of construction
+      heading: CM
+      short: ConstMth
+      medium: ConstructMth
+      long: Construction month
+    nl:
+      short_description: Bouwmaand
+      heading: BM
+      short: Bouwmaand
+      medium: Bouwmaand
+      long: Bouwmaand
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.APLKZ
+  sap_structure: EQUI
+  sap_field: APLKZ
+  position: 30
+  key_field: false
+  required_field: false
+  data_element: APLKZ
+  domain: APLKZ
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field APLKZ from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: 'Kennzeichen: Arbeitsplan vorhanden'
+      heading: AV
+      short: Arbeitspl.
+      medium: Arbeitsplan
+      long: Arbeitsplan vorh.
+    en:
+      short_description: 'Indicator: Task List Exists'
+      heading: TE
+      short: Task list
+      medium: Task list
+      long: Task list exists
+    nl:
+      short_description: 'Teken: taaklijst aanwezig'
+      heading: RA
+      short: Taaklijst
+      medium: Taaklijst
+      long: Taaklijst aanwezig
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.AULDT
+  sap_structure: EQUI
+  sap_field: AULDT
+  position: 31
+  key_field: false
+  required_field: false
+  data_element: AULDT
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field AULDT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Erstes Auslieferungsdatum des Equipments
+      heading: AuslDatum
+      short: AuslDatum
+      medium: AusliefDatum
+      long: AusliefDatum
+    en:
+      short_description: First delivery date of the equipment
+      heading: DelDate
+      short: DelDate
+      medium: Delivery date
+      long: Delivery date
+    nl:
+      short_description: Eerste uitleveringsdatum van equipment
+      heading: UitlDatum
+      short: UitlDatum
+      medium: Uitl.datum
+      long: Uitleveringsdatum
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.INBDT
+  sap_structure: EQUI
+  sap_field: INBDT
+  position: 32
+  key_field: false
+  required_field: false
+  data_element: ILOM_DATAB
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field INBDT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Datum der Inbetriebnahme des Technischen Objekts
+      heading: Betrieb ab
+      short: Betrieb ab
+      medium: In Betrieb ab
+      long: In Betrieb ab
+    en:
+      short_description: Start-up Date of the Technical Object
+      heading: Start from
+      short: Start from
+      medium: Start-up date
+      long: Start-up date
+    nl:
+      short_description: Datum van ingebruikname van het technisch object
+      heading: InGebrVan
+      short: InGebrVan
+      medium: In gebruik van
+      long: In gebruik vanaf
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.GERNR
+  sap_structure: EQUI
+  sap_field: GERNR
+  position: 33
+  key_field: false
+  required_field: false
+  data_element: GERNR
+  domain: GERNR
+  abap_type: C
+  data_type: CHAR
+  internal_length: 18
+  characters: 18
+  description: EQUI field GERNR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Serialnummer
+      heading: Serialnummer
+      short: SerialNr
+      medium: Serialnummer
+      long: Serialnummer
+    en:
+      short_description: Serial Number
+      heading: Serial Number
+      short: Serial No.
+      medium: Serial Number
+      long: Serial Number
+    nl:
+      short_description: Serienummer
+      heading: Serienummer
+      short: Serienr.
+      medium: Serienummer
+      long: Serienummer
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQLFN
+  sap_structure: EQUI
+  sap_field: EQLFN
+  position: 34
+  key_field: false
+  required_field: false
+  data_element: EQLFN
+  domain: NUM03
+  abap_type: N
+  data_type: NUMC
+  internal_length: 3
+  characters: 3
+  description: EQUI field EQLFN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Laufende Nummer des Equipmenteinsatzes an einem Tag
+      heading: LNE
+      short: LaufndNr
+      medium: Laufende Nr.
+      long: LaufndNr EqEinsatz
+    en:
+      short_description: Consecutive numbering of EquipUsagePeriods on same day
+      heading: ECN
+      short: ConsecNo.
+      medium: ConsecNumber
+      long: UsgePerConsecNo.
+    nl:
+      short_description: Volgnummer van equipmentinzet op een dag
+      heading: VNI
+      short: Volgnr
+      medium: Volgnummer
+      long: Volgnr equi-inzet
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.GWLDV
+  sap_structure: EQUI
+  sap_field: GWLDV
+  position: 35
+  key_field: false
+  required_field: false
+  data_element: GWLDV
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field GWLDV from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Gewährleistungsdatum für den Vertrieb
+      heading: Gewährl.
+      short: Gewähl.
+      medium: Gewährleist.
+      long: Gewährleistung
+    en:
+      short_description: Warranty date for Sales and Distribution
+      heading: Warranty
+      short: Warranty
+      medium: Warranty date
+      long: Warranty date
+    nl:
+      short_description: Garantiedatum voor de verkoop
+      heading: Garantie
+      short: Garantie
+      medium: Garantie
+      long: Garantie
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQDAT
+  sap_structure: EQUI
+  sap_field: EQDAT
+  position: 36
+  key_field: false
+  required_field: false
+  data_element: EQDAT
+  domain: DATUM
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field EQDAT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Datum, für SAP-interne Nutzung vorgesehen
+      heading: Datum
+      short: Datum
+      medium: Datum
+      long: Datum
+    en:
+      short_description: Date, intended for SAP internal use
+      heading: Date
+      short: Date
+      medium: Date
+      long: Date
+    nl:
+      short_description: Datum, bedoeld voor SAP-intern gebruik
+      heading: Datum
+      short: Datum
+      medium: Datum
+      long: Datum
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQBER
+  sap_structure: EQUI
+  sap_field: EQBER
+  position: 37
+  key_field: false
+  required_field: false
+  data_element: EQBER
+  domain: CHAR30
+  abap_type: C
+  data_type: CHAR
+  internal_length: 30
+  characters: 30
+  description: EQUI field EQBER from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Technische Informationen, für SAP-interne Nutzung vorgesehen
+      heading: Bemerkung
+      short: Bemerk
+      medium: Bemerkung
+      long: Bemerkung
+    en:
+      short_description: Technical information, intended for SAP internal use
+      heading: Note
+      short: Note
+      medium: Note
+      long: Note
+    nl:
+      short_description: Technische informatie, bedoeld voor SAP-intern gebruik
+      heading: Opmerking
+      short: Opmerking
+      medium: Opmerking
+      long: Opmerking
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQNUM
+  sap_structure: EQUI
+  sap_field: EQNUM
+  position: 38
+  key_field: false
+  required_field: false
+  data_element: EQNUM
+  domain: NUM9
+  abap_type: N
+  data_type: NUMC
+  internal_length: 9
+  characters: 9
+  description: EQUI field EQNUM from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Numerisches Feld, für SAP-interne Nutzung vorgesehen
+      heading: Feld
+      short: Feld
+      medium: Feld
+      long: Feld
+    en:
+      short_description: Numerical field, intended for SAP internal use
+      heading: Field
+      short: Field
+      medium: Field
+      long: Field
+    nl:
+      short_description: Numeriek veld, bedoeld voor SAP-intern gebruik
+      heading: Veld
+      short: Veld
+      medium: Veld
+      long: Veld
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.OBJNR
+  sap_structure: EQUI
+  sap_field: OBJNR
+  position: 39
+  key_field: false
+  required_field: false
+  data_element: J_OBJNR
+  domain: J_OBJNR
+  check_table: '*'
+  abap_type: C
+  data_type: CHAR
+  internal_length: 22
+  characters: 22
+  description: EQUI field OBJNR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Objektnummer
+      heading: Objektnummer
+      short: ObjNr
+      medium: Objektnummer
+      long: Objektnummer
+    en:
+      short_description: Object number
+      heading: Object number
+      short: Obj. no.
+      medium: Object number
+      long: Object number
+    nl:
+      short_description: Objectnummer
+      heading: Objectnummer
+      short: ObjNr
+      medium: Objectnummer
+      long: Objectnummer
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQSNR
+  sap_structure: EQUI
+  sap_field: EQSNR
+  position: 40
+  key_field: false
+  required_field: false
+  data_element: EQSNR
+  domain: EQSNR
+  check_table: EQSE
+  abap_type: C
+  data_type: CHAR
+  internal_length: 18
+  characters: 18
+  description: EQUI field EQSNR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Nummer der EQSE
+      heading: ''
+      short: Nummer
+      medium: Nummer
+      long: Nummer
+    en:
+      short_description: EQSE Number
+      heading: ''
+      short: Number
+      medium: Number
+      long: Number
+    nl:
+      short_description: Nummer van EQSE
+      heading: ''
+      short: Nummer
+      medium: Nummer
+      long: Nummer
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.CUOBJ
+  sap_structure: EQUI
+  sap_field: CUOBJ
+  position: 41
+  key_field: false
+  required_field: false
+  data_element: CUOBJ
+  domain: CUOBJ
+  abap_type: N
+  data_type: NUMC
+  internal_length: 18
+  characters: 18
+  description: EQUI field CUOBJ from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Konfiguration (interne Objektnummer)
+      heading: Objektnummer
+      short: int.Objnr.
+      medium: int. Objektnr.
+      long: Interne Objektnummer
+    en:
+      short_description: Configuration (internal object number)
+      heading: Object no.
+      short: Int.obj.no
+      medium: Int. object no.
+      long: Internal object no.
+    nl:
+      short_description: Configuratie (intern objectnummer)
+      heading: Objectnummer
+      short: Int.obj.nr
+      medium: Int. objectnr.
+      long: Intern objectnummer
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.KRFKZ
+  sap_structure: EQUI
+  sap_field: KRFKZ
+  position: 42
+  key_field: false
+  required_field: false
+  data_element: KRFKZ
+  domain: X
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field KRFKZ from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Referenzierte Konfiguration
+      heading: R
+      short: Referenz
+      medium: Referenziert
+      long: Referenzierte Konf.
+    en:
+      short_description: Referenced Configuration
+      heading: R
+      short: Reference
+      medium: Referenced
+      long: Referenced config.
+    nl:
+      short_description: Gerefereerde configuratie
+      heading: R
+      short: Referentie
+      medium: Gerefereerd
+      long: Gerefereerde conf.
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.KMATN
+  sap_structure: EQUI
+  sap_field: KMATN
+  position: 43
+  key_field: false
+  required_field: false
+  data_element: KMATN
+  domain: MATNR
+  check_table: MARA
+  abap_type: C
+  data_type: CHAR
+  internal_length: 18
+  characters: 18
+  description: EQUI field KMATN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Konfigurierbares Material
+      heading: Konfig.Material
+      short: Konf.Mat
+      medium: Konfig.Material
+      long: Konfigurierb. Material
+    en:
+      short_description: Configurable Material
+      heading: Config. material
+      short: ConfigMat
+      medium: Config.material
+      long: Configurable material
+    nl:
+      short_description: Configureerbaar artikel
+      heading: Config.artikel
+      short: Conf.art
+      medium: Config. artikel
+      long: Configureerbaar artikel
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.MATNR
+  sap_structure: EQUI
+  sap_field: MATNR
+  position: 44
+  key_field: false
+  required_field: false
+  data_element: MATNR
+  domain: MATNR
+  check_table: MARA
+  abap_type: C
+  data_type: CHAR
+  internal_length: 18
+  characters: 18
+  description: EQUI field MATNR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Materialnummer
+      heading: Material
+      short: Material
+      medium: Material
+      long: Material
+    en:
+      short_description: Material Number
+      heading: Material
+      short: Material
+      medium: Material
+      long: Material
+    nl:
+      short_description: Artikelnummer
+      heading: Artikel
+      short: Artikel
+      medium: Artikel
+      long: Artikel
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.SERNR
+  sap_structure: EQUI
+  sap_field: SERNR
+  position: 45
+  key_field: false
+  required_field: false
+  data_element: GERNR
+  domain: GERNR
+  abap_type: C
+  data_type: CHAR
+  internal_length: 18
+  characters: 18
+  description: EQUI field SERNR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Serialnummer
+      heading: Serialnummer
+      short: SerialNr
+      medium: Serialnummer
+      long: Serialnummer
+    en:
+      short_description: Serial Number
+      heading: Serial Number
+      short: Serial No.
+      medium: Serial Number
+      long: Serial Number
+    nl:
+      short_description: Serienummer
+      heading: Serienummer
+      short: Serienr.
+      medium: Serienummer
+      long: Serienummer
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.WERK
+  sap_structure: EQUI
+  sap_field: WERK
+  position: 46
+  key_field: false
+  required_field: false
+  data_element: WERKS_D
+  domain: WERKS
+  check_table: T001W
+  abap_type: C
+  data_type: CHAR
+  internal_length: 4
+  characters: 4
+  description: EQUI field WERK from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Werk
+      heading: Werk
+      short: Werk
+      medium: Werk
+      long: Werk
+    en:
+      short_description: Plant
+      heading: Plnt
+      short: Plant
+      medium: Plant
+      long: Plant
+    nl:
+      short_description: Vestiging
+      heading: Vst.
+      short: Vestiging
+      medium: Vestiging
+      long: Vestiging
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.LAGER
+  sap_structure: EQUI
+  sap_field: LAGER
+  position: 47
+  key_field: false
+  required_field: false
+  data_element: LGORT_D
+  domain: LGORT
+  check_table: T001L
+  abap_type: C
+  data_type: CHAR
+  internal_length: 4
+  characters: 4
+  description: EQUI field LAGER from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Lagerort
+      heading: LOrt
+      short: Lagerort
+      medium: Lagerort
+      long: Lagerort
+    en:
+      short_description: Storage Location
+      heading: SLoc
+      short: Stor. Loc.
+      medium: Stor. Loc.
+      long: Storage Location
+    nl:
+      short_description: Magazijn
+      heading: Mag.
+      short: Magazijn
+      medium: Magazijn
+      long: Magazijn
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.CHARGE
+  sap_structure: EQUI
+  sap_field: CHARGE
+  position: 48
+  key_field: false
+  required_field: false
+  data_element: CHARG_D
+  domain: CHARG
+  check_table: MCH1
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field CHARGE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Chargennummer
+      heading: Charge
+      short: Charge
+      medium: Charge
+      long: Charge
+    en:
+      short_description: Batch Number
+      heading: Batch
+      short: Batch
+      medium: Batch
+      long: Batch
+    nl:
+      short_description: Chargenummer
+      heading: Charge
+      short: Charge
+      medium: Charge
+      long: Charge
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.KUNDE
+  sap_structure: EQUI
+  sap_field: KUNDE
+  position: 49
+  key_field: false
+  required_field: false
+  data_element: KUNDSE
+  domain: KUNNR
+  check_table: KNA1
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field KUNDE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Kunde, an den Serialnummer geliefert wurde
+      heading: Akt. Kunde
+      short: Kunde
+      medium: Akt. Kunde
+      long: Aktueller Kunde
+    en:
+      short_description: Customer to Whom Serial Number was Delivered
+      heading: CurCustomer
+      short: Customer
+      medium: CurCustomer
+      long: Current customer
+    nl:
+      short_description: Klant waaraan serienummer is geleverd
+      heading: Huid.klant
+      short: Klant
+      medium: Huidige klant
+      long: Huidige klant
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.WARPL
+  sap_structure: EQUI
+  sap_field: WARPL
+  position: 50
+  key_field: false
+  required_field: false
+  data_element: WARPL
+  domain: WARPL
+  check_table: MPLA
+  abap_type: C
+  data_type: CHAR
+  internal_length: 12
+  characters: 12
+  description: EQUI field WARPL from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Wartungsplan
+      heading: W-Plan
+      short: W-Plan
+      medium: Wartungsplan
+      long: Wartungsplan
+    en:
+      short_description: Maintenance Plan
+      heading: MntPlan
+      short: MntPlan
+      medium: MaintenancePlan
+      long: Maintenance Plan
+    nl:
+      short_description: PO-plan
+      heading: PO-plan
+      short: PO-plan
+      medium: PO-plan
+      long: PO-plan
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.IMRC_POINT
+  sap_structure: EQUI
+  sap_field: IMRC_POINT
+  position: 51
+  key_field: false
+  required_field: false
+  data_element: IMRC_POINT
+  domain: IMRC_POINT
+  check_table: IMPTT
+  abap_type: C
+  data_type: CHAR
+  internal_length: 12
+  characters: 12
+  description: EQUI field IMRC_POINT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Meßpunkt
+      heading: Meßpunkt
+      short: Meßpunkt
+      medium: Meßpunkt
+      long: Meßpunkt
+    en:
+      short_description: Measuring Point
+      heading: MeasPoint
+      short: MeasPoint
+      medium: Measuring point
+      long: Measuring point
+    nl:
+      short_description: Meetpunt
+      heading: Meetpunt
+      short: Meetpunt
+      medium: Meetpunt
+      long: Meetpunt
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.REVLV
+  sap_structure: EQUI
+  sap_field: REVLV
+  position: 52
+  key_field: false
+  required_field: false
+  data_element: REVLV
+  domain: REVLV
+  abap_type: C
+  data_type: CHAR
+  internal_length: 2
+  characters: 2
+  description: EQUI field REVLV from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Revisionsstand
+      heading: RevStd
+      short: RevStand
+      medium: Revisionsstand
+      long: Revisionsstand
+    en:
+      short_description: Revision Level
+      heading: RevLev
+      short: Rev. Level
+      medium: Revision Level
+      long: Revision Level
+    nl:
+      short_description: Revisiestand
+      heading: RevStd
+      short: RevStand
+      medium: Revisiestand
+      long: Revisiestand
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.MGANR
+  sap_structure: EQUI
+  sap_field: MGANR
+  position: 53
+  key_field: false
+  required_field: false
+  data_element: MGANR
+  domain: MGANR
+  check_table: BGMK
+  abap_type: C
+  data_type: CHAR
+  internal_length: 20
+  characters: 20
+  description: EQUI field MGANR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Mustergarantienummer
+      heading: Mustergarantie
+      short: MusterGar
+      medium: Mustergarantie
+      long: Mustergarantie
+    en:
+      short_description: Master warranty number
+      heading: Master warranty
+      short: MasterWarr
+      medium: Master warranty
+      long: Master warranty
+    nl:
+      short_description: Modelgarantienummer
+      heading: Modelgarantie
+      short: Modelgar.
+      medium: Modelgarantie
+      long: Modelgarantie
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.BEGRUI
+  sap_structure: EQUI
+  sap_field: BEGRUI
+  position: 54
+  key_field: false
+  required_field: false
+  data_element: INH_BEGRUI
+  domain: INHER
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field BEGRUI from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Datenherkunft für Feld 'Berechtigungsgruppe'
+      heading: H
+      short: Herkunft
+      medium: Herk.BerechtGr.
+      long: Herk.BerechtGruppe
+    en:
+      short_description: Data origin for authorization group field
+      heading: O
+      short: Origin
+      medium: AuthGrp orig.
+      long: AuthGroup origin
+    nl:
+      short_description: Gegevensherkomst voor veld 'Bevoegdheidsgroep'
+      heading: H
+      short: Herkomst
+      medium: Herk.bevoeg.gr.
+      long: Herk.bevoegdh.groep
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_EQUI
+  sap_structure: EQUI
+  sap_field: S_EQUI
+  position: 55
+  key_field: false
+  required_field: false
+  data_element: EQUIP_KNZ
+  domain: X
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_EQUI from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Equipmentdaten vorhanden
+      heading: Equidaten
+      short: Equidaten
+      medium: Equipmentdaten
+      long: Equidaten vorhanden
+    en:
+      short_description: Equipment data exists
+      heading: Equi. Data
+      short: Equi. Data
+      medium: Equipment data
+      long: EquipmentData exists
+    nl:
+      short_description: Equipmentgegevens aanwezig
+      heading: Equipment
+      short: Equipment
+      medium: Equipmentgeg.
+      long: Equipment aanwezig
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_SERIAL
+  sap_structure: EQUI
+  sap_field: S_SERIAL
+  position: 56
+  key_field: false
+  required_field: false
+  data_element: KZKSD
+  domain: X
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_SERIAL from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Serialdaten bei der Equipmentpflege
+      heading: SD
+      short: Serial.D.
+      medium: Serial
+      long: Serialdaten
+    en:
+      short_description: Serial data when maintaining equipment
+      heading: SD
+      short: SerialData
+      medium: Serial
+      long: Serialization data
+    nl:
+      short_description: Seriegegevens bij de equipmentverzorging
+      heading: SG
+      short: Seriegeg.
+      medium: Seriegegevens
+      long: Seriegegevens
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_KONFI
+  sap_structure: EQUI
+  sap_field: S_KONFI
+  position: 57
+  key_field: false
+  required_field: false
+  data_element: KONFKNZ
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_KONFI from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Konfigurierbar
+      heading: k
+      short: Konf.
+      medium: Konfiguration
+      long: Konfiguration
+    en:
+      short_description: Configuration supported
+      heading: C
+      short: Conf.
+      medium: Configuration
+      long: Configuration
+    nl:
+      short_description: Configureerbaar
+      heading: C
+      short: Conf.
+      medium: Configuratie
+      long: Configuratie
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_SALE
+  sap_structure: EQUI
+  sap_field: S_SALE
+  position: 58
+  key_field: false
+  required_field: false
+  data_element: SDKNZ
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_SALE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Vertriebsequipment
+      heading: V
+      short: Vertrieb
+      medium: Vertrieb
+      long: Vertriebsequipment
+    en:
+      short_description: Sales equipment
+      heading: S
+      short: Sales
+      medium: Sales
+      long: Sales equipment
+    nl:
+      short_description: Verkoopequipment
+      heading: V
+      short: Verkoop
+      medium: Verkoop
+      long: Verkoopequipment
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_FHM
+  sap_structure: EQUI
+  sap_field: S_FHM
+  position: 59
+  key_field: false
+  required_field: false
+  data_element: FHMKZ
+  domain: XFLAG
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_FHM from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Fertigungshilfsmittelrelevanter Equipmenttyp
+      heading: F
+      short: FHM
+      medium: Fert.Hilfs.M.
+      long: Fertigungshilfsmitt.
+    en:
+      short_description: Equip. category relevant to production resources and tools
+      heading: P
+      short: PRT
+      medium: ProdRes/Tools
+      long: PRTs
+    nl:
+      short_description: Productiehulpmiddelrelevant equipmenttype
+      heading: P
+      short: PHM
+      medium: Prod.hulpmiddel
+      long: Productiehulpmiddel
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_ELSE
+  sap_structure: EQUI
+  sap_field: S_ELSE
+  position: 60
+  key_field: false
+  required_field: false
+  data_element: ELSE_KNZ
+  domain: X
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_ELSE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: 'Indikator: Sonstige Daten aktiv'
+      heading: Sonstiges
+      short: Sonstiges
+      medium: Sonstige Daten
+      long: Sonstige Daten
+    en:
+      short_description: 'Indicator: Other Data Active'
+      heading: Other
+      short: Other
+      medium: Other data
+      long: Other data
+    nl:
+      short_description: 'Indicator: overige gegevens actief'
+      heading: Overige
+      short: Overige
+      medium: Overige geg.
+      long: Overige gegevens
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_ISU
+  sap_structure: EQUI
+  sap_field: S_ISU
+  position: 61
+  key_field: false
+  required_field: false
+  data_element: ISU_KNZ
+  domain: X
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_ISU from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: IS-U Daten
+      heading: ISU
+      short: IS-U
+      medium: IS-U
+      long: IS-U
+    en:
+      short_description: IS-U data
+      heading: ISU
+      short: IS-U
+      medium: IS-U
+      long: IS-U
+    nl:
+      short_description: Gegevens IS-U
+      heading: ISU
+      short: IS-U
+      medium: IS-U
+      long: IS-U
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_EQBS
+  sap_structure: EQUI
+  sap_field: S_EQBS
+  position: 62
+  key_field: false
+  required_field: false
+  data_element: KZEQBS
+  domain: KZEQBS
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_EQBS from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: EQBS vorhanden
+      heading: EQBS
+      short: EQBS vorh.
+      medium: EQBS vorhanden
+      long: EQBS vorhanden
+    en:
+      short_description: EQSI Exists
+      heading: EQSI
+      short: SI exists
+      medium: EQSI exists
+      long: EQSI exists
+    nl:
+      short_description: EQBS beschikbaar
+      heading: EQBS
+      short: EQBS besc.
+      medium: EQBS beschikbaar
+      long: EQBS beschikbaar
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_FLEET
+  sap_structure: EQUI
+  sap_field: S_FLEET
+  position: 63
+  key_field: false
+  required_field: false
+  data_element: FLEET_KNZ
+  domain: X
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_FLEET from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: 'Indikator: Fahrzeug aktiv'
+      heading: Fahrzeug
+      short: Fahrzeug
+      medium: Daten Fahrzeug
+      long: Daten Fahrzeug
+    en:
+      short_description: 'Indicator: Fleet object active'
+      heading: FleetObj.
+      short: FleetObj.
+      medium: FleetObjectData
+      long: Fleet object data
+    nl:
+      short_description: 'Indicator: vervoermiddel actief'
+      heading: Voertuig
+      short: Voertuig
+      medium: Geg. voertuig
+      long: Gegevens voertuig
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.BSTVP
+  sap_structure: EQUI
+  sap_field: BSTVP
+  position: 64
+  key_field: false
+  required_field: false
+  data_element: BSTVP
+  domain: BSTVP
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field BSTVP from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Bestandsverprobung bei Serialnummern
+      heading: BstVp
+      short: BstdVerpr.
+      medium: Bestandsverpr.
+      long: Bestandsverprobung
+    en:
+      short_description: Stock Check for Serial Numbers
+      heading: StkCk
+      short: StockCheck
+      medium: Stock check
+      long: Stock check
+    nl:
+      short_description: Voorraadcontrole voor serienummers
+      heading: VrCnt
+      short: Voorr.cntr
+      medium: Voorraadcontr.
+      long: Voorraadcontrole
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.SPARTE
+  sap_structure: EQUI
+  sap_field: SPARTE
+  position: 65
+  key_field: false
+  required_field: false
+  data_element: SPARTE
+  domain: SPART
+  check_table: TSPA
+  abap_type: C
+  data_type: CHAR
+  internal_length: 2
+  characters: 2
+  description: EQUI field SPARTE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Sparte
+      heading: Sp
+      short: Sparte
+      medium: Sparte
+      long: Sparte
+    en:
+      short_description: Division
+      heading: Dv
+      short: Division
+      medium: Division
+      long: Division
+    nl:
+      short_description: Productgroep
+      heading: Pr
+      short: Prod.groep
+      medium: Productgroep
+      long: Productgroep
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.HANDLE
+  sap_structure: EQUI
+  sap_field: HANDLE
+  position: 66
+  key_field: false
+  required_field: false
+  data_element: ITOBTMP_TSEGGUID
+  domain: SYSUUID_22
+  abap_type: C
+  data_type: CHAR
+  internal_length: 22
+  characters: 22
+  description: EQUI field HANDLE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: 'SAP-Entwicklungsreserve: Anbindung Terminsegment (Schlüssel)'
+      heading: Handle
+      short: Handle
+      medium: Handle
+      long: Handle
+    en:
+      short_description: 'SAP Development Reserve: Integration of Date Segment (Key)'
+      heading: Handle
+      short: Handle
+      medium: Handle
+      long: Handle
+    nl:
+      short_description: 'SAP-ontwikkelingsreserve: verbinding termijnsegment (key)'
+      heading: Handle
+      short: Handle
+      medium: Handle
+      long: Handle
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.TSEGTP
+  sap_structure: EQUI
+  sap_field: TSEGTP
+  position: 67
+  key_field: false
+  required_field: false
+  data_element: ITOBTMP_TSEGTEMPLA
+  domain: TSEGTEMPLA
+  check_table: '*'
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field TSEGTP from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: 'SAP-Entwicklungsreserve: Anbindung Terminsegment (Template)'
+      heading: Template
+      short: Template
+      medium: Template
+      long: Template
+    en:
+      short_description: 'SAP Development Reserve: Integration Date Segment (Tempate)'
+      heading: Template
+      short: Template
+      medium: Template
+      long: Template
+    nl:
+      short_description: 'SAP-ontwikkelingsreserve: verbinding termijnsegment (sjabl.)'
+      heading: Sjabloon
+      short: Sjabloon
+      medium: Sjabloon
+      long: Sjabloon
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EMATN
+  sap_structure: EQUI
+  sap_field: EMATN
+  position: 68
+  key_field: false
+  required_field: false
+  data_element: EMATN
+  domain: MATNR
+  check_table: '*'
+  abap_type: C
+  data_type: CHAR
+  internal_length: 18
+  characters: 18
+  description: EQUI field EMATN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Materialnummer zur Herstellerteilenummer
+      heading: HTN-Mat.
+      short: HTN-Mat.
+      medium: HTN-Material
+      long: HTN-Material
+    en:
+      short_description: Material Number Corresponding to Manufacturer Part Number
+      heading: MPN Material
+      short: MPN Matl
+      medium: 'MPN: Material'
+      long: 'MPN: Material'
+    nl:
+      short_description: Artikelnummer van producentcomponentnummer
+      heading: PCN-artikel
+      short: PCN-art.
+      medium: PCN-artikel
+      long: PCN-artikel
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ACT_CHANGE_AA
+  sap_structure: EQUI
+  sap_field: ACT_CHANGE_AA
+  position: 69
+  key_field: false
+  required_field: false
+  data_element: AAPM_ACT_CHANGE_AA
+  domain: AAPM_ACT
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field ACT_CHANGE_AA from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Änderung des Equipmentstamms bei Anlagenstammsatzänderung
+      heading: Aktionsflag für Ändern Equipmentstamm aus Anlage
+      short: Änd. Equi
+      medium: Ändern Equi
+      long: Aktion für Ändern Equipment aus Anlage
+    en:
+      short_description: Change Equipment Master when Changing Asset
+      heading: Change equipment master from asset
+      short: Chng equip
+      medium: Change equipment
+      long: Change equipment master from asset
+    nl:
+      short_description: Wijziging van equipmentstam bij wijz. stamrec. vast actief
+      heading: Actieteken voor wijzigen equipmentstam uit v. act.
+      short: Equi.wijz.
+      medium: Equipment wijzigen
+      long: Actie v. wijz. equipment uit vast actief
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.S_CC
+  sap_structure: EQUI
+  sap_field: S_CC
+  position: 70
+  key_field: false
+  required_field: false
+  data_element: CCC_KNZ
+  domain: X
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field S_CC from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Konfigurationssteuerungs Daten
+      heading: Konfigurationssteuerungs D
+      short: CC
+      medium: CC
+      long: CC
+    en:
+      short_description: Configuration Control Data
+      heading: Configuration Control Data
+      short: CC
+      medium: CC
+      long: CC
+    nl:
+      short_description: Gegevens configuratiebesturing
+      heading: Geg. configuratiebesturing
+      short: CC
+      medium: CC
+      long: CC
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.DATLWB
+  sap_structure: EQUI
+  sap_field: DATLWB
+  position: 71
+  key_field: false
+  required_field: false
+  data_element: DATLWB
+  domain: DATS
+  abap_type: D
+  data_type: DATS
+  internal_length: 8
+  characters: 8
+  description: EQUI field DATLWB from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Datum der letzten Warenbewegung
+      heading: Datum letzte Warenbewegung
+      short: DatlWb
+      medium: Dat.l.Warenbew.
+      long: Datum letzte Warenbew.
+    en:
+      short_description: Date of Last Goods Movement
+      heading: Date of Last Goods Movemnt
+      short: LstGdsMvt
+      medium: Date L.GoodsMvt
+      long: Date Last Goods Movmnt
+    nl:
+      short_description: Datum van laatste goederenbeweging
+      heading: Datum laatste goederenbeweging
+      short: DatLGB
+      medium: Dat. l. goedBew
+      long: Datum ltste goederenbew.
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.UII
+  sap_structure: EQUI
+  sap_field: UII
+  position: 72
+  key_field: false
+  required_field: false
+  data_element: UII_CHAR72
+  domain: UII_CHAR72
+  abap_type: C
+  data_type: CHAR
+  internal_length: 72
+  characters: 72
+  description: EQUI field UII from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Eindeutige Teile-ID
+      heading: Eindeutige Teile-ID
+      short: UII
+      medium: UII
+      long: Eindeutige Teile-ID
+    en:
+      short_description: Unique Item Identifier
+      heading: Unique Item Identifier
+      short: UII
+      medium: UII
+      long: Unique Item Identifier
+    nl:
+      short_description: Unieke onderdeel-ID
+      heading: Unieke onderdeel-ID
+      short: UII
+      medium: UII
+      long: Unieke onderdeel-ID
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.IUID_TYPE
+  sap_structure: EQUI
+  sap_field: IUID_TYPE
+  position: 73
+  key_field: false
+  required_field: false
+  data_element: IUID_TYPE
+  domain: IUID_TYPE
+  check_table: TIUID_TYPE
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field IUID_TYPE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Strukturtyp der UII
+      heading: IUID-Typ
+      short: IUID-Typ
+      medium: IUID-Typ
+      long: IUID-Typ
+    en:
+      short_description: Structure Type of UII
+      heading: IUID Type
+      short: IUID Type
+      medium: IUID Type
+      long: IUID Type
+    nl:
+      short_description: Structuursoort van UII
+      heading: IUID-soort
+      short: IUID-soort
+      medium: IUID-soort
+      long: IUID-soort
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.UII_PLANT
+  sap_structure: EQUI
+  sap_field: UII_PLANT
+  position: 74
+  key_field: false
+  required_field: false
+  data_element: UII_PLANT
+  domain: WERKS
+  check_table: '*'
+  abap_type: C
+  data_type: CHAR
+  internal_length: 4
+  characters: 4
+  description: EQUI field UII_PLANT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Verantwortliches Werk für UII
+      heading: Verantwortl. Werk für UII
+      short: Werk UII
+      medium: VerantwWerk UII
+      long: Verantwortliches Werk für UII
+    en:
+      short_description: Plant Responsible for UII
+      heading: Plant Responsible for UII
+      short: Plant UII
+      medium: Resp. Plant UII
+      long: Plant Responsible for UII
+    nl:
+      short_description: Verantwoordelijke vestiging voor UII
+      heading: Verantwoord. vest. v. UII
+      short: Vest. UII
+      medium: VerantwVest UII
+      long: Verantwoord. vest. v. UII
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.DUMMY_CI_EQUI
+  sap_structure: EQUI
+  sap_field: DUMMY_CI_EQUI
+  position: 76
+  key_field: false
+  required_field: false
+  data_element: CHAR1
+  domain: CHAR1
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field DUMMY_CI_EQUI from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Einstelliges Kennzeichen
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    en:
+      short_description: Single-Character Indicator
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    nl:
+      short_description: Teken met één positie
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZVERZEKERDE_WAARDE
+  sap_structure: EQUI
+  sap_field: ZZVERZEKERDE_WAARDE
+  position: 77
+  key_field: false
+  required_field: false
+  data_element: ZZVERZEKERDE_WAARDE
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZVERZEKERDE_WAARDE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Insured Value
+      heading: Insured Value
+      short: Insured
+      medium: Insured Value
+      long: Insured Value
+    nl:
+      short_description: Verzekerde waarde
+      heading: Verzekerde waarde
+      short: Vrz.waarde
+      medium: Verzekerde waarde
+      long: Verzekerde waarde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZFIC_AANSCHAF
+  sap_structure: EQUI
+  sap_field: ZZFIC_AANSCHAF
+  position: 78
+  key_field: false
+  required_field: false
+  data_element: ZZFIC_AANSCHAF
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZFIC_AANSCHAF from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Fictional Acquisition Value
+      heading: Fictional Acquisition Value
+      short: Fict.Ac.V.
+      medium: Fict. Acq. Value
+      long: Fictional Acquisition Value
+    nl:
+      short_description: Fictieve aanschafwaarde
+      heading: Fictieve aanschafwaarde
+      short: Fict.aansc
+      medium: Fictieve aanschafwaa
+      long: Fictieve aanschafwaarde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZWERK_AANSCHAF
+  sap_structure: EQUI
+  sap_field: ZZWERK_AANSCHAF
+  position: 79
+  key_field: false
+  required_field: false
+  data_element: ZZWERK_AANSCHAF
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZWERK_AANSCHAF from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Actual Acquisition Value
+      heading: Actual Acquisition Value
+      short: Act.Acq.V.
+      medium: Actual Acq. Value
+      long: Actual Acquisition Value
+    nl:
+      short_description: Werkelijke aanschafwaarde
+      heading: Werkelijke aanschafwaarde
+      short: Werk.aansc
+      medium: Werkelijke aanschafw
+      long: Werkelijke aanschafwaarde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZAFSCHRIJVING
+  sap_structure: EQUI
+  sap_field: ZZAFSCHRIJVING
+  position: 80
+  key_field: false
+  required_field: false
+  data_element: ZZAFSCHRIJVING
+  domain: INT1
+  abap_type: X
+  data_type: INT1
+  internal_length: 1
+  characters: 3
+  description: EQUI field ZZAFSCHRIJVING from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Depreciation (year)
+      heading: Depreciation (year)
+      short: Depr.Year
+      medium: Depreciation (year)
+      long: Depreciation (year)
+    nl:
+      short_description: Afschrijving (jaar)
+      heading: Afschrijving (jaar)
+      short: Afschr.
+      medium: Afschrijving (jaar)
+      long: Afschrijving (jaar)
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZAFSCHRIJVING_PER
+  sap_structure: EQUI
+  sap_field: ZZAFSCHRIJVING_PER
+  position: 81
+  key_field: false
+  required_field: false
+  data_element: ZZAFSCHRIJVING_PER
+  domain: INT1
+  abap_type: X
+  data_type: INT1
+  internal_length: 1
+  characters: 3
+  description: EQUI field ZZAFSCHRIJVING_PER from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Depreciation (period)
+      heading: Depreciation (period)
+      short: Depr.Per.
+      medium: Depreciation (per.)
+      long: Depreciation (period)
+    nl:
+      short_description: Afschrijving in perioden
+      heading: Afschrijving in perioden
+      short: Afschr.per
+      medium: Afschrijving (per.)
+      long: Afschrijving in perioden
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZAFSCHRIJVING_C
+  sap_structure: EQUI
+  sap_field: ZZAFSCHRIJVING_C
+  position: 82
+  key_field: false
+  required_field: false
+  data_element: XFELD
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field ZZAFSCHRIJVING_C from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Feld zum Ankreuzen
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    en:
+      short_description: Checkbox
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    nl:
+      short_description: Aankruisvakje
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZVERZEKERING_KOST
+  sap_structure: EQUI
+  sap_field: ZZVERZEKERING_KOST
+  position: 83
+  key_field: false
+  required_field: false
+  data_element: ZZVERZEKERING_KOST
+  domain: ZCIVQNL_PERCENTAGE
+  abap_type: P
+  data_type: DEC
+  internal_length: 4
+  characters: 7
+  description: EQUI field ZZVERZEKERING_KOST from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Insurance Costs
+      heading: Insurance Costs
+      short: Insurance
+      medium: Insurance Costs
+      long: Insurance Costs
+    nl:
+      short_description: Verzekeringskosten
+      heading: Verzekeringskosten
+      short: Verzekerin
+      medium: Verzekeringskosten
+      long: Verzekeringskosten
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZALGEMENE_KOST
+  sap_structure: EQUI
+  sap_field: ZZALGEMENE_KOST
+  position: 84
+  key_field: false
+  required_field: false
+  data_element: ZZALGEMENE_KOST
+  domain: ZCIVQNL_PERCENTAGE
+  abap_type: P
+  data_type: DEC
+  internal_length: 4
+  characters: 7
+  description: EQUI field ZZALGEMENE_KOST from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: General Costs
+      heading: General Costs
+      short: Gen.Costs
+      medium: General Costs
+      long: General Costs
+    nl:
+      short_description: Algemene kosten
+      heading: Algemene kosten
+      short: Algemene k
+      medium: Algemene kosten
+      long: Algemene kosten
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZBEHEER_KOST
+  sap_structure: EQUI
+  sap_field: ZZBEHEER_KOST
+  position: 85
+  key_field: false
+  required_field: false
+  data_element: ZZBEHEER_KOST
+  domain: ZCIVQNL_PERCENTAGE
+  abap_type: P
+  data_type: DEC
+  internal_length: 4
+  characters: 7
+  description: EQUI field ZZBEHEER_KOST from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Administration Costs
+      heading: Administration Costs
+      short: Admin.Cost
+      medium: Administration Costs
+      long: Administration Costs
+    nl:
+      short_description: Beheer kosten
+      heading: Beheer kosten
+      short: Beheer kos
+      medium: Beheer kosten
+      long: Beheer kosten
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZWERKPLEK_KOST
+  sap_structure: EQUI
+  sap_field: ZZWERKPLEK_KOST
+  position: 86
+  key_field: false
+  required_field: false
+  data_element: ZZWERKPLEK_KOST
+  domain: ZCIVQNL_PERCENTAGE
+  abap_type: P
+  data_type: DEC
+  internal_length: 4
+  characters: 7
+  description: EQUI field ZZWERKPLEK_KOST from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Workplace Costs
+      heading: Workplace Costs
+      short: Workplace
+      medium: Workplace Costs
+      long: Workplace Costs
+    nl:
+      short_description: Werkplek kosten
+      heading: Werkplek kosten
+      short: Werkplek k
+      medium: Werkplek kosten
+      long: Werkplek kosten
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZOPSLAGCAP_BUITEN
+  sap_structure: EQUI
+  sap_field: ZZOPSLAGCAP_BUITEN
+  position: 87
+  key_field: false
+  required_field: false
+  data_element: ZZOPSLAGCAP_BUITEN
+  domain: ZZHOEVEELHEID
+  abap_type: P
+  data_type: DEC
+  internal_length: 3
+  characters: 5
+  description: EQUI field ZZOPSLAGCAP_BUITEN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Storage Outside (M2)
+      heading: Storage Outside (M2)
+      short: Outside M2
+      medium: Storage Outside (M2)
+      long: Storage Outside (M2)
+    nl:
+      short_description: Opslagcapaciteit buiten
+      heading: Opslagcapaciteit buiten
+      short: Opslagcapa
+      medium: Opslagcapaciteit bui
+      long: Opslagcapaciteit buiten
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZOPSLAGCAP_BINNEN
+  sap_structure: EQUI
+  sap_field: ZZOPSLAGCAP_BINNEN
+  position: 88
+  key_field: false
+  required_field: false
+  data_element: ZZOPSLAGCAP_BINNEN
+  domain: ZZHOEVEELHEID
+  abap_type: P
+  data_type: DEC
+  internal_length: 3
+  characters: 5
+  description: EQUI field ZZOPSLAGCAP_BINNEN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Storage Inside (M2)
+      heading: Storage Inside (M2)
+      short: Inside M2
+      medium: Storage Inside (M2)
+      long: Storage Inside (M2)
+    nl:
+      short_description: Opslagcapaciteit binnen
+      heading: Opslagcapaciteit binnen
+      short: Opslagcapa
+      medium: Opslagcapaciteit bin
+      long: Opslagcapaciteit binnen
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZOPSLAGCAP_WATER
+  sap_structure: EQUI
+  sap_field: ZZOPSLAGCAP_WATER
+  position: 89
+  key_field: false
+  required_field: false
+  data_element: ZZOPSLAGCAP_WATER
+  domain: ZZHOEVEELHEID
+  abap_type: P
+  data_type: DEC
+  internal_length: 3
+  characters: 5
+  description: EQUI field ZZOPSLAGCAP_WATER from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Storage Waterfront (M)
+      heading: Storage Waterfront (M)
+      short: Waterfront
+      medium: Storage Waterfront (
+      long: Storage Waterfront (M)
+    nl:
+      short_description: Opslagcapaciteit waterkant
+      heading: Opslagcapaciteit waterkant
+      short: Opslagcapa
+      medium: Opslagcapaciteit wat
+      long: Opslagcapaciteit waterkant
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZTHEORETISCH_REST
+  sap_structure: EQUI
+  sap_field: ZZTHEORETISCH_REST
+  position: 90
+  key_field: false
+  required_field: false
+  data_element: ZZTHEORETISCH_REST
+  domain: ZCIVQNL_PERCENTAGE
+  abap_type: P
+  data_type: DEC
+  internal_length: 4
+  characters: 7
+  description: EQUI field ZZTHEORETISCH_REST from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Theoretical residual value %
+      heading: Theoretical residual value %
+      short: Th.Res.Val
+      medium: Theoretical residual
+      long: Theoretical residual value %
+    nl:
+      short_description: Theoretische restwaarde %
+      heading: Theoretische restwaarde %
+      short: Theoretis%
+      medium: Theoretische rest.%
+      long: Theoretische restwaarde %
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZTHEORETISCH_REST_C
+  sap_structure: EQUI
+  sap_field: ZZTHEORETISCH_REST_C
+  position: 91
+  key_field: false
+  required_field: false
+  data_element: XFELD
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field ZZTHEORETISCH_REST_C from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Feld zum Ankreuzen
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    en:
+      short_description: Checkbox
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    nl:
+      short_description: Aankruisvakje
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZBEZETTE_DAGEN
+  sap_structure: EQUI
+  sap_field: ZZBEZETTE_DAGEN
+  position: 92
+  key_field: false
+  required_field: false
+  data_element: ZZBEZETTE_DAGEN
+  domain: INT4
+  abap_type: X
+  data_type: INT4
+  internal_length: 4
+  characters: 10
+  description: EQUI field ZZBEZETTE_DAGEN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Occupied Days
+      heading: Occupied Days
+      short: Occupied
+      medium: Occupied Days
+      long: Occupied Days
+    nl:
+      short_description: Bezette dagen
+      heading: Bezette dagen
+      short: Bezette da
+      medium: Bezette dagen
+      long: Bezette dagen
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZTHEORETISCH_REST_W
+  sap_structure: EQUI
+  sap_field: ZZTHEORETISCH_REST_W
+  position: 93
+  key_field: false
+  required_field: false
+  data_element: ZZTHEORETISCH_REST_W
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZTHEORETISCH_REST_W from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Theoretical residual value
+      heading: Theoretical residual value
+      short: Th.Res.Val
+      medium: Theor. Residual Val.
+      long: Theoretical residual value
+    nl:
+      short_description: Theoretische restwaarde
+      heading: Theoretische restwaarde
+      short: Theoretisc
+      medium: Theoretische restwaa
+      long: Theoretische restwaarde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZTHEORETISCH_REST_W_C
+  sap_structure: EQUI
+  sap_field: ZZTHEORETISCH_REST_W_C
+  position: 94
+  key_field: false
+  required_field: false
+  data_element: XFELD
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field ZZTHEORETISCH_REST_W_C from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Feld zum Ankreuzen
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    en:
+      short_description: Checkbox
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    nl:
+      short_description: Aankruisvakje
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZWERKELIJKE_WAARDE
+  sap_structure: EQUI
+  sap_field: ZZWERKELIJKE_WAARDE
+  position: 95
+  key_field: false
+  required_field: false
+  data_element: ZZWERKELIJKE_WAARDE
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZWERKELIJKE_WAARDE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Residual Value
+      heading: Residual Value
+      short: Res.Value
+      medium: Residual Value
+      long: Residual Value
+    nl:
+      short_description: Werkelijke Restwaarde
+      heading: Werkelijke Restwaarde
+      short: Restwaarde
+      medium: Werk. Restwaarde
+      long: Werkelijke Restwaarde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZWERKELIJKE_WAARDE_C
+  sap_structure: EQUI
+  sap_field: ZZWERKELIJKE_WAARDE_C
+  position: 96
+  key_field: false
+  required_field: false
+  data_element: XFELD
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field ZZWERKELIJKE_WAARDE_C from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Feld zum Ankreuzen
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    en:
+      short_description: Checkbox
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    nl:
+      short_description: Aankruisvakje
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZWERKELIJKE_AFSCHR
+  sap_structure: EQUI
+  sap_field: ZZWERKELIJKE_AFSCHR
+  position: 97
+  key_field: false
+  required_field: false
+  data_element: ZZWERKELIJKE_AFSCHR
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZWERKELIJKE_AFSCHR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Actual Residual Value
+      heading: Actual Residual Value
+      short: Act.Res.Va
+      medium: Actual Res. Value
+      long: Actual Residual Value
+    nl:
+      short_description: Werkelijke afschrijving
+      heading: Werkelijke afschrijving
+      short: Werkelijke
+      medium: Werkelijke afschrijv
+      long: Werkelijke afschrijving
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZRENTE
+  sap_structure: EQUI
+  sap_field: ZZRENTE
+  position: 98
+  key_field: false
+  required_field: false
+  data_element: ZZ_RENTE
+  domain: ZCIVQNL_PERCENTAGE
+  abap_type: P
+  data_type: DEC
+  internal_length: 4
+  characters: 7
+  description: EQUI field ZZRENTE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Interest
+      heading: Interest
+      short: Interest
+      medium: Interest
+      long: Interest
+    nl:
+      short_description: Rente
+      heading: Rente
+      short: Rente
+      medium: Rente
+      long: Rente
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZLOG_KOSTEN
+  sap_structure: EQUI
+  sap_field: ZZLOG_KOSTEN
+  position: 99
+  key_field: false
+  required_field: false
+  data_element: ZZLOG_KOSTEN
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZLOG_KOSTEN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Logistical Costs Persons and Tools
+      heading: Logistical Costs Persons and Tools
+      short: Log.Costs
+      medium: Logistical Costs
+      long: Logistical Costs Persons and Tools
+    nl:
+      short_description: Logistieke kosten Personen en Gereedschap
+      heading: Logistieke kosten Personen en Gereedschap
+      short: Logistieke
+      medium: Logistieke kosten Pe
+      long: Logistieke kosten Personen en Gereedscha
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZONDERHOUD
+  sap_structure: EQUI
+  sap_field: ZZONDERHOUD
+  position: 100
+  key_field: false
+  required_field: false
+  data_element: ZZONDERHOUD
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZONDERHOUD from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Maintenance
+      heading: Maintenance
+      short: Maintenanc
+      medium: Maintenance
+      long: Maintenance
+    nl:
+      short_description: Onderhoud
+      heading: Onderhoud
+      short: Onderhoud
+      medium: Onderhoud
+      long: Onderhoud
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZFILTERS
+  sap_structure: EQUI
+  sap_field: ZZFILTERS
+  position: 101
+  key_field: false
+  required_field: false
+  data_element: ZZFILTERS
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZFILTERS from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Filters
+      heading: Filters
+      short: Filters
+      medium: Filters
+      long: Filters
+    nl:
+      short_description: Filters
+      heading: Filters
+      short: Filters
+      medium: Filters
+      long: Filters
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZOLIE
+  sap_structure: EQUI
+  sap_field: ZZOLIE
+  position: 102
+  key_field: false
+  required_field: false
+  data_element: ZZOLIE
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZOLIE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Oil, Grease and Lubricant
+      heading: Oil, Grease and Lubricant
+      short: Oil,Grease
+      medium: Oil, Grease and Lub.
+      long: Oil, Grease and Lubricant
+    nl:
+      short_description: Olie, Vetten en Smeermiddel
+      heading: Olie, Vetten en Smeermiddel
+      short: Olie, Vett
+      medium: Olie, Vetten en Smee
+      long: Olie, Vetten en Smeermiddel
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZDRADEN
+  sap_structure: EQUI
+  sap_field: ZZDRADEN
+  position: 103
+  key_field: false
+  required_field: false
+  data_element: ZZDRADEN
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZVALUTA
+  description: EQUI field ZZDRADEN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Wires
+      heading: Wires
+      short: Wires
+      medium: Wires
+      long: Wires
+    nl:
+      short_description: Draden
+      heading: Draden
+      short: Draden
+      medium: Draden
+      long: Draden
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZVALUTA
+  sap_structure: EQUI
+  sap_field: ZZVALUTA
+  position: 104
+  key_field: false
+  required_field: false
+  data_element: WAERS
+  domain: WAERS
+  check_table: TCURC
+  abap_type: C
+  data_type: CUKY
+  internal_length: 5
+  characters: 5
+  description: EQUI field ZZVALUTA from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Währungsschlüssel
+      heading: Währg
+      short: Währung
+      medium: Währung
+      long: Währung
+    en:
+      short_description: Currency Key
+      heading: Crcy
+      short: Currency
+      medium: Currency
+      long: Currency
+    nl:
+      short_description: Valutacode
+      heading: Val.
+      short: Valuta
+      medium: Valuta
+      long: Valuta
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZJAAR
+  sap_structure: EQUI
+  sap_field: ZZJAAR
+  position: 105
+  key_field: false
+  required_field: false
+  data_element: GJAHR
+  domain: GJAHR
+  abap_type: N
+  data_type: NUMC
+  internal_length: 4
+  characters: 4
+  description: EQUI field ZZJAAR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Geschäftsjahr
+      heading: Jahr
+      short: GeschJahr
+      medium: Geschäftsjahr
+      long: Geschäftsjahr
+    en:
+      short_description: Fiscal Year
+      heading: Year
+      short: Fiscal Yr
+      medium: Fiscal Year
+      long: Fiscal Year
+    nl:
+      short_description: Boekjaar
+      heading: Jaar
+      short: Boekjaar
+      medium: Boekjaar
+      long: Boekjaar
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZCLOSED
+  sap_structure: EQUI
+  sap_field: ZZCLOSED
+  position: 106
+  key_field: false
+  required_field: false
+  data_element: ZZCLOSED
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field ZZCLOSED from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Year Locked
+      heading: Year Locked
+      short: Year Locke
+      medium: Year Locked
+      long: Year Locked
+    nl:
+      short_description: Jaar gefixeerd
+      heading: Jaar gefixeerd
+      short: Jaar fix.
+      medium: Jaar gefixeerd
+      long: Jaar gefixeerd
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZDOELSTELLING_HUUR
+  sap_structure: EQUI
+  sap_field: ZZDOELSTELLING_HUUR
+  position: 107
+  key_field: false
+  required_field: false
+  data_element: ZZDOELSTELLING_HUUR
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: T001
+  reference_field: WAERS
+  description: EQUI field ZZDOELSTELLING_HUUR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Objective Rent
+      heading: Objective Rent
+      short: Obj. Rent
+      medium: Objective Rent
+      long: Objective Rent
+    nl:
+      short_description: Doelstelling Huur
+      heading: Doelstelling Huur
+      short: Doel. Huur
+      medium: Doelstelling Huur
+      long: Doelstelling Huur
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZHUURPRIJS
+  sap_structure: EQUI
+  sap_field: ZZHUURPRIJS
+  position: 108
+  key_field: false
+  required_field: false
+  data_element: ZZHUURPRIJS
+  domain: TEXT20
+  abap_type: C
+  data_type: CHAR
+  internal_length: 20
+  characters: 20
+  description: EQUI field ZZHUURPRIJS from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Rent
+      heading: Rent
+      short: Rent
+      medium: Rent
+      long: Rent
+    nl:
+      short_description: Huurprijs
+      heading: Huurprijs
+      short: Huurprijs
+      medium: Huurprijs
+      long: Huurprijs
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZMARKT_TARIEF
+  sap_structure: EQUI
+  sap_field: ZZMARKT_TARIEF
+  position: 109
+  key_field: false
+  required_field: false
+  data_element: ZZMARKT_TARIEF
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: T001
+  reference_field: WAERS
+  description: EQUI field ZZMARKT_TARIEF from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Market Rate
+      heading: Market Rate
+      short: Market Rat
+      medium: Market Rate
+      long: Market Rate
+    nl:
+      short_description: Markt Tarief
+      heading: Markt Tarief
+      short: Markt Tar.
+      medium: Markt Tarief
+      long: Markt Tarief
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZVOORSTEL_HUUR
+  sap_structure: EQUI
+  sap_field: ZZVOORSTEL_HUUR
+  position: 110
+  key_field: false
+  required_field: false
+  data_element: ZZVOORSTEL_HUUR
+  domain: ZCIVQNL_WERT7
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: T001
+  reference_field: WAERS
+  description: EQUI field ZZVOORSTEL_HUUR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    en:
+      short_description: Proposal Rent
+      heading: Proposal Rent
+      short: Prop.Rent
+      medium: Proposal Rent
+      long: Proposal Rent
+    nl:
+      short_description: Voorstel Huurprijs
+      heading: Voorstel Huurprijs
+      short: Vrst. Huur
+      medium: Voorstel Huurprijs
+      long: Voorstel Huurprijs
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZAANTAL
+  sap_structure: EQUI
+  sap_field: ZZAANTAL
+  position: 111
+  key_field: false
+  required_field: false
+  data_element: AM_MENGE
+  domain: MENG13V
+  abap_type: P
+  data_type: QUAN
+  internal_length: 7
+  characters: 13
+  reference_table: EQUI
+  reference_field: ZZMEINS
+  description: EQUI field ZZAANTAL from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Menge
+      heading: Menge
+      short: Menge
+      medium: Menge
+      long: Menge
+    en:
+      short_description: Quantity
+      heading: Quantity
+      short: Quantity
+      medium: Quantity
+      long: Quantity
+    nl:
+      short_description: Hoeveelheid
+      heading: Hoeveelheid
+      short: Hoeveelh.
+      medium: Hoeveelheid
+      long: Hoeveelheid
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZMEINS
+  sap_structure: EQUI
+  sap_field: ZZMEINS
+  position: 112
+  key_field: false
+  required_field: false
+  data_element: MEINS
+  domain: MEINS
+  check_table: '*'
+  abap_type: C
+  data_type: UNIT
+  internal_length: 3
+  characters: 3
+  description: EQUI field ZZMEINS from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Basismengeneinheit
+      heading: BME
+      short: Einheit
+      medium: Basis-ME
+      long: Basismengeneinheit
+    en:
+      short_description: Base Unit of Measure
+      heading: BUn
+      short: Unit
+      medium: Base Unit
+      long: Base Unit of Measure
+    nl:
+      short_description: Basishoeveelheidseenheid
+      heading: BHE
+      short: Eenheid
+      medium: Basishvh.eenh.
+      long: Basishoevh.eenheid
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZANSWT
+  sap_structure: EQUI
+  sap_field: ZZANSWT
+  position: 113
+  key_field: false
+  required_field: false
+  data_element: ANSWT
+  domain: WERT
+  abap_type: P
+  data_type: CURR
+  internal_length: 7
+  characters: 13
+  reference_table: T001
+  reference_field: WAERS
+  description: EQUI field ZZANSWT from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Anschaffungswert
+      heading: Anschaffungswert
+      short: AnschWert
+      medium: AnschaffWert
+      long: Anschaffungswert
+    en:
+      short_description: Acquisition Value
+      heading: Acquisition Value
+      short: Acq.value
+      medium: AcquistnValue
+      long: Acquisition Value
+    nl:
+      short_description: Aanschafwaarde
+      heading: Aanschafwaarde
+      short: AanschWrde
+      medium: Aanschafwaarde
+      long: Aanschafwaarde
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.ZZCOMPLEXE_ACTIVA
+  sap_structure: EQUI
+  sap_field: ZZCOMPLEXE_ACTIVA
+  position: 114
+  key_field: false
+  required_field: false
+  data_element: XFELD
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field ZZCOMPLEXE_ACTIVA from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Feld zum Ankreuzen
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    en:
+      short_description: Checkbox
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+    nl:
+      short_description: Aankruisvakje
+      heading: ''
+      short: ''
+      medium: ''
+      long: ''
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQEXT_ACTIVE
+  sap_structure: EQUI
+  sap_field: EQEXT_ACTIVE
+  position: 116
+  key_field: false
+  required_field: false
+  data_element: /ISDFPS/DE_LM_DB_EQEXT_ACTIVE
+  domain: XFELD
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field EQEXT_ACTIVE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Ist die Rücksacktabelle /isdfps/lmeqext aktiv
+      heading: DFPS Append aktiv
+      short: DFPS
+      medium: DFPS Append
+      long: DFPS Append aktiv
+    en:
+      short_description: Backpack Table /isdfps/lmeqext Active
+      heading: Append DFPS Actve
+      short: DFPS
+      medium: Append DFPS
+      long: Append DFPS Active
+    nl:
+      short_description: Is rugzaktabel /isdfps/lmeqext actief?
+      heading: DFPS AppendActief
+      short: DFPS
+      medium: DFPS Append
+      long: DFPS Append actief
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI./MRSS/ID_PROFILE
+  sap_structure: EQUI
+  sap_field: /MRSS/ID_PROFILE
+  position: 119
+  key_field: false
+  required_field: false
+  data_element: /MRSS/T_REQU_UPD
+  domain: /MRSS/_HCM_BOOLEAN
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field /MRSS/ID_PROFILE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Kz. Anforderungsprofil wurde manuell geändert
+      heading: Kz. Manuelle Änderung
+      short: Kennz.
+      medium: Änd.-Kz.
+      long: Kz. Manuelle Änd.
+    en:
+      short_description: Requirements Profile Was Changed Manually
+      heading: Manual Change
+      short: Indicator
+      medium: Manual Change
+      long: Manual Change
+    nl:
+      short_description: Teken vereistenprofiel is handmatig gewijzigd
+      heading: Tk. handm. wijziging
+      short: Teken
+      medium: Tk. wijz.
+      long: Tk. handm. wijz.
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI./MRSS/PROF_GUID
+  sap_structure: EQUI
+  sap_field: /MRSS/PROF_GUID
+  position: 120
+  key_field: false
+  required_field: false
+  data_element: /MRSS/T_RSG_GUID
+  domain: SYSUUID
+  abap_type: X
+  data_type: RAW
+  internal_length: 16
+  characters: 16
+  description: EQUI field /MRSS/PROF_GUID from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: GUID
+      heading: GUID
+      short: GUID
+      medium: GUID
+      long: GUID
+    en:
+      short_description: GUID
+      heading: GUID
+      short: GUID
+      medium: GUID
+      long: GUID
+    nl:
+      short_description: GUID
+      heading: GUID
+      short: GUID
+      medium: GUID
+      long: GUID
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI./MRSS/PROF_KEY
+  sap_structure: EQUI
+  sap_field: /MRSS/PROF_KEY
+  position: 121
+  key_field: false
+  required_field: false
+  data_element: /MRSS/T_RSG_REQUID
+  domain: /MRSS/RSG_REQUID
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field /MRSS/PROF_KEY from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Profil-Schlüssel
+      heading: Anforderungsprofil
+      short: Profil
+      medium: Anforderungsprofil
+      long: Anforderungsprofil
+    en:
+      short_description: Profile Key
+      heading: RequiremntsProfile
+      short: Profile
+      medium: RequiremntsProfile
+      long: Requirements Profile
+    nl:
+      short_description: Profielkey
+      heading: Vereistenprofiel
+      short: Profiel
+      medium: Vereistenprofiel
+      long: Vereistenprofiel
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI./MRSS/DATACHANGE
+  sap_structure: EQUI
+  sap_field: /MRSS/DATACHANGE
+  position: 122
+  key_field: false
+  required_field: false
+  data_element: /MRSS/T_USCREENCTL_DATACHANGED
+  domain: FLAG
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field /MRSS/DATACHANGE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Im User Screen in den Controls wurden Daten geändert
+      heading: Daten geändert
+      short: geändert
+      medium: Daten geändert
+      long: Daten geändert
+    en:
+      short_description: Data was changed in the controls on the user screen
+      heading: Data changed
+      short: 'Changed:'
+      medium: Data changed
+      long: Data changed
+    nl:
+      short_description: Gegevens gewijzigd in gebruikersscherm in controls
+      heading: Geg. gewijzigd
+      short: Gewijz.
+      medium: Geg. gewijz.
+      long: Geg. gewijzigd
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQUI_SRTYPE
+  sap_structure: EQUI
+  sap_field: EQUI_SRTYPE
+  position: 124
+  key_field: false
+  required_field: false
+  data_element: COCF_SR_SRTYPE
+  domain: ''
+  check_table: COCF_CU_SRTYPE
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field EQUI_SRTYPE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Schichtberichtstyp
+      heading: Schichtberichtstyp
+      short: Typ
+      medium: Berichtstyp
+      long: Schichtberichtstyp
+    en:
+      short_description: Shift Report Type
+      heading: Shift Report Type
+      short: Type
+      medium: Report Type
+      long: Shift Report Type
+    nl:
+      short_description: Type ploegverslag
+      heading: Type ploegverslag
+      short: Type
+      medium: Verslagtype
+      long: Type ploegverslag
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQUI_SNTYPE
+  sap_structure: EQUI
+  sap_field: EQUI_SNTYPE
+  position: 125
+  key_field: false
+  required_field: false
+  data_element: COCF_SN_SNTYPE
+  domain: QMART
+  check_table: TQ80
+  abap_type: C
+  data_type: CHAR
+  internal_length: 2
+  characters: 2
+  description: EQUI field EQUI_SNTYPE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Schichtnotizart
+      heading: Meldungsart der Schichtnotiz
+      short: Notizart
+      medium: Schichtnotizart
+      long: Schichtnotizart
+    en:
+      short_description: Shift Note Type
+      heading: Notif. Type of Shift Note
+      short: Note Type
+      medium: Shift Note Type
+      long: Shift Note Type
+    nl:
+      short_description: Ploegnotitiesoort
+      heading: Meldingssoort ploegnotitie
+      short: Notitiesrt
+      medium: Ploegnotitiesrt
+      long: Ploegnotitiesoort
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQLB_DUTY
+  sap_structure: EQUI
+  sap_field: EQLB_DUTY
+  position: 127
+  key_field: false
+  required_field: false
+  data_element: DIACL_DUTY
+  domain: XFLAG
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field EQLB_DUTY from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Logbook Pflicht
+      heading: Lgb Pflicht
+      short: Lgb Pfl.
+      medium: Lgb Pflicht
+      long: Logbuch Pflicht
+    en:
+      short_description: Logbook Duty
+      heading: Logbk Duty
+      short: Logbk Duty
+      medium: Logbk Duty
+      long: Logbook Duty
+    nl:
+      short_description: Logboekplicht
+      heading: Logb.plicht
+      short: LogbPlicht
+      medium: Logb.plicht
+      long: Logboekplicht
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.EQLB_HIDE
+  sap_structure: EQUI
+  sap_field: EQLB_HIDE
+  position: 128
+  key_field: false
+  required_field: false
+  data_element: DIACL_HIDE
+  domain: XFLAG
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field EQLB_HIDE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Logbook Anzeige ausblenden
+      heading: Lgb ausblenden
+      short: Lgb Ausbl.
+      medium: Lgb ausblenden
+      long: Logbuch ausblenden
+    en:
+      short_description: Hide Logbook Display
+      heading: Hide Logbook
+      short: Hide Logbk
+      medium: Hide Logbook
+      long: Hide Logbook
+    nl:
+      short_description: Logboekweergave verbergen
+      heading: Logb. verbergen
+      short: Lgb. verb.
+      medium: Logb. verbergen
+      long: Logboek verbergen
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GDISPO
+  sap_structure: EQUI
+  sap_field: J_3GDISPO
+  position: 131
+  key_field: false
+  required_field: false
+  data_element: J_3GDISPO
+  domain: J_3GDISPO
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field J_3GDISPO from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Dispositionskennung
+      heading: Dispoknz
+      short: Dispoknz
+      medium: Dispoknz
+      long: Dispositionskennung
+    en:
+      short_description: Planning Indicator
+      heading: Plan. ind.
+      short: Plan. ind.
+      medium: Plan. ind.
+      long: Planning indicator
+    nl:
+      short_description: Plannings-ID
+      heading: Plann.-ID
+      short: Plann.-ID
+      medium: Plann.-ID
+      long: Plannings-ID
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GZDEQUI
+  sap_structure: EQUI
+  sap_field: J_3GZDEQUI
+  position: 132
+  key_field: false
+  required_field: false
+  data_element: J_3GZDEQUI
+  domain: J_3GZDEQUI
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field J_3GZDEQUI from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Kennzeichen zentrales - dezentrales Equipment
+      heading: Z/D-Equi
+      short: Z/D-Equi
+      medium: Z/D-Equipment
+      long: Z/D-Equipment
+    en:
+      short_description: Indicator for Central-Decentral Equipment
+      heading: C/DEqui.
+      short: C/DEqui.
+      medium: C/D equipment
+      long: C/D equipment
+    nl:
+      short_description: Teken centraal/decentraal equipment
+      heading: C/D-equi
+      short: C/D-equi
+      medium: C/D-equipment
+      long: C/D-equipment
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GEQART
+  sap_structure: EQUI
+  sap_field: J_3GEQART
+  position: 133
+  key_field: false
+  required_field: false
+  data_element: J_3GEQART
+  domain: J_3GEQART
+  check_table: J_3GFEQUI
+  abap_type: C
+  data_type: CHAR
+  internal_length: 10
+  characters: 10
+  description: EQUI field J_3GEQART from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Art der (Fremd-Equipment)Beschaffung
+      heading: Art-Besch.
+      short: Art-Besch.
+      medium: Art der Besch.
+      long: Art der Beschaffung
+    en:
+      short_description: Procurement Type for External Equipment
+      heading: Proc. type
+      short: Proc. type
+      medium: Procrmnt type
+      long: Procurement type
+    nl:
+      short_description: Soort (externe equipment)verwerving
+      heading: Srt. verw.
+      short: Srt. verw.
+      medium: Soort verwerv.
+      long: Soort verwerving
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GKZMENG
+  sap_structure: EQUI
+  sap_field: J_3GKZMENG
+  position: 134
+  key_field: false
+  required_field: false
+  data_element: J_3GKZMENG
+  domain: J_3GKZMENG
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field J_3GKZMENG from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Einzel-/Mengenkennung
+      heading: Einz/Meng.
+      short: Einz/Meng.
+      medium: Einzel/Mengenk.
+      long: Einzel-/Mengenkenn.
+    en:
+      short_description: Item/Multipart Indicator
+      heading: Itm/mltprt
+      short: Itm/mltprt
+      medium: Item/multipart
+      long: Item/multipart ind.
+    nl:
+      short_description: ID enkelvoudig/samengesteld
+      heading: Enk./sam.
+      short: Enk./sam.
+      medium: Enkel/samengest
+      long: Enkelv./samengesteld
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GKONDE
+  sap_structure: EQUI
+  sap_field: J_3GKONDE
+  position: 135
+  key_field: false
+  required_field: false
+  data_element: KONDM
+  domain: KONDM
+  check_table: T178
+  abap_type: C
+  data_type: CHAR
+  internal_length: 2
+  characters: 2
+  description: EQUI field J_3GKONDE from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Materialgruppe
+      heading: MGr
+      short: MatGruppe
+      medium: Materialgruppe
+      long: Materialgruppe
+    en:
+      short_description: Material Pricing Group
+      heading: MPG
+      short: Mat.pr.grp
+      medium: Mat.pricing grp
+      long: Material pricing grp
+    nl:
+      short_description: Artikelgroep
+      heading: AGr
+      short: ArtGroep
+      medium: Artikelgroep
+      long: Artikelgroep
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GFIKTIV
+  sap_structure: EQUI
+  sap_field: J_3GFIKTIV
+  position: 136
+  key_field: false
+  required_field: false
+  data_element: J_3GFIKTIV
+  domain: X
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field J_3GFIKTIV from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Kennung Fiktiv
+      heading: Fik.
+      short: Fiktiv
+      medium: Fiktiv
+      long: Fiktiv
+    en:
+      short_description: Fictitious Indicator
+      heading: Fic.
+      short: Fictitious
+      medium: Fictitious
+      long: Fictitious
+    nl:
+      short_description: ID fictief
+      heading: Fic.
+      short: Fictief
+      medium: Fictief
+      long: Fictief
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GBELTYP
+  sap_structure: EQUI
+  sap_field: J_3GBELTYP
+  position: 137
+  key_field: false
+  required_field: false
+  data_element: J_3GBELTYP
+  domain: CHAR15
+  abap_type: C
+  data_type: CHAR
+  internal_length: 15
+  characters: 15
+  description: EQUI field J_3GBELTYP from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Erlaubte Belegtypen
+      heading: Erlaubte Belegtypen
+      short: ErlBelTyp
+      medium: Erl. Belegtyp
+      long: Erlaubte Belegtypen
+    en:
+      short_description: Document Categories Allowed
+      heading: Doc. cat. allowed
+      short: DocCatAllw
+      medium: Doc. cat. allow
+      long: Doc. cat. allowed
+    nl:
+      short_description: Toegestane documenttypen
+      heading: Toegest. doc.typen
+      short: ToegDocTyp
+      medium: Toeg. doc.type
+      long: Toegest. doc.typen
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.MEINS
+  sap_structure: EQUI
+  sap_field: MEINS
+  position: 138
+  key_field: false
+  required_field: false
+  data_element: MEINS
+  domain: MEINS
+  check_table: T006
+  abap_type: C
+  data_type: UNIT
+  internal_length: 3
+  characters: 3
+  description: EQUI field MEINS from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Basismengeneinheit
+      heading: BME
+      short: Einheit
+      medium: Basis-ME
+      long: Basismengeneinheit
+    en:
+      short_description: Base Unit of Measure
+      heading: BUn
+      short: Unit
+      medium: Base Unit
+      long: Base Unit of Measure
+    nl:
+      short_description: Basishoeveelheidseenheid
+      heading: BHE
+      short: Eenheid
+      medium: Basishvh.eenh.
+      long: Basishoevh.eenheid
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GKZLADG
+  sap_structure: EQUI
+  sap_field: J_3GKZLADG
+  position: 139
+  key_field: false
+  required_field: false
+  data_element: J_3GKZLADG
+  domain: CHAR1
+  check_table: J_3GLADEKE
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field J_3GKZLADG from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: 'Kennzeichen: Ladekostenrelevanz'
+      heading: Ladekosten
+      short: Ladekosten
+      medium: Ladekosten
+      long: Ladekostenrelevanz
+    en:
+      short_description: 'Indicator: Relevancy to Loading Costs'
+      heading: (Un)loadCosts
+      short: Un/loadCst
+      medium: Load. costs
+      long: Rel. to load. costs
+    nl:
+      short_description: 'Teken: laadkostenrelevantie'
+      heading: Laadkosten
+      short: Laadkosten
+      medium: Laadkosten
+      long: Laadkostenrelevantie
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GKZBERG
+  sap_structure: EQUI
+  sap_field: J_3GKZBERG
+  position: 140
+  key_field: false
+  required_field: false
+  data_element: J_3GKZBERG
+  domain: J_3GKZBERG
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field J_3GKZBERG from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Kennzeichen Bereitstellungsgebühren
+      heading: KennzBereitGeb
+      short: KenBereitG
+      medium: KennzBereitGeb
+      long: Kennz. Bereitst.Geb.
+    en:
+      short_description: Indicator for Provision Fees
+      heading: Provision fee
+      short: Prov. fee
+      medium: Provision fee
+      long: Provision fee ind.
+    nl:
+      short_description: 'Teken: beschikbaarstellingskosten'
+      heading: Tk. besch.kst.
+      short: Tk.beschK
+      medium: Tk. besch.kst.
+      long: 'Tk.: besch.kst.'
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GEIFR
+  sap_structure: EQUI
+  sap_field: J_3GEIFR
+  position: 141
+  key_field: false
+  required_field: false
+  data_element: J_3GEIFR
+  domain: J_3GEIFR
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field J_3GEIFR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Kennzeichen für Eigen-/Fremdequipment
+      heading: EigenFremd
+      short: EigenFremd
+      medium: Eigen-/Fremd
+      long: Eigen-/Fremd-Equip.
+    en:
+      short_description: Indicator for Own/External Equipment
+      heading: Own/ext.
+      short: Own/ext.
+      medium: Own/external
+      long: Own/external equi.
+    nl:
+      short_description: Teken voor eigen/extern equipment
+      heading: Eigen/ext.
+      short: Eigen/ext.
+      medium: Eigen/extern
+      long: Eigen/ext. equipment
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GVERMEIN
+  sap_structure: EQUI
+  sap_field: J_3GVERMEIN
+  position: 142
+  key_field: false
+  required_field: false
+  data_element: J_3GVERMEIN
+  domain: MEINS
+  check_table: T006
+  abap_type: C
+  data_type: UNIT
+  internal_length: 3
+  characters: 3
+  description: EQUI field J_3GVERMEIN from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Verrechnungsmengeneinheit
+      heading: VME
+      short: VerMEinh
+      medium: Verrech-ME
+      long: VerrechMengenEinheit
+    en:
+      short_description: Unit of Measure for Settlement
+      heading: UMS
+      short: UnMeasSet.
+      medium: Un/meas settl.
+      long: Unit/meas. settl.
+    nl:
+      short_description: Verrekeningshoeveelheidseenheid
+      heading: VHE
+      short: Verr.HE
+      medium: Verrek.HE
+      long: Verrek.hoevh.eenheid
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI.J_3GZULNR
+  sap_structure: EQUI
+  sap_field: J_3GZULNR
+  position: 143
+  key_field: false
+  required_field: false
+  data_element: J_3GLICENCE_NUM
+  domain: CHAR15
+  abap_type: C
+  data_type: CHAR
+  internal_length: 15
+  characters: 15
+  description: EQUI field J_3GZULNR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: KFZ-Kennzeichen
+      heading: KFZ-Kennz.
+      short: KFZ-Kennz.
+      medium: KFZ-Kennzeichen
+      long: KFZ-Kennzeichen
+    en:
+      short_description: License Plate Number
+      heading: Plate no.
+      short: Plate no.
+      medium: Lic. plate no.
+      long: License plate number
+    nl:
+      short_description: Kenteken
+      heading: Kenteken
+      short: Kenteken
+      medium: Kenteken
+      long: Kenteken
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI./SAPCEM/ABRECHVH
+  sap_structure: EQUI
+  sap_field: /SAPCEM/ABRECHVH
+  position: 144
+  key_field: false
+  required_field: false
+  data_element: /SAPCEM/ABRECHVH
+  domain: XCHAR
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field /SAPCEM/ABRECHVH from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Abrechnung nach Vorhaltung
+      heading: Vh
+      short: Abrech. Vh
+      medium: nach Vorhaltung
+      long: Abrechnung nach Vorhaltung
+    en:
+      short_description: Settlement Using Shipping Document
+      heading: SS
+      short: Settl.SDoc
+      medium: Settl. w. SDoc.
+      long: Settlement Using Shipping Doc.
+    nl:
+      short_description: Afrekening volgens verzenddocument
+      heading: VD
+      short: Afr. verD.
+      medium: Vlg. verz.doc.
+      long: Afrekening volgens verzenddoc.
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI./SAPCEM/ABRECHLG
+  sap_structure: EQUI
+  sap_field: /SAPCEM/ABRECHLG
+  position: 145
+  key_field: false
+  required_field: false
+  data_element: /SAPCEM/ABRECHLG
+  domain: XCHAR
+  abap_type: C
+  data_type: CHAR
+  internal_length: 1
+  characters: 1
+  description: EQUI field /SAPCEM/ABRECHLG from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Abrechnung nach Leistungsbeleg
+      heading: Lg
+      short: Abrech. Lg
+      medium: nach LG-Belege
+      long: Abrechnung nach Leistungsbeleg
+    en:
+      short_description: Settlement Using PBE Document
+      heading: SP
+      short: Settl. PBE
+      medium: Settl. w. PBE
+      long: Settlement Using PBE Document
+    nl:
+      short_description: Afrekening volgens servicedocument
+      heading: SD
+      short: Afrek. sd.
+      medium: Volg. serv.doc.
+      long: Afrekening volgens servicedoc.
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
+- key: EQUI./SAPCEM/DISPOGR
+  sap_structure: EQUI
+  sap_field: /SAPCEM/DISPOGR
+  position: 146
+  key_field: false
+  required_field: false
+  data_element: /SAPCEM/DISPOGR
+  domain: /SAPCEM/DISPOGR
+  check_table: /SAPCEM/DISPOGRU
+  abap_type: C
+  data_type: CHAR
+  internal_length: 4
+  characters: 4
+  description: EQUI field /SAPCEM/DISPOGR from an anonymized SAP ECC DD03VT field catalog extract.
+  usage: Use as generic SAP ECC equipment master field metadata for field mapping, extract design and migration analysis;
+    verify against the target tenant and release before implementation.
+  labels:
+    de:
+      short_description: Dispogruppe
+      heading: DGrp
+      short: Dispogrp
+      medium: Dispogruppe
+      long: Dispositionsgruppe
+    en:
+      short_description: Planning Group
+      heading: PGrp
+      short: Plan Group
+      medium: Planning Group
+      long: Planning Group
+    nl:
+      short_description: Planningsgroep
+      heading: PlGr
+      short: Plan.grp
+      medium: Planningsgroep
+      long: Planningsgroep
+  source_variant: ecc-anonymous-source-system-01-dd03vt-equi-20260624
+  confidence: ddic_extract_anonymized
