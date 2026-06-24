@@ -7,6 +7,7 @@ import json
 from collections.abc import Sequence
 from pathlib import Path
 
+from sap_agent_context.agent_records import export_agent_records, validate_agent_records
 from sap_agent_context.bundle import build_context_bundle, mccoy_provider_manifest
 from sap_agent_context.completeness import audit_completeness
 from sap_agent_context.evaluation import evaluate_fo_output_fixtures
@@ -17,6 +18,7 @@ from sap_agent_context.validation import has_errors, validate_items
 DEFAULT_SQLITE = "build/context.sqlite"
 DEFAULT_ITEMS_JSONL = "build/items.jsonl"
 DEFAULT_VECTOR_JSONL = "build/vector-corpus.jsonl"
+DEFAULT_RECORDS_DIR = "records"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -35,6 +37,14 @@ def build_parser() -> argparse.ArgumentParser:
     build_index.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
     build_index.add_argument("--items-jsonl", type=Path, default=Path(DEFAULT_ITEMS_JSONL))
     build_index.add_argument("--vector-jsonl", type=Path, default=Path(DEFAULT_VECTOR_JSONL))
+
+    export_jsonl = subparsers.add_parser("export-jsonl")
+    export_jsonl.add_argument("--output-dir", type=Path, default=Path(DEFAULT_RECORDS_DIR))
+    export_jsonl.add_argument(
+        "--skip-schema-validation",
+        action="store_true",
+        help="write records without validating them against schema/*.schema.json",
+    )
 
     query = subparsers.add_parser("query")
     query.add_argument("--intent", required=True)
@@ -90,6 +100,32 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
+
+    if args.command == "export-jsonl":
+        items = load_items(root)
+        issues = validate_items(items)
+        if has_errors(issues):
+            print(
+                json.dumps(
+                    {
+                        "status": "failed",
+                        "reason": "validation errors block JSONL export",
+                        "issues": [issue.to_dict() for issue in issues],
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 1
+        output_dir = _resolve_output(root, args.output_dir)
+        payload = export_agent_records(items, output_dir, root=root)
+        if not args.skip_schema_validation:
+            payload["schema_validation"] = validate_agent_records(
+                output_dir, schema_dir=root / "schema"
+            )
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        schema_validation = payload.get("schema_validation", {"status": "passed"})
+        return 0 if schema_validation["status"] == "passed" else 1
 
     if args.command == "audit-completeness":
         items = load_items(root)

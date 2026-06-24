@@ -49,7 +49,19 @@ uv run sap-agent-context audit-completeness
 uv run sap-agent-context evaluate-fixtures
 ```
 
-Build indexes:
+Export agent-first JSONL records:
+
+```bash
+uv run sap-agent-context export-jsonl --output-dir records
+```
+
+The migration path is incremental: current YAML knowledge stays green and remains the
+migration source while `records/*.jsonl` becomes the deterministic agent-first
+record surface. The export writes typed JSONL files for apps, tables, fields,
+workflows, roles, claims, sources, and relations, then validates them against
+`schema/*.schema.json`.
+
+Build runtime indexes:
 
 ```bash
 uv run sap-agent-context build-index

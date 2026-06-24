@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SAP Agent Context claim record",
+  "type": "object",
+  "required": [
+    "id",
+    "subject_id",
+    "statement",
+    "confidence",
+    "evidence_ids",
+    "freshness",
+    "usage_constraints"
+  ],
+  "properties": {
+    "id": {"type": "string"},
+    "subject_id": {"type": "string"},
+    "statement": {"type": "string"},
+    "confidence": {"type": "string", "enum": ["low", "medium", "high"]},
+    "evidence_ids": {"type": "array", "minItems": 1},
+    "freshness": {"type": "object"},
+    "usage_constraints": {"type": "array"}
+  }
+}

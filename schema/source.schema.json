@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SAP Agent Context source record",
+  "type": "object",
+  "required": [
+    "id",
+    "subject_id",
+    "kind",
+    "title",
+    "access",
+    "requires_login",
+    "retrieved_at",
+    "license_note"
+  ],
+  "properties": {
+    "id": {"type": "string"},
+    "subject_id": {"type": "string"},
+    "kind": {"type": "string"},
+    "title": {"type": "string"},
+    "url": {"type": "string"},
+    "access": {"type": "string", "enum": ["public", "gated", "internal_derived"]},
+    "requires_login": {"type": "boolean"},
+    "retrieved_at": {"type": "string"},
+    "specificity": {"type": "string"},
+    "license_note": {"type": "string"}
+  }
+}
