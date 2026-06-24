@@ -1,0 +1,33 @@
+fixtures:
+  - id: exact_transaction_ie03
+    query: IE03 equipment display
+    limit: 5
+    filters:
+      kind: sap_app
+    required_top_ids:
+      - sap.app.eam.pm.ie03
+    require_citations: true
+  - id: exact_table_equi
+    query: EQUI equipment table
+    limit: 8
+    required_ids:
+      - sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog
+  - id: exact_field_catalog_dd03vt
+    query: DD03VT field catalog
+    limit: 8
+    required_ids:
+      - sap.field-set.ecc-anonymous-dd03vt-dd03vt-field-catalog
+  - id: semantic_display_equipment_master
+    query: How do I display equipment master data?
+    limit: 8
+    required_top_ids:
+      - sap.app.eam.pm.ie03
+    must_rank_before:
+      - higher: sap.app.eam.pm.ie03
+        lower: sap.app.eam.pm.ie01
+  - id: evidence_citations_ie03_status
+    query: IE03 equipment status source evidence
+    limit: 8
+    required_ids:
+      - sap.app.eam.pm.ie03
+    require_citations: true

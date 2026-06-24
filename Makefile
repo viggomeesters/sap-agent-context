@@ -1,6 +1,6 @@
-.PHONY: check validate audit audit-v02-gap-report evaluate test lint guard diff-check
+.PHONY: check validate audit audit-v02-gap-report evaluate build-index evaluate-runtime test lint guard diff-check
 
-check: guard validate audit evaluate test lint diff-check
+check: guard validate audit evaluate build-index evaluate-runtime test lint diff-check
 
 guard:
 	uv run python scripts/validate_repository.py
@@ -16,6 +16,12 @@ audit-v02-gap-report:
 
 evaluate:
 	uv run sap-agent-context evaluate-fixtures
+
+build-index:
+	uv run sap-agent-context build-index
+
+evaluate-runtime:
+	uv run sap-agent-context evaluate-runtime-retrieval
 
 test:
 	uv run pytest -q

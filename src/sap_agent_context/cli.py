@@ -13,6 +13,7 @@ from sap_agent_context.completeness import audit_completeness
 from sap_agent_context.evaluation import evaluate_fo_output_fixtures
 from sap_agent_context.index import build_indexes
 from sap_agent_context.repository import load_items
+from sap_agent_context.runtime_evaluation import evaluate_runtime_retrieval
 from sap_agent_context.runtime_search import search_runtime_index
 from sap_agent_context.validation import has_errors, validate_items
 
@@ -33,6 +34,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     evaluate = subparsers.add_parser("evaluate-fixtures")
     evaluate.add_argument("--fixtures", type=Path)
+
+    runtime_eval = subparsers.add_parser("evaluate-runtime-retrieval")
+    runtime_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
+    runtime_eval.add_argument("--fixtures", type=Path)
 
     build_index = subparsers.add_parser("build-index")
     build_index.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
@@ -161,6 +166,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         payload = evaluate_fo_output_fixtures(
             items,
             root=root,
+            fixtures_path=_resolve_output(root, args.fixtures) if args.fixtures else None,
+        )
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0 if payload["status"] == "passed" else 1
+
+    if args.command == "evaluate-runtime-retrieval":
+        payload = evaluate_runtime_retrieval(
+            root=root,
+            sqlite_path=_resolve_output(root, args.sqlite),
             fixtures_path=_resolve_output(root, args.fixtures) if args.fixtures else None,
         )
         print(json.dumps(payload, indent=2, sort_keys=True, default=str))
