@@ -21,6 +21,7 @@ def build_indexes(
     jsonl_path: Path,
     vector_jsonl_path: Path,
     root: Path,
+    sqlite_vec: str = "auto",
 ) -> dict[str, Any]:
     """Build SQLite, JSONL and vector-ready chunk indexes.
 
@@ -45,6 +46,12 @@ def build_indexes(
             *(_claim_vector_record(record) for record in records["claims"]),
         ]
         _write_jsonl(vector_jsonl_path, vector_records)
+        sqlite_vec_status = _configure_sqlite_vec(
+            sqlite_path,
+            mode=sqlite_vec,
+            vector_records=len(vector_records),
+            vector_jsonl_path=vector_jsonl_path,
+        )
         return {
             "status": "built",
             "items": len(item_records),
@@ -52,6 +59,7 @@ def build_indexes(
             "sources": len(records["sources"]),
             "relations": len(records["relations"]),
             "vector_records": len(vector_records),
+            "sqlite_vec": sqlite_vec_status,
             "sqlite": str(sqlite_path),
             "items_jsonl": str(jsonl_path),
             "vector_jsonl": str(vector_jsonl_path),
@@ -371,6 +379,87 @@ def _claim_vector_record(record: dict[str, Any]) -> dict[str, Any]:
             "evidence_ids": evidence_ids,
         },
     }
+
+
+def _configure_sqlite_vec(
+    sqlite_path: Path,
+    *,
+    mode: str,
+    vector_records: int,
+    vector_jsonl_path: Path,
+) -> dict[str, str]:
+    if mode not in {"off", "auto", "required"}:
+        raise ValueError("sqlite_vec must be one of: off, auto, required")
+    availability = _sqlite_vec_availability()
+    if mode == "required" and availability["status"] != "available":
+        raise RuntimeError(f"sqlite-vec is required but unavailable: {availability['reason']}")
+    status = "off" if mode == "off" else availability["status"]
+    if status == "available":
+        status = "enabled"
+    if mode == "auto" and availability["status"] != "available":
+        status = "skipped"
+    reason = "disabled" if mode == "off" else availability["reason"]
+    _write_vector_metadata(
+        sqlite_path,
+        status=status,
+        provider="not-configured",
+        model="not-configured",
+        dimension=0,
+        source=str(vector_jsonl_path),
+        vector_records=vector_records,
+    )
+    return {"mode": mode, "status": status, "reason": reason}
+
+
+def _sqlite_vec_availability() -> dict[str, str]:
+    try:
+        import sqlite_vec  # type: ignore[import-not-found]  # noqa: F401
+    except Exception as exc:  # pragma: no cover - environment dependent
+        return {"status": "unavailable", "reason": f"unavailable: {exc.__class__.__name__}"}
+    return {"status": "available", "reason": "sqlite_vec Python package import succeeded"}
+
+
+def _write_vector_metadata(
+    sqlite_path: Path,
+    *,
+    status: str,
+    provider: str,
+    model: str,
+    dimension: int,
+    source: str,
+    vector_records: int,
+) -> None:
+    with sqlite3.connect(sqlite_path) as conn:
+        conn.execute(
+            """
+            CREATE TABLE vector_index_metadata (
+              status TEXT NOT NULL,
+              provider TEXT NOT NULL,
+              model TEXT NOT NULL,
+              dimension INTEGER NOT NULL,
+              source TEXT NOT NULL,
+              content_hash_strategy TEXT NOT NULL,
+              vector_records INTEGER NOT NULL
+            )
+            """
+        )
+        conn.execute(
+            """
+            INSERT INTO vector_index_metadata (
+              status, provider, model, dimension, source,
+              content_hash_strategy, vector_records
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                status,
+                provider,
+                model,
+                dimension,
+                "build/vector-corpus.jsonl" if source.endswith("vector-corpus.jsonl") else source,
+                "stable vector record id + text",
+                vector_records,
+            ),
+        )
 
 
 def _strings(value: Any) -> list[str]:

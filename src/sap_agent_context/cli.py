@@ -37,6 +37,12 @@ def build_parser() -> argparse.ArgumentParser:
     build_index.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
     build_index.add_argument("--items-jsonl", type=Path, default=Path(DEFAULT_ITEMS_JSONL))
     build_index.add_argument("--vector-jsonl", type=Path, default=Path(DEFAULT_VECTOR_JSONL))
+    build_index.add_argument(
+        "--sqlite-vec",
+        choices=["off", "auto", "required"],
+        default="auto",
+        help="optional sqlite-vec integration mode for generated vector tables",
+    )
 
     export_jsonl = subparsers.add_parser("export-jsonl")
     export_jsonl.add_argument("--output-dir", type=Path, default=Path(DEFAULT_RECORDS_DIR))
@@ -97,6 +103,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             jsonl_path=_resolve_output(root, args.items_jsonl),
             vector_jsonl_path=_resolve_output(root, args.vector_jsonl),
             root=root,
+            sqlite_vec=args.sqlite_vec,
         )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
