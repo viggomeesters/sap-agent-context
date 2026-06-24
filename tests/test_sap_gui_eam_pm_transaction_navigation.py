@@ -18,12 +18,28 @@ def test_eam_pm_transaction_pack_contains_required_tcodes_and_prefix_rule() -> N
         "sap.app.eam.pm.ie01",
         "sap.app.eam.pm.ie02",
         "sap.app.eam.pm.ie03",
+        "sap.app.eam.pm.ie05",
+        "sap.app.eam.pm.ie06",
+        "sap.app.eam.pm.il01",
+        "sap.app.eam.pm.il02",
+        "sap.app.eam.pm.il03",
+        "sap.app.eam.pm.iw31",
+        "sap.app.eam.pm.iw32",
+        "sap.app.eam.pm.iw33",
+        "sap.app.eam.pm.iw38",
+        "sap.app.eam.pm.iw39",
         "sap.app.eam.pm.ih08",
+        "sap.app.eam.pm.ih09",
+        "sap.app.cross.migo",
+        "sap.app.cross.mb51",
+        "sap.app.cross.mm03",
     }
     assert required_apps <= ids
     assert "sap.rule.eam.pm.command-prefix-not-tcode" in ids
     text = PACK.read_text(encoding="utf-8").lower()
     assert "nie01 is not the transaction code" in text
+    assert "mm03" in text
+    assert "migo" in text
     assert "confidence: medium internal_derived" in text
 
 

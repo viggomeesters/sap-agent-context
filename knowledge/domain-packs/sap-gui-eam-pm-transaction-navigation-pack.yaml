@@ -200,6 +200,341 @@ items:
     - sap.object.eam-equipment
     source_references:
     - sap.ref.eam.pm.transaction-code-public-cross-check
+- id: sap.app.eam.pm.ie05
+  title: "IE05 - Change equipment list"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - ie05
+  - transaction
+  - navigation
+  - list-processing
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IE05 is represented as SAP GUI transaction/navigation context for equipment list processing in change
+    mode. Confidence: medium internal_derived; verify exact transaction availability, selection screen and
+    authorizations in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IE05 is a useful SAP GUI transaction context for equipment list processing, but screen behavior and authorizations are tenant-specific.
+    evidence:
+    - sap.ref.ddic-table-and-transaction-catalogs
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    source_references:
+    - sap.ref.ddic-table-and-transaction-catalogs
+- id: sap.app.eam.pm.ie06
+  title: "IE06 - Display equipment list"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - equipment
+  - ie06
+  - transaction
+  - navigation
+  - list-processing
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IE06 is represented as SAP GUI transaction/navigation context for equipment list processing in display
+    mode. Confidence: medium internal_derived; verify exact transaction availability, selection screen and
+    authorizations in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IE06 is a useful SAP GUI transaction context for equipment list display, but screen behavior and authorizations are tenant-specific.
+    evidence:
+    - sap.ref.ddic-table-and-transaction-catalogs
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    objects:
+    - sap.object.eam-equipment
+    source_references:
+    - sap.ref.ddic-table-and-transaction-catalogs
+- id: sap.app.eam.pm.il01
+  title: "IL01 - Create functional location"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - functional-location
+  - il01
+  - transaction
+  - navigation
+  - technical-object
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IL01 is represented as SAP GUI transaction/navigation context for creating functional locations.
+    Confidence: medium internal_derived; verify exact transaction availability, screen behavior and authorizations
+    in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IL01 is a useful SAP GUI transaction context for creating functional locations, but tenant menu paths and authorizations can differ.
+    evidence:
+    - sap.ref.eam.pm.sap-help-functional-location
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-functional-location
+- id: sap.app.eam.pm.il02
+  title: "IL02 - Change functional location"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - functional-location
+  - il02
+  - transaction
+  - navigation
+  - technical-object
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IL02 is represented as SAP GUI transaction/navigation context for changing functional locations.
+    Confidence: medium internal_derived; verify exact transaction availability, screen behavior and authorizations
+    in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IL02 is a useful SAP GUI transaction context for changing functional locations, but tenant menu paths and authorizations can differ.
+    evidence:
+    - sap.ref.eam.pm.sap-help-functional-location
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-functional-location
+- id: sap.app.eam.pm.il03
+  title: "IL03 - Display functional location"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - eam
+  - plant-maintenance
+  - functional-location
+  - il03
+  - transaction
+  - navigation
+  - technical-object
+  used_for:
+  - fo.navigation
+  - fo.test_scenarios
+  summary: 'IL03 is represented as SAP GUI transaction/navigation context for displaying functional locations.
+    Confidence: medium internal_derived; verify exact transaction availability, screen behavior and authorizations
+    in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IL03 is a useful SAP GUI transaction context for displaying functional locations, but tenant menu paths and authorizations can differ.
+    evidence:
+    - sap.ref.eam.pm.sap-help-functional-location
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-functional-location
+- id: sap.app.eam.pm.iw31
+  title: "IW31 - Create maintenance order"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, maintenance-order, iw31, transaction, navigation]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: 'IW31 is represented as SAP GUI transaction/navigation context for creating maintenance orders. Confidence:
+    medium internal_derived; verify exact order types, screen variants and authorizations in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IW31 is a useful SAP GUI transaction context for creating maintenance orders, with tenant-specific order types and authorizations.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations: {}
+- id: sap.app.eam.pm.iw32
+  title: "IW32 - Change maintenance order"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, maintenance-order, iw32, transaction, navigation]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: 'IW32 is represented as SAP GUI transaction/navigation context for changing maintenance orders. Confidence:
+    medium internal_derived; verify exact order types, screen variants and authorizations in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IW32 is a useful SAP GUI transaction context for changing maintenance orders, with tenant-specific order types and authorizations.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations: {}
+- id: sap.app.eam.pm.iw33
+  title: "IW33 - Display maintenance order"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, maintenance-order, iw33, transaction, navigation]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: 'IW33 is represented as SAP GUI transaction/navigation context for displaying maintenance orders.
+    Confidence: medium internal_derived; verify exact order types, screen variants and authorizations in the target
+    SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IW33 is a useful SAP GUI transaction context for displaying maintenance orders, with tenant-specific order types and authorizations.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations: {}
+- id: sap.app.eam.pm.iw38
+  title: "IW38 - Change maintenance order list"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, maintenance-order, iw38, transaction, navigation, list-processing]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: 'IW38 is represented as SAP GUI transaction/navigation context for maintenance order list processing
+    in change mode. Confidence: medium internal_derived; verify exact selection screen and authorizations in the
+    target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IW38 is a useful SAP GUI transaction context for maintenance order list processing, with tenant-specific selection and authorization behavior.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations: {}
+- id: sap.app.eam.pm.iw39
+  title: "IW39 - Display maintenance order list"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, maintenance-order, iw39, transaction, navigation, list-processing]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: 'IW39 is represented as SAP GUI transaction/navigation context for maintenance order list processing
+    in display mode. Confidence: medium internal_derived; verify exact selection screen and authorizations in the
+    target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IW39 is a useful SAP GUI transaction context for maintenance order list display, with tenant-specific selection and authorization behavior.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations: {}
+- id: sap.app.eam.pm.ih09
+  title: "IH09 - Display functional location list"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, functional-location, ih09, transaction, navigation, list-processing]
+  used_for: [fo.navigation, fo.test_scenarios]
+  summary: 'IH09 is represented as SAP GUI transaction/navigation context for functional location list/search
+    scenarios. Confidence: medium internal_derived; verify exact transaction availability, selection screen and
+    authorizations in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: IH09 is a useful SAP GUI transaction context for functional location list/search scenarios, but screen behavior and authorizations are tenant-specific.
+    evidence:
+    - sap.ref.eam.pm.sap-help-functional-location
+    - sap.rule.eam.pm.source-confidence-policy
+  relations:
+    source_references:
+    - sap.ref.eam.pm.sap-help-functional-location
+- id: sap.app.cross.migo
+  title: "MIGO - Goods movement"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, materials-management, goods-movement, migo, transaction, navigation]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: 'MIGO is represented as SAP GUI transaction/navigation context for goods movement. Confidence: medium
+    internal_derived; verify movement types, screen variants and authorizations in the target SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: MIGO is a useful SAP GUI transaction context for goods movement, with tenant-specific movement types and authorizations.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations: {}
+- id: sap.app.cross.mb51
+  title: "MB51 - Material document list"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, materials-management, material-document, mb51, transaction, navigation, list-processing]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: 'MB51 is represented as SAP GUI transaction/navigation context for material document list/search
+    scenarios. Confidence: medium internal_derived; verify exact selection screen and authorizations in the target
+    SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: MB51 is a useful SAP GUI transaction context for material document list/search scenarios, with tenant-specific selection and authorization behavior.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations: {}
+- id: sap.app.cross.mm03
+  title: "MM03 - Display material"
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, materials-management, material-master, mm03, transaction, navigation]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: 'MM03 is represented as SAP GUI transaction/navigation context for displaying material master data.
+    Confidence: medium internal_derived; verify material views, screen variants and authorizations in the target
+    SAP system.'
+  freshness: *id001
+  source: *id002
+  claims:
+  - statement: MM03 is a useful SAP GUI transaction context for displaying material master data, with tenant-specific views and authorizations.
+    evidence:
+    - sap.rule.eam.pm.source-confidence-policy
+  relations: {}
 - id: sap.object.eam.pm.sap-gui-command-field
   title: SAP GUI command field navigation prefix context
   kind: sap_object
