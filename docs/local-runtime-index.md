@@ -15,6 +15,7 @@ SAP Agent Context uses an agent-first storage split:
 uv run sap-agent-context validate
 uv run sap-agent-context export-jsonl --output-dir records
 uv run sap-agent-context build-index
+uv run sap-agent-context build-embeddings
 uv run sap-agent-context evaluate-runtime-retrieval
 ```
 
@@ -28,14 +29,15 @@ exports temporary records from YAML first for backward compatibility.
 | `records/*.jsonl` | typed item/claim/source/relation records | yes |
 | `build/context.sqlite` | local agent query store: items, claims, sources, relations, FTS5 | no |
 | `build/vector-corpus.jsonl` | deterministic text chunks for local embedding | no |
+| `vector_embedding_records` / `vector_embeddings` | FastEmbed + sqlite-vec semantic vectors | no |
 | `vector_index_metadata` | generated vector build status/model/dimension/source metadata | no |
 
 SQLite + FTS5 is the primary local runtime. `sqlite-vec` is included as a
 local-only dependency and `build-index --sqlite-vec required` must succeed in a
-fresh clone after `uv sync`. The current vector layer writes a deterministic
-`build/vector-corpus.jsonl` plus `vector_index_metadata`; embedding provider,
-model, and dimensions remain `not-configured` until a local embedding provider is
-chosen.
+fresh clone after `uv sync`. The semantic layer uses FastEmbed with
+`BAAI/bge-small-en-v1.5` by default, writes 384-dimensional embeddings into
+sqlite-vec, and records provider/model/dimension/vector count in
+`vector_index_metadata`.
 
 DuckDB can be useful for analytics, coverage checks, and embedding-quality
 analysis over JSONL, but it is not the primary runtime store for agent lookup.
@@ -65,8 +67,10 @@ Exact SAP code lookup:
 
 ```bash
 uv run sap-agent-context build-index
+uv run sap-agent-context build-embeddings
 uv run sap-agent-context runtime-search "IE03 equipment display" \
   --kind sap_app \
+  --vector \
   --limit 5
 ```
 

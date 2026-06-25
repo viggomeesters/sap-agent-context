@@ -64,5 +64,8 @@ def test_embedding_runtime_config_schema_is_local_first() -> None:
     providers = schema["properties"]["provider"]["enum"]
 
     assert {"fastembed", "sentence-transformers", "ollama", "custom-local"} <= set(providers)
+    assert schema["properties"]["provider"]["default"] == "fastembed"
+    assert schema["properties"]["model"]["default"] == "BAAI/bge-small-en-v1.5"
+    assert schema["properties"]["dimension"]["default"] == 384
     assert "pinecone" not in json.dumps(schema).lower()
     assert "openai" not in json.dumps(schema).lower()

@@ -6,10 +6,11 @@
   "properties": {
     "provider": {
       "type": "string",
-      "enum": ["fastembed", "sentence-transformers", "ollama", "custom-local"]
+      "enum": ["fastembed", "sentence-transformers", "ollama", "custom-local"],
+      "default": "fastembed"
     },
-    "model": {"type": "string"},
-    "dimension": {"type": "number"},
+    "model": {"type": "string", "default": "BAAI/bge-small-en-v1.5"},
+    "dimension": {"type": "integer", "default": 384},
     "cache_path": {"type": "string"},
     "batch_size": {"type": "number"},
     "normalize": {"type": "boolean"},

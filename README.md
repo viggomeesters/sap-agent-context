@@ -65,8 +65,9 @@ Build runtime indexes:
 
 ```bash
 uv run sap-agent-context build-index
+uv run sap-agent-context build-embeddings
 uv run sap-agent-context evaluate-runtime-retrieval
-uv run sap-agent-context runtime-search "IE03 equipment display" --kind sap_app --limit 5
+uv run sap-agent-context runtime-search "IE03 equipment display" --kind sap_app --vector --limit 5
 ```
 
 Runtime artifacts under `build/` are generated from canonical `records/*.jsonl`.
@@ -150,6 +151,7 @@ uv run sap-agent-context validate
 uv run sap-agent-context audit-completeness
 uv run sap-agent-context evaluate-fixtures
 uv run sap-agent-context build-index
+uv run sap-agent-context build-embeddings
 uv run sap-agent-context evaluate-runtime-retrieval
 uv run pytest -q
 uv run ruff check .

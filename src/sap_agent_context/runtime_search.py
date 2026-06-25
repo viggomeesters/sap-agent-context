@@ -8,6 +8,8 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
+from sap_agent_context.runtime_embeddings import search_runtime_vectors
+
 IDENTIFIER_RE = re.compile(r"\b[A-Z][A-Z0-9_/-]{2,}\b")
 WORD_RE = re.compile(r"[A-Za-z0-9_/-]+")
 
@@ -22,58 +24,73 @@ def search_runtime_index(
     access: str | None = None,
     used_for: str | None = None,
     topic: str | None = None,
+    query_vector: list[float] | None = None,
 ) -> list[dict[str, Any]]:
     """Search the generated runtime SQLite index.
 
     Exact SAP identifiers (transactions, tables, fields, scope ids) get a
     deterministic boost before BM25 so IE03/EQUI/DD03VT-style queries do not get
-    demoted by vague semantic text.
+    demoted by vague semantic text. When a query vector is supplied and local
+    embeddings are present, vector hits are merged as additional candidates.
     """
     tokens = _tokens(query)
     match_query = _fts_query(tokens)
     exact_terms = _exact_terms(query, tokens)
-    if not match_query:
+    if not match_query and query_vector is None:
         return []
-    with sqlite3.connect(sqlite_path) as conn:
-        conn.row_factory = sqlite3.Row
-        item_rows = conn.execute(
-            """
-            SELECT
-              items.id,
-              items.title,
-              items.kind,
-              items.summary AS text,
-              'item_fts' AS source,
-              bm25(item_fts) AS bm25_score,
-              item_fts.retrieval_text AS search_text,
-              items.payload_json AS payload_json
-            FROM item_fts
-            JOIN items ON items.id = item_fts.id
-            WHERE item_fts MATCH ?
-            LIMIT ?
-            """,
-            (match_query, max(limit * 4, 20)),
-        ).fetchall()
-        exact_item_rows = _exact_item_rows(conn, exact_terms, max(limit * 4, 20))
-        claim_rows = conn.execute(
-            """
-            SELECT
-              claims.id,
-              claims.subject_id AS title,
-              'claim' AS kind,
-              claims.statement AS text,
-              'claim_fts' AS source,
-              bm25(claim_fts) AS bm25_score,
-              claim_fts.statement || ' ' || claim_fts.evidence_text AS search_text,
-              claims.payload_json AS payload_json
-            FROM claim_fts
-            JOIN claims ON claims.id = claim_fts.id
-            WHERE claim_fts MATCH ?
-            LIMIT ?
-            """,
-            (match_query, max(limit * 2, 10)),
-        ).fetchall()
+
+    item_rows: list[sqlite3.Row] = []
+    exact_item_rows: list[sqlite3.Row] = []
+    claim_rows: list[sqlite3.Row] = []
+    if match_query:
+        with sqlite3.connect(sqlite_path) as conn:
+            conn.row_factory = sqlite3.Row
+            item_rows = conn.execute(
+                """
+                SELECT
+                  items.id,
+                  items.title,
+                  items.kind,
+                  items.summary AS text,
+                  'item_fts' AS source,
+                  bm25(item_fts) AS bm25_score,
+                  item_fts.retrieval_text AS search_text,
+                  items.payload_json AS payload_json
+                FROM item_fts
+                JOIN items ON items.id = item_fts.id
+                WHERE item_fts MATCH ?
+                LIMIT ?
+                """,
+                (match_query, max(limit * 4, 20)),
+            ).fetchall()
+            exact_item_rows = _exact_item_rows(conn, exact_terms, max(limit * 4, 20))
+            claim_rows = conn.execute(
+                """
+                SELECT
+                  claims.id,
+                  claims.subject_id AS title,
+                  'claim' AS kind,
+                  claims.statement AS text,
+                  'claim_fts' AS source,
+                  bm25(claim_fts) AS bm25_score,
+                  claim_fts.statement || ' ' || claim_fts.evidence_text AS search_text,
+                  claims.payload_json AS payload_json
+                FROM claim_fts
+                JOIN claims ON claims.id = claim_fts.id
+                WHERE claim_fts MATCH ?
+                LIMIT ?
+                """,
+                (match_query, max(limit * 2, 10)),
+            ).fetchall()
+
     results = [_ranked(row, exact_terms) for row in [*item_rows, *exact_item_rows, *claim_rows]]
+    if query_vector is not None:
+        vector_hits = search_runtime_vectors(
+            sqlite_path,
+            query_vector=query_vector,
+            limit=max(limit * 2, 10),
+        )
+        results.extend(_vector_ranked(hit) for hit in vector_hits)
     filtered = [
         result
         for result in results
@@ -155,6 +172,29 @@ def _ranked(row: sqlite3.Row, exact_terms: list[str]) -> dict[str, Any]:
         "claim_ids": _claim_ids(row, payload),
         "source_ids": _source_ids(row, payload),
         "metadata": payload,
+    }
+
+
+def _vector_ranked(hit: dict[str, Any]) -> dict[str, Any]:
+    metadata = hit.get("metadata") if isinstance(hit.get("metadata"), dict) else {}
+    record_type = str(hit.get("record_type") or "")
+    canonical_id = str(hit.get("canonical_record_id") or hit.get("id") or "")
+    distance = float(hit.get("distance") or 0.0)
+    result_id = str(hit.get("item_id") or hit.get("claim_id") or canonical_id)
+    kind = str(metadata.get("kind") or record_type)
+    return {
+        "id": result_id,
+        "title": str(metadata.get("title") or metadata.get("subject_id") or canonical_id),
+        "kind": kind,
+        "text": str(hit.get("text") or ""),
+        "source": "vector",
+        "exact_token_hits": 0,
+        "bm25_score": 0.0,
+        "vector_distance": distance,
+        "score": 120 - distance,
+        "claim_ids": [str(hit["claim_id"])] if hit.get("claim_id") else [],
+        "source_ids": _strings(metadata.get("evidence_ids") or metadata.get("source_ids")),
+        "metadata": metadata,
     }
 
 

@@ -13,6 +13,13 @@ from sap_agent_context.completeness import audit_completeness
 from sap_agent_context.evaluation import evaluate_fo_output_fixtures
 from sap_agent_context.index import build_indexes
 from sap_agent_context.repository import load_items
+from sap_agent_context.runtime_embeddings import (
+    DEFAULT_EMBEDDING_DIMENSION,
+    DEFAULT_EMBEDDING_MODEL,
+    DEFAULT_EMBEDDING_PROVIDER,
+    build_runtime_embeddings,
+    embed_query,
+)
 from sap_agent_context.runtime_evaluation import evaluate_runtime_retrieval
 from sap_agent_context.runtime_search import search_runtime_index
 from sap_agent_context.validation import has_errors, validate_items
@@ -50,6 +57,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="optional sqlite-vec integration mode for generated vector tables",
     )
 
+    build_embeddings = subparsers.add_parser("build-embeddings")
+    build_embeddings.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
+    build_embeddings.add_argument("--vector-jsonl", type=Path, default=Path(DEFAULT_VECTOR_JSONL))
+    build_embeddings.add_argument("--provider", default=DEFAULT_EMBEDDING_PROVIDER)
+    build_embeddings.add_argument("--model", default=DEFAULT_EMBEDDING_MODEL)
+    build_embeddings.add_argument("--dimension", type=int, default=DEFAULT_EMBEDDING_DIMENSION)
+    build_embeddings.add_argument("--batch-size", type=int, default=64)
+
     export_jsonl = subparsers.add_parser("export-jsonl")
     export_jsonl.add_argument("--output-dir", type=Path, default=Path(DEFAULT_RECORDS_DIR))
     export_jsonl.add_argument(
@@ -74,6 +89,9 @@ def build_parser() -> argparse.ArgumentParser:
     runtime_search.add_argument("--access", default=None)
     runtime_search.add_argument("--used-for", default=None)
     runtime_search.add_argument("--topic", default=None)
+    runtime_search.add_argument("--vector", action="store_true")
+    runtime_search.add_argument("--embedding-provider", default=DEFAULT_EMBEDDING_PROVIDER)
+    runtime_search.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
     runtime_search.add_argument("--output", type=Path)
 
     provider = subparsers.add_parser("mccoy-provider")
@@ -121,6 +139,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             vector_jsonl_path=_resolve_output(root, args.vector_jsonl),
             root=root,
             sqlite_vec=args.sqlite_vec,
+        )
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "build-embeddings":
+        payload = build_runtime_embeddings(
+            sqlite_path=_resolve_output(root, args.sqlite),
+            vector_jsonl_path=_resolve_output(root, args.vector_jsonl),
+            provider=args.provider,
+            model=args.model,
+            dimension=args.dimension,
+            batch_size=args.batch_size,
         )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
@@ -216,6 +246,13 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "runtime-search":
         sqlite_path = _resolve_output(root, args.sqlite)
+        query_vector = None
+        if args.vector:
+            query_vector = embed_query(
+                args.query,
+                provider=args.embedding_provider,
+                model=args.embedding_model,
+            )
         results = search_runtime_index(
             sqlite_path,
             args.query,
@@ -225,6 +262,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             access=args.access,
             used_for=args.used_for,
             topic=args.topic,
+            query_vector=query_vector,
         )
         payload = {
             "status": "passed" if results else "empty",
