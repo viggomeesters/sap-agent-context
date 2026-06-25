@@ -22,6 +22,7 @@ from sap_agent_context.runtime_embeddings import (
 )
 from sap_agent_context.runtime_evaluation import evaluate_runtime_retrieval
 from sap_agent_context.runtime_search import search_runtime_index
+from sap_agent_context.semantic_model_evaluation import evaluate_semantic_models
 from sap_agent_context.validation import has_errors, validate_items
 
 DEFAULT_SQLITE = "build/context.sqlite"
@@ -45,6 +46,16 @@ def build_parser() -> argparse.ArgumentParser:
     runtime_eval = subparsers.add_parser("evaluate-runtime-retrieval")
     runtime_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
     runtime_eval.add_argument("--fixtures", type=Path)
+
+    semantic_eval = subparsers.add_parser("evaluate-semantic-models")
+    semantic_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
+    semantic_eval.add_argument("--items-jsonl", type=Path, default=Path(DEFAULT_ITEMS_JSONL))
+    semantic_eval.add_argument("--vector-jsonl", type=Path, default=Path(DEFAULT_VECTOR_JSONL))
+    semantic_eval.add_argument("--fixtures", type=Path)
+    semantic_eval.add_argument("--provider", default=DEFAULT_EMBEDDING_PROVIDER)
+    semantic_eval.add_argument("--models", nargs="+", default=[DEFAULT_EMBEDDING_MODEL])
+    semantic_eval.add_argument("--dimension", type=int, default=DEFAULT_EMBEDDING_DIMENSION)
+    semantic_eval.add_argument("--batch-size", type=int, default=64)
 
     build_index = subparsers.add_parser("build-index")
     build_index.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
@@ -206,6 +217,21 @@ def main(argv: Sequence[str] | None = None) -> int:
             root=root,
             sqlite_path=_resolve_output(root, args.sqlite),
             fixtures_path=_resolve_output(root, args.fixtures) if args.fixtures else None,
+        )
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0 if payload["status"] == "passed" else 1
+
+    if args.command == "evaluate-semantic-models":
+        payload = evaluate_semantic_models(
+            root=root,
+            sqlite_path=_resolve_output(root, args.sqlite),
+            items_jsonl_path=_resolve_output(root, args.items_jsonl),
+            vector_jsonl_path=_resolve_output(root, args.vector_jsonl),
+            fixtures_path=_resolve_output(root, args.fixtures) if args.fixtures else None,
+            provider=args.provider,
+            models=args.models,
+            dimension=args.dimension,
+            batch_size=args.batch_size,
         )
         print(json.dumps(payload, indent=2, sort_keys=True, default=str))
         return 0 if payload["status"] == "passed" else 1

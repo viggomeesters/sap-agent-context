@@ -25,6 +25,8 @@ def test_local_runtime_index_docs_cover_required_contracts() -> None:
         "BAAI/bge-small-en-v1.5",
         "vector_embedding_records",
         "evaluate-runtime-retrieval",
+        "evaluate-semantic-models",
+        "NL/EN",
         "Do not add customer data",
         "internal URLs",
         "copied proprietary SAP documentation",

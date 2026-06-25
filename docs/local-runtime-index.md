@@ -17,6 +17,7 @@ uv run sap-agent-context export-jsonl --output-dir records
 uv run sap-agent-context build-index
 uv run sap-agent-context build-embeddings
 uv run sap-agent-context evaluate-runtime-retrieval
+uv run sap-agent-context evaluate-semantic-models
 ```
 
 `build-index` reads `records/*.jsonl` when present. If records are missing, it
@@ -60,6 +61,11 @@ The generated vector corpus uses stable IDs:
 
 Vector rows must preserve `canonical_record_id`, source/citation metadata, and a
 stable content hash strategy so caches can be rebuilt safely.
+
+`evaluate-semantic-models` runs local NL/EN semantic fixtures against one or
+more FastEmbed models. `BAAI/bge-small-en-v1.5` remains the default unless this
+local eval evidence shows a larger local model is needed. Do not add cloud
+embedding providers or hosted vector services for this repo.
 
 ## Query examples
 

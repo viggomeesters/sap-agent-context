@@ -26,6 +26,7 @@ customer data dump.
 | Vector corpus | ready | `build/vector-corpus.jsonl`, 1,289 item/claim chunks |
 | sqlite-vec dependency | ready | `sqlite-vec` is a project dependency; `--sqlite-vec required` succeeds |
 | Embedding vectors | ready | FastEmbed `BAAI/bge-small-en-v1.5`, 384 dimensions, 1,289 sqlite-vec rows |
+| Semantic model eval | ready | NL/EN fixtures; `BAAI/bge-small-en-v1.5` remains recommended default |
 | Retrieval evals | ready | 5 runtime retrieval fixtures passed |
 | Repo public boundary | ready | no generated `build/` artifacts tracked; no customer data/secrets required |
 
@@ -38,6 +39,7 @@ uv run sap-agent-context export-jsonl --output-dir records
 uv run sap-agent-context build-index --sqlite-vec required
 uv run sap-agent-context build-embeddings --provider fastembed --model BAAI/bge-small-en-v1.5
 uv run sap-agent-context evaluate-runtime-retrieval
+uv run sap-agent-context evaluate-semantic-models --models BAAI/bge-small-en-v1.5
 uv run sap-agent-context runtime-search "IE03 equipment display" --kind sap_app --vector --limit 5
 ```
 

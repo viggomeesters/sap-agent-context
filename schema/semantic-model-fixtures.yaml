@@ -1,0 +1,41 @@
+fixtures:
+  - id: nl_equipment_master_display
+    language: nl
+    query: Hoe toon ik equipmentstamgegevens in SAP?
+    limit: 20
+    filters:
+      kind: sap_app
+    required_ids:
+      - sap.app.eam.pm.ie03
+    require_vector_candidate: true
+  - id: en_equipment_master_display
+    language: en
+    query: How do I display equipment master data?
+    limit: 20
+    filters:
+      kind: sap_app
+    required_ids:
+      - sap.app.eam.pm.ie03
+    require_vector_candidate: true
+  - id: nl_equipment_status_meaning
+    language: nl
+    query: Wat betekent gebruikersstatus en systeemstatus bij equipment?
+    limit: 30
+    required_any:
+      - - sap.object.eam-user-status
+        - sap.claim.sap-object-eam-user-status.001
+        - sap.claim.sap-ref-eam-pm-sap-community-user-status-equipment.001
+      - - sap.object.eam-system-status
+        - sap.claim.sap-object-eam-system-status.001
+        - sap.claim.sap-ref-eam-pm-sap-community-system-status-equipment.001
+  - id: en_equipment_status_meaning
+    language: en
+    query: Explain equipment user status and system status
+    limit: 30
+    required_any:
+      - - sap.object.eam-user-status
+        - sap.claim.sap-object-eam-user-status.001
+        - sap.claim.sap-ref-eam-pm-sap-community-user-status-equipment.001
+      - - sap.object.eam-system-status
+        - sap.claim.sap-object-eam-system-status.001
+        - sap.claim.sap-ref-eam-pm-sap-community-system-status-equipment.001

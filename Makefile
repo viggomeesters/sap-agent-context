@@ -1,6 +1,6 @@
-.PHONY: check validate audit audit-v02-gap-report evaluate build-index build-embeddings evaluate-runtime test lint guard diff-check
+.PHONY: check validate audit audit-v02-gap-report evaluate build-index build-embeddings evaluate-runtime evaluate-semantic test lint guard diff-check
 
-check: guard validate audit evaluate build-index build-embeddings evaluate-runtime test lint diff-check
+check: guard validate audit evaluate build-index build-embeddings evaluate-runtime evaluate-semantic test lint diff-check
 
 guard:
 	uv run python scripts/validate_repository.py
@@ -25,6 +25,9 @@ build-embeddings:
 
 evaluate-runtime:
 	uv run sap-agent-context evaluate-runtime-retrieval
+
+evaluate-semantic:
+	uv run sap-agent-context evaluate-semantic-models
 
 test:
 	uv run pytest -q

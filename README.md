@@ -67,6 +67,7 @@ Build runtime indexes:
 uv run sap-agent-context build-index
 uv run sap-agent-context build-embeddings
 uv run sap-agent-context evaluate-runtime-retrieval
+uv run sap-agent-context evaluate-semantic-models
 uv run sap-agent-context runtime-search "IE03 equipment display" --kind sap_app --vector --limit 5
 ```
 
@@ -153,6 +154,7 @@ uv run sap-agent-context evaluate-fixtures
 uv run sap-agent-context build-index
 uv run sap-agent-context build-embeddings
 uv run sap-agent-context evaluate-runtime-retrieval
+uv run sap-agent-context evaluate-semantic-models
 uv run pytest -q
 uv run ruff check .
 ```
