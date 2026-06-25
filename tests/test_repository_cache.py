@@ -44,3 +44,10 @@ def test_load_items_reuses_yaml_parse_until_knowledge_file_changes(
 
     assert repository.load_items(tmp_path)[0].item_id == "sap.test.changed"
     assert calls == 2
+
+
+def test_yaml_loader_uses_accelerated_safe_loader_when_available() -> None:
+    if hasattr(repository.yaml, "CSafeLoader"):
+        assert repository.SAFE_YAML_LOADER is repository.yaml.CSafeLoader
+    else:
+        assert repository.SAFE_YAML_LOADER is repository.yaml.SafeLoader

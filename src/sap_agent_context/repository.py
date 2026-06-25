@@ -11,6 +11,7 @@ import yaml
 from sap_agent_context.model import KnowledgeItem
 
 DEFAULT_KNOWLEDGE_DIR = "knowledge"
+SAFE_YAML_LOADER = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
 KnowledgeFingerprint = tuple[tuple[str, int, int], ...]
 
 
@@ -68,7 +69,8 @@ def _knowledge_fingerprint(knowledge_dir: Path) -> KnowledgeFingerprint:
 
 
 def read_yaml_mapping(path: Path) -> dict[str, Any]:
-    payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    payload = yaml.load(path.read_text(encoding="utf-8"), Loader=SAFE_YAML_LOADER)
+    payload = payload or {}
     if not isinstance(payload, dict):
         raise ValueError(f"expected YAML mapping in {path}")
     return payload
