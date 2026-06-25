@@ -30,10 +30,12 @@ exports temporary records from YAML first for backward compatibility.
 | `build/vector-corpus.jsonl` | deterministic text chunks for local embedding | no |
 | `vector_index_metadata` | generated vector build status/model/dimension/source metadata | no |
 
-SQLite + FTS5 is the primary local runtime. `sqlite-vec` is optional and local
-only. In this environment `build-index --sqlite-vec auto` reports `skipped` when
-the sqlite-vec Python package is unavailable. `--sqlite-vec required` fails
-clearly instead of silently degrading.
+SQLite + FTS5 is the primary local runtime. `sqlite-vec` is included as a
+local-only dependency and `build-index --sqlite-vec required` must succeed in a
+fresh clone after `uv sync`. The current vector layer writes a deterministic
+`build/vector-corpus.jsonl` plus `vector_index_metadata`; embedding provider,
+model, and dimensions remain `not-configured` until a local embedding provider is
+chosen.
 
 DuckDB can be useful for analytics, coverage checks, and embedding-quality
 analysis over JSONL, but it is not the primary runtime store for agent lookup.

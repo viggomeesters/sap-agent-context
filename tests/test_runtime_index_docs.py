@@ -7,7 +7,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_local_runtime_index_docs_cover_required_contracts() -> None:
     text = (ROOT / "docs/local-runtime-index.md").read_text(encoding="utf-8")
-    combined = text + "\n" + (ROOT / "README.md").read_text(encoding="utf-8")
+    status = (ROOT / "docs/runtime-index-status.md").read_text(encoding="utf-8")
+    combined = text + "\n" + status + "\n" + (ROOT / "README.md").read_text(encoding="utf-8")
 
     required = [
         "records/*.jsonl",
