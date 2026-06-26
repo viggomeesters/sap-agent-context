@@ -138,6 +138,7 @@ def _build_sqlite(
     records: dict[str, list[dict[str, Any]]],
 ) -> None:
     with sqlite3.connect(sqlite_path) as conn:
+        _configure_build_connection(conn)
         conn.execute("PRAGMA foreign_keys = ON")
         conn.execute(
             """
@@ -213,6 +214,13 @@ def _build_sqlite(
         conn.execute("CREATE INDEX idx_sources_subject ON sources(subject_id)")
         conn.execute("CREATE INDEX idx_relations_subject_type ON relations(subject_id, type)")
         conn.execute("CREATE INDEX idx_relations_target ON relations(target_id)")
+
+
+def _configure_build_connection(conn: sqlite3.Connection) -> None:
+    """Tune a rebuildable local SQLite index for fast bulk creation."""
+    conn.execute("PRAGMA journal_mode = OFF")
+    conn.execute("PRAGMA synchronous = OFF")
+    conn.execute("PRAGMA temp_store = MEMORY")
 
 
 def _insert_items(conn: sqlite3.Connection, item_records: list[dict[str, Any]]) -> None:
