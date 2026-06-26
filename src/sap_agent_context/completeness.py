@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +15,8 @@ from sap_agent_context.model import KnowledgeItem
 from sap_agent_context.validation import has_errors, validate_items
 
 DEFAULT_MATRIX = "schema/completeness-matrix.yaml"
+SAFE_YAML_LOADER = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+MatrixFingerprint = tuple[int, int]
 
 
 @dataclass(frozen=True)
@@ -73,7 +76,16 @@ def audit_completeness(
 
 
 def _load_matrix(path: Path) -> dict[str, Any]:
-    payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    resolved = path.resolve()
+    stat = resolved.stat()
+    payload = _load_matrix_cached(str(resolved), (stat.st_mtime_ns, stat.st_size))
+    return dict(payload)
+
+
+@lru_cache(maxsize=8)
+def _load_matrix_cached(path: str, fingerprint: MatrixFingerprint) -> dict[str, Any]:
+    del fingerprint
+    payload = yaml.load(Path(path).read_text(encoding="utf-8"), Loader=SAFE_YAML_LOADER) or {}
     if not isinstance(payload, dict):
         raise ValueError(f"expected YAML mapping in {path}")
     return payload
