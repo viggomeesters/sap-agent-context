@@ -315,18 +315,18 @@ def _parse_date(value: Any) -> date | None:
 
 
 @lru_cache(maxsize=4096)
-def _tokens(value: str) -> set[str]:
+def _tokens(value: str) -> frozenset[str]:
     raw_tokens = {
         part for part in value.lower().replace("-", " ").replace("_", " ").split() if len(part) > 2
     }
     expanded = set(raw_tokens)
     for token in raw_tokens:
         expanded.update(QUERY_SYNONYMS.get(token, "").split())
-    return {token for token in expanded if len(token) > 2}
+    return frozenset(token for token in expanded if len(token) > 2)
 
 
 @lru_cache(maxsize=4096)
-def _precision_tokens(value: str) -> set[str]:
+def _precision_tokens(value: str) -> frozenset[str]:
     tokens = set()
     for token in _tokens(value):
         translated = QUERY_SYNONYMS.get(token)
@@ -343,7 +343,7 @@ def _precision_tokens(value: str) -> set[str]:
         "functioneel",
         "ontwerp",
     }
-    return tokens - generic
+    return frozenset(tokens - generic)
 
 
 def _topic_precision_gaps(bundle_items: list[dict[str, Any]], *, topic: str) -> list[str]:
