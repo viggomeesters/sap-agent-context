@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import shutil
 import sqlite3
 from pathlib import Path
+
+import pytest
 
 from sap_agent_context import cli
 from sap_agent_context.index import build_indexes
@@ -31,17 +34,27 @@ def _fake_embeddings(texts: list[str]) -> list[list[float]]:
     return vectors
 
 
-def _build_index(tmp_path: Path) -> tuple[Path, Path]:
-    sqlite_path = tmp_path / "context.sqlite"
-    vector_path = tmp_path / "vector-corpus.jsonl"
+@pytest.fixture(scope="module")
+def base_index(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, Path]:
+    base = tmp_path_factory.mktemp("runtime-embedding-base-index")
+    sqlite_path = base / "context.sqlite"
+    vector_path = base / "vector-corpus.jsonl"
     build_indexes(
         load_items(ROOT),
         sqlite_path=sqlite_path,
-        jsonl_path=tmp_path / "items.jsonl",
+        jsonl_path=base / "items.jsonl",
         vector_jsonl_path=vector_path,
         root=ROOT,
         sqlite_vec="required",
     )
+    return sqlite_path, vector_path
+
+
+def _build_index(tmp_path: Path, base_index: tuple[Path, Path]) -> tuple[Path, Path]:
+    sqlite_path = tmp_path / "context.sqlite"
+    vector_path = tmp_path / "vector-corpus.jsonl"
+    shutil.copy2(base_index[0], sqlite_path)
+    shutil.copy2(base_index[1], vector_path)
     return sqlite_path, vector_path
 
 
@@ -51,8 +64,11 @@ def test_fastembed_defaults_are_clone_first_local_provider() -> None:
     assert DEFAULT_EMBEDDING_DIMENSION == 384
 
 
-def test_build_runtime_embeddings_populates_sqlite_vec_and_metadata(tmp_path: Path) -> None:
-    sqlite_path, vector_path = _build_index(tmp_path)
+def test_build_runtime_embeddings_populates_sqlite_vec_and_metadata(
+    tmp_path: Path,
+    base_index: tuple[Path, Path],
+) -> None:
+    sqlite_path, vector_path = _build_index(tmp_path, base_index)
 
     report = build_runtime_embeddings(
         sqlite_path=sqlite_path,
@@ -80,8 +96,11 @@ def test_build_runtime_embeddings_populates_sqlite_vec_and_metadata(tmp_path: Pa
     assert rows == 1289
 
 
-def test_vector_search_returns_nearest_canonical_records(tmp_path: Path) -> None:
-    sqlite_path, vector_path = _build_index(tmp_path)
+def test_vector_search_returns_nearest_canonical_records(
+    tmp_path: Path,
+    base_index: tuple[Path, Path],
+) -> None:
+    sqlite_path, vector_path = _build_index(tmp_path, base_index)
     build_runtime_embeddings(
         sqlite_path=sqlite_path,
         vector_jsonl_path=vector_path,
@@ -96,8 +115,11 @@ def test_vector_search_returns_nearest_canonical_records(tmp_path: Path) -> None
     assert results[0]["distance"] == 0
 
 
-def test_runtime_search_can_include_vector_results_without_cloud_service(tmp_path: Path) -> None:
-    sqlite_path, vector_path = _build_index(tmp_path)
+def test_runtime_search_can_include_vector_results_without_cloud_service(
+    tmp_path: Path,
+    base_index: tuple[Path, Path],
+) -> None:
+    sqlite_path, vector_path = _build_index(tmp_path, base_index)
     build_runtime_embeddings(
         sqlite_path=sqlite_path,
         vector_jsonl_path=vector_path,
@@ -120,9 +142,10 @@ def test_runtime_search_can_include_vector_results_without_cloud_service(tmp_pat
 
 def test_build_embeddings_cli_writes_embedding_metadata(
     tmp_path: Path,
+    base_index: tuple[Path, Path],
     monkeypatch,
 ) -> None:
-    sqlite_path, vector_path = _build_index(tmp_path)
+    sqlite_path, vector_path = _build_index(tmp_path, base_index)
 
     def fake_build_runtime_embeddings(**kwargs):
         kwargs["dimension"] = 3
@@ -151,9 +174,10 @@ def test_build_embeddings_cli_writes_embedding_metadata(
 
 def test_runtime_search_cli_can_embed_query_when_vector_flag_is_used(
     tmp_path: Path,
+    base_index: tuple[Path, Path],
     monkeypatch,
 ) -> None:
-    sqlite_path, vector_path = _build_index(tmp_path)
+    sqlite_path, vector_path = _build_index(tmp_path, base_index)
     build_runtime_embeddings(
         sqlite_path=sqlite_path,
         vector_jsonl_path=vector_path,
@@ -179,8 +203,11 @@ def test_runtime_search_cli_can_embed_query_when_vector_flag_is_used(
     assert exit_code == 0
 
 
-def test_vector_merge_does_not_displace_strong_fts_item_result(tmp_path: Path) -> None:
-    sqlite_path, vector_path = _build_index(tmp_path)
+def test_vector_merge_does_not_displace_strong_fts_item_result(
+    tmp_path: Path,
+    base_index: tuple[Path, Path],
+) -> None:
+    sqlite_path, vector_path = _build_index(tmp_path, base_index)
     build_runtime_embeddings(
         sqlite_path=sqlite_path,
         vector_jsonl_path=vector_path,
