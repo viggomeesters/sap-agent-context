@@ -66,6 +66,12 @@ def build_indexes(
             "items_jsonl": str(jsonl_path),
             "vector_jsonl": str(vector_jsonl_path),
             "records_source": str(records_dir),
+            "read_model": {
+                "artifact_kind": "generated_read_model",
+                "authoritative": False,
+                "source_of_truth": "records/*.jsonl",
+                "editing_source": "knowledge/**/*.yaml",
+            },
         }
     finally:
         if temp_dir is not None:
@@ -193,6 +199,14 @@ def _build_sqlite(
             )
             """
         )
+        conn.execute(
+            """
+            CREATE TABLE read_model_metadata (
+              key TEXT PRIMARY KEY,
+              value TEXT NOT NULL
+            )
+            """
+        )
         conn.execute("CREATE TABLE item_topics (item_id TEXT NOT NULL, topic TEXT NOT NULL)")
         conn.execute("CREATE TABLE item_used_for (item_id TEXT NOT NULL, used_for TEXT NOT NULL)")
         conn.execute(
@@ -204,6 +218,7 @@ def _build_sqlite(
         conn.execute(
             "CREATE VIRTUAL TABLE source_fts USING fts5(id, subject_id, title, license_note, url)"
         )
+        _insert_read_model_metadata(conn)
         _insert_items(conn, item_records)
         _insert_claims(conn, records["claims"])
         _insert_sources(conn, records["sources"])
@@ -221,6 +236,22 @@ def _configure_build_connection(conn: sqlite3.Connection) -> None:
     conn.execute("PRAGMA journal_mode = OFF")
     conn.execute("PRAGMA synchronous = OFF")
     conn.execute("PRAGMA temp_store = MEMORY")
+
+
+def _insert_read_model_metadata(conn: sqlite3.Connection) -> None:
+    rows = {
+        "artifact_kind": "generated_read_model",
+        "authoritative": "false",
+        "source_of_truth": "records/*.jsonl",
+        "editing_source": "knowledge/**/*.yaml",
+        "bundle_kind": "sap_fo_context_bundle",
+        "rebuild_command": "uv run sap-agent-context build-index",
+        "write_back_allowed": "false",
+    }
+    conn.executemany(
+        "INSERT INTO read_model_metadata (key, value) VALUES (?, ?)",
+        sorted(rows.items()),
+    )
 
 
 def _insert_items(conn: sqlite3.Connection, item_records: list[dict[str, Any]]) -> None:

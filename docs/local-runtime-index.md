@@ -28,7 +28,7 @@ exports temporary records from YAML first for backward compatibility.
 | Layer | Purpose | Canonical? |
 | --- | --- | --- |
 | `records/*.jsonl` | typed item/claim/source/relation records | yes |
-| `build/context.sqlite` | local agent query store: items, claims, sources, relations, FTS5 | no |
+| `build/context.sqlite` | local agent query store: items, claims, sources, relations, FTS5; includes `read_model_metadata` marking it generated/non-authoritative | no |
 | `build/vector-corpus.jsonl` | deterministic text chunks for local embedding | no |
 | `vector_embedding_records` / `vector_embeddings` | FastEmbed + sqlite-vec semantic vectors | no |
 | `vector_index_metadata` | generated vector build status/model/dimension/source metadata | no |

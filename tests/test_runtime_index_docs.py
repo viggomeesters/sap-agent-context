@@ -13,6 +13,8 @@ def test_local_runtime_index_docs_cover_required_contracts() -> None:
     required = [
         "records/*.jsonl",
         "generated runtime artifacts",
+        "read_model_metadata",
+        "non-authoritative",
         "SQLite + FTS5",
         "sqlite-vec",
         "DuckDB",

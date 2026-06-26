@@ -63,6 +63,9 @@ def test_build_indexes_writes_sqlite_jsonl_and_vector_ready_chunks(tmp_path: Pat
             "SELECT payload_json FROM sources WHERE subject_id = ? LIMIT 1",
             ("sap.app.eam.pm.ie03",),
         ).fetchone()
+        read_model_metadata = dict(
+            conn.execute("SELECT key, value FROM read_model_metadata").fetchall()
+        )
     assert row == ("Manage Workflows for Supplier Invoices", "2026-12-21")
     assert {"items", "claims", "sources", "relations", "item_topics", "item_used_for"} <= tables
     assert counts["items"] == len(items)
@@ -71,6 +74,11 @@ def test_build_indexes_writes_sqlite_jsonl_and_vector_ready_chunks(tmp_path: Pat
     assert counts["relations"] > 0
     assert json.loads(claim_payload[0])["subject_id"] == "sap.app.eam.pm.ie03"
     assert json.loads(source_payload[0])["subject_id"] == "sap.app.eam.pm.ie03"
+    assert read_model_metadata["artifact_kind"] == "generated_read_model"
+    assert read_model_metadata["authoritative"] == "false"
+    assert read_model_metadata["source_of_truth"] == "records/*.jsonl"
+    assert read_model_metadata["editing_source"] == "knowledge/**/*.yaml"
+    assert read_model_metadata["bundle_kind"] == "sap_fo_context_bundle"
 
     item_lines = (tmp_path / "items.jsonl").read_text(encoding="utf-8").splitlines()
     vector_lines = (tmp_path / "vector-corpus.jsonl").read_text(encoding="utf-8").splitlines()
