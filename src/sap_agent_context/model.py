@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import cached_property
 from pathlib import Path
 from typing import Any
 
@@ -30,35 +31,35 @@ class KnowledgeItem:
     path: Path
     data: dict[str, Any]
 
-    @property
+    @cached_property
     def item_id(self) -> str:
         return str(self.data["id"])
 
-    @property
+    @cached_property
     def title(self) -> str:
         return str(self.data["title"])
 
-    @property
+    @cached_property
     def kind(self) -> str:
         return str(self.data["kind"])
 
-    @property
+    @cached_property
     def summary(self) -> str:
         return str(self.data.get("summary") or "")
 
-    @property
+    @cached_property
     def access(self) -> str:
         return str(self.data["access"])
 
-    @property
+    @cached_property
     def topics(self) -> list[str]:
         return _strings(self.data.get("topics"))
 
-    @property
+    @cached_property
     def used_for(self) -> list[str]:
         return _strings(self.data.get("used_for"))
 
-    @property
+    @cached_property
     def text_for_retrieval(self) -> str:
         raw_claims = self.data.get("claims")
         claims = raw_claims if isinstance(raw_claims, list) else []

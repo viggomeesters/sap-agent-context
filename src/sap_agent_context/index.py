@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import sqlite3
 import tempfile
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +13,7 @@ from sap_agent_context.agent_records import RECORD_FILES, export_agent_records
 from sap_agent_context.model import KnowledgeItem
 
 ITEM_RECORD_GROUPS = ["apps", "tables", "fields", "workflows", "roles"]
+RecordsFingerprint = tuple[tuple[str, int, int], ...]
 
 
 def build_indexes(
@@ -84,10 +86,34 @@ def _records_dir_or_temp(
 
 
 def _load_record_groups(records_dir: Path) -> dict[str, list[dict[str, Any]]]:
+    resolved = records_dir.resolve()
+    fingerprint = _records_fingerprint(resolved)
+    cached = _load_record_groups_cached(str(resolved), fingerprint)
+    return {group: list(records) for group, records in cached.items()}
+
+
+@lru_cache(maxsize=8)
+def _load_record_groups_cached(
+    records_dir: str,
+    fingerprint: RecordsFingerprint,
+) -> dict[str, tuple[dict[str, Any], ...]]:
+    del fingerprint  # cache key only; files are read from records_dir below
+    base = Path(records_dir)
     return {
-        group: _read_jsonl(records_dir / filename)
+        group: tuple(_read_jsonl(base / filename))
         for group, filename in RECORD_FILES.items()
     }
+
+
+def _records_fingerprint(records_dir: Path) -> RecordsFingerprint:
+    return tuple(
+        (
+            filename,
+            (records_dir / filename).stat().st_mtime_ns,
+            (records_dir / filename).stat().st_size,
+        )
+        for filename in RECORD_FILES.values()
+    )
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
