@@ -5,8 +5,9 @@ SAP Agent Context uses an agent-first storage split:
 1. `records/*.jsonl` is the canonical agent record surface for applications,
    tables, fields, workflows, roles, claims, sources, and relations.
 2. `build/context.sqlite`, `build/items.jsonl`, and `build/vector-corpus.jsonl`
-   are generated runtime artifacts. Rebuild them; do not hand-edit them.
-3. YAML knowledge files remain the migration/editing source until the JSONL
+   are generated runtime artifacts and generated/non-authoritative projections.
+   Rebuild them; do not hand-edit them.
+3. YAML knowledge files remain the temporary editing source until the JSONL
    record surface is explicitly promoted as the only edit surface.
 
 ## Rebuild
@@ -32,6 +33,11 @@ exports temporary records from YAML first for backward compatibility.
 | `build/vector-corpus.jsonl` | deterministic text chunks for local embedding | no |
 | `vector_embedding_records` / `vector_embeddings` | FastEmbed + sqlite-vec semantic vectors | no |
 | `vector_index_metadata` | generated vector build status/model/dimension/source metadata | no |
+
+See [JSONL record surface](jsonl-record-surface.md) for the explicit
+JSONL-vault-spike alignment, intentional compatibility deviations, and future
+migration path from `kind` to `record_type: item` + `sap_context_type`, with a
+possible `items.jsonl` projection.
 
 SQLite + FTS5 is the primary local runtime. `sqlite-vec` is included as a
 local-only dependency and `build-index --sqlite-vec required` must succeed in a
