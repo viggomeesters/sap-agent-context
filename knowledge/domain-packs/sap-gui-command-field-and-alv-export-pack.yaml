@@ -1,0 +1,284 @@
+﻿pack_id: sap-gui-command-field-and-alv-export-pack
+title: SAP GUI command field and ALV spreadsheet export pack
+description: Generic SAP GUI command field / OK-code context, including transaction prefixes, session commands,
+  debugging prefix and ALV spreadsheet export format reset with &RESET_EXCEL.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep command semantics generic and confidence-labelled; verify exact SAP GUI/client behavior,
+    authorizations and ALV implementation in the target system.
+freshness_current: &freshness
+  valid_from: '2026-06-26'
+  review_after: '2026-12-26'
+  expires_at: '2027-06-26'
+  retrieved_at: '2026-06-26'
+items:
+- id: sap.object.gui.command-field-ok-code
+  title: SAP GUI command field and OK-code field
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - command-field
+  - ok-code
+  - transaction
+  - navigation
+  - /n
+  - /o
+  - /i
+  - /h
+  - /nend
+  - /nex
+  - "&reset_excel"
+  - alv
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: 'The SAP GUI command field, also called the OK-code field in many consultant conversations, accepts
+    transaction navigation commands such as /nSE16N, session commands such as /oSE16N and screen/report-specific
+    function codes such as &RESET_EXCEL. Confidence: medium internal_derived with public SAP Help pointers for
+    ALV spreadsheet reset behavior; verify exact client behavior in the target SAP GUI/system.'
+  freshness: *freshness
+  source: &sap_gui_source
+    kind: derived_summary
+    title: SAP GUI command-field and ALV spreadsheet reset consultant pattern
+    url: ''
+    retrieved_at: '2026-06-26'
+    specificity: internal_pattern
+    license_note: Generic consultant navigation semantics written in our own words; SAP Help references are link-only
+      evidence pointers.
+  claims:
+  - statement: The command field can accept transaction codes with prefixes and some function codes, but function
+      codes are interpreted by the current screen/report and are not universal transactions.
+    evidence:
+    - sap.rule.gui.ok-code-prefix-semantics
+    - sap.rule.gui.alv-reset-excel-format
+  relations:
+    objects:
+    - sap.object.gui.alv-grid-spreadsheet-export
+- id: sap.rule.gui.ok-code-prefix-semantics
+  title: SAP GUI command field prefixes and common commands
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - command-field
+  - ok-code
+  - /n
+  - /o
+  - /i
+  - /h
+  - /nend
+  - /nex
+  - transaction-prefix
+  - fake-tcode
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule: distinguish SAP GUI command prefixes from transaction codes. /n plus a transaction starts
+    the transaction in the current session, /o plus a transaction opens a new session/window where available, /i
+    closes the current session, /h requests ABAP debugging where authorized, /nend logs off with confirmation and
+    /nex exits quickly without the normal confirmation flow. Confidence: medium internal_derived; verify local GUI
+    behavior and authorizations.'
+  freshness: *freshness
+  source: *sap_gui_source
+  rules:
+  - if: user writes /n followed by a transaction code
+    then: explain it as current-session navigation prefix plus transaction code
+    outcome: ready with prefix caveat
+  - if: user writes /o followed by a transaction code
+    then: explain it as new-session/window navigation prefix plus transaction code where available
+    outcome: ready with GUI/client caveat
+  - if: user writes a leading N or O as if it were part of a tcode, such as NMM03 or OSE16N
+    then: do not treat that as a validated tcode; consider whether they meant /nMM03 or /oSE16N
+    outcome: correct prefix semantics or ask for clarification
+  - if: user asks about /h
+    then: explain it as an ABAP debugging request that depends on authorization and system settings
+    outcome: ready with authorization caveat
+  claims:
+  - statement: Prefixes such as /n and /o are command-field prefixes, not transaction-code characters.
+    evidence:
+    - sap.object.gui.command-field-ok-code
+  relations:
+    objects:
+    - sap.object.gui.command-field-ok-code
+- id: sap.object.gui.alv-grid-spreadsheet-export
+  title: SAP GUI ALV grid spreadsheet export behavior
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - alv
+  - spreadsheet
+  - export
+  - excel
+  - xlsx
+  - se16n
+  - "&reset_excel"
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.test_scenarios
+  summary: 'ALV grid spreadsheet export can remember a user-specific chosen format when the user selects an always-use
+    option. In an ALV output screen, the OK-code/function code &RESET_EXCEL can reset that remembered spreadsheet
+    export format so the selection dialog appears again. Confidence: high for SAP Help-described ALV reset pattern;
+    verify whether a specific report uses standard ALV and whether the current SAP GUI/client honors the function
+    code.'
+  freshness: *freshness
+  source: &sap_help_alv_reset
+    kind: public_url
+    title: SAP Help ALV spreadsheet export format reset
+    url: https://help.sap.com/docs/SUPPORT_CONTENT/abap/3353526046.html
+    retrieved_at: '2026-06-26'
+    specificity: exact_page
+    license_note: Link-only public SAP Help evidence pointer; wording in this repository is a derived summary.
+  claims:
+  - statement: '&RESET_EXCEL is an ALV-related OK-code/function code for deleting the remembered spreadsheet export
+      format choice; it should be entered while an ALV list/grid output is active.
+      '
+    evidence:
+    - sap.rule.gui.alv-reset-excel-format
+  relations:
+    objects:
+    - sap.object.gui.command-field-ok-code
+    source_references:
+    - sap.ref.gui.alv-spreadsheet-export-help
+- id: sap.rule.gui.alv-reset-excel-format
+  title: Reset remembered ALV spreadsheet export format with &RESET_EXCEL
+  kind: decision_rule
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - alv
+  - spreadsheet
+  - export
+  - excel
+  - xlsx
+  - always-use-this-format
+  - "&reset_excel"
+  - se16n
+  used_for:
+  - fo.navigation
+  - fo.business_rules
+  - fo.quality_gate
+  summary: 'Decision rule: when SAP GUI ALV spreadsheet export always chooses a remembered format, instruct the user
+    to open an ALV output screen, enter &RESET_EXCEL in the command/OK-code field, press Enter, then retry spreadsheet
+    export. If unavailable or ineffective, the report may not be standard ALV or the user-specific setting may need
+    administrator maintenance. Confidence: high for the generic ALV reset pattern; tenant behavior can vary.'
+  freshness: *freshness
+  source: *sap_help_alv_reset
+  rules:
+  - if: user says spreadsheet export always chooses XLSX because always-use-this-format was selected
+    then: instruct them to enter &RESET_EXCEL in the SAP GUI command/OK-code field while an ALV output list is active
+    outcome: reset remembered ALV spreadsheet format choice
+  - if: '&RESET_EXCEL does not work'
+    then: check whether the current output is a standard ALV grid/list and consider user-specific ALV setting maintenance
+    outcome: escalate with ALV/report/client caveat
+  - if: user asks whether &RESET_EXCEL is a transaction
+    then: explain that it is a function/OK-code interpreted by the current ALV screen, not a transaction code
+    outcome: ready with command-field caveat
+  claims:
+  - statement: '&RESET_EXCEL belongs in the command/OK-code field on an ALV output screen and is not typed into table
+      selection fields such as SE16N selection criteria.
+      '
+    evidence:
+    - sap.object.gui.alv-grid-spreadsheet-export
+  relations:
+    objects:
+    - sap.object.gui.command-field-ok-code
+    - sap.object.gui.alv-grid-spreadsheet-export
+- id: sap.ref.gui.alv-spreadsheet-export-help
+  title: SAP Help pointer for ALV spreadsheet export reset
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-help
+  - sap-gui
+  - alv
+  - spreadsheet
+  - export
+  - "&reset_excel"
+  used_for:
+  - fo.source_registry
+  - fo.navigation
+  - fo.quality_gate
+  summary: 'Public SAP Help/support pointer for the ALV spreadsheet export format reset pattern. Use as source evidence
+    for &RESET_EXCEL, not as permission to copy SAP documentation text.'
+  freshness: *freshness
+  source:
+    kind: public_url
+    title: SAP Help ALV spreadsheet export format reset
+    url: https://help.sap.com/docs/SUPPORT_CONTENT/abap/3353526046.html
+    retrieved_at: '2026-06-26'
+    specificity: exact_page
+    license_note: Link-only public SAP Help evidence pointer.
+  claims:
+  - statement: This reference supports the generic ALV spreadsheet export reset pattern.
+    evidence:
+    - https://help.sap.com/docs/SUPPORT_CONTENT/abap/3353526046.html
+  relations:
+    objects:
+    - sap.object.gui.alv-grid-spreadsheet-export
+- id: sap.test-pattern.gui-command-field-and-alv-reset
+  title: SAP GUI command field and ALV reset test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - sap-gui
+  - command-field
+  - ok-code
+  - /n
+  - /o
+  - /h
+  - alv
+  - "&reset_excel"
+  - spreadsheet
+  - export
+  used_for:
+  - fo.test_scenarios
+  - fo.navigation
+  - fo.quality_gate
+  summary: 'Test pattern: SAP GUI answers must distinguish command prefixes/function codes from transaction codes
+    and must route ALV remembered spreadsheet format issues to &RESET_EXCEL with an ALV-screen caveat.'
+  freshness: *freshness
+  source: *sap_gui_source
+  test_scenarios:
+  - name: Reset remembered spreadsheet format
+    given: A user says SE16N spreadsheet export always chooses XLSX after selecting always use this format.
+    when: Bundle is built for ALV export reset &RESET_EXCEL.
+    then: The answer tells them to open an ALV output, enter &RESET_EXCEL in the command/OK-code field, press Enter,
+      and retry export.
+  - name: Command field prefix distinction
+    given: A user asks what can be typed in the SAP GUI command field.
+    when: Bundle is built for SAP GUI command field OK-code prefixes.
+    then: The answer distinguishes transaction navigation prefixes such as /n and /o from screen-specific function
+      codes such as &RESET_EXCEL.
+  claims:
+  - statement: Tests protect against treating &RESET_EXCEL as a transaction code and against fake tcodes formed by
+      prefix characters.
+    evidence:
+    - sap.rule.gui.ok-code-prefix-semantics
+    - sap.rule.gui.alv-reset-excel-format
+  relations:
+    objects:
+    - sap.object.gui.command-field-ok-code
+    - sap.object.gui.alv-grid-spreadsheet-export
