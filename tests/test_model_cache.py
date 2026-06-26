@@ -36,7 +36,10 @@ def test_knowledge_item_retrieval_properties_are_cached(monkeypatch) -> None:
     assert item.used_for == ["fo.workflow"]
     first_text = item.text_for_retrieval
     second_text = item.text_for_retrieval
+    first_lower = item.text_for_retrieval_lower
+    second_lower = item.text_for_retrieval_lower
 
     assert first_text == second_text
+    assert first_lower == second_lower == first_text.lower()
     assert "sap.test.item" in first_text
     assert calls == 2

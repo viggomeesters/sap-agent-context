@@ -91,7 +91,7 @@ def _rank_items(
     product = sap_product.strip().lower()
     ranked = []
     for item in items:
-        text = item.text_for_retrieval.lower()
+        text = item.text_for_retrieval_lower
         topic_score = sum(8 for token in topic_tokens if token in text)
         if not topic_score:
             continue

@@ -80,6 +80,10 @@ class KnowledgeItem:
             if part
         )
 
+    @cached_property
+    def text_for_retrieval_lower(self) -> str:
+        return self.text_for_retrieval.lower()
+
 
 def _strings(value: Any) -> list[str]:
     if not isinstance(value, list):
