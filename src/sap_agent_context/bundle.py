@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timezone
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -313,6 +314,7 @@ def _parse_date(value: Any) -> date | None:
         return None
 
 
+@lru_cache(maxsize=4096)
 def _tokens(value: str) -> set[str]:
     raw_tokens = {
         part for part in value.lower().replace("-", " ").replace("_", " ").split() if len(part) > 2
@@ -323,6 +325,7 @@ def _tokens(value: str) -> set[str]:
     return {token for token in expanded if len(token) > 2}
 
 
+@lru_cache(maxsize=4096)
 def _precision_tokens(value: str) -> set[str]:
     tokens = set()
     for token in _tokens(value):
