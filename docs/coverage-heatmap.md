@@ -2,39 +2,39 @@
 
 > Generated from current knowledge items. This is a planning heatmap, not an exhaustive SAP product coverage claim.
 
-Total items: `654`
+Total items: `666`
 
 ## Domain density
 
 | Domain | Items | Sources | FO patterns | Decision rules | Test patterns | Eval items |
 |---|---:|---:|---:|---:|---:|---:|
 | analytics_extensibility | 35 | 4 | 0 | 5 | 6 | 9 |
-| eam_pm | 109 | 12 | 3 | 15 | 12 | 13 |
-| finance | 75 | 8 | 2 | 10 | 9 | 11 |
-| integration | 283 | 39 | 10 | 27 | 30 | 31 |
+| eam_pm | 121 | 12 | 9 | 21 | 12 | 13 |
+| finance | 77 | 8 | 3 | 11 | 9 | 11 |
+| integration | 284 | 39 | 11 | 27 | 30 | 31 |
 | material_master | 97 | 9 | 3 | 8 | 8 | 11 |
 | migration | 209 | 10 | 0 | 22 | 25 | 48 |
 | procurement | 100 | 12 | 1 | 15 | 15 | 19 |
 | sales_otc | 204 | 20 | 10 | 23 | 23 | 27 |
-| security_authorizations | 356 | 44 | 2 | 25 | 30 | 32 |
+| security_authorizations | 358 | 44 | 3 | 26 | 30 | 32 |
 | unclassified | 4 | 1 | 0 | 1 | 1 | 1 |
 
 ## EAM/PM lifecycle slices
 
 | Slice | Items | FO patterns | Decision rules | Test patterns | Status |
 |---|---:|---:|---:|---:|---|
-| equipment | 58 | 3 | 7 | 7 | dense |
-| functional-location | 14 | 0 | 1 | 2 | thin |
-| notification | 14 | 1 | 1 | 1 | dense |
-| maintenance-order | 24 | 0 | 3 | 3 | thin |
-| maintenance-plan | 8 | 0 | 1 | 1 | thin |
-| task-list | 8 | 0 | 1 | 1 | thin |
-| measuring-point-counter | 7 | 0 | 1 | 1 | thin |
-| work-center | 10 | 0 | 1 | 1 | thin |
-| bom-spares | 22 | 1 | 2 | 2 | dense |
-| confirmation | 20 | 0 | 5 | 4 | thin |
-| technical-completion | 9 | 0 | 1 | 2 | thin |
-| settlement | 7 | 0 | 1 | 1 | thin |
+| equipment | 61 | 5 | 8 | 7 | dense |
+| functional-location | 16 | 1 | 2 | 2 | dense |
+| notification | 17 | 3 | 2 | 1 | dense |
+| maintenance-order | 28 | 3 | 4 | 3 | dense |
+| maintenance-plan | 10 | 1 | 2 | 1 | dense |
+| task-list | 11 | 2 | 2 | 1 | dense |
+| measuring-point-counter | 9 | 1 | 2 | 1 | dense |
+| work-center | 12 | 1 | 2 | 1 | dense |
+| bom-spares | 26 | 3 | 4 | 2 | dense |
+| confirmation | 22 | 1 | 6 | 4 | dense |
+| technical-completion | 11 | 1 | 2 | 2 | dense |
+| settlement | 9 | 1 | 2 | 1 | dense |
 | permits-safety | 3 | 0 | 1 | 1 | thin |
 
 ## Weak domains

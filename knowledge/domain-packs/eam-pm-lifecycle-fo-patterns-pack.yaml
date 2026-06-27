@@ -1,0 +1,315 @@
+pack_id: eam-pm-lifecycle-fo-patterns-pack
+title: EAM/PM lifecycle FO patterns and decision rules
+description: FO-useful patterns, questions and fail-closed decision rules for the EAM/PM lifecycle spine.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Use these patterns as consultant review scaffolding; tenant-specific customizing, roles, permits and settlement require local evidence.
+freshness_current: &freshness
+  valid_from: '2026-06-27'
+  review_after: '2026-12-27'
+  expires_at: '2027-06-27'
+  retrieved_at: '2026-06-27'
+source_internal: &source_internal
+  kind: internal_pattern
+  title: Internal EAM/PM FO lifecycle review pattern
+  url: ''
+  retrieved_at: '2026-06-27'
+  specificity: internal_pattern
+  license_note: Internal-derived FO scaffolding; verify process, customizing, authorizations and release behavior in the target tenant.
+items:
+- id: sap.pattern.eam.pm-equipment-foundation-fo
+  title: EAM/PM equipment and functional-location FO pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, equipment, functional-location, technical-object, fo-pattern]
+  used_for: [fo.scope, fo.process_flow, fo.field_mapping, fo.quality_gate]
+  summary: Equipment/functional-location FO sections should define the technical-object hierarchy, master-data ownership, status visibility, mandatory identifiers and tenant verification for labels, tabs and status profiles.
+  freshness: *freshness
+  source: *source_internal
+  claims:
+  - statement: Equipment FO patterns should ask for hierarchy ownership, identifier conventions, status-profile usage and display/change authorization before documenting technical-object behavior.
+    evidence: [sap.object.eam-equipment, sap.object.eam-functional-location, sap.rule.eam.pm-status-answer-contract]
+  relations:
+    objects: [sap.object.eam-equipment, sap.object.eam-functional-location, sap.object.eam-technical-object-status]
+    rules: [sap.rule.eam.pm-equipment-foundation-fo-questions]
+  required_questions:
+  - Which technical objects are in scope: equipment, functional location or both?
+  - Who owns master-data creation/change and who only displays technical objects?
+  - Which status profiles/user statuses are tenant-specific and must be verified?
+  assumptions:
+  - Equipment and functional location are generic technical-object anchors.
+  non_goals:
+  - Do not invent tenant-specific hierarchy structure indicators, status codes or screen labels.
+  validation_notes:
+  - Validate with a representative display/change transaction and one target tenant technical object.
+- id: sap.rule.eam.pm-equipment-foundation-fo-questions
+  title: Equipment foundation FO decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, equipment, functional-location, status-profile, tenant-caveat]
+  used_for: [fo.business_rules, fo.quality_gate]
+  summary: 'Decision rule for equipment/functional-location FO sections: fail closed on hierarchy, status profile and authorization details without tenant evidence.'
+  freshness: *freshness
+  source: *source_internal
+  rules:
+  - if: hierarchy labels, structure indicators, user statuses or status profiles are not supplied
+    then: write an explicit tenant-verification question instead of inventing values
+    outcome: FO section remains reviewable without fake specifics
+  claims:
+  - statement: Equipment foundation FO sections must keep hierarchy and status details tenant-verified.
+    evidence: [sap.pattern.eam.pm-equipment-foundation-fo]
+  relations:
+    patterns: [sap.pattern.eam.pm-equipment-foundation-fo]
+- id: sap.pattern.eam.pm-notification-order-planning-fo
+  title: EAM/PM notification and maintenance-order planning FO pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, notification, maintenance-order, planning, fo-pattern]
+  used_for: [fo.scope, fo.process_flow, fo.business_rules, fo.test_scenarios]
+  summary: Notification/order planning FO sections should separate problem intake, priority/planner ownership, order type, operation planning, component reservation and status/approval checkpoints.
+  freshness: *freshness
+  source: *source_internal
+  claims:
+  - statement: Notification/order FO patterns should separate intake, planning and execution ownership before describing order creation or processing.
+    evidence: [sap.object.eam-maintenance-order, sap.bulk.api.maintenance-order.object]
+  relations:
+    objects: [sap.object.eam-maintenance-order, sap.object.eam-task-list, sap.object.eam-work-center]
+    rules: [sap.rule.eam.pm-notification-order-planning-fail-closed]
+  required_questions:
+  - Does work start from a notification, direct order, plan call or manual order?
+  - Which order types, priorities, planner groups and approval/status gates are in scope?
+  - Are components/spares planned on task lists, orders, BOMs or manually?
+  assumptions:
+  - Maintenance order is the execution anchor, not proof of the full planning process by itself.
+  non_goals:
+  - Do not claim exact status flow, order type configuration or component reservation behavior without tenant evidence.
+  validation_notes:
+  - Validate at least one planned order and one corrective/manual order scenario.
+- id: sap.rule.eam.pm-notification-order-planning-fail-closed
+  title: Notification/order planning fail-closed decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, notification, maintenance-order, order-type, planner-group, approval, tenant-caveat]
+  used_for: [fo.business_rules, fo.quality_gate]
+  summary: 'Decision rule for notification/order planning: do not infer order types, status gates, planner groups or component planning behavior from generic EAM context alone.'
+  freshness: *freshness
+  source: *source_internal
+  rules:
+  - if: order type, planner group, approval/status gate or component planning source is missing
+    then: add a blocking FO question and mark the answer tenant-specific
+    outcome: fail closed instead of producing fake process detail
+  claims:
+  - statement: Notification/order planning needs tenant evidence for order types, status gates and component planning rules.
+    evidence: [sap.pattern.eam.pm-notification-order-planning-fo]
+  relations:
+    patterns: [sap.pattern.eam.pm-notification-order-planning-fo]
+- id: sap.pattern.eam.pm-task-list-plan-fo
+  title: EAM/PM task-list and maintenance-plan FO pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, task-list, maintenance-plan, maintenance-item, strategy, scheduling, fo-pattern]
+  used_for: [fo.process_flow, fo.business_rules, fo.test_scenarios, fo.quality_gate]
+  summary: Task-list/maintenance-plan FO sections should distinguish reusable operation templates from plan scheduling, maintenance items, call generation and generated order behavior.
+  freshness: *freshness
+  source: *source_internal
+  claims:
+  - statement: Task lists and maintenance plans are distinct FO anchors; reusable operations should not be confused with scheduling/call logic.
+    evidence: [sap.object.eam-task-list, sap.object.eam-maintenance-plan, sap.ref.eam.pm.sap-help-task-list-display]
+  relations:
+    source_references: [sap.ref.eam.pm.sap-help-task-list-display]
+    objects: [sap.object.eam-task-list, sap.object.eam-maintenance-plan, sap.object.eam-work-center]
+    rules: [sap.rule.eam.pm-task-list-plan-tenant-questions]
+  required_questions:
+  - Which task-list types/groups/counters are in scope and who maintains operations?
+  - Which maintenance strategy/cycle/call horizon/scheduling parameters are tenant-specific?
+  - Does the plan generate notifications, orders or another follow-on process in the target system?
+  assumptions:
+  - Task list describes reusable work steps; maintenance plan controls scheduling/call context.
+  non_goals:
+  - Do not infer plan strategy, cycle or call object from the existence of a task list without tenant evidence.
+  validation_notes:
+  - Validate one task-list display and one maintenance plan scheduling example before final FO wording.
+- id: sap.rule.eam.pm-task-list-plan-tenant-questions
+  title: Task-list and maintenance-plan tenant-question decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, task-list, maintenance-plan, strategy, scheduling, maintenance-item, tenant-caveat]
+  used_for: [fo.business_rules, fo.quality_gate]
+  summary: 'Decision rule for task-list/maintenance-plan FO sections: fail closed on strategy, cycle, maintenance item and call-object behavior until tenant examples are provided.'
+  freshness: *freshness
+  source: *source_internal
+  rules:
+  - if: maintenance strategy, cycle, call horizon or call object is unknown
+    then: ask for a representative maintenance plan and scheduling evidence
+    outcome: prevent generic preventive-maintenance hallucination
+  claims:
+  - statement: Maintenance-plan FO answers require tenant evidence for strategy/cycle/call behavior.
+    evidence: [sap.pattern.eam.pm-task-list-plan-fo]
+  relations:
+    patterns: [sap.pattern.eam.pm-task-list-plan-fo]
+- id: sap.pattern.eam.pm-measuring-point-counter-fo
+  title: EAM/PM measuring point and counter FO pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, measuring-point, counter, measurement-document, condition-based-maintenance, fo-pattern]
+  used_for: [fo.field_mapping, fo.process_flow, fo.business_rules, fo.test_scenarios]
+  summary: Measuring-point/counter FO sections should define object assignment, unit, reading frequency, threshold/limit handling, measurement document ownership and follow-on notification/order logic.
+  freshness: *freshness
+  source: *source_internal
+  claims:
+  - statement: Measuring-point/counter FO patterns must ask for unit, reading ownership, threshold behavior and follow-on process evidence.
+    evidence: [sap.object.eam-measuring-point-counter]
+  relations:
+    objects: [sap.object.eam-measuring-point-counter, sap.object.eam-maintenance-plan, sap.object.eam-maintenance-order]
+    rules: [sap.rule.eam.pm-measuring-point-counter-fail-closed]
+  required_questions:
+  - Which equipment/functional location owns the measuring point or counter?
+  - Which unit, reading frequency and threshold/limit behavior are required?
+  - Does a measurement reading trigger notification/order logic or only reporting?
+  assumptions:
+  - Counter/measurement behavior is configuration/process dependent.
+  non_goals:
+  - Do not invent measurement units, threshold categories or automatic follow-on behavior without tenant evidence.
+  validation_notes:
+  - Validate one reading entry/display and one follow-on process example if automation is claimed.
+- id: sap.rule.eam.pm-measuring-point-counter-fail-closed
+  title: Measuring point/counter fail-closed decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, measuring-point, counter, unit, threshold, tenant-caveat]
+  used_for: [fo.business_rules, fo.quality_gate]
+  summary: 'Decision rule for measuring points/counters: do not infer units, threshold behavior or follow-on automation without tenant evidence.'
+  freshness: *freshness
+  source: *source_internal
+  rules:
+  - if: unit, threshold/limit behavior or follow-on automation is not supplied
+    then: record it as an open FO tenant-evidence question and keep generated content generic
+    outcome: avoid false condition-based-maintenance detail
+  claims:
+  - statement: Measuring-point/counter details must be tenant-verified before they become FO acceptance or test criteria.
+    evidence: [sap.pattern.eam.pm-measuring-point-counter-fo]
+  relations:
+    patterns: [sap.pattern.eam.pm-measuring-point-counter-fo]
+- id: sap.pattern.eam.pm-work-center-components-fo
+  title: EAM/PM work center and component planning FO pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, work-center, component, spares, bom, task-list, maintenance-order, fo-pattern]
+  used_for: [fo.process_flow, fo.field_mapping, fo.business_rules, fo.test_scenarios]
+  summary: Work-center/component FO sections should define who performs the operation, capacity/cost relevance, component source, spare availability checks and reservation/issue process boundaries.
+  freshness: *freshness
+  source: *source_internal
+  claims:
+  - statement: Work-center/component FO patterns should separate execution responsibility from spare-part planning and stock availability.
+    evidence: [sap.object.eam-work-center, sap.object.eam-maintenance-order-component, sap.object.eam-equipment-bom]
+  relations:
+    objects: [sap.object.eam-work-center, sap.object.eam-maintenance-order-component, sap.object.eam-equipment-bom, sap.object.eam-spare-part-material]
+    rules: [sap.rule.eam.pm-work-center-components-fail-closed]
+  required_questions:
+  - Which work center/planner group owns the operation and capacity planning?
+  - Are components sourced from equipment BOM, functional-location BOM, task list, order component or manual entry?
+  - Which stock/reservation/goods-issue checks are in scope?
+  assumptions:
+  - Component planning and spare availability are separate from work-center responsibility.
+  non_goals:
+  - Do not infer capacity formulas, cost center behavior or reservation logic without tenant evidence.
+  validation_notes:
+  - Validate one order/component scenario and one stock-availability scenario.
+- id: sap.rule.eam.pm-work-center-components-fail-closed
+  title: Work center/component fail-closed decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, work-center, component, spares, bom, reservation, capacity, tenant-caveat]
+  used_for: [fo.business_rules, fo.quality_gate]
+  summary: 'Decision rule for work-center/component FO sections: fail closed by asking for source of components,
+    reservation/goods issue behavior and capacity/cost relevance before claiming implementation detail.'
+  freshness: *freshness
+  source: *source_internal
+  rules:
+  - if: component source, stock check, reservation process or work-center cost/capacity relevance is missing
+    then: keep the generated FO at tenant-evidence decision-question level
+    outcome: prevent over-specific spare/capacity process claims
+  claims:
+  - statement: Work-center/component answers need tenant evidence for component source, reservation and capacity/cost behavior.
+    evidence: [sap.pattern.eam.pm-work-center-components-fo]
+  relations:
+    patterns: [sap.pattern.eam.pm-work-center-components-fo]
+- id: sap.pattern.eam.pm-confirmation-teco-settlement-fo
+  title: EAM/PM confirmation, technical completion and settlement FO pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, confirmation, technical-completion, teco, settlement, maintenance-order, fo-pattern]
+  used_for: [fo.process_flow, fo.business_rules, fo.test_scenarios, fo.quality_gate]
+  summary: Confirmation/TECO/settlement FO sections should separate work confirmation, technical completion, business closeout and FI/CO settlement behavior, with settlement receivers/profiles treated as tenant-specific.
+  freshness: *freshness
+  source: *source_internal
+  claims:
+  - statement: Confirmation, TECO and settlement should be separate FO decisions, not one generic done state.
+    evidence: [sap.object.eam-technical-completion, sap.object.eam-settlement-caveat]
+  relations:
+    objects: [sap.object.eam-maintenance-order, sap.object.eam-technical-completion, sap.object.eam-settlement-caveat]
+    rules: [sap.rule.eam.pm-confirmation-teco-settlement-fail-closed]
+  required_questions:
+  - What must be confirmed: time, activity, measurement reading, component usage or narrative completion?
+  - What does TECO block or allow in the target process?
+  - Which settlement receiver/profile/period process is owned by FI/CO?
+  assumptions:
+  - Technical completion is not the same as financial settlement.
+  non_goals:
+  - Do not invent settlement receiver/profile or closeout sequence without tenant FI/CO evidence.
+  validation_notes:
+  - Validate one order confirmation, one TECO action and one settlement/accounting handoff example if in scope.
+- id: sap.rule.eam.pm-confirmation-teco-settlement-fail-closed
+  title: Confirmation/TECO/settlement fail-closed decision rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, confirmation, technical-completion, teco, settlement, controlling, tenant-caveat]
+  used_for: [fo.business_rules, fo.quality_gate]
+  summary: 'Decision rule for closeout: keep confirmation, technical completion and settlement as separate evidence-backed decisions and fail closed on FI/CO-specific details.'
+  freshness: *freshness
+  source: *source_internal
+  rules:
+  - if: settlement receiver/profile, period-end responsibility or accounting handoff is unknown
+    then: add FI/CO tenant-verification question and do not claim settlement behavior
+    outcome: prevent false closeout/accounting guidance
+  claims:
+  - statement: Settlement behavior is FI/CO-specific and must not be generated from generic EAM lifecycle context alone.
+    evidence: [sap.pattern.eam.pm-confirmation-teco-settlement-fo]
+  relations:
+    patterns: [sap.pattern.eam.pm-confirmation-teco-settlement-fo]
