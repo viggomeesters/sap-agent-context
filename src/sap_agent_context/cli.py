@@ -10,6 +10,11 @@ from pathlib import Path
 from sap_agent_context.agent_records import export_agent_records, validate_agent_records
 from sap_agent_context.bundle import build_context_bundle, mccoy_provider_manifest
 from sap_agent_context.completeness import audit_completeness
+from sap_agent_context.domain_density import (
+    build_domain_density_heatmap,
+    render_heatmap_markdown,
+    write_heatmap,
+)
 from sap_agent_context.evaluation import evaluate_fo_output_fixtures
 from sap_agent_context.index import build_indexes
 from sap_agent_context.repository import load_items
@@ -39,6 +44,15 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser("validate")
     audit = subparsers.add_parser("audit-completeness")
     audit.add_argument("--matrix", type=Path)
+
+    heatmap = subparsers.add_parser("domain-density-heatmap")
+    heatmap.add_argument("--output", type=Path)
+    heatmap.add_argument(
+        "--format",
+        choices=["json", "markdown"],
+        default="json",
+        help="render as JSON for machines or Markdown for docs/review",
+    )
 
     evaluate = subparsers.add_parser("evaluate-fixtures")
     evaluate.add_argument("--fixtures", type=Path)
@@ -201,6 +215,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         print(json.dumps(payload, indent=2, sort_keys=True, default=str))
         return 0 if payload["status"] == "passed" else 1
+
+    if args.command == "domain-density-heatmap":
+        items = load_items(root)
+        payload = build_domain_density_heatmap(items)
+        if args.output:
+            write_heatmap(payload, _resolve_output(root, args.output), args.format)
+        if args.format == "markdown":
+            print(render_heatmap_markdown(payload), end="")
+        else:
+            print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0
 
     if args.command == "evaluate-fixtures":
         items = load_items(root)
