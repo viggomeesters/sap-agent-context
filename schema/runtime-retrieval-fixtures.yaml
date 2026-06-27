@@ -31,3 +31,21 @@ fixtures:
     required_ids:
       - sap.app.eam.pm.ie03
     require_citations: true
+  - id: eam_pm_task_list_plan_runtime
+    query: maintenance plan task list scheduling tenant questions preventive maintenance
+    limit: 24
+    required_ids:
+      - sap.app.eam.pm.ip10
+      - sap.app.eam.pm.ia03
+  - id: eam_pm_measuring_point_counter_runtime
+    query: measuring point counter unit threshold measurement document follow-on order
+    limit: 24
+    required_ids:
+      - sap.app.eam.pm.ik03
+  - id: eam_pm_confirmation_settlement_runtime
+    query: confirmation TECO settlement receiver profile FI CO fail closed
+    limit: 24
+    filters:
+      kind: fo_pattern
+    required_ids:
+      - sap.pattern.eam.pm-confirmation-teco-settlement-fo

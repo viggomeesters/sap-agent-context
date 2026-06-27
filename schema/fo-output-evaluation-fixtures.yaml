@@ -276,3 +276,69 @@ fixtures:
   - sap.app.eam.pm.ih08
   - sap.object.eam-equipment
   - sap.test-pattern.eam.pm-transaction-navigation
+- id: eam_pm_task_list_plan_fo_ready
+  intent: fo.workflow
+  topic: FO maintenance plan task list scheduling tenant questions preventive maintenance
+  sap_product: cross_sap
+  limit: 24
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  - public
+  required_kinds:
+  - fo_pattern
+  - decision_rule
+  - sap_object
+  required_item_ids:
+  - sap.pattern.eam.pm-task-list-plan-fo
+  - sap.rule.eam.pm-task-list-plan-tenant-questions
+  - sap.object.eam-task-list
+  - sap.object.eam-maintenance-plan
+- id: eam_pm_measuring_point_counter_fo_ready
+  intent: fo.field_mapping
+  topic: measuring point counter unit threshold tenant evidence
+  sap_product: cross_sap
+  limit: 24
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  required_kinds:
+  - fo_pattern
+  - decision_rule
+  - sap_object
+  required_item_ids:
+  - sap.pattern.eam.pm-measuring-point-counter-fo
+  - sap.rule.eam.pm-measuring-point-counter-fail-closed
+  - sap.object.eam-measuring-point-counter
+- id: eam_pm_work_center_components_fo_ready
+  intent: fo.workflow
+  topic: work center component spare parts BOM reservation goods issue capacity cost tenant evidence
+  sap_product: cross_sap
+  limit: 24
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  required_kinds:
+  - fo_pattern
+  - decision_rule
+  - sap_object
+  required_item_ids:
+  - sap.pattern.eam.pm-work-center-components-fo
+  - sap.rule.eam.pm-work-center-components-fail-closed
+  - sap.object.eam-work-center
+- id: eam_pm_confirmation_teco_settlement_fo_ready
+  intent: fo.business_rules
+  topic: confirmation technical completion TECO settlement receiver profile FI CO tenant evidence
+  sap_product: cross_sap
+  limit: 24
+  expected_status: ready
+  required_access_labels:
+  - internal_derived
+  required_kinds:
+  - fo_pattern
+  - decision_rule
+  - sap_object
+  required_item_ids:
+  - sap.pattern.eam.pm-confirmation-teco-settlement-fo
+  - sap.rule.eam.pm-confirmation-teco-settlement-fail-closed
+  - sap.object.eam-settlement-caveat

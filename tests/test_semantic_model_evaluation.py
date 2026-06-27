@@ -22,11 +22,51 @@ def _fake_embeddings(texts: list[str]) -> list[list[float]]:
 
 
 def test_semantic_model_evaluation_covers_nl_and_en_fixtures_without_cloud(tmp_path: Path) -> None:
+    fixtures_path = tmp_path / "semantic-fixtures.yaml"
+    fixtures_path.write_text(
+        """
+fixtures:
+  - id: nl_equipment_master_display
+    language: nl
+    query: Hoe toon ik equipmentstamgegevens in SAP?
+    limit: 20
+    filters:
+      kind: sap_app
+    required_ids:
+      - sap.app.eam.pm.ie03
+    require_vector_candidate: true
+  - id: en_equipment_master_display
+    language: en
+    query: How do I display equipment master data?
+    limit: 20
+    filters:
+      kind: sap_app
+    required_ids:
+      - sap.app.eam.pm.ie03
+    require_vector_candidate: true
+  - id: nl_equipment_status_meaning
+    language: nl
+    query: Wat betekent gebruikersstatus en systeemstatus bij equipment?
+    limit: 30
+    required_any:
+      - - sap.object.eam-user-status
+        - sap.claim.sap-object-eam-user-status.001
+  - id: en_equipment_status_meaning
+    language: en
+    query: Explain equipment user status and system status
+    limit: 30
+    required_any:
+      - - sap.object.eam-user-status
+        - sap.claim.sap-object-eam-user-status.001
+""".strip(),
+        encoding="utf-8",
+    )
     payload = evaluate_semantic_models(
         root=ROOT,
         sqlite_path=tmp_path / "context.sqlite",
         items_jsonl_path=tmp_path / "items.jsonl",
         vector_jsonl_path=tmp_path / "vector-corpus.jsonl",
+        fixtures_path=fixtures_path,
         models=["BAAI/bge-small-en-v1.5"],
         dimension=3,
         embed_texts=_fake_embeddings,

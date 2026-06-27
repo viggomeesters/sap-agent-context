@@ -39,3 +39,27 @@ fixtures:
       - - sap.object.eam-system-status
         - sap.claim.sap-object-eam-system-status.001
         - sap.claim.sap-ref-eam-pm-sap-community-system-status-equipment.001
+  - id: nl_maintenance_plan_task_list
+    language: nl
+    query: Hoe beschrijf ik onderhoudsplan taaklijst en scheduling vragen in een FO?
+    limit: 40
+    required_any:
+      - - sap.pattern.eam.pm-task-list-plan-fo
+        - sap.rule.eam.pm-task-list-plan-tenant-questions
+        - sap.object.eam-maintenance-plan
+  - id: en_measuring_point_counter
+    language: en
+    query: Which EAM measuring point counter unit and threshold questions are needed?
+    limit: 40
+    required_any:
+      - - sap.pattern.eam.pm-measuring-point-counter-fo
+        - sap.rule.eam.pm-measuring-point-counter-fail-closed
+        - sap.object.eam-measuring-point-counter
+  - id: nl_teco_settlement_caveat
+    language: nl
+    query: Wanneer moet ik bij TECO en settlement fail closed vragen stellen?
+    limit: 40
+    required_any:
+      - - sap.pattern.eam.pm-confirmation-teco-settlement-fo
+        - sap.rule.eam.pm-confirmation-teco-settlement-fail-closed
+        - sap.object.eam-settlement-caveat
