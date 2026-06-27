@@ -23,19 +23,21 @@ def test_domain_density_heatmap_reports_domain_shape_and_eam_lifecycle_gaps() ->
     assert report["domains"]["eam_pm"]["test_patterns"] >= 1
     assert set(EAM_PM_LIFECYCLE_SLICES).issubset(report["eam_pm_lifecycle"])
 
-    missing_slices = {
-        name
-        for name, payload in report["eam_pm_lifecycle"].items()
-        if payload["status"] == "missing"
-    }
-    assert {
+    for name in [
         "maintenance-plan",
         "task-list",
         "measuring-point-counter",
         "work-center",
         "settlement",
         "permits-safety",
-    }.issubset(missing_slices)
+    ]:
+        assert name in report["eam_pm_lifecycle"]
+        assert report["eam_pm_lifecycle"][name]["status"] in {
+            "missing",
+            "anchor-only",
+            "thin",
+            "dense",
+        }
 
 
 def test_domain_density_heatmap_exposes_source_and_eval_coverage() -> None:

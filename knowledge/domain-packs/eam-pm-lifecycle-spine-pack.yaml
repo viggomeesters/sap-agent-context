@@ -1,0 +1,356 @@
+pack_id: eam-pm-lifecycle-spine-pack
+title: EAM/PM lifecycle spine pack
+description: Source-labelled lifecycle anchors for Plant Maintenance / EAM beyond equipment-only starter coverage.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Public pointers are link-first; internal-derived lifecycle semantics require tenant verification before final FO use.
+freshness_current: &freshness
+  valid_from: '2026-06-27'
+  review_after: '2026-12-27'
+  expires_at: '2027-06-27'
+  retrieved_at: '2026-06-27'
+source_public_task_list: &source_public_task_list
+  kind: public_url
+  title: SAP Help Portal - Display Task List
+  url: https://help.sap.com/docs/SAP_S4HANA_CLOUD/2dfa044a255f49e89a3050daf3c61c11/ce2f70571ada0222e10000000a44147b.html
+  retrieved_at: '2026-06-27'
+  specificity: exact_page
+  license_note: Link-first public SAP Help pointer; do not copy SAP documentation text into this repository.
+source_public_eam_search: &source_public_eam_search
+  kind: public_url
+  title: SAP Help Portal search pointer for EAM maintenance plans orders measuring points and work centers
+  url: https://help.sap.com/docs/search?q=maintenance%20plan%20task%20list%20measuring%20point%20work%20center%20maintenance%20order
+  retrieved_at: '2026-06-27'
+  specificity: root_pointer
+  license_note: Link-first public SAP Help search pointer; verify exact app/release page before final consultant use.
+source_internal_lifecycle: &source_internal_lifecycle
+  kind: internal_pattern
+  title: Internal generic EAM/PM lifecycle implementation pattern
+  url: ''
+  retrieved_at: '2026-06-27'
+  specificity: internal_pattern
+  license_note: Internal-derived consultant lifecycle pattern; verify target tenant process, order types, task-list usage, plan strategy, counters, work centers, permits and settlement behavior.
+items:
+- id: sap.ref.eam.pm.sap-help-task-list-display
+  title: SAP Help pointer for maintenance task lists
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics: [eam, plant-maintenance, task-list, maintenance-plan, work-center, components, source-registry]
+  used_for: [fo.source_traceability, fo.process_flow, fo.test_scenarios]
+  summary: Link-first SAP Help pointer for task list display context, including responsible work center, operations, spare parts and production resources/tools. Use as a pointer, not copied documentation.
+  freshness: *freshness
+  source: *source_public_task_list
+  claims:
+  - statement: Task-list context should be sourced and verified before an agent uses operations, work center, component or tool details in an FO.
+    evidence: [sap.ref.eam.pm.sap-help-task-list-display]
+  relations: {}
+- id: sap.ref.eam.pm.sap-help-lifecycle-search
+  title: SAP Help search pointer for EAM/PM lifecycle planning and execution
+  kind: external_reference
+  status: active
+  access: public
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, maintenance-plan, maintenance-order, measuring-point, counter, work-center, settlement, technical-completion, source-registry]
+  used_for: [fo.source_traceability, fo.process_flow, fo.quality_gate]
+  summary: Link-first public search pointer for maintenance planning/execution topics such as plans, orders, measuring points, work centers, confirmations and settlement caveats.
+  freshness: *freshness
+  source: *source_public_eam_search
+  claims:
+  - statement: Lifecycle-slice answers should cite exact public or gated sources before claiming app/release-specific behavior.
+    evidence: [sap.ref.eam.pm.sap-help-lifecycle-search]
+  relations: {}
+- id: sap.object.eam-maintenance-plan
+  title: EAM maintenance plan
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, maintenance-plan, maintenance-item, scheduling, preventive-maintenance]
+  used_for: [fo.process_flow, fo.business_rules, fo.test_scenarios]
+  summary: Maintenance plan is the planning anchor for recurring/preventive maintenance. Treat strategy, cycle, call horizon, scheduling parameters and generated call/order behavior as tenant-specific and source-verified before final FO use.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Maintenance plan context must keep scheduling strategy and generated maintenance call/order behavior explicit and tenant-verified.
+    evidence: [sap.ref.eam.pm.sap-help-lifecycle-search]
+  relations:
+    related_objects: [sap.object.eam-task-list, sap.object.eam-maintenance-order, sap.object.eam-measuring-point-counter]
+- id: sap.object.eam-task-list
+  title: EAM maintenance task list
+  kind: sap_object
+  status: active
+  access: public
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics: [eam, plant-maintenance, task-list, operations, work-center, components, maintenance-plan]
+  used_for: [fo.process_flow, fo.field_mapping, fo.test_scenarios]
+  summary: Task list context describes reusable maintenance operations, responsible work centers, component/spare expectations and tools/resources that can be assigned or referenced in planning/execution.
+  freshness: *freshness
+  source: *source_public_task_list
+  claims:
+  - statement: Task-list FO context should distinguish reusable operation templates from the actual generated or executed order operations.
+    evidence: [sap.ref.eam.pm.sap-help-task-list-display]
+  relations:
+    source_references: [sap.ref.eam.pm.sap-help-task-list-display]
+    related_objects: [sap.object.eam-work-center, sap.object.eam-maintenance-plan, sap.object.eam-maintenance-order]
+- id: sap.object.eam-maintenance-order
+  title: EAM maintenance order execution object
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, maintenance-order, notification, task-list, work-center, confirmation, technical-completion, settlement]
+  used_for: [fo.process_flow, fo.field_mapping, fo.test_scenarios]
+  summary: Maintenance order is the execution anchor for planned or corrective maintenance work. Treat order type,
+    operation structure, components, confirmations, technical completion and settlement behavior as tenant-specific.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Maintenance order context should separate execution operations, components, confirmations, technical completion and settlement caveats before an agent generates an FO.
+    evidence: [sap.bulk.api.maintenance-order.object, sap.ref.eam.pm.sap-help-lifecycle-search]
+  relations:
+    related_objects: [sap.object.eam-task-list, sap.object.eam-work-center, sap.object.eam-technical-completion, sap.object.eam-settlement-caveat]
+- id: sap.object.eam-measuring-point-counter
+  title: EAM measuring point and counter
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, measuring-point, counter, measurement-document, condition-based-maintenance]
+  used_for: [fo.process_flow, fo.field_mapping, fo.test_scenarios]
+  summary: Measuring points and counters capture condition/counter readings used in inspection and condition-based maintenance scenarios. Exact reading categories, units, limits and follow-on behavior require tenant verification.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Measuring-point/counter context must keep units, reading frequency, limit behavior and follow-on order/notification logic tenant-specific.
+    evidence: [sap.ref.eam.pm.sap-help-lifecycle-search]
+  relations:
+    related_objects: [sap.object.eam-equipment, sap.object.eam-functional-location, sap.object.eam-maintenance-plan]
+- id: sap.object.eam-work-center
+  title: EAM work center
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, work-center, capacity, operation, planner-group]
+  used_for: [fo.process_flow, fo.business_rules, fo.test_scenarios]
+  summary: Work center is a planning/execution responsibility and capacity anchor for task list and maintenance order operations. Exact cost center/capacity/formula/scheduling behavior is tenant-specific.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: EAM/PM work-center answers should not invent capacity, costing or scheduling formulas without tenant evidence.
+    evidence: [sap.ref.eam.pm.sap-help-task-list-display]
+  relations:
+    related_objects: [sap.object.eam-task-list, sap.object.eam-maintenance-order]
+- id: sap.object.eam-technical-completion
+  title: EAM technical completion lifecycle state
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, maintenance-order, technical-completion, teco, confirmation, settlement]
+  used_for: [fo.process_flow, fo.business_rules, fo.test_scenarios]
+  summary: Technical completion is an order lifecycle milestone/caveat for stopping or closing technical execution context. Do not equate it with financial settlement or business completion without tenant process evidence.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Technical completion, confirmation and settlement are separate FO topics and must not be collapsed into one generic done state.
+    evidence: [sap.ref.eam.pm.sap-help-lifecycle-search]
+  relations:
+    related_objects: [sap.object.eam-maintenance-order, sap.object.eam-settlement-caveat]
+- id: sap.object.eam-settlement-caveat
+  title: EAM settlement caveat
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, settlement, cost, maintenance-order, controlling]
+  used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+  summary: Settlement is a costing/controlling caveat for maintenance orders, not a safe generic assumption. Settlement receivers, profiles and period-end behavior require tenant-specific FI/CO evidence.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Maintenance order settlement guidance must fail closed unless settlement receiver/profile/period process evidence is available.
+    evidence: [sap.ref.eam.pm.sap-help-lifecycle-search]
+  relations:
+    related_objects: [sap.object.eam-maintenance-order, sap.object.eam-technical-completion]
+- id: sap.object.eam-permit-safety
+  title: EAM permit and safety caveat
+  kind: sap_object
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, permit, safety, work-permit, maintenance-order, authorization]
+  used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+  summary: Permit/safety handling is a process and compliance caveat around maintenance execution. Do not assume permit types, approvals or lockout/safety steps without tenant and regulatory context.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Permit and safety steps are tenant/regulatory-specific and should be treated as explicit FO questions, not generic SAP defaults.
+    evidence: [sap.ref.eam.pm.sap-help-lifecycle-search]
+  relations:
+    related_objects: [sap.object.eam-maintenance-order, sap.object.eam-work-center]
+- id: sap.app.eam.pm.ip10
+  title: IP10 - Schedule maintenance plan
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, maintenance-plan, ip10, scheduling, navigation]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: IP10 is represented as SAP GUI navigation context for scheduling maintenance plans. Verify transaction availability, plan category, scheduling parameters and authorizations in the target system.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Maintenance-plan scheduling navigation must keep plan strategy and tenant-specific scheduling parameters explicit.
+    evidence: [sap.object.eam-maintenance-plan]
+  relations:
+    objects: [sap.object.eam-maintenance-plan]
+- id: sap.app.eam.pm.ia03
+  title: IA03 - Display general maintenance task list
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, task-list, ia03, operations, work-center, navigation]
+  used_for: [fo.navigation, fo.process_flow, fo.test_scenarios]
+  summary: IA03 is represented as SAP GUI navigation context for displaying general maintenance task lists. Verify task-list type, group/counter, operation detail and authorizations in the target system.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Task-list navigation should not be confused with executed order operations; use tenant verification for list type/group/counter.
+    evidence: [sap.ref.eam.pm.sap-help-task-list-display]
+  relations:
+    objects: [sap.object.eam-task-list, sap.object.eam-work-center]
+- id: sap.app.eam.pm.ik03
+  title: IK03 - Display measuring point
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, measuring-point, counter, ik03, navigation]
+  used_for: [fo.navigation, fo.field_mapping, fo.test_scenarios]
+  summary: IK03 is represented as SAP GUI navigation context for displaying measuring points/counters. Verify exact transaction availability, object assignment, unit and measurement-document behavior in the target system.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: Measuring-point/counter navigation must keep object assignment, units and measurement-document behavior explicit.
+    evidence: [sap.object.eam-measuring-point-counter]
+  relations:
+    objects: [sap.object.eam-measuring-point-counter]
+- id: sap.app.eam.pm.cr03
+  title: CR03 - Display work center
+  kind: sap_app
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [sap-gui, eam, plant-maintenance, work-center, cr03, capacity, navigation]
+  used_for: [fo.navigation, fo.business_rules, fo.test_scenarios]
+  summary: CR03 is represented as SAP GUI navigation context for displaying work centers. Verify plant, category, cost/capacity relevance and authorizations in the target system.
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: EAM/PM work-center guidance should name plant, work-center category, capacity relevance and costing relevance as tenant-verified inputs before claiming scheduling or cost behavior.
+    evidence: [sap.object.eam-work-center]
+  relations:
+    objects: [sap.object.eam-work-center]
+- id: sap.field-set.eam-pm-lifecycle-planning
+  title: EAM/PM lifecycle planning field set
+  kind: sap_field
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, maintenance-plan, task-list, measuring-point, work-center, settlement, field-set]
+  used_for: [fo.field_mapping, fo.test_data, fo.quality_gate]
+  summary: 'Minimal lifecycle field-set context for FO questions: maintenance plan, task list group/counter,
+    measuring point, counter reading unit, work center, order, technical completion and settlement caveat.'
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  claims:
+  - statement: EAM/PM lifecycle field mapping should separate planning anchors, execution anchors and settlement caveats before generating an FO.
+    evidence: [sap.object.eam-maintenance-plan, sap.object.eam-task-list, sap.object.eam-measuring-point-counter, sap.object.eam-work-center, sap.object.eam-settlement-caveat]
+  relations:
+    objects: [sap.object.eam-maintenance-plan, sap.object.eam-task-list, sap.object.eam-measuring-point-counter, sap.object.eam-work-center, sap.object.eam-settlement-caveat]
+  field_definitions:
+  - key: MaintenancePlan
+    description: Maintenance plan identifier/context.
+    usage: Use only as planning anchor; verify strategy/cycle/call behavior in tenant.
+  - key: TaskListGroupCounter
+    description: Task list group/counter context.
+    usage: Distinguish reusable task list from executed order operation.
+  - key: MeasuringPointCounter
+    description: Measuring point/counter context.
+    usage: Verify object assignment, unit and reading behavior.
+  - key: WorkCenter
+    description: Work center context.
+    usage: Verify plant, capacity/cost relevance and responsible organization.
+  - key: SettlementReceiver
+    description: Settlement receiver/profile caveat context.
+    usage: Treat as FI/CO-specific and tenant-verified, not generic EAM default.
+- id: sap.rule.eam.pm-lifecycle-fail-closed
+  title: EAM/PM lifecycle fail-closed rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, maintenance-plan, task-list, measuring-point, counter, work-center, settlement, permit, safety, quality-gate]
+  used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+  summary: 'Decision rule for lifecycle answers: fail closed on tenant-specific plan strategy, task-list type,
+    measuring point units, work-center costing/capacity, permits/safety and settlement profile/receiver.'
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  rules:
+  - if: question asks for exact maintenance plan cycle, strategy, call horizon or generated order behavior
+    then: request tenant/release evidence before finalizing
+    outcome: fail closed with explicit FO question
+  - if: question asks for settlement receiver/profile or costing behavior
+    then: do not infer from EAM object context alone
+    outcome: route to FI/CO tenant verification
+  - if: question asks for permits or safety steps
+    then: do not invent regulatory/process approvals
+    outcome: capture as tenant-specific compliance question
+  claims:
+  - statement: EAM/PM lifecycle generation must fail closed on configuration-heavy planning, safety and settlement details.
+    evidence: [sap.object.eam-maintenance-plan, sap.object.eam-settlement-caveat, sap.object.eam-permit-safety]
+  relations:
+    objects: [sap.object.eam-maintenance-plan, sap.object.eam-task-list, sap.object.eam-measuring-point-counter, sap.object.eam-work-center, sap.object.eam-settlement-caveat, sap.object.eam-permit-safety]
+- id: sap.test-pattern.eam-pm-lifecycle-spine-coverage
+  title: EAM/PM lifecycle spine coverage test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics: [eam, plant-maintenance, maintenance-plan, task-list, measuring-point, counter, work-center, technical-completion, settlement, permit, safety, test-pattern]
+  used_for: [fo.test_scenarios, fo.quality_gate]
+  summary: 'Test pattern for lifecycle spine questions: a bundle should include planning anchors, task-list/work-center
+    context, measuring point/counter caveats and settlement/safety fail-closed rules.'
+  freshness: *freshness
+  source: *source_internal_lifecycle
+  test_scenarios:
+  - name: Maintenance plan to work order lifecycle
+    given: A consultant asks for the EAM/PM lifecycle from preventive plan to order closeout.
+    when: The context bundle is built.
+    then: It includes maintenance plan, task list, work center, measuring point/counter, technical completion and settlement/safety caveats.
+  claims:
+  - statement: EAM/PM lifecycle tests should prove the repo covers more than equipment display/navigation.
+    evidence: [sap.rule.eam.pm-lifecycle-fail-closed]
+  relations:
+    objects: [sap.object.eam-maintenance-plan, sap.object.eam-task-list, sap.object.eam-measuring-point-counter, sap.object.eam-work-center, sap.object.eam-technical-completion, sap.object.eam-settlement-caveat, sap.object.eam-permit-safety]
