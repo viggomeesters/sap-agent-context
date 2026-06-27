@@ -36,7 +36,7 @@ Default for every row below: `copied_code=false`. If a future task copies code, 
 | Pattern | Decision | Reason |
 |---|---|---|
 | Copying SDP CSV/XLSX/schema data | rejected | Public repo boundary: would risk private/customer/project data and would not belong in generic SAP context. |
-| Treating generated SQLite/JSON/read models as writable source of truth | rejected | `sap-agent-context` must keep canonical public YAML/metadata as SSOT unless a future ADR approves migration. |
+| Treating generated SQLite/vector/read models as writable source of truth | rejected | `sap-agent-context` keeps `records/*.jsonl` as the canonical agent record surface; build outputs remain generated/non-authoritative. |
 | Importing SDP project/customer analytics | rejected | Field usage, project registry and customer decisions are private and not generic SAP context. |
 | Mirroring SDP's full data layer | deferred/rejected for this loop | Useful architectural inspiration, but too broad and would blur scope. Adopt only narrow contracts with tests. |
 

@@ -13,8 +13,8 @@ def test_jsonl_record_surface_doc_names_alignment_and_deviations() -> None:
 
     required_phrases = [
         "records-first",
-        "YAML remains the temporary editing source",
-        "records/*.jsonl is the deterministic agent-first record surface",
+        "records/*.jsonl is the canonical agent record surface",
+        "YAML is a legacy authoring/import format",
         "build/ is generated runtime output",
         "Intentional deviations",
         "record_type",
@@ -32,7 +32,7 @@ def test_readme_links_jsonl_record_surface_decision() -> None:
 
     assert "docs/jsonl-record-surface.md" in text
     assert "records-first" in text
-    assert "YAML knowledge stays green" in text
+    assert "YAML is a legacy authoring/import format" in text
 
 
 def test_runtime_doc_keeps_generated_runtime_and_future_migration_path_explicit() -> None:

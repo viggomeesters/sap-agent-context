@@ -2,8 +2,8 @@
 
 SAP Agent Context is a curated, link-first context layer for AI agents working
 with SAP functional design, field mapping, workflow, roles, scope items, and
-implementation support. It stores compact YAML context items, source pointers,
-freshness metadata, bundle quality gates, and deterministic evaluation fixtures
+implementation support. It publishes compact JSONL agent records, source
+pointers, freshness metadata, bundle quality gates, and deterministic evaluation fixtures
 for SAP S/4HANA Cloud Public Edition work.
 
 The repository does not mirror SAP Help, SAP Notes, Learning Hub, SAP for Me, or
@@ -14,7 +14,7 @@ sources through access-labelled pointers.
 
 ## Highlights
 
-- Canonical YAML knowledge items under `knowledge/**/*.yaml`.
+- Canonical JSONL agent records under `records/*.jsonl`.
 - Canonical context layout documented in
   [Context Structure](docs/context-structure.md).
 - Rebuildable SQLite, FTS5, JSONL, and vector-ready indexes under `build/`.
@@ -49,18 +49,19 @@ uv run sap-agent-context audit-completeness
 uv run sap-agent-context evaluate-fixtures
 ```
 
-Export agent-first JSONL records:
+Synchronize legacy authoring files into agent-first JSONL records:
 
 ```bash
 uv run sap-agent-context export-jsonl --output-dir records
 ```
 
-The migration path is incremental and records-first: current YAML knowledge stays green and remains the
-migration source while `records/*.jsonl` becomes the deterministic agent-first
-record surface. The export writes typed JSONL files for apps, tables, fields,
-workflows, roles, claims, sources, and relations, then validates them against
-`schema/*.schema.json`. The intentional JSONL-vault-spike alignment and
-compatibility deviations are documented in [JSONL record surface](docs/jsonl-record-surface.md).
+The repo is JSONL-first and records-first: `records/*.jsonl` is the canonical agent record
+surface. YAML is a legacy authoring/import format kept temporarily for human
+pack editing; it is not the source of truth. The export writes typed JSONL files
+for apps, tables, fields, workflows, roles, claims, sources, and relations, then
+validates them against `schema/*.schema.json`. The intentional
+JSONL-vault-spike alignment and compatibility deviations are documented in
+[JSONL record surface](docs/jsonl-record-surface.md).
 
 Build runtime indexes:
 

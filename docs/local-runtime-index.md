@@ -7,8 +7,8 @@ SAP Agent Context uses an agent-first storage split:
 2. `build/context.sqlite`, `build/items.jsonl`, and `build/vector-corpus.jsonl`
    are generated runtime artifacts and generated/non-authoritative projections.
    Rebuild them; do not hand-edit them.
-3. YAML knowledge files remain the temporary editing source until the JSONL
-   record surface is explicitly promoted as the only edit surface.
+3. YAML files are a legacy authoring/import format only; runtime and consumer
+   contracts are JSONL-first.
 
 ## Rebuild
 

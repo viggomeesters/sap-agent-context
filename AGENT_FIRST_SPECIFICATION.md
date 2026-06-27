@@ -267,8 +267,8 @@ synthetic examples without customer data.
 
 The current YAML knowledge files can migrate incrementally:
 
-1. Keep YAML validation and bundle behavior green.
-2. Add JSONL export from current YAML items.
+1. Keep JSONL record validation and bundle behavior green.
+2. Keep legacy YAML authoring/import synchronized into `records/*.jsonl` while migration remains active.
 3. Add JSON Schema validation for exported records.
 4. Add SQLite/libSQL and DuckDB build targets from JSONL.
 5. Move retrieval hints, claims, and relations into stricter record shapes.

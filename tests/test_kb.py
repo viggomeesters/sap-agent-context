@@ -77,7 +77,8 @@ def test_build_indexes_writes_sqlite_jsonl_and_vector_ready_chunks(tmp_path: Pat
     assert read_model_metadata["artifact_kind"] == "generated_read_model"
     assert read_model_metadata["authoritative"] == "false"
     assert read_model_metadata["source_of_truth"] == "records/*.jsonl"
-    assert read_model_metadata["editing_source"] == "knowledge/**/*.yaml"
+    assert read_model_metadata["authoring_format"] == "legacy_yaml_import"
+    assert "editing_source" not in read_model_metadata
     assert read_model_metadata["bundle_kind"] == "sap_fo_context_bundle"
 
     item_lines = (tmp_path / "items.jsonl").read_text(encoding="utf-8").splitlines()

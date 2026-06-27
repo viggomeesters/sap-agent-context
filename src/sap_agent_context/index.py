@@ -28,8 +28,8 @@ def build_indexes(
     """Build SQLite, JSONL and vector-ready chunk indexes.
 
     Runtime SQLite is derived from canonical agent-first records/*.jsonl when
-    available. When records are absent, the current YAML items are exported to a
-    temporary records directory first so the build remains backward compatible.
+    available. When records are absent, legacy YAML authoring files are imported
+    to a temporary records directory first so older clones remain buildable.
     """
     sqlite_path.parent.mkdir(parents=True, exist_ok=True)
     jsonl_path.parent.mkdir(parents=True, exist_ok=True)
@@ -70,7 +70,7 @@ def build_indexes(
                 "artifact_kind": "generated_read_model",
                 "authoritative": False,
                 "source_of_truth": "records/*.jsonl",
-                "editing_source": "knowledge/**/*.yaml",
+                "authoring_format": "legacy_yaml_import",
             },
         }
     finally:
@@ -243,7 +243,7 @@ def _insert_read_model_metadata(conn: sqlite3.Connection) -> None:
         "artifact_kind": "generated_read_model",
         "authoritative": "false",
         "source_of_truth": "records/*.jsonl",
-        "editing_source": "knowledge/**/*.yaml",
+        "authoring_format": "legacy_yaml_import",
         "bundle_kind": "sap_fo_context_bundle",
         "rebuild_command": "uv run sap-agent-context build-index",
         "write_back_allowed": "false",

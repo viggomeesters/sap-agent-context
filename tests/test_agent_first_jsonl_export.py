@@ -17,7 +17,7 @@ def test_export_agent_records_writes_typed_jsonl_files(tmp_path: Path) -> None:
     report = export_agent_records(load_items(ROOT), tmp_path / "records", root=ROOT)
 
     assert report["status"] == "exported"
-    assert report["source"] == "knowledge/**/*.yaml"
+    assert report["legacy_authoring_source"] == "knowledge/**/*.yaml"
     assert report["canonical_target"] == "records/*.jsonl"
     for name in [
         "apps",

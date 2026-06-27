@@ -12,10 +12,11 @@ LEDGER = ROOT / "docs/sdp-pattern-adoption-ledger.md"
 
 def test_identity_alias_relation_contract_declares_ssot_and_derived_boundary() -> None:
     data = yaml.safe_load(CONTRACT.read_text(encoding="utf-8"))
-    assert data["source_of_truth"] == "yaml_context"
+    assert data["source_of_truth"] == "jsonl_records"
     assert data["provenance"]["copied_code"] is False
     assert data["provenance"]["copied_data"] is False
-    assert "knowledge/**/*.yaml" in data["read_model_boundary"]["authoritative"]
+    assert data["read_model_boundary"]["authoritative"] == "records/*.jsonl"
+    assert data["read_model_boundary"]["legacy_authoring_import"] == "knowledge/**/*.yaml"
     assert any("build/" in value for value in data["read_model_boundary"]["derived"])
 
 

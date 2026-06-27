@@ -62,7 +62,7 @@ def export_agent_records(
     *,
     root: Path,
 ) -> dict[str, Any]:
-    """Export current YAML knowledge items into agent-first JSONL record files."""
+    """Import legacy YAML authoring items into agent-first JSONL record files."""
     output_dir.mkdir(parents=True, exist_ok=True)
     grouped: dict[str, list[dict[str, Any]]] = {name: [] for name in RECORD_FILES}
 
@@ -80,7 +80,7 @@ def export_agent_records(
 
     return {
         "status": "exported",
-        "source": "knowledge/**/*.yaml",
+        "legacy_authoring_source": "knowledge/**/*.yaml",
         "canonical_target": "records/*.jsonl",
         "output_dir": str(output_dir),
         "files": len(RECORD_FILES),

@@ -1,7 +1,7 @@
 version: 1
 name: sap-agent-context coverage classification model
 status: active
-source_of_truth: yaml_context
+source_of_truth: jsonl_records
 provenance:
   adopted_from_pattern: sdp_object_template_coverage_classification
   copied_code: false
@@ -73,4 +73,4 @@ report_contract:
   generated_from_must_reference:
     - schema/completeness-matrix.yaml
     - schema/sap-agent-context-v0.2-coverage.yaml
-    - knowledge/**/*.yaml
+    - records/*.jsonl

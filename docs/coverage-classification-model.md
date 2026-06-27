@@ -27,4 +27,4 @@ Coverage reports and future read models should make these dimensions explicit:
 
 ## Boundary
 
-The classification model is a contract for generated reports and gates. It does not import SDP coverage rows and it does not make generated reports authoritative. YAML context and schema files remain the source of truth.
+The classification model is a contract for generated reports and gates. It does not import SDP coverage rows and it does not make generated reports authoritative. The JSONL records under `records/*.jsonl` are the canonical agent record surface; YAML is only a legacy authoring/import format.

@@ -3,7 +3,7 @@
 ## Unreleased
 
 - Add generated read-model metadata to rebuildable SQLite indexes so runtime artifacts self-identify as derived/non-authoritative.
-- Add SDP pattern adoption ledger to document public-safe pattern provenance, rejected private-data copying, and YAML SSOT/read-model boundary.
+- Add SDP pattern adoption ledger to document public-safe pattern provenance, rejected private-data copying, and source/read-model boundary.
 
 All notable changes to this project are documented here.
 

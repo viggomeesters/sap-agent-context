@@ -4,7 +4,7 @@ This contract adapts safe SDP identity/alias/relation patterns for `sap-agent-co
 
 ## Intent
 
-Agents need stable IDs, searchable aliases and explicit relations so context bundles can be generated deterministically and reviewed safely. The canonical source of truth remains YAML context items; generated indexes and reports are derived read models.
+Agents need stable IDs, searchable aliases and explicit relations so context bundles can be generated deterministically and reviewed safely. The canonical source of truth is the JSONL record surface under `records/*.jsonl`; generated indexes and reports are derived read models, and YAML is only a legacy authoring/import format.
 
 ## Identity
 

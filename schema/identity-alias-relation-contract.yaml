@@ -1,7 +1,7 @@
 version: 1
 name: sap-agent-context identity/alias/relation contract
 status: active
-source_of_truth: yaml_context
+source_of_truth: jsonl_records
 provenance:
   adopted_from_pattern: sdp_identity_alias_relation_contracts
   copied_code: false
@@ -22,7 +22,7 @@ contracts:
       sap_role: sap.role.
       access_policy: sap.access-policy.
     rules:
-      - id values are canonical YAML identifiers and must not be rewritten by generated artifacts.
+      - id values are canonical record identifiers and must not be rewritten by generated artifacts.
       - aliases and relations may point to canonical ids, but may not become the canonical id.
       - generated SQLite, JSONL or report outputs are derived read models.
   aliases:
@@ -56,10 +56,11 @@ contracts:
       - keep mapping/defaulting/business-rule context in field_map or decision_rule items.
       - never infer tenant-specific mandatory/optional status from generic context alone.
 read_model_boundary:
-  authoritative: knowledge/**/*.yaml and schema/**/*.yaml
+  authoritative: records/*.jsonl
   derived:
     - build/**/*.json
     - build/**/*.jsonl
     - build/**/*.db
     - generated reports
-  rule: Derived artifacts may accelerate lookup/reporting but must not write back or override YAML SSOT without an ADR.
+  legacy_authoring_import: knowledge/**/*.yaml
+  rule: Derived artifacts may accelerate lookup/reporting but must not write back or override JSONL records without an ADR.

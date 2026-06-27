@@ -1,27 +1,51 @@
 # JSONL record surface
 
-SAP Agent Context follows the JSONL-vault-spike principle where it matters for
-agent use: **records-first**, source-backed, generated runtime views, and no
-hidden mutation. It is not a pure JSONL-primary vault yet; it is a stricter
-migration layer from curated YAML into typed agent records.
+SAP Agent Context is **JSONL-first** and records-first: `records/*.jsonl` is the
+canonical agent record surface. YAML still exists in the repository only as a
+legacy authoring/import format while older curation workflows are being
+migrated.
 
 ## Current contract
 
 ```text
-YAML knowledge files
-  -> typed records/*.jsonl
+legacy YAML authoring/import files
+  -> records/*.jsonl
   -> build/context.sqlite + FTS5 + vector corpus + embeddings
   -> bounded context bundles and downstream consumers
 ```
 
-- **YAML remains the temporary editing source** until the JSONL record surface is
-  explicitly promoted as the only edit surface.
-- **records/*.jsonl is the deterministic agent-first record surface** for apps,
-  tables, fields, workflows, roles, claims, sources, and relations.
+In source-of-truth terms:
+
+```text
+JSONL -> build/context.sqlite
+```
+
+- **records/*.jsonl is the canonical agent record surface** for apps, tables,
+  fields, workflows, roles, claims, sources, and relations.
+- **YAML is a legacy authoring/import format**, not the source of truth. It may
+  remain temporarily because existing pack-level authoring and some tests still
+  inspect legacy files directly.
 - **build/ is generated runtime output**. It is rebuildable, ignored by Git, and
-  must not become the source of truth.
+  must not become authoritative.
 - Runtime SQLite, FTS5, vector JSONL, and sqlite-vec rows are projections from
   records, not hand-edited state.
+- Do not add new YAML-first source-of-truth language. New docs and gates must
+  describe YAML as legacy import/authoring only.
+
+## Why YAML still exists
+
+YAML remains because pack-level authoring is still more reviewable for humans
+than hand-editing many JSONL lines. That is an implementation convenience, not a
+truth boundary. The durable agent-facing contract is the exported JSONL record
+surface and the generated runtime indexes derived from it.
+
+Practically:
+
+- humans may still edit `knowledge/**/*.yaml` during the migration;
+- `export-jsonl` synchronizes those legacy authoring files into records;
+- build/runtime/evidence contracts must treat `records/*.jsonl` as canonical;
+- if YAML and JSONL diverge, the fix is to resync records or migrate the authoring
+  path, not to call YAML authoritative again.
 
 ## Alignment with JSONL-vault-spike
 
@@ -37,7 +61,7 @@ SAP Agent Context keeps the useful JSONL-vault-spike philosophy:
 - Keep public data source-labelled and access-labelled; customer evidence stays
   outside this public repo.
 
-## Intentional deviations
+## Intentional deviations / compatibility deviations
 
 The latest JSONL-vault-spike naming preference is:
 
@@ -57,7 +81,7 @@ That is intentional for now:
    downstream consumers.
 2. Item records are split by domain file (`apps.jsonl`, `tables.jsonl`,
    `fields.jsonl`, `workflows.jsonl`, `roles.jsonl`) for reviewability while the
-   YAML source is still active.
+   legacy YAML authoring path is still active.
 3. The consumer contract still exposes `bundle_kind: sap_fo_context_bundle` for
    backward compatibility.
 
@@ -66,17 +90,17 @@ by the quality gate.
 
 ## Future migration path
 
-If/when the repo promotes JSONL as the primary edit surface, migrate in this
-order:
+To remove the legacy YAML authoring path entirely, migrate in this order:
 
 1. Add `record_type` to every exported record.
 2. Rename item subtype semantics from `kind` to `sap_context_type` while keeping
    `kind` as a deprecated compatibility alias.
-3. Add a generated or canonical `items.jsonl` projection containing all item
-   records with `record_type: item`.
+3. Add a canonical `items.jsonl` projection containing all item records with
+   `record_type: item`.
 4. Move downstream consumers from `kind` to `sap_context_type`.
-5. Only then remove `kind` from public examples and schemas.
+5. Move authoring tools to write JSONL records directly.
+6. Only then delete or archive legacy YAML authoring files.
 
-Until that migration is planned and tested, do not do a broad schema rename. The
-current goal is a public-safe, source-backed SAP agent context layer, not format
-purity at the cost of consumer stability.
+Until that migration is planned and tested, do not do a broad schema rename or
+mass file-format conversion. The current fix is to make the truth boundary
+honest: JSONL first, YAML legacy import only.
