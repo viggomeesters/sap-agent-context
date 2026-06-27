@@ -60,6 +60,7 @@ def audit_completeness(
     _audit_minimums(findings, items, matrix)
     _audit_domains(findings, items, matrix)
     _audit_representative_queries(findings, items, root, matrix)
+    density_profiles = _audit_domain_density_profiles(findings, items, root, matrix)
 
     critical = [finding for finding in findings if finding.severity == "critical"]
     important = [finding for finding in findings if finding.severity == "important"]
@@ -71,6 +72,7 @@ def audit_completeness(
         "critical": len(critical),
         "important": len(important),
         "later": len(later),
+        "domain_density_profiles": density_profiles,
         "findings": [finding.to_dict() for finding in findings],
     }
 
@@ -307,6 +309,112 @@ def _audit_representative_queries(
                     evidence=f"required={_strings(query.get('required_dimensions'))}",
                 )
             )
+
+
+def _audit_domain_density_profiles(
+    findings: list[CompletenessFinding],
+    items: list[KnowledgeItem],
+    root: Path,
+    matrix: dict[str, Any],
+) -> list[dict[str, Any]]:
+    raw_profiles = matrix.get("domain_density_profiles")
+    profiles = raw_profiles if isinstance(raw_profiles, list) else []
+    reports: list[dict[str, Any]] = []
+    fixture_text = _fixture_text(root)
+    for profile in profiles:
+        if not isinstance(profile, dict):
+            continue
+        profile_id = str(profile.get("id") or "domain")
+        topic_tokens = set(_strings(profile.get("topic_tokens")))
+        domain_items = [
+            item for item in items if topic_tokens.intersection(_normalized_tokens(item.topics))
+        ]
+        kind_counts = _counts_by(domain_items, lambda item: item.kind)
+        source_refs = sum(
+            1
+            for item in domain_items
+            if item.kind == "external_reference" or _source_has_url(item)
+        )
+        eval_hits = sum(1 for token in topic_tokens if token and token in fixture_text)
+        missing = _domain_density_missing(
+            profile,
+            items_count=len(domain_items),
+            kind_counts=kind_counts,
+            source_refs=source_refs,
+            eval_hits=eval_hits,
+        )
+        status = "deep" if not missing else "starter"
+        reports.append(
+            {
+                "id": profile_id,
+                "status": status,
+                "items": len(domain_items),
+                "source_refs": source_refs,
+                "eval_fixture_token_hits": eval_hits,
+                "kind_counts": dict(sorted(kind_counts.items())),
+                "missing": missing,
+                "promotion": str(profile.get("promotion") or "report_only"),
+            }
+        )
+        if missing:
+            severity = "important" if profile.get("promotion") == "required" else "later"
+            findings.append(
+                CompletenessFinding(
+                    severity=severity,
+                    area=f"domain-density:{profile_id}",
+                    message=(
+                        "Domain density profile is starter coverage, not deep "
+                        "implementation-pack coverage."
+                    ),
+                    evidence="; ".join(missing),
+                )
+            )
+    return reports
+
+
+def _domain_density_missing(
+    profile: dict[str, Any],
+    *,
+    items_count: int,
+    kind_counts: dict[str, int],
+    source_refs: int,
+    eval_hits: int,
+) -> list[str]:
+    missing: list[str] = []
+    min_items = int(profile.get("min_items") or 0)
+    min_sources = int(profile.get("min_source_refs") or 0)
+    min_eval_hits = int(profile.get("min_eval_fixture_token_hits") or 0)
+    if items_count < min_items:
+        missing.append(f"items<{min_items} actual={items_count}")
+    if source_refs < min_sources:
+        missing.append(f"source_refs<{min_sources} actual={source_refs}")
+    if eval_hits < min_eval_hits:
+        missing.append(f"eval_fixture_token_hits<{min_eval_hits} actual={eval_hits}")
+    for kind, minimum in _int_mapping(profile.get("required_kind_counts")).items():
+        actual = kind_counts.get(kind, 0)
+        if actual < minimum:
+            missing.append(f"{kind}<{minimum} actual={actual}")
+    return missing
+
+
+def _fixture_text(root: Path) -> str:
+    parts: list[str] = []
+    for relative in [
+        "schema/fo-output-evaluation-fixtures.yaml",
+        "schema/runtime-retrieval-fixtures.yaml",
+        "schema/semantic-model-fixtures.yaml",
+        "schema/adversarial-query-corpus.yaml",
+    ]:
+        path = root / relative
+        if path.exists():
+            parts.append(path.read_text(encoding="utf-8").lower())
+    return "\n".join(parts)
+
+
+def _source_has_url(item: KnowledgeItem) -> bool:
+    source = item.data.get("source") if isinstance(item.data.get("source"), dict) else {}
+    return bool(str(source.get("url") or "").strip())
+
 
 
 def _normalized_tokens(values: list[str]) -> set[str]:

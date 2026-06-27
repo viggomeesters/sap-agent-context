@@ -298,3 +298,45 @@ representative_queries:
   - authorization_role
   - access_policy
   - test_coverage
+
+domain_density_profiles:
+- id: eam_pm_lifecycle
+  title: EAM/PM lifecycle implementation-pack coverage
+  promotion: required
+  topic_tokens:
+  - eam
+  - plant
+  - maintenance
+  - maintenance-plan
+  - task-list
+  - measuring-point
+  - counter
+  - work-center
+  - settlement
+  min_items: 100
+  min_source_refs: 12
+  min_eval_fixture_token_hits: 8
+  required_kind_counts:
+    external_reference: 4
+    sap_app: 10
+    sap_object: 20
+    fo_pattern: 9
+    decision_rule: 18
+    test_pattern: 11
+- id: analytics_extensibility_candidate
+  title: Analytics/extensibility candidate deepening profile
+  promotion: report_only
+  topic_tokens:
+  - analytics
+  - extensibility
+  - custom
+  - field
+  - reporting
+  min_items: 50
+  min_source_refs: 8
+  min_eval_fixture_token_hits: 4
+  required_kind_counts:
+    external_reference: 5
+    fo_pattern: 2
+    decision_rule: 8
+    test_pattern: 8
