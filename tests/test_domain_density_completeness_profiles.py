@@ -31,16 +31,11 @@ def test_domain_density_profiles_distinguish_deep_from_starter() -> None:
 
 def test_report_only_domain_density_gap_is_later_not_failure() -> None:
     report = audit_completeness(load_items(ROOT), root=ROOT)
-    density_findings = [
-        finding
-        for finding in report["findings"]
-        if finding["area"].startswith("domain-density:")
-    ]
+    profiles = {profile["id"]: profile for profile in report["domain_density_profiles"]}
+    analytics = profiles["analytics_extensibility_candidate"]
 
     assert report["critical"] == 0
     assert report["important"] == 0
-    assert any(
-        finding["severity"] == "later"
-        and finding["area"] == "domain-density:analytics_extensibility_candidate"
-        for finding in density_findings
-    )
+    assert analytics["promotion"] == "report_only"
+    assert analytics["status"] == "deep"
+    assert analytics["missing"] == []

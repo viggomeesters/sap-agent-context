@@ -409,3 +409,194 @@ items:
       - level: negative
         case: Custom field is requested for API/report use but exposure is unverified.
         expected: Interface/report acceptance is blocked until exposure evidence exists.
+
+  - id: sap.pattern.extensibility.custom-field-fo
+    title: Custom field extensibility FO pattern
+    kind: fo_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, fo-pattern, exposure, tenant-boundary]
+    used_for: [fo.field_mapping, fo.business_rules, fo.open_questions, fo.non_goals]
+    summary: >
+      FO pattern for custom-field extensibility: keep business context, UI/API/report
+      exposure, publish status, owner and regression impact explicit before treating
+      the field as usable.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Custom-field FO sections should ask for tenant evidence before claiming a field exists or is exposed.
+        evidence: [sap.field-map.custom-field-exposure-readiness, sap.rule.custom-field-tenant-boundary]
+    relations:
+      objects: [sap.object.custom-field-extension]
+      field_maps: [sap.field-map.custom-field-exposure-readiness]
+      decision_rules: [sap.rule.custom-field-tenant-boundary, sap.rule.custom-field-report-exposure-fail-closed]
+      test_patterns: [sap.test-pattern.custom-field-exposure-regression]
+    required_questions:
+      - Which business context owns the custom field?
+      - Which UI, API, form, report or analytical query must expose it?
+      - Is the field published and visible in the target tenant and role?
+      - What regression scope proves existing reporting or interfaces still work?
+    assumptions:
+      - Public context can describe the extensibility pattern, not tenant field IDs.
+      - Exposure targets can differ between UI, API and analytics surfaces.
+    non_goals:
+      - Do not invent custom field technical names, CDS extensions or tenant publication state.
+      - Do not claim complete SAP extensibility coverage from this bounded slice.
+    validation_notes:
+      - FO output is ready only when tenant evidence proves business context, exposure and publish status.
+
+  - id: sap.pattern.analytics.reporting-fo
+    title: Analytics reporting FO pattern
+    kind: fo_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, kpi, fo-pattern, filter, freshness]
+    used_for: [fo.field_mapping, fo.business_rules, fo.open_questions, fo.non_goals]
+    summary: >
+      FO pattern for analytics/reporting: separate KPI intent from source query,
+      measure formula, filter semantics, authorization, freshness and export path.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Analytics FO sections should fail closed when query source, filter, formula or freshness evidence is missing.
+        evidence: [sap.field-map.analytics-report-readiness, sap.rule.analytics-reporting-readiness]
+    relations:
+      objects: [sap.object.analytics-query]
+      field_maps: [sap.field-map.analytics-report-readiness]
+      decision_rules: [sap.rule.analytics-reporting-readiness, sap.rule.analytics-kpi-source-fail-closed]
+      test_patterns: [sap.test-pattern.analytics-report-filter-freshness]
+    required_questions:
+      - Which query/report or data source backs the KPI?
+      - Which measures, dimensions and filters define the business result?
+      - Which roles can see the data and drilldowns?
+      - What refresh or extraction timing is acceptable for the process?
+    assumptions:
+      - KPI labels alone are not evidence of a usable report or analytical query.
+      - Authorization and freshness can change whether a report is acceptable for FO use.
+    non_goals:
+      - Do not invent report variants, CDS view names or customer KPI formulas.
+      - Do not treat a generic executive dashboard request as ready without source and filter proof.
+    validation_notes:
+      - FO output is ready only when source query, filters, formula, role and freshness evidence are explicit.
+
+  - id: sap.rule.custom-field-report-exposure-fail-closed
+    title: Custom field report/API exposure fail-closed rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, reporting, api-exposure, fail-closed]
+    used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Fail-closed rule for custom fields that must appear in reports, APIs or forms:
+      design intent is not enough without tenant exposure evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Report/API use of custom fields requires explicit exposure proof before FO acceptance.
+        evidence: [sap.pattern.extensibility.custom-field-fo]
+    relations:
+      fo_patterns: [sap.pattern.extensibility.custom-field-fo]
+      field_maps: [sap.field-map.custom-field-exposure-readiness]
+    rules:
+      - if: custom field is requested for analytics or API use but exposure target is unknown
+        then: ask for target app/API/report evidence
+        outcome: FO remains needs-curation for exposure behavior
+      - if: field is published for UI only but report/API use is requested
+        then: block report/interface readiness until exposure is proven
+        outcome: prevents hallucinated cross-surface availability
+      - if: field exposure and publish status are tenant-verified
+        then: include the field in mapping and regression test scope
+        outcome: FO can cite the tenant evidence boundary
+
+  - id: sap.rule.analytics-kpi-source-fail-closed
+    title: Analytics KPI source fail-closed rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, kpi, filter, freshness, fail-closed]
+    used_for: [fo.business_rules, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Fail-closed rule for analytics/KPI requests where source query, formula,
+      filter semantics or freshness are missing.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Generic dashboard requests should not become ready FO output without source query, formula, filter and freshness evidence.
+        evidence: [sap.pattern.analytics.reporting-fo]
+    relations:
+      fo_patterns: [sap.pattern.analytics.reporting-fo]
+      field_maps: [sap.field-map.analytics-report-readiness]
+    rules:
+      - if: KPI/report title is known but query source is missing
+        then: ask for query/report evidence and keep output bounded
+        outcome: prevents fake-ready analytics guidance
+      - if: filters or formula are missing
+        then: ask for measure, dimension, filter and aggregation evidence
+        outcome: report semantics remain explicit
+      - if: freshness timing affects decisions but is not known
+        then: ask for refresh/extraction evidence
+        outcome: FO acceptance includes timing caveats
+
+  - id: sap.test-pattern.custom-field-exposure-regression
+    title: Custom field exposure regression test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [extensibility, custom-fields, exposure, regression, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, fo.field_mapping]
+    summary: >
+      Test pattern for proving a custom field is visible in the required UI/API/report
+      surface and does not break existing reports or integrations.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Custom-field exposure tests should cover UI/API/report visibility and publish-state regression.
+        evidence: [sap.rule.custom-field-report-exposure-fail-closed]
+    relations:
+      fo_patterns: [sap.pattern.extensibility.custom-field-fo]
+      decision_rules: [sap.rule.custom-field-report-exposure-fail-closed]
+    test_scenarios:
+      - level: positive
+        case: Tenant evidence shows field published and exposed to the target report/API.
+        expected: FO maps the field and includes regression coverage.
+      - level: negative
+        case: Field exists in design notes but exposure target is unverified.
+        expected: FO blocks report/API readiness and asks for evidence.
+
+  - id: sap.test-pattern.analytics-report-filter-freshness
+    title: Analytics report filter and freshness test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [analytics, reporting, kpi, filter, freshness, test-scenarios]
+    used_for: [fo.test_scenarios, fo.quality_gate, fo.business_rules]
+    summary: >
+      Test pattern for analytics/reporting FO sections: source query, KPI formula,
+      filters, authorization and refresh timing must be proven before acceptance.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Analytics reporting tests should prove query source, filters, authorization and data freshness.
+        evidence: [sap.rule.analytics-kpi-source-fail-closed]
+    relations:
+      fo_patterns: [sap.pattern.analytics.reporting-fo]
+      decision_rules: [sap.rule.analytics-kpi-source-fail-closed]
+    test_scenarios:
+      - level: positive
+        case: Query source, KPI formula, filters, role and freshness are all verified.
+        expected: FO can mark the report scenario ready.
+      - level: negative
+        case: Dashboard title is known but query, formula or refresh timing is missing.
+        expected: FO remains needs-curation with explicit follow-up questions.

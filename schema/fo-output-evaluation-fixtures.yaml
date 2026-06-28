@@ -178,12 +178,13 @@ fixtures:
   intent: fo.business_rules
   topic: custom field tenant boundary exposure analytics reporting readiness filter freshness
   sap_product: s4hana_cloud_public
-  limit: 12
+  limit: 40
   expected_status: ready
   required_access_labels:
   - internal_derived
   - public
   required_kinds:
+  - fo_pattern
   - sap_object
   - field_map
   - decision_rule
@@ -194,6 +195,11 @@ fixtures:
   - sap.rule.custom-field-tenant-boundary
   - sap.rule.analytics-reporting-readiness
   - sap.test-pattern.extensibility-analytics-readiness
+  - sap.pattern.extensibility.custom-field-fo
+  - sap.pattern.analytics.reporting-fo
+  - sap.rule.custom-field-report-exposure-fail-closed
+  - sap.rule.analytics-kpi-source-fail-closed
+  - sap.test-pattern.analytics-report-filter-freshness
 - id: generic_executive_dashboard_needs_curation
   intent: fo.analytics
   topic: generic executive dashboard performance report

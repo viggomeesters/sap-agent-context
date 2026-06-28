@@ -63,3 +63,19 @@ fixtures:
       - - sap.pattern.eam.pm-confirmation-teco-settlement-fo
         - sap.rule.eam.pm-confirmation-teco-settlement-fail-closed
         - sap.object.eam-settlement-caveat
+  - id: nl_custom_field_analytics_exposure
+    language: nl
+    query: Welke vragen moet ik stellen voor custom field exposure in analytics en API rapportage?
+    limit: 40
+    required_any:
+      - - sap.pattern.extensibility.custom-field-fo
+        - sap.rule.custom-field-report-exposure-fail-closed
+        - sap.field-map.custom-field-exposure-readiness
+  - id: en_analytics_kpi_filter_freshness
+    language: en
+    query: Which KPI source query filter and freshness evidence is needed for reporting?
+    limit: 40
+    required_any:
+      - - sap.pattern.analytics.reporting-fo
+        - sap.rule.analytics-kpi-source-fail-closed
+        - sap.field-map.analytics-report-readiness

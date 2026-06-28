@@ -49,3 +49,14 @@ fixtures:
       kind: fo_pattern
     required_ids:
       - sap.pattern.eam.pm-confirmation-teco-settlement-fo
+  - id: analytics_extensibility_custom_field_runtime
+    query: custom field business context publish status app tenant evidence
+    limit: 24
+    required_ids:
+      - sap.app.custom-fields-and-logic-context
+  - id: analytics_reporting_kpi_runtime
+    query: analytics reporting KPI source query filter freshness report readiness
+    limit: 24
+    required_ids:
+      - sap.field-map.analytics-report-readiness
+      - sap.app-analytics-reporting-context
