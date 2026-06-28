@@ -152,6 +152,10 @@ completed EAM/PM lifecycle slice and defines the required source references, FO
 patterns, decision rules, tests, fixtures, and bounded thresholds for a named
 slice without claiming exhaustive SAP coverage.
 
+The next-step product direction is captured in the
+[Product vision](docs/vision.md): a cloneable, local-first SAP context runtime
+that turns source-labelled knowledge into verifiable agent context bundles.
+
 ## Development
 
 Run the full local quality gate:
