@@ -1,0 +1,164 @@
+# Deep domain pack template for sap-agent-context.
+#
+# This is a reusable authoring contract, not a real domain pack. Copy the shape
+# into a new knowledge/domain-packs/<domain>-<slice>-pack.yaml file, replace the
+# sample ids/topics/thresholds, and keep the public-safety caveats.
+#
+# A completed profile proves bounded implementation-pack coverage for the named
+# slice only. It must not be presented as exhaustive SAP product coverage.
+template_id: deep-domain-pack-template.v1
+derived_from:
+  exemplar_slice: eam_pm_lifecycle
+  exemplar_files:
+    - knowledge/domain-packs/eam-pm-lifecycle-spine-pack.yaml
+    - knowledge/domain-packs/eam-pm-lifecycle-fo-patterns-pack.yaml
+    - schema/completeness-matrix.yaml
+    - schema/fo-output-evaluation-fixtures.yaml
+    - schema/runtime-retrieval-fixtures.yaml
+    - schema/semantic-model-fixtures.yaml
+  rationale: >-
+    EAM/PM lifecycle is the first bounded slice that combines link-first source
+    references, domain anchors, FO patterns, fail-closed decision rules, test
+    patterns, eval/retrieval fixtures, and domain-density thresholds.
+public_safety:
+  claim_boundary: >-
+    Meeting this template proves bounded implementation-pack coverage for the
+    named domain slice only; it is not exhaustive SAP product coverage.
+  allowed_sources:
+    - public_url
+    - gated_pointer
+    - internal_pattern
+  forbidden_content:
+    - customer/client names
+    - SAP screenshots or exports
+    - internal URLs, tickets, project IDs, or proprietary mappings
+    - copied proprietary SAP documentation
+    - secrets, credentials, cookies, .env files, or private keys
+required_sections:
+  source_references:
+    description: Link-first source registry for public/gated/internal-derived evidence.
+    minimum: 2
+    required_fields: [id, title, kind, access, source, freshness, claims]
+    exemplar_ids:
+      - sap.ref.eam.pm.sap-help-task-list-display
+      - sap.ref.eam.pm.sap-help-lifecycle-search
+  domain_anchors:
+    description: Domain object/app/surface anchors that later patterns and rules can cite.
+    minimum: 6
+    required_kinds: [sap_object, sap_app]
+    required_relations: [source_references, related_objects]
+    exemplar_ids:
+      - sap.object.eam-maintenance-plan
+      - sap.object.eam-task-list
+      - sap.app.eam.pm.ip10
+  fo_patterns:
+    description: FO-useful process/field/rule scaffolds with questions, assumptions, non-goals and validation notes.
+    minimum: 3
+    required_fields: [required_questions, assumptions, non_goals, validation_notes]
+    exemplar_ids:
+      - sap.pattern.eam.pm-task-list-plan-fo
+      - sap.pattern.eam.pm-measuring-point-counter-fo
+  decision_rules:
+    description: Fail-closed rules that block hallucinated tenant-specific behavior.
+    minimum: 3
+    required_fields: [rules, claims, relations]
+    required_rule_fields: [if, then, outcome]
+    exemplar_ids:
+      - sap.rule.eam.pm-task-list-plan-tenant-questions
+      - sap.rule.eam.pm-measuring-point-counter-fail-closed
+  test_patterns:
+    description: Test/acceptance scaffolds tied to the domain anchors and FO patterns.
+    minimum: 2
+    required_fields: [used_for, claims, relations]
+    exemplar_topics: [fo.test_scenarios, quality_gate]
+  eval_fixtures:
+    description: FO-output fixtures that prove the slice can be retrieved and used by FO generation checks.
+    minimum: 2
+    required_files:
+      - schema/fo-output-evaluation-fixtures.yaml
+    required_fields: [id, intent, topic, expected_ids]
+  retrieval_fixtures:
+    description: Runtime retrieval checks for lexical/vector/runtime recall.
+    minimum: 1
+    required_files:
+      - schema/runtime-retrieval-fixtures.yaml
+    required_fields: [id, query, expected_ids]
+  semantic_fixtures:
+    description: Multilingual or vocabulary-bridging fixtures for semantic retrieval.
+    minimum: 1
+    required_files:
+      - schema/semantic-model-fixtures.yaml
+    required_fields: [id, query, expected_ids]
+  domain_density_profile:
+    description: Bounded completeness threshold in schema/completeness-matrix.yaml.
+    required_fields:
+      - id
+      - title
+      - promotion
+      - topic_tokens
+      - min_items
+      - min_source_refs
+      - min_eval_fixture_token_hits
+      - required_kind_counts
+    promotion_policy:
+      report_only: Missing dimensions create later findings and should not fail starter coverage.
+      required: Missing dimensions create important findings and fail audit-completeness.
+sample_domain_profile:
+  id: sample_reporting_slice
+  title: Sample reporting/extensibility slice template proof
+  promotion: report_only
+  topic_tokens: [reporting, extensibility, custom-field]
+  min_items: 12
+  min_source_refs: 2
+  min_eval_fixture_token_hits: 2
+  required_kind_counts:
+    external_reference: 2
+    sap_object: 3
+    fo_pattern: 2
+    decision_rule: 3
+    test_pattern: 2
+sample_pack_skeleton:
+  pack_id: sample-reporting-slice-pack
+  title: Sample reporting slice pack skeleton
+  description: >-
+    Replace this skeleton with a real bounded slice. Keep source references,
+    tenant caveats, FO questions, fail-closed rules, tests and fixtures together.
+  ownership:
+    owner: sap-agent-context
+    review_strategy: Public/gated/internal-derived evidence must be labelled and tenant-specific behavior must fail closed.
+  items:
+    - id: sap.ref.sample.reporting.public-source
+      kind: external_reference
+      access: public
+      topics: [reporting, extensibility, source-registry]
+      summary: Link-first pointer; do not copy proprietary documentation.
+    - id: sap.object.sample.reporting-anchor
+      kind: sap_object
+      access: internal_derived
+      topics: [reporting, extensibility, custom-field]
+      summary: Sample anchor requiring replacement with real evidence.
+    - id: sap.pattern.sample.reporting-fo
+      kind: fo_pattern
+      topics: [reporting, extensibility, fo-pattern]
+      required_questions:
+        - Which reporting scenario and data source are in scope?
+      assumptions:
+        - The slice is bounded to one named reporting scenario.
+      non_goals:
+        - Do not claim complete analytics/extensibility coverage.
+      validation_notes:
+        - Validate with one source-backed query and one FO-output fixture.
+    - id: sap.rule.sample.reporting-fail-closed
+      kind: decision_rule
+      topics: [reporting, extensibility, tenant-caveat]
+      rules:
+        - if: source system, data source, or extensibility mechanism is missing
+          then: ask for evidence instead of inventing implementation behavior
+          outcome: generated FO content stays bounded and reviewable
+verification_checklist:
+  - Add source-linked YAML items or direct JSONL authoring records.
+  - Export/sync records when the repo still uses YAML authoring for that pack.
+  - Add or update FO-output, runtime retrieval, and semantic fixtures.
+  - Add a domain_density_profiles entry with promotion report_only first.
+  - Promote to required only after thresholds are met and tests prove the profile is deep.
+  - Run uv sync --locked, make check, and git diff --check.

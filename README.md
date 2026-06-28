@@ -145,6 +145,13 @@ Representative bundles are also checked against the
 [Bundle Quality Contract](docs/bundle-quality-contract.md), so completeness is
 not only item-count and knowledge-kind coverage.
 
+For repeatable domain-density work, use the
+[Deep domain pack template](docs/deep-domain-pack-template.md) and
+`examples/deep-domain-pack-template.yaml`. The template is derived from the
+completed EAM/PM lifecycle slice and defines the required source references, FO
+patterns, decision rules, tests, fixtures, and bounded thresholds for a named
+slice without claiming exhaustive SAP coverage.
+
 ## Development
 
 Run the full local quality gate:
