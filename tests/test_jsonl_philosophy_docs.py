@@ -7,6 +7,8 @@ DOC = ROOT / "docs" / "jsonl-record-surface.md"
 README = ROOT / "README.md"
 RUNTIME_DOC = ROOT / "docs" / "local-runtime-index.md"
 MIGRATION_DOC = ROOT / "docs" / "jsonl-migration-boundary.md"
+TRUST_DOC = ROOT / "docs" / "retrieval-trust-boundary.md"
+CONSUMER_DOC = ROOT / "docs" / "agent-consumer-contract.md"
 
 
 def test_jsonl_record_surface_doc_names_alignment_and_deviations() -> None:
@@ -33,6 +35,7 @@ def test_readme_links_jsonl_record_surface_decision() -> None:
 
     assert "docs/jsonl-record-surface.md" in text
     assert "docs/jsonl-migration-boundary.md" in text
+    assert "docs/retrieval-trust-boundary.md" in text
     assert "validate-records --records-dir records" in text
     assert "records-first" in text
     assert "YAML is a legacy authoring/import format" in text
@@ -62,3 +65,23 @@ def test_jsonl_migration_boundary_blocks_generated_artifact_authoring() -> None:
     ]
     for phrase in required_phrases:
         assert phrase in text
+
+
+def test_retrieval_trust_boundary_keeps_consumer_claims_fail_closed() -> None:
+    text = TRUST_DOC.read_text(encoding="utf-8")
+    consumer = CONSUMER_DOC.read_text(encoding="utf-8")
+
+    required_phrases = [
+        "evidence-ranked context, not SAP product truth",
+        "ready",
+        "needs_curation",
+        "report_only",
+        "internal_derived",
+        "source_ids",
+        "claim_ids",
+        "does not mean SAP Agent Context covers all SAP products",
+    ]
+    for phrase in required_phrases:
+        assert phrase in text
+    assert "records/*.jsonl`; `knowledge/**/*.yaml` is a legacy authoring/import path" in consumer
+    assert "Retrieval trust boundary" in consumer

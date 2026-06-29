@@ -81,7 +81,9 @@ uv run sap-agent-context runtime-search "IE03 equipment display" --kind sap_app 
 Runtime artifacts under `build/` are generated from canonical `records/*.jsonl`.
 SQLite + FTS5 is the primary local agent runtime; sqlite-vec is optional and
 local-only. DuckDB is an optional analytics/coverage companion, not the primary
-runtime store. See [Local runtime index](docs/local-runtime-index.md).
+runtime store. See [Local runtime index](docs/local-runtime-index.md) and
+[Retrieval trust boundary](docs/retrieval-trust-boundary.md) for what ranked
+results can and cannot prove.
 
 Generate a context bundle:
 

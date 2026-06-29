@@ -50,7 +50,10 @@ Consumers can read generated JSON bundles directly or register the
   summaries to populate field mapping, object scope, authorization, test, and
   decision-rule sections.
 - Keep generated bundles as rebuildable artifacts. The canonical source remains
-  `knowledge/**/*.yaml`.
+  `records/*.jsonl`; `knowledge/**/*.yaml` is a legacy authoring/import path.
+- Follow the [Retrieval trust boundary](retrieval-trust-boundary.md): do not
+  promote `needs_curation`, `report_only`, gated, expired or `internal_derived`
+  records into customer-specific proof without the required verification.
 
 ## McCoy As Example Consumer
 
