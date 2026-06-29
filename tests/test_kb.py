@@ -104,6 +104,13 @@ def test_context_bundle_selects_supplier_invoice_workflow_items() -> None:
     assert bundle["status"] == "ready"
     assert bundle["producer"]["name"] == "sap-agent-context"
     assert bundle["producer"]["contract"] == "sap-agent-context-bundle"
+    assert bundle["consumer_contract"]["name"] == "sap-agent-context-bundle"
+    assert bundle["consumer_contract"]["version"] == 1
+    assert bundle["consumer_contract"]["status_values"] == ["ready", "needs_curation"]
+    assert "report_only" in bundle["consumer_contract"]["report_only_semantics"]
+    for field in ["status", "items", "citations", "gaps", "quality_signals"]:
+        assert field in bundle["consumer_contract"]["required_consumer_fields"]
+        assert field in bundle
     assert bundle["bundle_kind"] == "sap_fo_context_bundle"
     assert "sap.app.manage-workflows-supplier-invoices" in ids
     assert "sap.field-set.supplier-invoice-routing" in ids

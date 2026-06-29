@@ -61,4 +61,6 @@ McCoy FO Generator v2 can register the bundle folder as a local-folder provider,
 but SAP Agent Context is not coupled to McCoy. Other tools can consume the same
 JSON bundle contract directly.
 
-See `docs/mccoy-fo-generator-v2-hook.md` for the McCoy-specific command example.
+See [Context bundle consumer contract](context-bundle-consumer-contract.md) for
+the field-level JSON contract, and `docs/mccoy-fo-generator-v2-hook.md` for the
+McCoy-specific command example.

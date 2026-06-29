@@ -51,6 +51,22 @@ def build_context_bundle(
     return {
         "schema_version": 1,
         "bundle_kind": "sap_fo_context_bundle",
+        "consumer_contract": {
+            "name": "sap-agent-context-bundle",
+            "version": 1,
+            "status_values": ["ready", "needs_curation"],
+            "report_only_semantics": (
+                "report_only is a slice/profile maturity state, not a final bundle status; "
+                "consumers must not promote it to ready without gates."
+            ),
+            "required_consumer_fields": [
+                "status",
+                "items",
+                "citations",
+                "gaps",
+                "quality_signals",
+            ],
+        },
         "producer": {
             "name": "sap-agent-context",
             "contract": "sap-agent-context-bundle",
