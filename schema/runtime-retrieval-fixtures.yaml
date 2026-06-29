@@ -70,6 +70,21 @@ fixtures:
     limit: 30
     required_ids:
       - sap.app.manage-purchase-requisitions-context
+  - id: focused_procurement_decision_rule_runtime
+    query: decision rule procurement release strategy tenant evidence
+    limit: 12
+    required_top_ids:
+      - sap.rule.procurement-release-strategy-tenant-evidence
+  - id: focused_integration_error_retry_pattern_runtime
+    query: FO pattern integration error retry
+    limit: 12
+    required_top_ids:
+      - sap.pattern.integration-error-retry-fo
+  - id: focused_integration_error_retry_rule_runtime
+    query: decision rule integration error retry
+    limit: 12
+    required_top_ids:
+      - sap.rule.integration-error-retry-fail-closed
   - id: adversarial_generic_dashboard_not_ready
     query: generic executive dashboard every module all KPIs
     limit: 8

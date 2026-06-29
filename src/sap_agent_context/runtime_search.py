@@ -39,8 +39,10 @@ def search_runtime_index(
     if not match_query and query_vector is None:
         return []
 
+    candidate_limit = max(limit * 10, 100)
     item_rows: list[sqlite3.Row] = []
     exact_item_rows: list[sqlite3.Row] = []
+    focused_item_rows: list[sqlite3.Row] = []
     claim_rows: list[sqlite3.Row] = []
     if match_query:
         with sqlite3.connect(sqlite_path) as conn:
@@ -61,9 +63,10 @@ def search_runtime_index(
                 WHERE item_fts MATCH ?
                 LIMIT ?
                 """,
-                (match_query, max(limit * 4, 20)),
+                (match_query, candidate_limit),
             ).fetchall()
-            exact_item_rows = _exact_item_rows(conn, exact_terms, max(limit * 4, 20))
+            exact_item_rows = _exact_item_rows(conn, exact_terms, candidate_limit)
+            focused_item_rows = _focused_item_rows(conn, tokens, max(limit * 2, 20))
             claim_rows = conn.execute(
                 """
                 SELECT
@@ -80,11 +83,12 @@ def search_runtime_index(
                 WHERE claim_fts MATCH ?
                 LIMIT ?
                 """,
-                (match_query, max(limit * 2, 10)),
+                (match_query, max(limit * 4, 40)),
             ).fetchall()
 
     results = [
-        _ranked(row, tokens, exact_terms) for row in [*item_rows, *exact_item_rows, *claim_rows]
+        _ranked(row, tokens, exact_terms)
+        for row in [*item_rows, *exact_item_rows, *focused_item_rows, *claim_rows]
     ]
     if query_vector is not None:
         vector_hits = search_runtime_vectors(
@@ -155,6 +159,43 @@ def _exact_item_rows(
     ).fetchall()
 
 
+def _focused_item_rows(
+    conn: sqlite3.Connection,
+    tokens: list[str],
+    limit: int,
+) -> list[sqlite3.Row]:
+    token_set = {token.lower() for token in tokens}
+    if not ({"fo", "pattern", "decision", "rule", "fail", "closed"} & token_set):
+        return []
+    signal_terms = [
+        token
+        for token in tokens
+        if len(token) >= 5 and token.lower() not in {"decision", "pattern"}
+    ][:6]
+    if len(signal_terms) < 3:
+        return []
+    predicates = ["items.payload_json LIKE ?" for _ in signal_terms]
+    params = [f"%{term}%" for term in signal_terms]
+    params.append(str(limit))
+    return conn.execute(
+        f"""
+        SELECT
+          items.id,
+          items.title,
+          items.kind,
+          items.summary AS text,
+          'item_focus' AS source,
+          0.0 AS bm25_score,
+          items.payload_json AS search_text,
+          items.payload_json AS payload_json
+        FROM items
+        WHERE {' AND '.join(predicates)}
+        LIMIT ?
+        """,
+        params,
+    ).fetchall()
+
+
 def _ranked(row: sqlite3.Row, tokens: list[str], exact_terms: list[str]) -> dict[str, Any]:
     text = " ".join(str(row[key] or "") for key in ["id", "title", "text", "search_text"])
     haystack = text.lower()
@@ -162,17 +203,21 @@ def _ranked(row: sqlite3.Row, tokens: list[str], exact_terms: list[str]) -> dict
     bm25_score = float(row["bm25_score"] or 0.0)
     source_boost = 100 if str(row["source"]).startswith("item_") else 0
     payload = _json_payload(str(row["payload_json"] or ""))
+    kind = str(row["kind"])
+    item_id = str(row["id"])
+    focus_boost = _focus_boost(tokens, kind, item_id)
     claim_ids = _claim_ids(row, payload)
     source_ids = _source_ids(row, payload)
     result = {
-        "id": str(row["id"]),
+        "id": item_id,
         "title": str(row["title"]),
-        "kind": str(row["kind"]),
+        "kind": kind,
         "text": str(row["text"]),
         "source": str(row["source"]),
         "exact_token_hits": exact_hits,
         "bm25_score": bm25_score,
-        "score": exact_hits * 1000 + source_boost - bm25_score,
+        "focus_boost": focus_boost,
+        "score": exact_hits * 1000 + source_boost + focus_boost - bm25_score,
         "claim_ids": claim_ids,
         "source_ids": source_ids,
         "metadata": payload,
@@ -193,6 +238,7 @@ def _vector_ranked(hit: dict[str, Any], tokens: list[str]) -> dict[str, Any]:
     distance = float(hit.get("distance") or 0.0)
     result_id = str(hit.get("item_id") or hit.get("claim_id") or canonical_id)
     kind = str(metadata.get("kind") or record_type)
+    focus_boost = _focus_boost(tokens, kind, result_id)
     source_ids = _strings(metadata.get("evidence_ids") or metadata.get("source_ids"))
     result = {
         "id": result_id,
@@ -203,7 +249,8 @@ def _vector_ranked(hit: dict[str, Any], tokens: list[str]) -> dict[str, Any]:
         "exact_token_hits": 0,
         "bm25_score": 0.0,
         "vector_distance": distance,
-        "score": 120 - distance,
+        "focus_boost": focus_boost,
+        "score": 120 + focus_boost - distance,
         "claim_ids": [str(hit["claim_id"])] if hit.get("claim_id") else [],
         "source_ids": source_ids,
         "metadata": metadata,
@@ -238,6 +285,7 @@ def _explain_result(
         "exact_terms": exact_terms,
         "exact_token_hits": result.get("exact_token_hits", 0),
         "bm25_score": result.get("bm25_score", 0.0),
+        "focus_boost": result.get("focus_boost", 0.0),
         "access": metadata.get("access", ""),
         "freshness": metadata.get("freshness", {}),
         "source_ids": result.get("source_ids", []),
@@ -247,6 +295,20 @@ def _explain_result(
         explain["vector_distance"] = vector_distance
         explain["vector_model"] = vector_model
     return explain
+
+
+def _focus_boost(tokens: list[str], kind: str, item_id: str) -> float:
+    token_set = {token.lower() for token in tokens}
+    boost = 0.0
+    if kind == "fo_pattern" and ({"fo", "pattern"} & token_set):
+        boost += 45.0
+    if kind == "decision_rule" and ({"decision", "rule", "fail", "closed"} & token_set):
+        boost += 45.0
+    if kind == "test_pattern" and ({"test", "scenario", "probe"} & token_set):
+        boost += 30.0
+    if item_id.startswith("sap.bulk.") and ({"fo", "pattern", "decision", "rule"} & token_set):
+        boost -= 25.0
+    return boost
 
 
 def _json_payload(raw: str) -> dict[str, Any]:

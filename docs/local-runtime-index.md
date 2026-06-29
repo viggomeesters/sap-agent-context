@@ -115,6 +115,12 @@ available, access label, freshness metadata, source IDs and claim IDs. That shap
 is intended to be consumable by bundle generation while keeping the existing
 `sap_fo_context_bundle` output backward compatible.
 
+Focused FO/rule queries use a small ranking boost for `fo_pattern`,
+`decision_rule`, and `test_pattern` records, plus a focused payload fallback for
+multi-term domain queries such as procurement release strategy and integration
+retry rules. Generic `sap.bulk.*` anchors are lightly down-ranked for those
+focused queries so starter/bulk records do not hide the deeper pattern or rule.
+
 ## Public boundary
 
 This repository is public-safe only when it stays generic and source-backed.

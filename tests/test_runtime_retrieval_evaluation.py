@@ -27,11 +27,14 @@ def test_runtime_retrieval_fixtures_pass(tmp_path: Path) -> None:
     report = evaluate_runtime_retrieval(root=ROOT, sqlite_path=_index_path(tmp_path))
 
     assert report["status"] == "passed"
-    assert report["fixtures"] >= 15
+    assert report["fixtures"] >= 18
     ids = {result["id"] for result in report["results"]}
     assert "exact_transaction_ie03" in ids
     assert "semantic_display_equipment_master" in ids
     assert "evidence_citations_ie03_status" in ids
+    assert "focused_procurement_decision_rule_runtime" in ids
+    assert "focused_integration_error_retry_pattern_runtime" in ids
+    assert "focused_integration_error_retry_rule_runtime" in ids
     assert "adversarial_generic_dashboard_not_ready" in ids
     assert "adversarial_invented_tenant_field_not_authoritative" in ids
     assert "adversarial_unrelated_hr_payroll_module_no_eam_ready_context" in ids
