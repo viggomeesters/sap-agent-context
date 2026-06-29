@@ -17,6 +17,11 @@ from sap_agent_context.domain_density import (
 )
 from sap_agent_context.evaluation import evaluate_fo_output_fixtures
 from sap_agent_context.index import build_indexes
+from sap_agent_context.maturity import (
+    build_maturity_report,
+    render_maturity_markdown,
+    write_maturity_report,
+)
 from sap_agent_context.repository import load_items
 from sap_agent_context.runtime_embeddings import (
     DEFAULT_EMBEDDING_DIMENSION,
@@ -48,6 +53,15 @@ def build_parser() -> argparse.ArgumentParser:
     heatmap = subparsers.add_parser("domain-density-heatmap")
     heatmap.add_argument("--output", type=Path)
     heatmap.add_argument(
+        "--format",
+        choices=["json", "markdown"],
+        default="json",
+        help="render as JSON for machines or Markdown for docs/review",
+    )
+
+    maturity = subparsers.add_parser("maturity-report")
+    maturity.add_argument("--output", type=Path)
+    maturity.add_argument(
         "--format",
         choices=["json", "markdown"],
         default="json",
@@ -233,6 +247,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             write_heatmap(payload, _resolve_output(root, args.output), args.format)
         if args.format == "markdown":
             print(render_heatmap_markdown(payload), end="")
+        else:
+            print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0
+
+    if args.command == "maturity-report":
+        items = load_items(root)
+        payload = build_maturity_report(items, root=root)
+        if args.output:
+            write_maturity_report(payload, _resolve_output(root, args.output), args.format)
+        if args.format == "markdown":
+            print(render_maturity_markdown(payload), end="")
         else:
             print(json.dumps(payload, indent=2, sort_keys=True, default=str))
         return 0

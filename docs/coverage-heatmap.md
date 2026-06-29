@@ -47,3 +47,17 @@ Total items: `666`
 - `records/*.jsonl` remains the canonical agent record surface.
 - YAML is legacy authoring/import format only.
 - This heatmap should guide filling; it must not become a fake exhaustive SAP completeness claim.
+
+## Maturity report
+
+Run:
+
+```bash
+uv run sap-agent-context maturity-report --format markdown --output docs/maturity-report.md
+```
+
+The maturity report maps observed domains and declared density profiles to the
+same deep-domain template dimensions: source references, domain anchors, FO
+patterns, decision rules, test patterns, and runtime/evaluation coverage. It
+separates `required`, `report_only`, and `needs_curation` states; it remains a
+planning signal, not an exhaustive SAP product truth claim.
