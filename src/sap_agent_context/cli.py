@@ -98,6 +98,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="write records without validating them against schema/*.schema.json",
     )
 
+    validate_records = subparsers.add_parser("validate-records")
+    validate_records.add_argument("--records-dir", type=Path, default=Path(DEFAULT_RECORDS_DIR))
+
     query = subparsers.add_parser("query")
     query.add_argument("--intent", required=True)
     query.add_argument("--topic", required=True)
@@ -205,6 +208,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(payload, indent=2, sort_keys=True, default=str))
         schema_validation = payload.get("schema_validation", {"status": "passed"})
         return 0 if schema_validation["status"] == "passed" else 1
+
+    if args.command == "validate-records":
+        records_dir = _resolve_output(root, args.records_dir)
+        payload = validate_agent_records(records_dir, schema_dir=root / "schema")
+        payload["records_dir"] = str(records_dir)
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0 if payload["status"] == "passed" else 1
 
     if args.command == "audit-completeness":
         items = load_items(root)

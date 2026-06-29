@@ -405,10 +405,18 @@ def _validate_record(
     line_number: int,
 ) -> list[dict[str, str]]:
     issues: list[dict[str, str]] = []
+    record_id = str(record.get("id") or "<missing id>")
+    location = f"line {line_number} record {record_id}"
     required = schema.get("required") if isinstance(schema.get("required"), list) else []
     for field in required:
         if field not in record:
-            issues.append({"path": str(path), "message": f"line {line_number}: missing {field}"})
+            issues.append(
+                {
+                    "path": str(path),
+                    "id": record_id,
+                    "message": f"{location}: missing {field}",
+                }
+            )
     properties = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
     for field, rules in properties.items():
         if field not in record or not isinstance(rules, dict):
@@ -419,18 +427,27 @@ def _validate_record(
             issues.append(
                 {
                     "path": str(path),
-                    "message": f"line {line_number}: {field} must be {expected_type}",
+                    "id": record_id,
+                    "message": f"{location}: {field} must be {expected_type}",
                 }
             )
         enum = rules.get("enum")
         if isinstance(enum, list) and value not in enum:
             issues.append(
-                {"path": str(path), "message": f"line {line_number}: {field} must be one of {enum}"}
+                {
+                    "path": str(path),
+                    "id": record_id,
+                    "message": f"{location}: {field} must be one of {enum}",
+                }
             )
         has_min_items = rules.get("minItems") and isinstance(value, list)
         if has_min_items and len(value) < int(rules["minItems"]):
             issues.append(
-                {"path": str(path), "message": f"line {line_number}: {field} must not be empty"}
+                {
+                    "path": str(path),
+                    "id": record_id,
+                    "message": f"{location}: {field} must not be empty",
+                }
             )
     return issues
 
