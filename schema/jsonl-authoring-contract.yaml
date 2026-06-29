@@ -1,0 +1,134 @@
+schema_version: 1
+id: jsonl-authoring-contract.v1
+status: active
+source_of_truth: records/*.jsonl
+legacy_authoring_import: knowledge/**/*.yaml
+compatibility_boundary:
+  current_authoring_format: legacy_yaml_import
+  canonical_agent_surface: records/*.jsonl
+  generated_read_models:
+    - build/context.sqlite
+    - build/vector-corpus.jsonl
+    - sqlite_vec tables
+  deletion_policy: >-
+    Do not delete or mass-convert legacy YAML until JSONL-native authoring,
+    roundtrip checks and downstream consumer migration are implemented.
+required_record_files:
+  apps: apps.jsonl
+  tables: tables.jsonl
+  fields: fields.jsonl
+  workflows: workflows.jsonl
+  roles: roles.jsonl
+  claims: claims.jsonl
+  sources: sources.jsonl
+  relations: relations.jsonl
+common_requirements:
+  stable_ids:
+    required: true
+    rule: IDs are durable, lowercase, namespaced and safe to reference from claims, relations and fixtures.
+  provenance:
+    required: true
+    fields:
+      - source_ids
+      - source_path
+      - evidence_ids
+      - source.kind
+      - source.title
+      - source.url
+      - source.license_note
+  access_labels:
+    required: true
+    allowed:
+      - public
+      - gated
+      - internal_derived
+  freshness:
+    required: true
+    fields:
+      - valid_from
+      - review_after
+      - expires_at
+      - retrieved_at
+  compatibility_aliases:
+    kind: >-
+      Current compatibility field for item subtype. Future migration may add
+      record_type and sap_context_type, but kind remains required until downstream
+      consumers move.
+record_types:
+  item:
+    files:
+      - apps.jsonl
+      - tables.jsonl
+      - fields.jsonl
+      - workflows.jsonl
+      - roles.jsonl
+    required_fields:
+      - id
+      - kind
+      - title
+      - summary
+      - status
+      - access
+      - requires_login
+      - sap_product
+      - topics
+      - used_for
+      - source_path
+      - source_ids
+      - claim_ids
+      - relation_ids
+      - freshness
+      - retrieval
+  claim:
+    files:
+      - claims.jsonl
+    required_fields:
+      - id
+      - subject_id
+      - statement
+      - confidence
+      - evidence_ids
+      - freshness
+      - usage_constraints
+  source:
+    files:
+      - sources.jsonl
+    required_fields:
+      - id
+      - subject_id
+      - kind
+      - title
+      - url
+      - access
+      - requires_login
+      - retrieved_at
+      - specificity
+      - license_note
+  relation:
+    files:
+      - relations.jsonl
+    required_fields:
+      - id
+      - subject_id
+      - type
+      - target_id
+      - source_ids
+jsonl_authoring_rules:
+  - id: jsonl.no_orphan_claims
+    rule: Every claim.subject_id must refer to an item id in an item record file.
+  - id: jsonl.no_orphan_sources
+    rule: Every source.subject_id must refer to an item id in an item record file.
+  - id: jsonl.no_orphan_relations
+    rule: Every relation.subject_id must refer to an item id in an item record file.
+  - id: jsonl.source_label_required
+    rule: Every item must carry source_ids and every source must carry access, specificity and license_note.
+  - id: jsonl.freshness_required
+    rule: Items and claims must carry freshness fields so stale/expired gates remain computable.
+  - id: jsonl.yaml_is_import_only
+    rule: YAML domain packs are allowed as legacy authoring imports but must not be described as the canonical agent record surface.
+verification:
+  required_commands:
+    - uv run sap-agent-context export-jsonl --output-dir records
+    - uv run sap-agent-context validate
+    - uv run sap-agent-context build-index
+    - make check
