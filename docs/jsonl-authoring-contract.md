@@ -48,3 +48,16 @@ knowledge/**/*.yaml or future JSONL-native authoring
 ```
 
 If YAML and JSONL diverge, fix the import/export or authoring path. Do not make generated SQLite, vector files or build artifacts authoritative.
+
+## Roundtrip compatibility check
+
+The current roundtrip gate does not promise byte-for-byte YAML reconstruction. It checks the compatibility surface that matters for agent/runtime migration:
+
+- item identity: `id`, `kind`, `title`, `access`, `topics`, `used_for`, `source_path`;
+- provenance links: `source_ids`, `claim_ids`, `relation_ids`;
+- claim count and subject linkage;
+- source count and subject linkage;
+- relation count and subject linkage;
+- workflow records such as FO patterns, decision rules and test patterns.
+
+Lossy changes to those fields fail loudly. YAML formatting, pack grouping and comments remain outside the JSONL roundtrip contract.

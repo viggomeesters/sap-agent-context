@@ -113,6 +113,18 @@ record_types:
       - type
       - target_id
       - source_ids
+roundtrip_compatibility:
+  scope: >-
+    JSONL-native authoring must preserve the legacy YAML compatibility surface for
+    item identity, kind, title, access, topics, used_for, source_path, source_ids,
+    claim_ids, relation_ids, claims, sources and relations. Full YAML formatting
+    and pack grouping are not part of the roundtrip contract.
+  fail_loudly_on_loss:
+    - claims
+    - sources
+    - relations
+    - workflows
+    - item compatibility fields
 jsonl_authoring_rules:
   - id: jsonl.no_orphan_claims
     rule: Every claim.subject_id must refer to an item id in an item record file.

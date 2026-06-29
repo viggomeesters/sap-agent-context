@@ -123,6 +123,77 @@ def validate_agent_records(records_dir: Path, *, schema_dir: Path) -> dict[str, 
     }
 
 
+def validate_yaml_jsonl_roundtrip_compatibility(
+    items: list[KnowledgeItem], records_dir: Path
+) -> dict[str, Any]:
+    """Check exported JSONL preserves the legacy YAML compatibility surface."""
+    issues: list[dict[str, str]] = []
+    records = _load_record_files(records_dir)
+    item_records = {
+        record["id"]: record
+        for group in ("apps", "tables", "fields", "workflows", "roles")
+        for record in records.get(group, [])
+        if isinstance(record.get("id"), str)
+    }
+    claims_by_subject = _group_by(records.get("claims", []), "subject_id")
+    sources_by_subject = _group_by(records.get("sources", []), "subject_id")
+    relations_by_subject = _group_by(records.get("relations", []), "subject_id")
+
+    for item in sorted(items, key=lambda value: value.item_id):
+        record = item_records.get(item.item_id)
+        if record is None:
+            issues.append({"id": item.item_id, "message": "missing item record"})
+            continue
+
+        _compare_scalar(issues, item.item_id, record, "kind", item.kind)
+        _compare_scalar(issues, item.item_id, record, "title", item.title)
+        _compare_scalar(issues, item.item_id, record, "access", item.access)
+        _compare_list(issues, item.item_id, record, "topics", item.topics)
+        _compare_list(issues, item.item_id, record, "used_for", item.used_for)
+
+        if not record.get("source_path"):
+            issues.append({"id": item.item_id, "message": "source_path missing"})
+        if not record.get("source_ids"):
+            issues.append({"id": item.item_id, "message": "source_ids missing"})
+        if not record.get("claim_ids") and item.data.get("claims"):
+            issues.append({"id": item.item_id, "message": "claim_ids missing for YAML claims"})
+        if not record.get("relation_ids") and item.data.get("relations"):
+            issues.append(
+                {"id": item.item_id, "message": "relation_ids missing for YAML relations"}
+            )
+
+        expected_claims = (
+            item.data.get("claims") if isinstance(item.data.get("claims"), list) else []
+        )
+        if len(claims_by_subject.get(item.item_id, [])) != len(expected_claims):
+            issues.append({"id": item.item_id, "message": "claim count changed during export"})
+
+        if len(sources_by_subject.get(item.item_id, [])) != 1:
+            issues.append({"id": item.item_id, "message": "expected exactly one source record"})
+
+        relations = (
+            item.data.get("relations")
+            if isinstance(item.data.get("relations"), dict)
+            else {}
+        )
+        expected_relations = sum(
+            len(targets) for targets in relations.values() if isinstance(targets, list)
+        )
+        if len(relations_by_subject.get(item.item_id, [])) != expected_relations:
+            issues.append({"id": item.item_id, "message": "relation count changed during export"})
+
+    return {
+        "status": "failed" if issues else "passed",
+        "items": len(items),
+        "records": sum(len(value) for value in records.values()),
+        "issues": issues,
+        "compatibility_note": (
+            "YAML remains legacy import; JSONL preserves the compatibility surface "
+            "needed for future JSONL-native authoring."
+        ),
+    }
+
+
 def _item_record(item: KnowledgeItem, root: Path) -> dict[str, Any]:
     source_id = _source_id(item)
     return {
@@ -287,6 +358,44 @@ def _write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
     with path.open("w", encoding="utf-8") as handle:
         for record in sorted(records, key=lambda record: str(record["id"])):
             handle.write(json.dumps(record, sort_keys=True, default=str, ensure_ascii=False) + "\n")
+
+
+def _load_record_files(records_dir: Path) -> dict[str, list[dict[str, Any]]]:
+    loaded: dict[str, list[dict[str, Any]]] = {}
+    for name, filename in RECORD_FILES.items():
+        path = records_dir / filename
+        loaded[name] = []
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                loaded[name].append(json.loads(line))
+    return loaded
+
+
+def _group_by(records: list[dict[str, Any]], key: str) -> dict[str, list[dict[str, Any]]]:
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for record in records:
+        grouped[str(record.get(key) or "")].append(record)
+    return grouped
+
+
+def _compare_scalar(
+    issues: list[dict[str, str]], item_id: str, record: dict[str, Any], field: str, expected: str
+) -> None:
+    if str(record.get(field) or "") != str(expected or ""):
+        issues.append({"id": item_id, "message": f"{field} changed during export"})
+
+
+def _compare_list(
+    issues: list[dict[str, str]],
+    item_id: str,
+    record: dict[str, Any],
+    field: str,
+    expected: list[str],
+) -> None:
+    if _unique_strings(record.get(field) or []) != _unique_strings(expected):
+        issues.append({"id": item_id, "message": f"{field} changed during export"})
 
 
 def _validate_record(
