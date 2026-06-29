@@ -362,3 +362,87 @@ items:
       - level: negative
         case: PO is approved but goods receipt is expected and not posted.
         expected: Follow-on invoice/receipt readiness remains incomplete.
+
+  - id: sap.pattern.procurement-release-strategy-workflow-fo
+    title: Procurement tenant workflow evidence FO pattern
+    kind: fo_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, release-strategy, flexible-workflow, threshold, approver-role, fallback-owner, tenant-verification]
+    used_for: [fo.workflow, fo.business_rules, fo.quality_gate]
+    summary: >
+      FO pattern for tenant-specific procurement workflow caveats: document
+      condition source, threshold/currency, approver role, fallback owner and
+      tenant workflow evidence before marking routing guidance ready.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Procurement workflow routing guidance is tenant-specific; API/catalog context does not prove release strategy or flexible workflow behavior.
+        evidence: [sap.rule.procurement-release-strategy-tenant-evidence]
+    relations:
+      objects: [sap.object.purchase-requisition-pr-po, sap.object.purchase-order]
+      decision_rules: [sap.rule.procurement-release-strategy-tenant-evidence]
+      test_patterns: [sap.test-pattern.procurement-release-strategy-caveat]
+
+  - id: sap.rule.procurement-release-strategy-tenant-evidence
+    title: Procurement tenant workflow evidence rule
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, release-strategy, flexible-workflow, threshold, approver-role, fallback-owner, tenant-verification]
+    used_for: [fo.workflow, fo.quality_gate, fo.test_scenarios]
+    summary: >
+      Fail-closed rule for procurement workflow routing guidance: if release
+      conditions, flexible workflow variant, approver role, threshold/currency or
+      fallback owner are missing, the bundle must ask for tenant evidence instead
+      of giving implementation-ready routing advice.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Release strategy and flexible workflow behavior require tenant evidence and cannot be inferred from PR/PO API presence alone.
+        evidence: [sap.pattern.procurement-release-strategy-workflow-fo]
+    relations:
+      field_maps: [sap.field-map.pr-to-po-readiness]
+    rules:
+      - condition: threshold or currency source is missing
+        outcome: block implementation-ready workflow routing and request release-condition evidence
+      - condition: approver role or fallback owner is missing
+        outcome: block workflow-ready status and request role/owner evidence
+      - condition: API PR/PO catalog exists but tenant workflow variant is unverified
+        outcome: keep API mapping ready only; mark workflow/release guidance as needs tenant verification
+
+  - id: sap.test-pattern.procurement-release-strategy-caveat
+    title: Procurement tenant workflow caveat test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [procurement, release-strategy, flexible-workflow, threshold, approver, fallback-owner, negative-test]
+    used_for: [fo.workflow, fo.test_scenarios, fo.quality_gate]
+    summary: >
+      Test pattern for procurement workflow caveats: prove the happy-path
+      routing path, missing threshold fail-closed behavior, missing approver/fallback
+      owner behavior and PR-to-PO readiness separation.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Procurement workflow tests must include missing threshold and missing approver negative cases, not only a happy-path approval.
+        evidence: [sap.rule.procurement-release-strategy-tenant-evidence]
+    relations:
+      objects: [sap.object.purchase-requisition-pr-po, sap.object.purchase-order]
+      decision_rules: [sap.rule.procurement-release-strategy-tenant-evidence]
+    test_scenarios:
+      - level: acceptance
+        case: Release condition, threshold/currency, approver role and fallback owner are tenant-verified.
+        expected: FO may describe approval routing with explicit evidence references.
+      - level: negative
+        case: PR/PO API exists but release strategy or flexible workflow variant is not tenant-verified.
+        expected: Bundle stays needs tenant verification for approval routing.
+      - level: negative
+        case: Threshold or approver/fallback owner is missing.
+        expected: Implementation-ready workflow guidance is blocked with concrete open questions.

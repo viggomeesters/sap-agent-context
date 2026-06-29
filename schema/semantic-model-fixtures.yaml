@@ -95,3 +95,11 @@ fixtures:
       - - sap.pattern.integration-error-retry-fo
         - sap.rule.integration-error-retry-fail-closed
         - sap.test-pattern.integration-error-retry-redaction
+  - id: nl_procurement_release_strategy_caveat
+    language: nl
+    query: Welke release strategy flexible workflow threshold en approver evidence moet ik vragen?
+    limit: 40
+    required_any:
+      - - sap.pattern.procurement-release-strategy-workflow-fo
+        - sap.rule.procurement-release-strategy-tenant-evidence
+        - sap.test-pattern.procurement-release-strategy-caveat

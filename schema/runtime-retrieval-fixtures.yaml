@@ -65,3 +65,8 @@ fixtures:
     limit: 30
     required_ids:
       - sap.app.communication-arrangements-context
+  - id: procurement_release_strategy_runtime
+    query: procurement release strategy flexible workflow approval threshold approver tenant verification
+    limit: 30
+    required_ids:
+      - sap.app.manage-purchase-requisitions-context

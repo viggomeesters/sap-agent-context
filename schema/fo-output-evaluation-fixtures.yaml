@@ -152,6 +152,21 @@ fixtures:
   - sap.field-map.po-fulfillment-readiness
   - sap.rule.procurement-workflow-readiness
   - sap.test-pattern.procurement-pr-po-readiness
+- id: procurement_release_strategy_caveat_ready
+  intent: fo.workflow
+  topic: procurement release strategy flexible workflow approval threshold approver role fallback owner tenant verification
+  sap_product: s4hana_cloud_public
+  limit: 30
+  expected_status: ready
+  require_source_traceability: true
+  required_kinds:
+  - fo_pattern
+  - decision_rule
+  - test_pattern
+  required_item_ids:
+  - sap.pattern.procurement-release-strategy-workflow-fo
+  - sap.rule.procurement-release-strategy-tenant-evidence
+  - sap.test-pattern.procurement-release-strategy-caveat
 - id: integration_api_communication_ready
   intent: fo.integration
   topic: integration api communication arrangement credentials tenant url payload business key error handling no

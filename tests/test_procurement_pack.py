@@ -30,6 +30,9 @@ def test_procurement_pack_has_required_shapes() -> None:
         "sap.field-map.po-fulfillment-readiness": "field_map",
         "sap.rule.procurement-workflow-readiness": "decision_rule",
         "sap.test-pattern.procurement-pr-po-readiness": "test_pattern",
+        "sap.pattern.procurement-release-strategy-workflow-fo": "fo_pattern",
+        "sap.rule.procurement-release-strategy-tenant-evidence": "decision_rule",
+        "sap.test-pattern.procurement-release-strategy-caveat": "test_pattern",
     }
     for item_id, kind in expected.items():
         assert items[item_id]["kind"] == kind
@@ -95,3 +98,48 @@ def test_procurement_bundle_readiness_is_specific_not_generic() -> None:
     )
     assert generic_bundle["status"] == "needs_curation"
     assert any("Low topic precision" in gap for gap in generic_bundle["gaps"])
+
+
+def test_procurement_release_strategy_fails_closed_without_tenant_evidence() -> None:
+    items = _items_by_id()
+    pattern = items["sap.pattern.procurement-release-strategy-workflow-fo"]
+    rule = items["sap.rule.procurement-release-strategy-tenant-evidence"]
+    test_pattern = items["sap.test-pattern.procurement-release-strategy-caveat"]
+
+    assert pattern["kind"] == "fo_pattern"
+    assert (
+        "sap.rule.procurement-release-strategy-tenant-evidence"
+        in pattern["relations"]["decision_rules"]
+    )
+    assert (
+        "sap.test-pattern.procurement-release-strategy-caveat"
+        in pattern["relations"]["test_patterns"]
+    )
+
+    outcomes = "\n".join(entry["outcome"] for entry in rule["rules"])
+    assert "block implementation-ready workflow routing" in outcomes
+    assert "needs tenant verification" in outcomes
+
+    levels = {case["level"] for case in test_pattern["test_scenarios"]}
+    assert "acceptance" in levels
+    assert "negative" in levels
+
+
+def test_procurement_release_strategy_bundle_is_ready_but_tenant_bounded() -> None:
+    bundle = build_context_bundle(
+        load_items(ROOT),
+        root=ROOT,
+        intent="fo.workflow",
+        topic=(
+            "procurement release strategy flexible workflow approval threshold "
+            "approver role fallback owner tenant verification"
+        ),
+        sap_product="s4hana_cloud_public",
+        limit=30,
+    )
+
+    selected_ids = {item["id"] for item in bundle["items"]}
+    assert bundle["status"] == "ready"
+    assert "sap.pattern.procurement-release-strategy-workflow-fo" in selected_ids
+    assert "sap.rule.procurement-release-strategy-tenant-evidence" in selected_ids
+    assert "sap.test-pattern.procurement-release-strategy-caveat" in selected_ids
