@@ -1,0 +1,121 @@
+schema_version: 1
+id: deep-slice-retro-gate
+status: active
+description: >-
+  Retro gate for comparing completed bounded SAP deep slices against the
+  deep-domain pack template. This is a checklist/evidence artifact, not a claim
+  of exhaustive SAP product coverage.
+template_dimensions:
+  - source_references
+  - domain_anchors
+  - fo_patterns
+  - decision_rules
+  - test_patterns
+  - fo_output_fixtures
+  - runtime_retrieval_fixtures
+  - semantic_fixtures
+  - density_profile_or_no_follow_up_reason
+slices:
+  - id: eam_pm_lifecycle
+    status: exemplar
+    files:
+      - knowledge/domain-packs/eam-pm-lifecycle-spine-pack.yaml
+      - knowledge/domain-packs/eam-pm-lifecycle-fo-patterns-pack.yaml
+      - schema/completeness-matrix.yaml
+      - schema/fo-output-evaluation-fixtures.yaml
+      - schema/runtime-retrieval-fixtures.yaml
+      - schema/semantic-model-fixtures.yaml
+    dimension_status:
+      source_references: met
+      domain_anchors: met
+      fo_patterns: met
+      decision_rules: met
+      test_patterns: met
+      fo_output_fixtures: met
+      runtime_retrieval_fixtures: met
+      semantic_fixtures: met
+      density_profile_or_no_follow_up_reason: met
+    follow_up:
+      status: none
+      reason: Exemplar slice already has bounded deep profile and required gates.
+  - id: analytics_extensibility
+    status: checked
+    files:
+      - knowledge/domain-packs/extensibility-analytics-pack.yaml
+      - tests/test_extensibility_analytics_pack.py
+      - schema/fo-output-evaluation-fixtures.yaml
+      - schema/runtime-retrieval-fixtures.yaml
+      - schema/semantic-model-fixtures.yaml
+    dimension_status:
+      source_references: met
+      domain_anchors: met
+      fo_patterns: met
+      decision_rules: met
+      test_patterns: met
+      fo_output_fixtures: met
+      runtime_retrieval_fixtures: met
+      semantic_fixtures: met
+      density_profile_or_no_follow_up_reason: met
+    follow_up:
+      status: no_follow_up
+      reason: >-
+        Slice is intentionally report_only and bounded to custom field exposure
+        plus analytics/reporting readiness; no required promotion until more
+        source families are added.
+  - id: integration_security
+    status: checked
+    files:
+      - knowledge/domain-packs/integrations-api-communication-pack.yaml
+      - tests/test_integrations_pack.py
+      - schema/fo-output-evaluation-fixtures.yaml
+      - schema/runtime-retrieval-fixtures.yaml
+      - schema/semantic-model-fixtures.yaml
+    dimension_status:
+      source_references: met
+      domain_anchors: met
+      fo_patterns: met
+      decision_rules: met
+      test_patterns: met
+      fo_output_fixtures: met
+      runtime_retrieval_fixtures: met
+      semantic_fixtures: met
+      density_profile_or_no_follow_up_reason: met
+    follow_up:
+      status: no_follow_up
+      reason: >-
+        Runtime lexical retrieval is intentionally anchored at stable app/policy
+        records while FO-output and semantic gates cover deeper FO/rules; no
+        runtime ranking change belongs in this slice.
+  - id: procurement_release_strategy
+    status: checked
+    files:
+      - knowledge/domain-packs/procurement-pr-po-pack.yaml
+      - tests/test_procurement_pack.py
+      - tests/test_adversarial.py
+      - schema/fo-output-evaluation-fixtures.yaml
+      - schema/runtime-retrieval-fixtures.yaml
+      - schema/semantic-model-fixtures.yaml
+    dimension_status:
+      source_references: met
+      domain_anchors: met
+      fo_patterns: met
+      decision_rules: met
+      test_patterns: met
+      fo_output_fixtures: met
+      runtime_retrieval_fixtures: met
+      semantic_fixtures: met
+      density_profile_or_no_follow_up_reason: met
+    follow_up:
+      status: no_follow_up
+      reason: >-
+        Generic release-strategy query remains adversarial needs_curation; only
+        threshold/approver/tenant-evidence-specific retrieval becomes ready.
+        No separate task needed until a broader procurement workflow profile is
+        promoted from report_only to required.
+quality_rules:
+  - id: retro.requires-two-non-eam-slices
+    rule: At least two checked slices must not be eam_pm_lifecycle.
+  - id: retro.requires-every-dimension-status
+    rule: Every checked slice must mark every template dimension as met or provide a follow-up reason.
+  - id: retro.requires-explicit-follow-up-disposition
+    rule: Each checked slice must provide follow_up.status and follow_up.reason.
