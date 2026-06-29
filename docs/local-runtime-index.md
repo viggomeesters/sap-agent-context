@@ -108,9 +108,12 @@ uv run sap-agent-context evaluate-runtime-retrieval
 ```
 
 The runtime-search output includes item IDs, claim IDs, source/evidence IDs,
-exact-token hits, and score fields. That shape is intended to be consumable by
-bundle generation while keeping the existing `sap_fo_context_bundle` output
-backward compatible.
+exact-token hits, score fields, and an `explain` block for each result. The
+explanation records the rank source (`item_fts`, `item_exact`, `claim_fts` or
+`vector`), matched query terms, exact-token hits, BM25/vector metadata when
+available, access label, freshness metadata, source IDs and claim IDs. That shape
+is intended to be consumable by bundle generation while keeping the existing
+`sap_fo_context_bundle` output backward compatible.
 
 ## Public boundary
 

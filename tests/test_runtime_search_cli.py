@@ -47,7 +47,21 @@ def test_runtime_search_output_is_citeable_for_bundle_generation(tmp_path: Path)
     assert top["id"] == "sap.app.eam.pm.ie03"
     assert top["claim_ids"]
     assert top["source_ids"]
-    assert {"id", "score", "source", "text", "claim_ids", "source_ids"} <= set(top)
+    assert {"id", "score", "source", "text", "claim_ids", "source_ids", "explain"} <= set(top)
+
+
+def test_runtime_search_explains_ranking_source_terms_and_evidence(tmp_path: Path) -> None:
+    results = search_runtime_index(_index_path(tmp_path), "IE03 equipment status", limit=5)
+    explain = results[0]["explain"]
+
+    assert explain["rank_source"] in {"item_fts", "item_exact"}
+    assert "IE03" in explain["matched_terms"]
+    assert "equipment" in explain["matched_terms"]
+    assert explain["exact_token_hits"] >= 1
+    assert explain["source_ids"]
+    assert explain["claim_ids"]
+    assert explain["access"] in {"public", "gated", "internal_derived"}
+    assert explain["freshness"]["review_after"]
 
 
 def test_runtime_search_cli_outputs_json(tmp_path: Path, capsys) -> None:
@@ -73,3 +87,4 @@ def test_runtime_search_cli_outputs_json(tmp_path: Path, capsys) -> None:
     assert payload["status"] == "passed"
     assert payload["query"] == "IE03 equipment display"
     assert payload["results"][0]["id"] == "sap.app.eam.pm.ie03"
+    assert payload["results"][0]["explain"]["source_ids"]

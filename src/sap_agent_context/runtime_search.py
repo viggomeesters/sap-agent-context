@@ -83,14 +83,16 @@ def search_runtime_index(
                 (match_query, max(limit * 2, 10)),
             ).fetchall()
 
-    results = [_ranked(row, exact_terms) for row in [*item_rows, *exact_item_rows, *claim_rows]]
+    results = [
+        _ranked(row, tokens, exact_terms) for row in [*item_rows, *exact_item_rows, *claim_rows]
+    ]
     if query_vector is not None:
         vector_hits = search_runtime_vectors(
             sqlite_path,
             query_vector=query_vector,
             limit=max(limit * 2, 10),
         )
-        results.extend(_vector_ranked(hit) for hit in vector_hits)
+        results.extend(_vector_ranked(hit, tokens) for hit in vector_hits)
     filtered = [
         result
         for result in results
@@ -109,7 +111,7 @@ def search_runtime_index(
     )
     selected = ordered[:limit]
     if claim_rows and not any(row["source"] == "claim_fts" for row in selected):
-        claim_results = [_ranked(row, exact_terms) for row in claim_rows]
+        claim_results = [_ranked(row, tokens, exact_terms) for row in claim_rows]
         best_claim = sorted(
             claim_results, key=lambda row: (-row["score"], row["bm25_score"], row["id"])
         )[0]
@@ -153,14 +155,16 @@ def _exact_item_rows(
     ).fetchall()
 
 
-def _ranked(row: sqlite3.Row, exact_terms: list[str]) -> dict[str, Any]:
+def _ranked(row: sqlite3.Row, tokens: list[str], exact_terms: list[str]) -> dict[str, Any]:
     text = " ".join(str(row[key] or "") for key in ["id", "title", "text", "search_text"])
     haystack = text.lower()
     exact_hits = sum(1 for term in exact_terms if term.lower() in haystack)
     bm25_score = float(row["bm25_score"] or 0.0)
     source_boost = 100 if str(row["source"]).startswith("item_") else 0
     payload = _json_payload(str(row["payload_json"] or ""))
-    return {
+    claim_ids = _claim_ids(row, payload)
+    source_ids = _source_ids(row, payload)
+    result = {
         "id": str(row["id"]),
         "title": str(row["title"]),
         "kind": str(row["kind"]),
@@ -169,20 +173,28 @@ def _ranked(row: sqlite3.Row, exact_terms: list[str]) -> dict[str, Any]:
         "exact_token_hits": exact_hits,
         "bm25_score": bm25_score,
         "score": exact_hits * 1000 + source_boost - bm25_score,
-        "claim_ids": _claim_ids(row, payload),
-        "source_ids": _source_ids(row, payload),
+        "claim_ids": claim_ids,
+        "source_ids": source_ids,
         "metadata": payload,
     }
+    result["explain"] = _explain_result(
+        result,
+        tokens=tokens,
+        exact_terms=exact_terms,
+        search_text=text,
+    )
+    return result
 
 
-def _vector_ranked(hit: dict[str, Any]) -> dict[str, Any]:
+def _vector_ranked(hit: dict[str, Any], tokens: list[str]) -> dict[str, Any]:
     metadata = hit.get("metadata") if isinstance(hit.get("metadata"), dict) else {}
     record_type = str(hit.get("record_type") or "")
     canonical_id = str(hit.get("canonical_record_id") or hit.get("id") or "")
     distance = float(hit.get("distance") or 0.0)
     result_id = str(hit.get("item_id") or hit.get("claim_id") or canonical_id)
     kind = str(metadata.get("kind") or record_type)
-    return {
+    source_ids = _strings(metadata.get("evidence_ids") or metadata.get("source_ids"))
+    result = {
         "id": result_id,
         "title": str(metadata.get("title") or metadata.get("subject_id") or canonical_id),
         "kind": kind,
@@ -193,9 +205,48 @@ def _vector_ranked(hit: dict[str, Any]) -> dict[str, Any]:
         "vector_distance": distance,
         "score": 120 - distance,
         "claim_ids": [str(hit["claim_id"])] if hit.get("claim_id") else [],
-        "source_ids": _strings(metadata.get("evidence_ids") or metadata.get("source_ids")),
+        "source_ids": source_ids,
         "metadata": metadata,
     }
+    result["explain"] = _explain_result(
+        result,
+        tokens=tokens,
+        exact_terms=[],
+        search_text=f"{hit.get('text') or ''} {json.dumps(metadata, sort_keys=True, default=str)}",
+        vector_distance=distance,
+        vector_model=str(hit.get("model") or metadata.get("model") or ""),
+    )
+    return result
+
+
+def _explain_result(
+    result: dict[str, Any],
+    *,
+    tokens: list[str],
+    exact_terms: list[str],
+    search_text: str,
+    vector_distance: float | None = None,
+    vector_model: str = "",
+) -> dict[str, Any]:
+    metadata = result.get("metadata") if isinstance(result.get("metadata"), dict) else {}
+    haystack = search_text.lower()
+    matched_terms = [token for token in tokens if token.lower() in haystack]
+    explain: dict[str, Any] = {
+        "rank_source": result.get("source"),
+        "score": result.get("score"),
+        "matched_terms": _dedupe(matched_terms),
+        "exact_terms": exact_terms,
+        "exact_token_hits": result.get("exact_token_hits", 0),
+        "bm25_score": result.get("bm25_score", 0.0),
+        "access": metadata.get("access", ""),
+        "freshness": metadata.get("freshness", {}),
+        "source_ids": result.get("source_ids", []),
+        "claim_ids": result.get("claim_ids", []),
+    }
+    if vector_distance is not None:
+        explain["vector_distance"] = vector_distance
+        explain["vector_model"] = vector_model
+    return explain
 
 
 def _json_payload(raw: str) -> dict[str, Any]:
