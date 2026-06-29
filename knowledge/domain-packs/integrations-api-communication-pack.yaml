@@ -432,3 +432,204 @@ items:
   - level: security
     case: Example contains credential, token, tenant URL or private endpoint.
     expected: Public bundle rejects or redacts the value and records a verification step.
+- id: sap.pattern.integration.communication-arrangement-fo
+  title: Communication arrangement FO pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - integration
+  - communication-arrangement
+  - communication-system
+  - authentication
+  - authorization
+  - no-secrets
+  - tenant-verification
+  used_for:
+  - fo.integration
+  - fo.security
+  - fo.sap_configuration
+  summary: 'FO pattern for SAP communication arrangement integrations: document scenario, direction, communication
+    system, auth method class, user/role ownership and tenant verification steps without storing endpoint values,
+    certificates, tokens or credentials.
+
+    '
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: A communication-arrangement FO can be ready only when scenario assignment, direction, auth method
+      class and tenant verification evidence are explicit while secrets remain out of the bundle.
+    evidence:
+    - sap.app.communication-arrangements-context
+    - sap.policy.integration-no-secrets
+  relations:
+    objects:
+    - sap.object.communication-arrangement-integration
+    access_policies:
+    - sap.policy.integration-no-secrets
+    rules:
+    - sap.rule.integration-arrangement-readiness
+    - sap.rule.integration-secret-redaction-fail-closed
+- id: sap.pattern.integration-error-retry-fo
+  title: Integration error and retry FO pattern
+  kind: fo_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - integration
+  - api
+  - error-handling
+  - retry
+  - idempotency
+  - business-key
+  - payload
+  used_for:
+  - fo.integration
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'FO pattern for API/event error handling: identify the business key/idempotency key, retry rule,
+    duplicate-message behavior, status/error owner and support handoff before treating an interface as ready.
+
+    '
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Interface readiness needs retry/idempotency and support ownership proof, not only a successful
+      happy-path payload example.
+    evidence:
+    - sap.field-map.integration-api-message-readiness
+  relations:
+    objects:
+    - sap.object.integration-api-endpoint
+    fields:
+    - sap.field-set.integration-api-message-core
+    rules:
+    - sap.rule.integration-error-retry-fail-closed
+    test_patterns:
+    - sap.test-pattern.integration-error-retry-redaction
+- id: sap.rule.integration-secret-redaction-fail-closed
+  title: Integration secret redaction fail-closed rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: cross_sap
+  topics:
+  - integration
+  - security
+  - no-secrets
+  - redaction
+  - tenant-url
+  - credentials
+  used_for:
+  - fo.integration
+  - fo.security
+  - fo.quality_gate
+  summary: 'Fail-closed rule for integration examples: if a sample contains credentials, tokens, certificates,
+    cookies, private endpoint values or tenant hostnames, the public context bundle must redact/reject it and ask
+    for a sanitized verification note instead.
+
+    '
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Public integration context must fail closed on secret-like values rather than normalizing them as
+      examples.
+    evidence:
+    - sap.policy.integration-no-secrets
+  rules:
+  - condition: sample includes endpoint, auth secret, token, certificate, cookie or tenant-specific host value
+    outcome: reject/redact the sample and record only a generic verification step
+  - condition: source evidence is a public API catalog pointer but auth/endpoint proof is missing
+    outcome: keep bundle ready only for generic context; mark tenant setup as open verification
+- id: sap.rule.integration-error-retry-fail-closed
+  title: Integration error retry fail-closed rule
+  kind: decision_rule
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - integration
+  - error-handling
+  - retry
+  - idempotency
+  - business-key
+  used_for:
+  - fo.integration
+  - fo.quality_gate
+  - fo.test_scenarios
+  summary: 'Fail-closed rule for API/event integration readiness: if business key, retry/idempotency behavior,
+    duplicate handling or error owner is missing, the FO must request that evidence instead of marking the interface
+    implementation-ready.
+
+    '
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: Error/retry behavior is part of integration readiness and must not be inferred from a public API
+      catalog entry alone.
+    evidence:
+    - sap.field-set.integration-api-message-core
+    - sap.field-map.integration-api-message-readiness
+  rules:
+  - condition: business key or idempotency key is missing
+    outcome: block implementation-ready status and request reconciliation evidence
+  - condition: retry and duplicate-message behavior are undefined
+    outcome: block implementation-ready status and request negative test scenarios
+  - condition: status/error support owner is missing
+    outcome: record open support-ownership question
+- id: sap.test-pattern.integration-error-retry-redaction
+  title: Integration error retry and redaction test pattern
+  kind: test_pattern
+  status: active
+  access: internal_derived
+  requires_login: false
+  sap_product: s4hana_cloud_public
+  topics:
+  - integration
+  - api
+  - communication-arrangement
+  - error-handling
+  - retry
+  - redaction
+  - no-secrets
+  - negative-test
+  - auth-method
+  - tenant-verification
+  - business-key
+  used_for:
+  - fo.integration
+  - fo.test_scenarios
+  - fo.quality_gate
+  summary: 'Negative/acceptance test pattern for integration FOs: prove sanitized setup evidence, one positive
+    exchange, duplicate/retry behavior, missing-auth fail-closed behavior and secret redaction.
+
+    '
+  freshness: *id001
+  source: *id004
+  claims:
+  - statement: A safe integration test set includes setup evidence, happy path, retry/idempotency, missing-auth
+      negative test and redaction check.
+    evidence:
+    - sap.rule.integration-secret-redaction-fail-closed
+    - sap.rule.integration-error-retry-fail-closed
+  relations:
+    field_maps:
+    - sap.field-map.integration-api-message-readiness
+    access_policies:
+    - sap.policy.integration-no-secrets
+  test_scenarios:
+  - level: acceptance
+    case: Catalog API, scenario direction and sanitized communication arrangement evidence are present.
+    expected: FO can describe the integration boundary without storing tenant endpoint or auth values.
+  - level: negative
+    case: Business key or idempotency/retry behavior is missing.
+    expected: FO remains needs implementation evidence and asks for retry/duplicate-message rules.
+  - level: security
+    case: Example payload/setup includes auth secret, tenant hostname or private endpoint value.
+    expected: Bundle rejects/redacts the value and keeps only a generic verification step.

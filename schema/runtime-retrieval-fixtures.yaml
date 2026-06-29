@@ -60,3 +60,8 @@ fixtures:
     required_ids:
       - sap.field-map.analytics-report-readiness
       - sap.app-analytics-reporting-context
+  - id: integration_communication_arrangement_security_runtime
+    query: integration api communication arrangement no secrets tenant verification policy
+    limit: 30
+    required_ids:
+      - sap.app.communication-arrangements-context

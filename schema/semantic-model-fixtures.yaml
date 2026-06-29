@@ -79,3 +79,19 @@ fixtures:
       - - sap.pattern.analytics.reporting-fo
         - sap.rule.analytics-kpi-source-fail-closed
         - sap.field-map.analytics-report-readiness
+  - id: nl_integration_no_secrets_boundary
+    language: nl
+    query: Welke communicatie arrangement security checks en redactie zijn nodig zonder secrets of tenant URL?
+    limit: 40
+    required_any:
+      - - sap.pattern.integration.communication-arrangement-fo
+        - sap.rule.integration-secret-redaction-fail-closed
+        - sap.policy.integration-no-secrets
+  - id: en_integration_error_retry_idempotency
+    language: en
+    query: Which integration retry idempotency business key and duplicate handling evidence is needed?
+    limit: 40
+    required_any:
+      - - sap.pattern.integration-error-retry-fo
+        - sap.rule.integration-error-retry-fail-closed
+        - sap.test-pattern.integration-error-retry-redaction
