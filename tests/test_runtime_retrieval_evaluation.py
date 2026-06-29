@@ -27,11 +27,41 @@ def test_runtime_retrieval_fixtures_pass(tmp_path: Path) -> None:
     report = evaluate_runtime_retrieval(root=ROOT, sqlite_path=_index_path(tmp_path))
 
     assert report["status"] == "passed"
-    assert report["fixtures"] >= 5
+    assert report["fixtures"] >= 15
     ids = {result["id"] for result in report["results"]}
     assert "exact_transaction_ie03" in ids
     assert "semantic_display_equipment_master" in ids
     assert "evidence_citations_ie03_status" in ids
+    assert "adversarial_generic_dashboard_not_ready" in ids
+    assert "adversarial_invented_tenant_field_not_authoritative" in ids
+    assert "adversarial_unrelated_hr_payroll_module_no_eam_ready_context" in ids
+
+
+def test_runtime_retrieval_fixture_schema_supports_adversarial_forbidden_ids(
+    tmp_path: Path,
+) -> None:
+    sqlite_path = _index_path(tmp_path)
+    fixture_path = tmp_path / "adversarial-fixtures.yaml"
+    fixture_path.write_text(
+        """
+fixtures:
+  - id: forced_forbidden_id_failure
+    query: IE03 equipment display
+    limit: 5
+    forbidden_ids:
+      - sap.app.eam.pm.ie03
+""",
+        encoding="utf-8",
+    )
+
+    report = evaluate_runtime_retrieval(
+        root=ROOT,
+        sqlite_path=sqlite_path,
+        fixtures_path=fixture_path,
+    )
+
+    assert report["status"] == "failed"
+    assert "forbidden id present" in report["results"][0]["failures"][0]
 
 
 def test_runtime_retrieval_cli_outputs_json(tmp_path: Path, capsys) -> None:

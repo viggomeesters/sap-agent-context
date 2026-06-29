@@ -70,3 +70,30 @@ fixtures:
     limit: 30
     required_ids:
       - sap.app.manage-purchase-requisitions-context
+  - id: adversarial_generic_dashboard_not_ready
+    query: generic executive dashboard every module all KPIs
+    limit: 8
+    forbidden_top_ids:
+      - sap.app-analytics-reporting-context
+      - sap.field-map.analytics-report-readiness
+    forbidden_top_kinds:
+      - fo_pattern
+  - id: adversarial_invented_tenant_field_not_authoritative
+    query: invented tenant field ZZZ_TENANT_SECRET_FIELD approval matrix
+    limit: 8
+    forbidden_ids:
+      - sap.field.zzz-tenant-secret-field
+      - sap.field.zzz_tenant_secret_field
+    forbidden_top_ids:
+      - sap.field-map.analytics-report-readiness
+      - sap.field-map.custom-field-exposure-readiness
+  - id: adversarial_unrelated_hr_payroll_module_no_eam_ready_context
+    query: HR payroll infotype wage type schema personnel administration
+    limit: 8
+    forbidden_ids:
+      - sap.app.eam.pm.ie01
+      - sap.app.eam.pm.ie02
+      - sap.app.eam.pm.ie03
+      - sap.app.eam.pm.ie05
+      - sap.app.eam.pm.ie06
+      - sap.app.eam.pm.ih08

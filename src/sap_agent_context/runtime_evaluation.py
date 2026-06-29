@@ -80,6 +80,16 @@ def _fixture_failures(fixture: dict[str, Any], results: list[dict[str, Any]]) ->
     for item_id in _strings(fixture.get("required_ids")):
         if item_id not in ids:
             failures.append(f"required id missing: {item_id}; ids={ids}")
+    for item_id in _strings(fixture.get("forbidden_ids")):
+        if item_id in ids:
+            failures.append(f"forbidden id present: {item_id}; ids={ids}")
+    for item_id in _strings(fixture.get("forbidden_top_ids")):
+        if item_id in top_ids:
+            failures.append(f"forbidden top id present: {item_id}; top={top_ids}")
+    top_kinds = [str(result.get("kind") or "") for result in results[: len(top_ids)]]
+    for kind in _strings(fixture.get("forbidden_top_kinds")):
+        if kind in top_kinds:
+            failures.append(f"forbidden top kind present: {kind}; top_kinds={top_kinds}")
     if fixture.get("require_citations"):
         citeable = any(result.get("claim_ids") and result.get("source_ids") for result in results)
         if not citeable:
