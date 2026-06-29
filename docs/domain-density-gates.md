@@ -23,6 +23,12 @@ Current report-only weak slice:
 
 Use `uv run sap-agent-context audit-completeness` and inspect `domain_density_profiles` in the JSON output.
 
+Use [Next-slice prioritization heuristic](next-slice-prioritization.md) after
+`maturity-report` and `gap-report` when choosing which `report_only` or thin
+slice to fill next. It turns maturity gaps, retrieval value, FO risk, source
+availability and fixtureability into a concrete next-slice decision without
+rewarding broad SAP filler.
+
 ## Creating a new deep slice
 
 Use [Deep domain pack template](deep-domain-pack-template.md) and
