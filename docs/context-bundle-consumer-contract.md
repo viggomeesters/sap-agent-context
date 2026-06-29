@@ -88,6 +88,9 @@ if bundle["status"] != "ready":
     print("Draft only; surface gaps before output:", bundle["gaps"])
 ```
 
+See `examples/downstream-consumer-fixtures.md` for ready, `needs_curation`,
+`report_only`, and anti-hallucination response examples.
+
 ## Boundary
 
 The contract proves the repository produced a bounded, source-labelled context bundle. It does not prove exhaustive SAP coverage, tenant configuration, proprietary documentation access, or customer-specific correctness.
