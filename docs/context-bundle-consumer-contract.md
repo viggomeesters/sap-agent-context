@@ -91,6 +91,11 @@ if bundle["status"] != "ready":
 See `examples/downstream-consumer-fixtures.md` for ready, `needs_curation`,
 `report_only`, and anti-hallucination response examples.
 
+Consumer fail-closed gate fixtures live in
+`schema/consumer-fail-closed-fixtures.yaml`. They intentionally catch missing
+source, missing source output, missing tenant evidence, hidden gaps, `needs_curation` misuse and
+`report_only` misuse (report_only misuse) before a consumer treats draft context as final output.
+
 ## Boundary
 
 The contract proves the repository produced a bounded, source-labelled context bundle. It does not prove exhaustive SAP coverage, tenant configuration, proprietary documentation access, or customer-specific correctness.

@@ -1,0 +1,94 @@
+schema: sap-agent-context.consumer-fail-closed-fixtures.v1
+fixtures:
+  - id: missing_source_blocks_final_output
+    description: Consumer must not mark output ready when final claim lacks citations/source URLs.
+    bundle:
+      status: ready
+      citations: []
+      gaps: []
+      quality_signals:
+        gap_count: 0
+        source_url_count: 0
+    consumer_output:
+      status: final
+      text: "This FO is ready for customer use."
+    expected:
+      fail_closed: true
+      reasons:
+        - missing_source
+
+  - id: missing_tenant_evidence_blocks_thresholds
+    description: Consumer must not invent tenant thresholds or role names.
+    bundle:
+      status: ready
+      citations:
+        - item_id: sap.rule.procurement-release-strategy-tenant-evidence
+          access: internal_derived
+          url: ""
+      gaps: []
+      quality_signals:
+        gap_count: 0
+        source_url_count: 0
+    consumer_output:
+      status: final
+      text: "The approval threshold is €10,000 and approver role is Z_AP_MANAGER."
+    expected:
+      fail_closed: true
+      reasons:
+        - missing_tenant_evidence
+        - invented_role_or_threshold
+
+  - id: report_only_misuse_blocks_ready_claim
+    description: Consumer must not treat report_only maturity as final ready status.
+    profile:
+      id: analytics_extensibility_candidate
+      promotion: report_only
+      maturity: deep
+    consumer_output:
+      status: final
+      text: "Analytics/extensibility is complete and customer-ready."
+    expected:
+      fail_closed: true
+      reasons:
+        - report_only_misuse
+
+  - id: needs_curation_blocks_final_output
+    description: Consumer must surface bundle gaps instead of generating final prose.
+    bundle:
+      status: needs_curation
+      citations:
+        - item_id: sap.bulk.record-to-report.access-policy
+          access: internal_derived
+          url: ""
+      gaps:
+        - "Low topic precision; no selected item covers enough of the query tokens."
+      quality_signals:
+        gap_count: 1
+        source_url_count: 0
+    consumer_output:
+      status: final
+      text: "The executive dashboard requirements are ready."
+    expected:
+      fail_closed: true
+      reasons:
+        - gaps_hidden
+        - needs_curation_misuse
+
+  - id: ready_with_sources_and_open_questions_passes
+    description: Ready bundle output can pass when it preserves citations and tenant questions.
+    bundle:
+      status: ready
+      citations:
+        - item_id: sap.app.manage-workflows-supplier-invoices
+          access: public
+          url: https://example.invalid/sap-help
+      gaps: []
+      quality_signals:
+        gap_count: 0
+        source_url_count: 1
+    consumer_output:
+      status: draft_ready
+      text: "Cites sap.app.manage-workflows-supplier-invoices and asks to confirm tenant workflow variant, approval thresholds and fallback owner."
+    expected:
+      fail_closed: false
+      reasons: []
