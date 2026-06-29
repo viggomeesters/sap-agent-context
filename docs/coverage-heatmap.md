@@ -61,3 +61,12 @@ same deep-domain template dimensions: source references, domain anchors, FO
 patterns, decision rules, test patterns, and runtime/evaluation coverage. It
 separates `required`, `report_only`, and `needs_curation` states; it remains a
 planning signal, not an exhaustive SAP product truth claim.
+
+For concrete follow-up candidates by slice, run:
+
+```bash
+uv run sap-agent-context gap-report --format markdown --output docs/gap-report.md
+```
+
+Each missing dimension becomes a follow-up task candidate with acceptance text;
+slices without gaps carry an explicit no-follow-up reason.

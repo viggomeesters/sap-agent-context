@@ -126,6 +126,89 @@ def write_maturity_report(report: dict[str, Any], output: Path, output_format: s
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def build_gap_report(items: list[KnowledgeItem], *, root: Path) -> dict[str, Any]:
+    """Turn maturity gaps into concrete follow-up candidates per slice/domain."""
+
+    maturity = build_maturity_report(items, root=root)
+    entries = [*maturity["domains"], *maturity["domain_density_profiles"]]
+    slices = [_gap_entry(entry) for entry in entries]
+    gaps = [entry for entry in slices if entry["gaps"]]
+    return {
+        "status": "passed",
+        "definition": (
+            "Gap report by slice: every missing maturity dimension maps to a "
+            "follow-up candidate; slices with no gaps include an explicit "
+            "no-follow-up reason."
+        ),
+        "dimensions": DEEP_TEMPLATE_DIMENSIONS,
+        "slices": slices,
+        "gaps": gaps,
+    }
+
+
+def render_gap_markdown(report: dict[str, Any]) -> str:
+    """Render a concrete gap report for planning and follow-up task creation."""
+
+    lines = [
+        "# SAP Agent Context gap report by slice",
+        "",
+        (
+            "> Every gap below maps to a concrete follow-up candidate. No-gap "
+            "slices carry an explicit no-follow-up reason."
+        ),
+        "",
+        "| Slice | Promotion | Maturity | Gaps | Next action |",
+        "|---|---|---|---:|---|",
+    ]
+    for entry in report["slices"]:
+        next_action = (
+            entry["gaps"][0]["follow_up_task"]
+            if entry["gaps"]
+            else entry["no_follow_up_reason"]
+        )
+        lines.append(
+            "| {id} | {promotion} | {maturity} | {count} | {next_action} |".format(
+                id=entry["id"],
+                promotion=entry["promotion"],
+                maturity=entry["maturity"],
+                count=len(entry["gaps"]),
+                next_action=next_action,
+            )
+        )
+
+    lines.extend(["", "## Gap details", ""])
+    if report["gaps"]:
+        for entry in report["gaps"]:
+            lines.append(f"### {entry['id']}")
+            for gap in entry["gaps"]:
+                lines.append(f"- **{gap['dimension']}**: {gap['follow_up_task']}")
+                lines.append(f"  - Acceptance: {gap['acceptance']}")
+            lines.append("")
+    else:
+        lines.append("No current maturity gaps under the report heuristic.\n")
+
+    lines.extend(
+        [
+            "## Boundary",
+            "",
+            "- Gap counts are planning inputs, not SAP truth percentages.",
+            (
+                "- Create follow-up tasks only for in-scope gaps; otherwise keep "
+                "the no-follow-up reason visible."
+            ),
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def write_gap_report(report: dict[str, Any], output: Path, output_format: str) -> None:
+    output.parent.mkdir(parents=True, exist_ok=True)
+    if output_format == "markdown":
+        output.write_text(render_gap_markdown(report), encoding="utf-8")
+        return
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
 def _domain_maturity(domain: str, data: dict[str, Any]) -> dict[str, Any]:
     dimensions = {
         "source_references": int(data.get("source_references") or 0) > 0,
@@ -188,3 +271,51 @@ def _entry(
 def _has_anchor(data: dict[str, Any]) -> bool:
     kind_counts = data.get("kind_counts") if isinstance(data.get("kind_counts"), dict) else {}
     return any(int(kind_counts.get(kind) or 0) > 0 for kind in ["sap_app", "sap_object"])
+
+
+def _gap_entry(entry: dict[str, Any]) -> dict[str, Any]:
+    missing = list(entry.get("missing_dimensions") or [])
+    gaps = [
+        {
+            "dimension": dimension,
+            "follow_up_task": _follow_up_task(str(entry["id"]), str(dimension)),
+            "acceptance": _gap_acceptance(str(dimension)),
+        }
+        for dimension in missing
+    ]
+    return {
+        "id": entry["id"],
+        "promotion": entry["promotion"],
+        "status": entry["status"],
+        "maturity": entry["maturity"],
+        "gaps": gaps,
+        "no_follow_up_reason": (
+            "No missing maturity dimensions under current bounded slice gates."
+            if not gaps
+            else ""
+        ),
+    }
+
+
+def _follow_up_task(slice_id: str, dimension: str) -> str:
+    labels = {
+        "source_references": "Add source-backed reference records with access/freshness metadata",
+        "domain_anchors": "Add SAP app/object anchor records and relations",
+        "fo_patterns": "Add FO pattern records with questions, assumptions and validation notes",
+        "decision_rules": "Add fail-closed decision rules for tenant-specific behavior",
+        "test_patterns": "Add test-pattern records or FO-output fixture coverage",
+        "runtime_or_eval_coverage": "Add runtime/semantic/FO evaluation fixtures for the slice",
+    }
+    return f"{labels.get(dimension, 'Fill missing dimension')} for `{slice_id}`."
+
+
+def _gap_acceptance(dimension: str) -> str:
+    labels = {
+        "source_references": "At least one cited source id with access and freshness is present.",
+        "domain_anchors": "Bundle can cite a concrete app/object anchor for the slice.",
+        "fo_patterns": "A consumer can draft bounded FO questions from source-backed patterns.",
+        "decision_rules": "Tenant-specific uncertainty fails closed instead of generic prose.",
+        "test_patterns": "The slice has regression coverage for positive/negative scenarios.",
+        "runtime_or_eval_coverage": "Runtime, semantic or FO fixture proves retrieval visibility.",
+    }
+    return labels.get(dimension, "Missing dimension is filled and covered by tests.")

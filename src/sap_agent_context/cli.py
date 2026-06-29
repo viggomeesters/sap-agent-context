@@ -18,8 +18,11 @@ from sap_agent_context.domain_density import (
 from sap_agent_context.evaluation import evaluate_fo_output_fixtures
 from sap_agent_context.index import build_indexes
 from sap_agent_context.maturity import (
+    build_gap_report,
     build_maturity_report,
+    render_gap_markdown,
     render_maturity_markdown,
+    write_gap_report,
     write_maturity_report,
 )
 from sap_agent_context.repository import load_items
@@ -62,6 +65,15 @@ def build_parser() -> argparse.ArgumentParser:
     maturity = subparsers.add_parser("maturity-report")
     maturity.add_argument("--output", type=Path)
     maturity.add_argument(
+        "--format",
+        choices=["json", "markdown"],
+        default="json",
+        help="render as JSON for machines or Markdown for docs/review",
+    )
+
+    gap_report = subparsers.add_parser("gap-report")
+    gap_report.add_argument("--output", type=Path)
+    gap_report.add_argument(
         "--format",
         choices=["json", "markdown"],
         default="json",
@@ -258,6 +270,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             write_maturity_report(payload, _resolve_output(root, args.output), args.format)
         if args.format == "markdown":
             print(render_maturity_markdown(payload), end="")
+        else:
+            print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0
+
+    if args.command == "gap-report":
+        items = load_items(root)
+        payload = build_gap_report(items, root=root)
+        if args.output:
+            write_gap_report(payload, _resolve_output(root, args.output), args.format)
+        if args.format == "markdown":
+            print(render_gap_markdown(payload), end="")
         else:
             print(json.dumps(payload, indent=2, sort_keys=True, default=str))
         return 0
