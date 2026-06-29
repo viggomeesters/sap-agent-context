@@ -53,6 +53,7 @@ Synchronize legacy authoring files into agent-first JSONL records:
 
 ```bash
 uv run sap-agent-context export-jsonl --output-dir records
+uv run sap-agent-context validate-records --records-dir records
 ```
 
 The repo is JSONL-first and records-first: `records/*.jsonl` is the canonical agent record
@@ -61,7 +62,11 @@ pack editing; it is not the source of truth. The export writes typed JSONL files
 for apps, tables, fields, workflows, roles, claims, sources, and relations, then
 validates them against `schema/*.schema.json`. The intentional
 JSONL-vault-spike alignment and compatibility deviations are documented in
-[JSONL record surface](docs/jsonl-record-surface.md).
+[JSONL record surface](docs/jsonl-record-surface.md). The direct-edit boundary
+for agents is documented in
+[JSONL migration boundary](docs/jsonl-migration-boundary.md): edit bounded
+records or legacy packs, then validate records; do not hand-edit generated
+`build/` artifacts or bulk rewrite content to make coverage look complete.
 
 Build runtime indexes:
 

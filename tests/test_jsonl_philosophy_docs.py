@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / "docs" / "jsonl-record-surface.md"
 README = ROOT / "README.md"
 RUNTIME_DOC = ROOT / "docs" / "local-runtime-index.md"
+MIGRATION_DOC = ROOT / "docs" / "jsonl-migration-boundary.md"
 
 
 def test_jsonl_record_surface_doc_names_alignment_and_deviations() -> None:
@@ -31,6 +32,8 @@ def test_readme_links_jsonl_record_surface_decision() -> None:
     text = README.read_text(encoding="utf-8")
 
     assert "docs/jsonl-record-surface.md" in text
+    assert "docs/jsonl-migration-boundary.md" in text
+    assert "validate-records --records-dir records" in text
     assert "records-first" in text
     assert "YAML is a legacy authoring/import format" in text
 
@@ -43,3 +46,19 @@ def test_runtime_doc_keeps_generated_runtime_and_future_migration_path_explicit(
     assert "generated/non-authoritative" in text
     assert "record_type" in text
     assert "sap_context_type" in text
+
+
+def test_jsonl_migration_boundary_blocks_generated_artifact_authoring() -> None:
+    text = MIGRATION_DOC.read_text(encoding="utf-8")
+
+    required_phrases = [
+        "records/*.jsonl` is the canonical agent-facing record surface",
+        "validate-records --records-dir records",
+        "YAML under `knowledge/**/*.yaml` is a legacy authoring/import format",
+        "Do not hand-edit them",
+        "Bulk import broad SAP content",
+        "Mass-rename `kind`",
+        "Weaken evaluation or completeness gates",
+    ]
+    for phrase in required_phrases:
+        assert phrase in text
