@@ -86,6 +86,19 @@ uv run sap-agent-context runtime-search "IE03 equipment display" \
   --limit 5
 ```
 
+Local explain-first query:
+
+```bash
+uv run sap-agent-context query-explain \
+  "company code value source customizing evidence" \
+  --limit 5
+```
+
+`query-explain` is the clone-local command for answer-debugging. It returns the
+same ranked result shape as `runtime-search`, plus a top-level
+`explain_contract` and `top_explanation` so an agent can show why the first item
+was returned without scanning the full result list.
+
 Table/field lookup:
 
 ```bash

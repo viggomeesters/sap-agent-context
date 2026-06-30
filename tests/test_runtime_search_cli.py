@@ -88,3 +88,31 @@ def test_runtime_search_cli_outputs_json(tmp_path: Path, capsys) -> None:
     assert payload["query"] == "IE03 equipment display"
     assert payload["results"][0]["id"] == "sap.app.eam.pm.ie03"
     assert payload["results"][0]["explain"]["source_ids"]
+
+
+def test_query_explain_cli_outputs_top_explanation_contract(tmp_path: Path, capsys) -> None:
+    sqlite_path = _index_path(tmp_path)
+
+    exit_code = main(
+        [
+            "--root",
+            str(ROOT),
+            "query-explain",
+            "company code value source customizing evidence",
+            "--sqlite",
+            str(sqlite_path),
+            "--limit",
+            "5",
+        ]
+    )
+
+    assert exit_code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["command"] == "query-explain"
+    assert payload["explain_contract"]["tenant_boundary"].startswith(
+        "Runtime explanations are retrieval evidence"
+    )
+    assert payload["top_explanation"]["rank_source"]
+    assert payload["top_explanation"]["source_ids"]
+    assert payload["top_explanation"]["claim_ids"]
+    assert "freshness" in payload["top_explanation"]

@@ -135,24 +135,34 @@ def build_parser() -> argparse.ArgumentParser:
     query.add_argument("--output", type=Path)
 
     runtime_search = subparsers.add_parser("runtime-search")
-    runtime_search.add_argument("query")
-    runtime_search.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
-    runtime_search.add_argument("--limit", type=int, default=12)
-    runtime_search.add_argument("--kind", default=None)
-    runtime_search.add_argument("--sap-product", default=None)
-    runtime_search.add_argument("--access", default=None)
-    runtime_search.add_argument("--used-for", default=None)
-    runtime_search.add_argument("--topic", default=None)
-    runtime_search.add_argument("--vector", action="store_true")
-    runtime_search.add_argument("--embedding-provider", default=DEFAULT_EMBEDDING_PROVIDER)
-    runtime_search.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
-    runtime_search.add_argument("--output", type=Path)
+    _add_runtime_search_args(runtime_search)
+
+    query_explain = subparsers.add_parser(
+        "query-explain",
+        help="clone-local query command that always returns ranking/source explanation metadata",
+    )
+    _add_runtime_search_args(query_explain)
 
     provider = subparsers.add_parser("mccoy-provider")
     provider.add_argument("bundle", type=Path)
     provider.add_argument("--title", default="")
     provider.add_argument("--output", type=Path)
     return parser
+
+
+def _add_runtime_search_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("query")
+    parser.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
+    parser.add_argument("--limit", type=int, default=12)
+    parser.add_argument("--kind", default=None)
+    parser.add_argument("--sap-product", default=None)
+    parser.add_argument("--access", default=None)
+    parser.add_argument("--used-for", default=None)
+    parser.add_argument("--topic", default=None)
+    parser.add_argument("--vector", action="store_true")
+    parser.add_argument("--embedding-provider", default=DEFAULT_EMBEDDING_PROVIDER)
+    parser.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL)
+    parser.add_argument("--output", type=Path)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -353,7 +363,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(bundle, indent=2, sort_keys=True, default=str))
         return 0 if bundle["status"] == "ready" else 2
 
-    if args.command == "runtime-search":
+    if args.command in {"runtime-search", "query-explain"}:
         sqlite_path = _resolve_output(root, args.sqlite)
         query_vector = None
         if args.vector:
@@ -375,6 +385,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         payload = {
             "status": "passed" if results else "empty",
+            "command": args.command,
             "query": args.query,
             "sqlite": str(sqlite_path),
             "filters": {
@@ -384,6 +395,22 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "used_for": args.used_for,
                 "topic": args.topic,
             },
+            "explain_contract": {
+                "always_include": [
+                    "rank_source",
+                    "matched_terms",
+                    "exact_token_hits",
+                    "claim_ids",
+                    "source_ids",
+                    "access",
+                    "freshness",
+                ],
+                "tenant_boundary": (
+                    "Runtime explanations are retrieval evidence, not tenant-specific "
+                    "SAP system evidence."
+                ),
+            },
+            "top_explanation": results[0]["explain"] if results else {},
             "results": results,
         }
         if args.output:
