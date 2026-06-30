@@ -1,0 +1,201 @@
+pack_id: sap-alias-evolution-map-pack
+title: SAP alias and evolution map pack
+description: >
+  Context pack for SAP terms that are old/new/alias/generation-sensitive. It
+  prevents agents from treating LTMC, Migration Cockpit, Migrate Your Data, SAP
+  Business Workflow, Flexible Workflow, Workflow Management and Build Process
+  Automation as interchangeable without release/edition evidence.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep as alias/evolution navigation, not a definitive release-history mirror.
+freshness_current: &freshness_current
+  valid_from: '2026-06-30'
+  review_after: '2026-12-30'
+  expires_at: '2027-06-30'
+  retrieved_at: '2026-06-30'
+internal_source: &internal_source
+  kind: internal_pattern
+  title: SAP Agent Context alias/evolution pattern
+  url: ''
+  retrieved_at: '2026-06-30'
+  specificity: internal_pattern
+  license_note: Internal-derived generic alias/evolution pattern; verify exact release/source before implementation guidance.
+items:
+  - id: sap.object.sap-term-alias-evolution
+    title: SAP term alias and evolution context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [alias, evolution, old-new, release-specific, terminology]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Anchor for SAP terminology that changes by generation, release or edition.
+      A term can be an alias, predecessor, successor, UI label, transaction name,
+      app name or productized service name; agents must ask for applicability.
+    release_applicability:
+      edition: Generic SAP terminology pattern
+      verification: Verify exact product/edition/release/source before claiming that one term replaces another.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: SAP old/new terminology should be represented as an applicability question, not flattened into one universal synonym.
+        evidence: [sap.rule.sap-alias-evolution-gate]
+
+  - id: sap.object.sap-migration-term-evolution
+    title: SAP migration terminology evolution context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [migration, ltmc, migration-cockpit, migrate-your-data, aliases, release-specific]
+    used_for: [migration.analysis, agent.context, fo.discovery]
+    summary: >
+      Alias/evolution anchor for migration terms such as LTMC, Migration Cockpit,
+      migration objects/templates and Migrate Your Data. These terms can point to
+      related but release/edition-sensitive tooling and UI surfaces.
+    release_applicability:
+      edition: Migration tooling terminology pattern
+      verification: Verify target edition/release and exact SAP Help/source page before recommending a tool, transaction or app name.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: LTMC, Migration Cockpit and Migrate Your Data should trigger release/edition disambiguation before implementation-ready guidance.
+        evidence: [sap.rule.sap-alias-evolution-gate]
+    aliases:
+      - term: LTMC
+        stance: legacy_or_context_specific_term
+        ask_for: ECC/S/4HANA release and current migration app/tool surface
+      - term: Migration Cockpit
+        stance: umbrella_or_tooling_family_term
+        ask_for: target edition/release and migration object/template evidence
+      - term: Migrate Your Data
+        stance: Fiori/app-label-style term in some contexts
+        ask_for: target launchpad/app/source evidence and release applicability
+
+  - id: sap.object.sap-workflow-term-evolution
+    title: SAP workflow terminology evolution context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [workflow, sap-business-workflow, flexible-workflow, workflow-management, build-process-automation, aliases]
+    used_for: [fo.workflow, agent.context, fo.discovery]
+    summary: >
+      Alias/evolution anchor for workflow terms. SAP Business Workflow, Flexible
+      Workflow, Workflow Management and Build Process Automation are not safe to
+      treat as one surface without product/release/edition and process context.
+    release_applicability:
+      edition: Workflow terminology pattern
+      verification: Verify target product/release/process and current SAP source before claiming which workflow technology applies.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Workflow terminology requires generation/product/process disambiguation before claiming configuration steps or capabilities.
+        evidence: [sap.rule.sap-alias-evolution-gate]
+    aliases:
+      - term: SAP Business Workflow
+        stance: classic workflow terminology; verify target generation and backend context
+        ask_for: ECC/S/4HANA release, process object and workflow runtime evidence
+      - term: Flexible Workflow
+        stance: S/4 process-specific workflow pattern term; not universal
+        ask_for: scope/process, release and configuration evidence
+      - term: Workflow Management
+        stance: product/service-era term; verify current product naming/source
+        ask_for: source/release and BTP/service context
+      - term: Build Process Automation
+        stance: newer product/service context term; verify current SAP source and tenant/service setup
+        ask_for: BTP/service entitlement, tenant and current source evidence
+
+  - id: sap.rule.sap-alias-evolution-gate
+    title: SAP alias/evolution gate
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [alias, evolution, old-new, release-specific, fail-closed]
+    used_for: [agent.answering, fo.quality_gate, migration.analysis, fo.workflow]
+    summary: >
+      Decision rule for SAP terms that may be aliases, legacy terms, renamed
+      surfaces or product-generation differences. It forces disambiguation before guidance.
+    release_applicability:
+      edition: Generic SAP terminology pattern
+      verification: Apply before recommending transactions/apps/services for old/new terms.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: If a user uses an old or ambiguous SAP term, the safe answer names plausible interpretations and asks for edition/release/source evidence.
+        evidence: [sap.object.sap-term-alias-evolution]
+    rules:
+      - condition: term is LTMC or migration cockpit but product/release is unknown
+        outcome: needs_release_edition_disambiguation
+      - condition: term is Migrate Your Data but app/source evidence is missing
+        outcome: needs_app_source_evidence
+      - condition: term is workflow but process/product generation is unknown
+        outcome: needs_workflow_generation_context
+      - condition: term may be legacy or replaced
+        outcome: caveat_alias_evolution_not_one_to_one
+      - condition: exact current SAP source is unavailable
+        outcome: answer with bounded interpretations, not exact configuration steps
+
+  - id: sap.fo-pattern.sap-alias-evolution-discovery
+    title: SAP alias/evolution discovery pattern
+    kind: fo_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [alias, evolution, discovery, migration, workflow]
+    used_for: [fo.discovery, agent.answering, migration.analysis, fo.workflow]
+    summary: >
+      Discovery pattern for old/new SAP terminology. It turns ambiguous labels
+      into clarification and evidence requests instead of confident wrong mapping.
+    release_applicability:
+      edition: Generic SAP terminology pattern
+      verification: Use exact product/release/source evidence before final recommendations.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Alias/evolution answers should list plausible interpretations and mark what evidence would make one interpretation ready.
+        evidence: [sap.rule.sap-alias-evolution-gate]
+    questions:
+      - Which SAP product generation and edition are in scope?
+      - Is the term a transaction, Fiori app label, service/product name, methodology label or generic process concept?
+      - Which release/source page proves the current name and availability?
+      - Is this a migration, workflow, configuration or user-facing navigation question?
+      - Should the answer be a concept explanation, a caveated translation or implementation-ready guidance?
+
+  - id: sap.test-pattern.sap-alias-evolution-fail-closed
+    title: SAP alias/evolution fail-closed test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [alias, evolution, ltmc, workflow, test-pattern]
+    used_for: [fo.test_scenarios, fo.quality_gate, agent.answering]
+    summary: >
+      Test pattern proving old/new SAP terms are not collapsed into universal
+      synonyms without product/release/edition/source evidence.
+    release_applicability:
+      edition: Generic SAP terminology pattern
+      verification: Use exact release/source evidence for final guidance.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Alias/evolution tests should reject guidance that treats ambiguous legacy/current terms as one-to-one replacements.
+        evidence: [sap.rule.sap-alias-evolution-gate]
+    test_scenarios:
+      - level: negative
+        case: User says LTMC and asks for current steps without product/release context.
+        expected: needs_release_edition_disambiguation.
+      - level: negative
+        case: User says workflow and asks how to configure it without process/generation context.
+        expected: needs_workflow_generation_context.
+      - level: acceptance
+        case: User asks whether Migrate Your Data is the same as Migration Cockpit.
+        expected: caveated_alias_evolution_not_one_to_one.
