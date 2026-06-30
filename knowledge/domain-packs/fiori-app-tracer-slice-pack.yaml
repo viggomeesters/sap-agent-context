@@ -1,0 +1,313 @@
+pack_id: sap-fiori-app-tracer-slice-pack
+title: SAP Fiori app tracer slice context pack
+description: >
+  Bounded Fiori app traceability slice for agent answers. The slice helps an
+  agent trace a Fiori app mention to source pointer, app anchor, role/catalog
+  evidence request, process/object context and fail-closed tenant caveats without
+  copying SAP Fiori app documentation or claiming tenant availability.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep as link-first public source pointers plus generic tracer
+    patterns; exact app/catalog/role availability must be verified in the target
+    tenant and release.
+freshness_current: &freshness_current
+  valid_from: '2026-06-30'
+  review_after: '2026-12-30'
+  expires_at: '2027-06-30'
+  retrieved_at: '2026-06-30'
+source_fiori_apps_library: &source_fiori_apps_library
+  kind: public_url
+  title: SAP Fiori Apps Reference Library
+  url: https://fioriappslibrary.hana.ondemand.com/sap/fix/externalViewer/
+  retrieved_at: '2026-06-30'
+  specificity: exact_page
+  license_note: Link-first public SAP app catalog pointer; do not copy app documentation text.
+source_internal_pattern: &source_internal_pattern
+  kind: internal_pattern
+  title: Internal Fiori app traceability answer pattern
+  url: ''
+  retrieved_at: '2026-06-30'
+  specificity: internal_pattern
+  license_note: Internal-derived generic tracer pattern; no customer data, tenant hostnames or copied SAP documentation.
+items:
+  - id: sap.ref.fiori-apps-reference-library
+    title: SAP Fiori Apps Reference Library source pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, fiori-app, app-library, catalog, role, source-traceability]
+    used_for: [fo.source_traceability, fo.authorization, fo.process_flow, agent.answering]
+    summary: >
+      Link-first source pointer for tracing Fiori app names to app metadata,
+      app/catalog information, related roles and release-specific availability.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Verify app availability, business catalog, role template and scope item in the target tenant and release before claiming implementation readiness.
+    freshness: *freshness_current
+    source: *source_fiori_apps_library
+    claims:
+      - statement: Fiori app answers should cite an app-library or app-specific source pointer before claiming exact app, role or catalog availability.
+        evidence: [https://fioriappslibrary.hana.ondemand.com/sap/fix/externalViewer/]
+
+  - id: sap.app.fiori-app-trace-anchor
+    title: Fiori app trace anchor
+    kind: sap_app
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, fiori-app, app-trace, business-catalog, role, scope-item]
+    used_for: [fo.sap_configuration, fo.authorization, fo.process_flow, agent.answering]
+    summary: >
+      Generic app anchor used when an agent must trace a Fiori app mention from
+      name/source pointer to process object, role/catalog evidence, scope item and
+      tenant/release verification questions.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Treat app/library metadata as a public starting point only; confirm the app, business catalog and role assignment in the target tenant.
+    freshness: *freshness_current
+    source: *source_fiori_apps_library
+    claims:
+      - statement: A Fiori app trace should separate public app-library evidence from tenant-specific role/catalog activation evidence.
+        evidence: [sap.ref.fiori-apps-reference-library]
+    relations:
+      sources: [sap.ref.fiori-apps-reference-library]
+      roles: [sap.role.fiori-business-role-trace]
+      access_policies: [sap.policy.fiori-app-tenant-verification]
+      field_maps: [sap.field-map.fiori-app-traceability]
+
+  - id: sap.object.fiori-app-trace
+    title: Fiori app traceability object
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, app-trace, process-object, role-catalog, traceability]
+    used_for: [fo.process_flow, fo.authorization, agent.answering]
+    summary: >
+      Trace object for app-answer context: app name/source, process or business
+      object, business catalog/role, scope item, authorization caveat and local
+      tenant evidence status.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Verify app-to-role/catalog/scope relationships in the target release and tenant.
+    freshness: *freshness_current
+    source: *source_internal_pattern
+    claims:
+      - statement: Fiori app traceability is incomplete unless source, app anchor, role/catalog evidence and tenant verification are visible.
+        evidence: [sap.ref.fiori-apps-reference-library]
+    relations:
+      apps: [sap.app.fiori-app-trace-anchor]
+
+  - id: sap.field-set.fiori-app-trace-core
+    title: Fiori app trace core field set
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, app-trace, fields, source-evidence, role-catalog]
+    used_for: [fo.field_mapping, fo.authorization, agent.answering]
+    summary: >
+      Core fields an agent should carry when answering a Fiori app trace question:
+      app name/id when known, source URL, business catalog or role evidence,
+      process/object anchor, scope item and tenant verification status.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Field values must be verified against app-library metadata and target-tenant role/catalog evidence.
+    freshness: *freshness_current
+    source: *source_internal_pattern
+    claims:
+      - statement: App trace answers need explicit evidence fields instead of a generic app-name-only answer.
+        evidence: [sap.ref.fiori-apps-reference-library]
+    relations:
+      objects: [sap.object.fiori-app-trace]
+    field_definitions:
+      - key: AppTrace.AppName
+        description: Human app name from the prompt or public app-library lookup.
+        usage: Use as the first lookup key; do not infer exact app id without source evidence.
+      - key: AppTrace.SourceUrl
+        description: Public source pointer or gated source reference used for the app claim.
+        usage: Cite in answers and keep link-first.
+      - key: AppTrace.BusinessCatalogOrRole
+        description: Business catalog, role template or authorization anchor when known.
+        usage: Mark as target-tenant verification required unless directly evidenced.
+      - key: AppTrace.ProcessObject
+        description: Business process or object the app operates on.
+        usage: Connect the app to FO process flow and object context.
+      - key: AppTrace.TenantVerificationStatus
+        description: Whether the target tenant/release has confirmed app availability and authorization assignment.
+        usage: Fail closed when missing.
+
+  - id: sap.field-map.fiori-app-traceability
+    title: Fiori app traceability field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, app-trace, field-map, source-traceability]
+    used_for: [fo.field_mapping, fo.authorization, agent.answering]
+    summary: >
+      Field map for Fiori app trace answers: carry app/source/role/process and
+      tenant-verification fields into answer proof and FO context.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Verify target fields against the app source and tenant role/catalog evidence.
+    freshness: *freshness_current
+    source: *source_internal_pattern
+    claims:
+      - statement: Fiori app trace answers should carry source, role/catalog and tenant verification fields as separate evidence slots.
+        evidence: [sap.field-set.fiori-app-trace-core]
+    relations:
+      fields: [sap.field-set.fiori-app-trace-core]
+      objects: [sap.object.fiori-app-trace]
+    field_map:
+      - source: AppTrace.AppName
+        target: Answer.AppName
+        purpose: Name the app as given or source-backed; do not invent app ids.
+      - source: AppTrace.SourceUrl
+        target: Answer.Citation
+        purpose: Provide link-first source evidence.
+      - source: AppTrace.BusinessCatalogOrRole
+        target: Answer.AuthorizationEvidence
+        purpose: Keep role/catalog evidence separate from source pointer.
+      - source: AppTrace.ProcessObject
+        target: Answer.ProcessContext
+        purpose: Connect the app to the business object/process context.
+      - source: AppTrace.TenantVerificationStatus
+        target: Answer.Caveat
+        purpose: Surface tenant/release verification requirement.
+    mapping_steps:
+      - source: AppTrace.AppName
+        target: Answer.AppName
+        purpose: Name the app as given or source-backed; do not invent app ids.
+      - source: AppTrace.SourceUrl
+        target: Answer.Citation
+        purpose: Provide link-first source evidence.
+      - source: AppTrace.BusinessCatalogOrRole
+        target: Answer.AuthorizationEvidence
+        purpose: Keep role/catalog evidence separate from source pointer.
+      - source: AppTrace.ProcessObject
+        target: Answer.ProcessContext
+        purpose: Connect the app to the business object/process context.
+      - source: AppTrace.TenantVerificationStatus
+        target: Answer.Caveat
+        purpose: Surface tenant/release verification requirement.
+
+  - id: sap.role.fiori-business-role-trace
+    title: Fiori business role trace placeholder
+    kind: sap_role
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, authorization, business-role, business-catalog, app-trace]
+    used_for: [fo.authorization, fo.sap_configuration, agent.answering]
+    summary: >
+      Generic role/catalog trace anchor for Fiori app answers. It represents the
+      requirement to verify target business roles, business catalogs and role
+      templates, not a universal role assignment.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Confirm business role and catalog assignment in the target tenant and release.
+    freshness: *freshness_current
+    source: *source_internal_pattern
+    claims:
+      - statement: Public app-library evidence does not prove a user's tenant role assignment.
+        evidence: [sap.ref.fiori-apps-reference-library]
+
+  - id: sap.policy.fiori-app-tenant-verification
+    title: Fiori app tenant verification policy
+    kind: access_policy
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, tenant-verification, authorization, fail-closed]
+    used_for: [fo.authorization, fo.quality_gate, agent.answering]
+    summary: >
+      Fail-closed policy: if a prompt asks whether a Fiori app is available,
+      assigned or configured in a tenant, require tenant/release evidence before
+      final implementation-ready guidance.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Tenant-specific app activation, role/catalog assignment and scope activation must be checked in the target system.
+    freshness: *freshness_current
+    source: *source_internal_pattern
+    claims:
+      - statement: A public Fiori app source pointer is not sufficient evidence for tenant app availability or user authorization.
+        evidence: [sap.ref.fiori-apps-reference-library]
+
+  - id: sap.rule.fiori-app-trace-answer-contract
+    title: Fiori app trace answer contract
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, app-trace, answer-contract, fail-closed]
+    used_for: [fo.quality_gate, fo.authorization, agent.answering]
+    summary: >
+      Decision rule for Fiori app trace answers: cite source pointer, name app
+      anchor, separate role/catalog evidence and fail closed on tenant-specific
+      availability or assignment.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Verify app/source, business catalog, scope item and role assignment in the target tenant/release.
+    freshness: *freshness_current
+    source: *source_internal_pattern
+    claims:
+      - statement: Fiori app answers should be source-cited and caveated for tenant role/catalog availability.
+        evidence: [sap.field-map.fiori-app-traceability]
+    relations:
+      apps: [sap.app.fiori-app-trace-anchor]
+      fields: [sap.field-set.fiori-app-trace-core]
+      access_policies: [sap.policy.fiori-app-tenant-verification]
+    rules:
+      - if: app name exists but no public or gated app source pointer is cited
+        then: do not provide implementation-ready answer
+        outcome: request app-library/source evidence
+      - if: role/catalog assignment is not tenant-verified
+        then: keep authorization guidance caveated
+        outcome: ask for target business role/catalog evidence
+      - if: source pointer and tenant role/catalog evidence are both present
+        then: answer may describe the traced app/process relationship
+        outcome: ready with citations and tenant evidence caveat
+
+  - id: sap.test-pattern.fiori-app-trace-answer
+    title: Fiori app trace answer test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [fiori, app-trace, answer-proof, authorization, fail-closed]
+    used_for: [fo.test_scenarios, fo.quality_gate, agent.answering]
+    summary: >
+      Test pattern for Fiori app trace answers. A good answer cites a source
+      pointer, names app/process context, separates role/catalog evidence and
+      asks for tenant verification when missing.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Verify app and role/catalog data in the target tenant before final implementation-ready answer.
+    freshness: *freshness_current
+    source: *source_internal_pattern
+    claims:
+      - statement: Fiori app trace tests should reject app-name-only answers without source and tenant caveats.
+        evidence: [sap.rule.fiori-app-trace-answer-contract]
+    relations:
+      rules: [sap.rule.fiori-app-trace-answer-contract]
+      field_maps: [sap.field-map.fiori-app-traceability]
+    test_scenarios:
+      - name: Fiori app source trace with missing tenant role evidence
+        given: A prompt asks which Fiori app supports a process, but no target role assignment is supplied.
+        when: An agent builds an answer.
+        then: The answer cites the app source pointer and asks for target business role/catalog verification.
+      - name: App-name-only claim rejection
+        given: A prompt provides only an app name and asks for tenant availability.
+        when: An agent prepares implementation-ready guidance.
+        then: The answer blocks final tenant-specific availability claims until source and tenant evidence are supplied.
