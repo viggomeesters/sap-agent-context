@@ -38,6 +38,10 @@ def test_runtime_retrieval_fixtures_pass(tmp_path: Path) -> None:
     assert "adversarial_generic_dashboard_not_ready" in ids
     assert "adversarial_invented_tenant_field_not_authoritative" in ids
     assert "adversarial_unrelated_hr_payroll_module_no_eam_ready_context" in ids
+    assert "foundation_context_from_zero_runtime" in ids
+    assert "alias_evolution_ltmc_runtime" in ids
+    assert "source_registry_access_boundary_runtime" in ids
+    assert "adversarial_roadmap_not_delivery_proof_runtime" in ids
 
 
 def test_runtime_retrieval_fixture_schema_supports_adversarial_forbidden_ids(

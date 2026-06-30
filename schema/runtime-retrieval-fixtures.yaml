@@ -112,3 +112,38 @@ fixtures:
       - sap.app.eam.pm.ie05
       - sap.app.eam.pm.ie06
       - sap.app.eam.pm.ih08
+  - id: foundation_context_from_zero_runtime
+    query: foundation ontology
+    limit: 12
+    filters:
+      kind: sap_object
+      topic: sap-foundation
+    required_top_ids:
+      - sap.object.sap-context-foundation
+  - id: alias_evolution_ltmc_runtime
+    query: LTMC Migration Cockpit Migrate Your Data release edition alias
+    limit: 50
+    required_ids:
+      - sap.object.sap-migration-term-evolution
+      - sap.rule.sap-alias-evolution-gate
+  - id: source_registry_access_boundary_runtime
+    query: source registry source family evidence boundary
+    limit: 50
+    filters:
+      topic: source-registry
+    required_ids:
+      - sap.ref.source-family-help-portal
+      - sap.ref.source-family-fiori-apps-library
+      - sap.ref.source-family-sap-notes-kba
+      - sap.policy.sap-source-registry-access-boundary
+  - id: adversarial_roadmap_not_delivery_proof_runtime
+    query: roadmap future capability delivered current production tenant available
+    limit: 50
+    filters:
+      topic: source-registry
+    required_ids:
+      - sap.ref.source-family-roadmap-explorer
+      - sap.test-pattern.sap-source-registry-fail-closed
+    forbidden_top_ids:
+      - sap.app-analytics-reporting-context
+      - sap.field-map.analytics-report-readiness
