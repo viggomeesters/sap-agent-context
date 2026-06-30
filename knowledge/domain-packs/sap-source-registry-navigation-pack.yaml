@@ -1,0 +1,383 @@
+pack_id: sap-source-registry-navigation-pack
+title: SAP source registry navigation pack
+description: >
+  Link-first registry for the public and gated SAP source families an agent should
+  use before making SAP claims. It records what each source is good for, its
+  access boundary, reuse rule and the evidence stance needed before turning a
+  pointer into implementation-ready guidance.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep as source-family navigation. Do not mirror SAP content or store gated SAP Notes/KBA text.
+freshness_current: &freshness_current
+  valid_from: '2026-06-30'
+  review_after: '2026-12-30'
+  expires_at: '2027-06-30'
+  retrieved_at: '2026-06-30'
+help_source: &help_source
+  kind: public_url
+  title: SAP Help Portal
+  url: https://help.sap.com/docs
+  retrieved_at: '2026-06-30'
+  specificity: root_pointer
+  license_note: Link-first public pointer; do not copy SAP documentation text.
+fiori_source: &fiori_source
+  kind: public_url
+  title: SAP Fiori Apps Reference Library
+  url: https://fioriappslibrary.hana.ondemand.com/sap/fix/externalViewer/
+  retrieved_at: '2026-06-30'
+  specificity: catalog_entry
+  license_note: Link-first catalog pointer; verify exact app/product version before claims.
+ba_hub_source: &ba_hub_source
+  kind: public_url
+  title: SAP Business Accelerator Hub
+  url: https://api.sap.com/
+  retrieved_at: '2026-06-30'
+  specificity: root_pointer
+  license_note: Link-first API/event/integration pointer; verify exact API artifact and release suitability.
+roadmap_source: &roadmap_source
+  kind: public_url
+  title: SAP Road Map Explorer
+  url: https://roadmaps.sap.com/
+  retrieved_at: '2026-06-30'
+  specificity: root_pointer
+  license_note: Link-first roadmap pointer; do not claim roadmap commitments without checking current page context.
+whats_new_source: &whats_new_source
+  kind: public_url
+  title: SAP What's New Viewer
+  url: https://help.sap.com/whats-new/
+  retrieved_at: '2026-06-30'
+  specificity: root_pointer
+  license_note: Link-first release-change pointer; verify exact product/release entry before current-version claims.
+learning_source: &learning_source
+  kind: public_url
+  title: SAP Learning
+  url: https://learning.sap.com/
+  retrieved_at: '2026-06-30'
+  specificity: root_pointer
+  license_note: Link-first learning pointer; use for explanation/onboarding, not final configuration proof.
+notes_source: &notes_source
+  kind: gated_url
+  title: SAP for Me / SAP Notes and KBAs
+  url: https://me.sap.com/
+  retrieved_at: '2026-06-30'
+  specificity: root_pointer
+  license_note: Gated pointer only; do not store protected SAP Notes/KBA text.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: SAP Agent Context source registry policy
+  url: ''
+  retrieved_at: '2026-06-30'
+  specificity: internal_pattern
+  license_note: Internal policy for source use and evidence boundaries.
+items:
+  - id: sap.ref.source-family-help-portal
+    title: SAP Help Portal source family
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-help, source-registry, documentation, product-assistance, release-specific]
+    used_for: [agent.context, agent.answering, fo.evidence, fo.source_traceability]
+    summary: >
+      Public SAP Help Portal root/source family. Use for product assistance,
+      concept explanation and product/release documentation pointers. Exact
+      release-specific claims still need exact product/version pages.
+    release_applicability:
+      edition: Cross-SAP public documentation pointer
+      verification: Select exact product, edition and version page before making release-specific or implementation-ready claims.
+    freshness: *freshness_current
+    source: *help_source
+    claims:
+      - statement: SAP Help Portal is a source-family pointer for public SAP documentation; root pages are not enough for exact release claims.
+        evidence: [https://help.sap.com/docs]
+
+  - id: sap.ref.source-family-fiori-apps-library
+    title: SAP Fiori Apps Reference Library source family
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [fiori, fiori-apps-reference-library, apps, roles, catalogs, source-registry]
+    used_for: [agent.context, agent.answering, fo.evidence, fo.source_traceability]
+    summary: >
+      Public source family for Fiori app/catalog/role/applicability exploration.
+      Use it to verify app identity and implementation metadata; do not assume an
+      app is available in a customer tenant without target evidence.
+    release_applicability:
+      edition: Fiori app catalog pointer
+      verification: Verify exact app, product version, business role/catalog and target tenant availability before implementation claims.
+    freshness: *freshness_current
+    source: *fiori_source
+    claims:
+      - statement: Fiori app catalog pointers help identify apps and metadata, but tenant availability remains target-specific.
+        evidence: [https://fioriappslibrary.hana.ondemand.com/sap/fix/externalViewer/]
+
+  - id: sap.ref.source-family-business-accelerator-hub
+    title: SAP Business Accelerator Hub source family
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [business-accelerator-hub, api, events, integration, source-registry]
+    used_for: [agent.context, agent.answering, fo.evidence, fo.field_mapping, fo.source_traceability]
+    summary: >
+      Public source family for SAP APIs, events and integration artifacts. Use it
+      to verify API identity, entity surfaces and integration direction before
+      mapping or interface design.
+    release_applicability:
+      edition: API/event catalog pointer
+      verification: Verify exact API/event artifact, product scope, authentication model and release suitability before design claims.
+    freshness: *freshness_current
+    source: *ba_hub_source
+    claims:
+      - statement: Business Accelerator Hub is useful for API/event identity and surface checks; exact artifacts are required for mapping proof.
+        evidence: [https://api.sap.com/]
+
+  - id: sap.ref.source-family-roadmap-explorer
+    title: SAP Road Map Explorer source family
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [roadmap, roadmap-explorer, future-release, source-registry]
+    used_for: [agent.context, agent.answering, fo.risk_notes, fo.source_traceability]
+    summary: >
+      Roadmap source family for future/planned capabilities. It is useful for
+      orientation and risk notes, not for claiming delivered/current behavior.
+    release_applicability:
+      edition: Roadmap pointer
+      verification: Verify current roadmap entry, status and product context; roadmap items are not delivery proof.
+    freshness: *freshness_current
+    source: *roadmap_source
+    claims:
+      - statement: Roadmap pointers are planning evidence, not proof that a capability exists in a target tenant or current release.
+        evidence: [https://roadmaps.sap.com/]
+
+  - id: sap.ref.source-family-whats-new-viewer
+    title: SAP What's New Viewer source family
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [whats-new, release, release-notes, source-registry]
+    used_for: [agent.context, agent.answering, fo.risk_notes, fo.source_traceability]
+    summary: >
+      Release-change source family for checking what changed in a product/release.
+      Use exact entries for current/release claims and recency-sensitive answers.
+    release_applicability:
+      edition: Release-change pointer
+      verification: Verify exact product, release and entry before saying a feature is new, changed, deprecated or available.
+    freshness: *freshness_current
+    source: *whats_new_source
+    claims:
+      - statement: What's New entries can support release-change claims only when the exact product/release entry is cited.
+        evidence: [https://help.sap.com/whats-new/]
+
+  - id: sap.ref.source-family-sap-learning
+    title: SAP Learning source family
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-learning, onboarding, explanation, source-registry]
+    used_for: [agent.context, agent.answering, onboarding.learning, fo.evidence]
+    summary: >
+      Learning/onboarding source family. It is useful for from-zero explanations
+      and vocabulary but should not override exact product documentation,
+      tenant evidence or release-specific source pages.
+    release_applicability:
+      edition: Learning pointer
+      verification: Verify exact learning unit and cross-check implementation claims with product documentation.
+    freshness: *freshness_current
+    source: *learning_source
+    claims:
+      - statement: SAP Learning can support onboarding explanations, but implementation-ready claims need product/source or tenant evidence.
+        evidence: [https://learning.sap.com/]
+
+  - id: sap.ref.source-family-sap-notes-kba
+    title: SAP Notes and KBA source family
+    kind: external_reference
+    status: active
+    access: gated
+    requires_login: true
+    sap_product: generic_sap
+    topics: [sap-notes, kba, sap-for-me, gated-source, support, source-registry]
+    used_for: [agent.context, agent.answering, fo.risk_notes, fo.source_traceability]
+    summary: >
+      Gated support source family. SAP Notes and KBAs may require S-user/customer
+      access and can be product/support-case specific. Store only pointers and
+      evidence requirements, not protected text.
+    release_applicability:
+      edition: Gated support pointer
+      verification: A human with authorized access must verify note/KBA content and applicability before relying on it.
+    freshness: *freshness_current
+    source: *notes_source
+    claims:
+      - statement: SAP Notes/KBA references are gated evidence pointers and must not be copied into the public-safe context repository.
+        evidence: [https://me.sap.com/]
+
+  - id: sap.policy.sap-source-registry-access-boundary
+    title: SAP source registry access boundary
+    kind: access_policy
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [source-registry, access-boundary, public, gated, copyright, evidence]
+    used_for: [agent.context, agent.answering, fo.quality_gate, fo.source_traceability]
+    summary: >
+      Access and reuse policy for SAP source families. It keeps the repository
+      link-first and public-safe while letting agents reason about what source
+      would be needed next.
+    release_applicability:
+      edition: Repository source policy
+      verification: Apply whenever source material is added or cited.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Source families should be stored as pointers plus evidence stance; copy only minimal original wording and never gated/proprietary SAP text.
+        evidence: [sap.ref.source-family-help-portal, sap.ref.source-family-sap-notes-kba]
+    rules:
+      - source_family: SAP Help Portal
+        access: public
+        allowed_use: exact public links and original summaries
+        forbidden_use: mirrored documentation pages
+        proof_boundary: exact product/version page required for release-specific claims
+      - source_family: Fiori Apps Reference Library
+        access: public
+        allowed_use: app/catalog/role/source pointer and original summary
+        forbidden_use: tenant availability claim without tenant evidence
+        proof_boundary: exact app/product version plus tenant evidence for availability
+      - source_family: Business Accelerator Hub
+        access: public
+        allowed_use: API/event identity pointer and original mapping caveat
+        forbidden_use: interface proof from root catalog only
+        proof_boundary: exact API/event artifact required
+      - source_family: Road Map Explorer
+        access: public
+        allowed_use: roadmap/risk pointer
+        forbidden_use: current-delivered claim from roadmap alone
+        proof_boundary: delivered-current claim needs product release or tenant proof
+      - source_family: SAP Notes/KBA
+        access: gated
+        allowed_use: authorized pointer and applicability request
+        forbidden_use: copied protected text or unsupported claims
+        proof_boundary: authorized human/S-user verification required
+
+  - id: sap.rule.sap-source-selection-gate
+    title: SAP source selection gate
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [source-selection, evidence, release, tenant, fail-closed]
+    used_for: [agent.context, agent.answering, fo.quality_gate, fo.source_traceability]
+    summary: >
+      Decision rule for selecting the right source family based on the question.
+      It prevents agents from using generic/root pointers as exact evidence.
+    release_applicability:
+      edition: Repository source policy
+      verification: Apply before any answer claims current availability, release change, API mapping, configuration or support-note applicability.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: >
+          The source family should match the claim type: explanation, app metadata,
+          API surface, roadmap, release change, support note or tenant proof.
+        evidence: [sap.policy.sap-source-registry-access-boundary]
+    rules:
+      - claim_type: concept_explanation
+        preferred_source: SAP Help Portal or SAP Learning
+        minimum_evidence: public source pointer plus original summary
+      - claim_type: fiori_app_metadata
+        preferred_source: Fiori Apps Reference Library
+        minimum_evidence: exact app/source page and product version
+      - claim_type: api_or_event_mapping
+        preferred_source: SAP Business Accelerator Hub
+        minimum_evidence: exact API/event artifact
+      - claim_type: planned_future_capability
+        preferred_source: SAP Road Map Explorer
+        minimum_evidence: roadmap pointer plus non-delivered caveat
+      - claim_type: new_changed_deprecated
+        preferred_source: SAP What's New Viewer
+        minimum_evidence: exact product/release entry
+      - claim_type: support_note_or_kba
+        preferred_source: SAP Notes/KBA via SAP for Me
+        minimum_evidence: authorized human verification; pointer only in repository
+      - claim_type: tenant_configuration_or_availability
+        preferred_source: target tenant/system evidence
+        minimum_evidence: screenshot/export/config value/test evidence from target landscape; source registry pointer is insufficient
+
+  - id: sap.fo-pattern.sap-source-registry-answer-proof
+    title: SAP source registry answer proof pattern
+    kind: fo_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [source-registry, answer-proof, evidence, source-labels]
+    used_for: [agent.answering, fo.evidence, fo.quality_gate]
+    summary: >
+      Answer pattern for source-labelled SAP responses. It asks the agent to name
+      the source family, confidence boundary and next proof needed instead of
+      relying on built-in model memory.
+    release_applicability:
+      edition: Repository source policy
+      verification: Apply to every source-backed answer.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: SAP answers should show which source family backs the claim and what would be required for implementation-ready proof.
+        evidence: [sap.rule.sap-source-selection-gate]
+    answer_slots:
+      - slot: source_family
+        meaning: SAP Help, Fiori Library, Business Accelerator Hub, Roadmap, What's New, SAP Notes/KBA, tenant evidence or internal pattern
+      - slot: access_boundary
+        meaning: public, gated or target-tenant evidence
+      - slot: exactness
+        meaning: root pointer, catalog entry, exact page or target proof
+      - slot: fail_closed_reason
+        meaning: why the answer is not implementation-ready yet
+      - slot: next_proof
+        meaning: the smallest evidence that would upgrade the answer
+
+  - id: sap.test-pattern.sap-source-registry-fail-closed
+    title: SAP source registry fail-closed test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [source-registry, fail-closed, source-selection, test-pattern]
+    used_for: [fo.test_scenarios, fo.quality_gate, agent.answering]
+    summary: >
+      Test pattern for rejecting answers that use root pointers, roadmap pages or
+      gated support references as stronger evidence than they are.
+    release_applicability:
+      edition: Repository source policy
+      verification: Apply to source registry/evidence answers.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Source registry tests should reject copied gated content, roadmap-as-delivered proof and tenant availability claims without target evidence.
+        evidence: [sap.rule.sap-source-selection-gate]
+    test_scenarios:
+      - level: negative
+        case: Agent claims a Fiori app is available in the customer tenant because the catalog has a matching app.
+        expected: needs_target_tenant_evidence
+      - level: negative
+        case: Agent quotes SAP Notes/KBA text into the repository.
+        expected: forbidden_gated_content_copy
+      - level: negative
+        case: Agent treats roadmap item as delivered current functionality.
+        expected: roadmap_is_not_delivery_proof
+      - level: acceptance
+        case: Agent explains SAP concept with Help/Learning pointer and caveats exact implementation.
+        expected: source_labelled_concept_explanation

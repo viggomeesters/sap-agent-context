@@ -84,7 +84,7 @@ def test_sap_foundation_bundle_retrieves_from_zero_and_customizing_context() -> 
         intent="agent.context",
         topic="SAP foundation lifecycle landscape customizing evidence",
         sap_product="generic_sap",
-        limit=20,
+        limit=40,
     )
     customizing_bundle = build_context_bundle(
         items,
