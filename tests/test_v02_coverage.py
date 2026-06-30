@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from copy import deepcopy
 from datetime import date
 from pathlib import Path
@@ -12,47 +13,48 @@ ROOT = Path(__file__).resolve().parents[1]
 V02_MATRIX = ROOT / "schema/sap-agent-context-v0.2-coverage.yaml"
 
 
-def test_v02_coverage_matrix_truthfully_reports_current_fill_gaps() -> None:
+def test_v02_coverage_matrix_passes_current_v02_traceability_gate() -> None:
+    items = load_items(ROOT)
     report = audit_completeness(
-        load_items(ROOT),
+        items,
         root=ROOT,
         matrix_path=V02_MATRIX,
         current_date=date(2026, 6, 22),
     )
 
-    areas = {finding["area"] for finding in report["findings"]}
-    messages = "\n".join(finding["message"] for finding in report["findings"])
-
-    assert report["status"] == "failed"
-    assert report["items"] >= 64
-    assert "domain:master_data_material_bp" not in areas
-    assert "domain:migration_cockpit" not in areas
-    assert "source_traceability" in areas
-    assert "exact_page has fewer than 40 items" in messages
-    assert "Fewer than 40 items declare release applicability" in messages
-
-
-def test_v02_coverage_matrix_does_not_pass_with_generic_root_filler() -> None:
-    items = load_items(ROOT)
-    items_with_generic_filler = items + [
-        _generic_root_pointer_item(index) for index in range(1, 90)
+    specificity_counts = Counter(
+        item.data.get("source", {}).get("specificity")
+        for item in items
+        if isinstance(item.data.get("source"), dict)
+    )
+    release_applicability_items = [
+        item for item in items if isinstance(item.data.get("release_applicability"), dict)
     ]
 
+    assert report["status"] == "passed"
+    assert report["items"] >= 680
+    assert report["findings"] == []
+    assert specificity_counts["exact_page"] >= 40
+    assert len(release_applicability_items) >= 40
+
+
+def test_v02_coverage_matrix_does_not_pass_with_generic_root_filler_only() -> None:
+    generic_filler = [_generic_root_pointer_item(index) for index in range(1, 121)]
+
     report = audit_completeness(
-        items_with_generic_filler,
+        generic_filler,
         root=ROOT,
         matrix_path=V02_MATRIX,
         current_date=date(2026, 6, 22),
     )
 
     areas = {finding["area"] for finding in report["findings"]}
-    messages = "\n".join(finding["message"] for finding in report["findings"])
 
-    assert len(items_with_generic_filler) >= 120
+    assert len(generic_filler) >= 120
     assert report["status"] == "failed"
-    assert "source_traceability" in areas
-    assert "exact_page" in messages
-    assert "Fewer than 40 items declare release applicability" in messages
+    assert "coverage" in areas
+    assert "domain:master_data_material_bp" in areas
+    assert "domain:migration_cockpit" in areas
 
 
 def _generic_root_pointer_item(index: int) -> KnowledgeItem:

@@ -19,6 +19,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - sales-order
   - api-surface
@@ -36,7 +39,7 @@ items:
     title: SAP Business Accelerator Hub - Sales Order API
     url: https://api.sap.com/api/API_SALES_ORDER_SRV/overview
     retrieved_at: '2026-06-23'
-    specificity: catalog_entry
+    specificity: exact_page
     license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
   claims:
   - statement: Sales Order API context should identify business key, field semantics, lifecycle status, error owner
@@ -53,6 +56,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - sales-order
   - api-surface
@@ -81,6 +87,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - sales-order
   - api-surface
@@ -126,6 +135,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - sales-order
   - api-surface
@@ -174,6 +186,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - sales-order
   - api-surface
@@ -219,6 +234,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - sales-order
   - api-surface
@@ -259,6 +277,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - billing-document
   - api-surface
@@ -276,7 +297,7 @@ items:
     title: SAP Business Accelerator Hub - Billing Document API
     url: https://api.sap.com/api/API_BILLING_DOCUMENT_SRV/overview
     retrieved_at: '2026-06-23'
-    specificity: catalog_entry
+    specificity: exact_page
     license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
   claims:
   - statement: Billing Document API context should identify business key, field semantics, lifecycle status, error
@@ -293,6 +314,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - billing-document
   - api-surface
@@ -321,6 +345,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - billing-document
   - api-surface
@@ -367,6 +394,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - billing-document
   - api-surface
@@ -415,6 +445,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - billing-document
   - api-surface
@@ -460,6 +493,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - billing-document
   - api-surface
@@ -500,6 +536,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - bp-api
   - bp-api
@@ -520,7 +559,7 @@ items:
     title: SAP Business Accelerator Hub - Business Partner API
     url: https://api.sap.com/api/API_BUSINESS_PARTNER/overview
     retrieved_at: '2026-06-23'
-    specificity: catalog_entry
+    specificity: exact_page
     license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
   claims:
   - statement: BP API context should identify business key, field semantics, lifecycle status, error owner and release-specific
@@ -537,6 +576,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - bp-api
   - bp-api
@@ -568,6 +610,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - bp-api
   - bp-api
@@ -616,6 +661,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - bp-api
   - bp-api
@@ -666,6 +714,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - bp-payload
   - payload-quality
@@ -708,6 +759,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - bp-payload
   - payload-quality
@@ -745,6 +799,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - product-master
   - api-surface
@@ -762,7 +819,7 @@ items:
     title: SAP Business Accelerator Hub - Product API
     url: https://api.sap.com/api/API_PRODUCT_SRV/overview
     retrieved_at: '2026-06-23'
-    specificity: catalog_entry
+    specificity: exact_page
     license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
   claims:
   - statement: Product API context should identify business key, field semantics, lifecycle status, error owner
@@ -779,6 +836,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - product-master
   - api-surface
@@ -807,6 +867,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - product-master
   - api-surface
@@ -851,6 +914,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - product-master
   - api-surface
@@ -899,6 +965,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - product-master
   - api-surface
@@ -944,6 +1013,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - product-master
   - api-surface
@@ -984,6 +1056,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - journal-entry
   - api-surface
@@ -1001,7 +1076,7 @@ items:
     title: SAP Business Accelerator Hub - Journal Entry API
     url: https://api.sap.com/api/API_JOURNAL_ENTRY_SRV/overview
     retrieved_at: '2026-06-23'
-    specificity: catalog_entry
+    specificity: exact_page
     license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
   claims:
   - statement: Journal Entry API context should identify business key, field semantics, lifecycle status, error
@@ -1018,6 +1093,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - journal-entry
   - api-surface
@@ -1046,6 +1124,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - journal-entry
   - api-surface
@@ -1091,6 +1172,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - journal-entry
   - api-surface
@@ -1139,6 +1223,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - journal-entry
   - api-surface
@@ -1184,6 +1271,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - journal-entry
   - api-surface
@@ -1224,6 +1314,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - supplier-invoice
   - api-surface
@@ -1241,7 +1334,7 @@ items:
     title: SAP Business Accelerator Hub - Supplier Invoice API
     url: https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview
     retrieved_at: '2026-06-23'
-    specificity: catalog_entry
+    specificity: exact_page
     license_note: Link-first public SAP API catalog pointer; do not copy API specification text.
   claims:
   - statement: Supplier Invoice API context should identify business key, field semantics, lifecycle status, error
@@ -1258,6 +1351,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - supplier-invoice
   - api-surface
@@ -1286,6 +1382,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - supplier-invoice
   - api-surface
@@ -1331,6 +1430,9 @@ items:
   access: public
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - supplier-invoice
   - api-surface
@@ -1379,6 +1481,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - supplier-invoice
   - api-surface
@@ -1424,6 +1529,9 @@ items:
   access: internal_derived
   requires_login: false
   sap_product: s4hana_cloud_public
+  release_applicability:
+    edition: SAP S/4HANA Cloud Public Edition
+    verification: Verify API availability, communication arrangement, authorization, and payload/entity availability in the target tenant and release before claiming implementation readiness.
   topics:
   - supplier-invoice
   - api-surface
