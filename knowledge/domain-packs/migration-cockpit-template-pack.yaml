@@ -516,3 +516,148 @@ items:
       - level: regression
         case: Mapping changes between simulation and load.
         expected: FO identifies retest and reconciliation impact before go-live.
+
+  - id: sap.field-set.migration-mapping-verification-evidence
+    title: Migration mapping verification evidence fields
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, verified-mapping, source-evidence, target-evidence]
+    used_for: [fo.field_mapping, migration.analysis, fo.quality_gate]
+    summary: >
+      Evidence fields for a verified Migration Cockpit mapping: downloaded
+      template/version, source field owner, target key, transform, value-source
+      class, validation evidence and tenant/release verification status.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: A migration mapping should not be called verified unless template, source, target, transform and validation evidence are all visible.
+        evidence: [sap.field-map.migration-source-target-template, sap.ref.sap-help-migration-cockpit-public]
+    relations:
+      objects: [sap.object.migration-template, sap.object.migration-project-run]
+    field_definitions:
+      - key: MappingEvidence.TemplateVersion
+        description: Downloaded migration template or release/version identifier.
+        usage: Cite when asserting a mapping was checked against the template.
+      - key: MappingEvidence.SourceOwner
+        description: Owner or system accountable for source field semantics.
+        usage: Assign when source data defects or unclear labels block mapping readiness.
+      - key: MappingEvidence.TargetKey
+        description: SAP target field/object key used by the migration template or context bundle.
+        usage: Link to sap_field, sap_object or field_map item when available.
+      - key: MappingEvidence.TransformAndValueSource
+        description: Direct, derived, lookup/customizing or manually enriched transform evidence.
+        usage: Keep value-source and transform evidence separate from the label.
+      - key: MappingEvidence.ValidationArtifact
+        description: Validation/simulation/reconciliation evidence proving the mapping was checked.
+        usage: Required before marking the mapping implementation-ready.
+      - key: MappingEvidence.ReadinessStatus
+        description: verified, needs_verification or needs_curation.
+        usage: Fail closed unless the mapping has all required evidence.
+
+  - id: sap.field-map.migration-verified-mapping-ledger
+    title: Verified Migration Cockpit mapping ledger
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, verified-mapping, ledger, field-mapping]
+    used_for: [fo.field_mapping, migration.analysis, fo.quality_gate]
+    summary: >
+      Ledger-style field map that upgrades a candidate migration mapping only
+      when source label, target key, transform/value-source, validation artifact
+      and release/tenant caveat are all present.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Verified migration mappings require evidence slots for source, target, transform/value-source, validation artifact and readiness status.
+        evidence: [sap.field-set.migration-mapping-verification-evidence]
+    relations:
+      fields: [sap.field-set.migration-mapping-verification-evidence, sap.field-set.migration-template-core]
+      objects: [sap.object.migration-template, sap.object.migration-project-run]
+    mapping_steps:
+      - source: MigrationTemplate.TemplateLabel
+        target: MappingEvidence.TemplateVersion
+        verification: Compare against downloaded template and release context.
+      - source: MigrationTemplate.SourceField
+        target: MappingEvidence.SourceOwner
+        verification: Identify accountable source owner or mark needs_curation.
+      - source: MigrationTemplate.TargetKey
+        target: MappingEvidence.TargetKey
+        verification: Link to a SAP target field/object/key when known.
+      - source: MigrationTemplate.TransformMethod
+        target: MappingEvidence.TransformAndValueSource
+        verification: Separate direct, derived, lookup/customizing and manual enrichment evidence.
+      - source: MigrationRun.LoadStatus
+        target: MappingEvidence.ValidationArtifact
+        verification: Attach validation, simulation or reconciliation evidence before ready status.
+      - source: MigrationTemplate.VerificationNote
+        target: MappingEvidence.ReadinessStatus
+        verification: Keep needs_verification/needs_curation visible until all evidence is present.
+
+  - id: sap.rule.migration-verified-mapping-ready-gate
+    title: Verified migration mapping ready gate
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, verified-mapping, ready-gate, fail-closed]
+    used_for: [fo.business_rules, migration.analysis, fo.quality_gate]
+    summary: >
+      Gate for verified migration mappings: an agent may mark a mapping ready
+      only when source owner, target key, transform/value-source, template/release
+      evidence and validation artifact are present.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: A source-to-target row with only a business label is not a verified Migration Cockpit mapping.
+        evidence: [sap.field-map.migration-verified-mapping-ledger]
+    relations:
+      field_maps: [sap.field-map.migration-verified-mapping-ledger, sap.field-map.migration-source-target-template]
+    rules:
+      - condition: template label exists but target key is missing
+        outcome: needs_curation_target_key
+      - condition: target key exists but template/release evidence is missing
+        outcome: needs_verification_release_template
+      - condition: transform or customizing/value-source evidence is missing
+        outcome: needs_verification_value_source
+      - condition: validation, simulation or reconciliation artifact is missing
+        outcome: not_ready_missing_validation_artifact
+      - condition: source, target, transform/value-source, release and validation evidence are present
+        outcome: ready_with_tenant_caveat
+
+  - id: sap.test-pattern.migration-verified-mapping-gate
+    title: Verified migration mapping gate test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [migration, cockpit, verified-mapping, test-pattern, fail-closed]
+    used_for: [fo.test_scenarios, fo.quality_gate, migration.analysis]
+    summary: >
+      Test pattern proving a mapping row is not ready until target key,
+      transform/value-source and validation evidence are present; ambiguous
+      template labels remain needs_verification.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Verified mapping tests should reject label-only and validation-missing mappings.
+        evidence: [sap.rule.migration-verified-mapping-ready-gate]
+    relations:
+      rules: [sap.rule.migration-verified-mapping-ready-gate]
+      field_maps: [sap.field-map.migration-verified-mapping-ledger]
+    test_scenarios:
+      - level: negative
+        case: Product Number label has no downloaded-template evidence.
+        expected: Mapping stays needs_verification_release_template.
+      - level: negative
+        case: Company Code value-source mapping has no target customizing lookup evidence.
+        expected: Mapping stays needs_verification_value_source.
+      - level: acceptance
+        case: Source owner, target key, transform/value-source, template/release and validation artifact are all present.
+        expected: Mapping can be ready_with_tenant_caveat.

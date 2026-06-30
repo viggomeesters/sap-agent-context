@@ -32,8 +32,12 @@ def test_migration_pack_has_required_context_shapes() -> None:
         "sap.field-map.migration-source-target-template": "field_map",
         "sap.field-map.migration-value-source-transform": "field_map",
         "sap.field-map.product-number-template-verification": "field_map",
+        "sap.field-set.migration-mapping-verification-evidence": "sap_field",
+        "sap.field-map.migration-verified-mapping-ledger": "field_map",
         "sap.rule.ambiguous-migration-template-labels": "decision_rule",
+        "sap.rule.migration-verified-mapping-ready-gate": "decision_rule",
         "sap.test-pattern.migration-template-validation": "test_pattern",
+        "sap.test-pattern.migration-verified-mapping-gate": "test_pattern",
         "sap.test-pattern.migration-reconciliation-and-delta": "test_pattern",
     }
 
@@ -66,6 +70,24 @@ def test_migration_public_items_are_link_first_and_freshness_labelled() -> None:
                 or "MIT" in license_note
                 or "do not mirror" in license_note
             )
+
+
+def test_migration_verified_mapping_gate_requires_evidence_slots() -> None:
+    items = _items_by_id()
+    ledger = items["sap.field-map.migration-verified-mapping-ledger"]
+    rule = items["sap.rule.migration-verified-mapping-ready-gate"]
+    evidence_fields = items["sap.field-set.migration-mapping-verification-evidence"]
+
+    targets = {step["target"] for step in ledger["mapping_steps"]}
+    outcomes = {entry["outcome"] for entry in rule["rules"]}
+    field_keys = {field["key"] for field in evidence_fields["field_definitions"]}
+
+    assert "MappingEvidence.TemplateVersion" in targets
+    assert "MappingEvidence.TransformAndValueSource" in targets
+    assert "MappingEvidence.ValidationArtifact" in targets
+    assert "not_ready_missing_validation_artifact" in outcomes
+    assert "ready_with_tenant_caveat" in outcomes
+    assert "MappingEvidence.ReadinessStatus" in field_keys
 
 
 def test_migration_bundle_readiness_is_specific_not_ambiguous() -> None:

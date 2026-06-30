@@ -64,5 +64,13 @@ def test_vector_metadata_records_rebuildable_source_and_count(tmp_path: Path) ->
             FROM vector_index_metadata
             """
         ).fetchone()
-    assert row == ("off", "build/vector-corpus.jsonl", "stable vector record id + text", 1405)
+    expected_vector_records = sum(
+        1 for line in (tmp_path / "vector-corpus.jsonl").read_text().splitlines() if line
+    )
+    assert row == (
+        "off",
+        "build/vector-corpus.jsonl",
+        "stable vector record id + text",
+        expected_vector_records,
+    )
     assert report["sqlite_vec"] == {"mode": "off", "status": "off", "reason": "disabled"}

@@ -79,11 +79,13 @@ def test_build_runtime_embeddings_populates_sqlite_vec_and_metadata(
         embed_texts=_fake_embeddings,
     )
 
+    expected_vector_records = sum(1 for line in vector_path.read_text().splitlines() if line)
+
     assert report["status"] == "embedded"
     assert report["provider"] == "fastembed"
     assert report["model"] == "BAAI/bge-small-en-v1.5"
     assert report["dimension"] == 3
-    assert report["vector_records"] == 1405
+    assert report["vector_records"] == expected_vector_records
     with sqlite3.connect(sqlite_path) as conn:
         metadata = conn.execute(
             """
@@ -92,8 +94,14 @@ def test_build_runtime_embeddings_populates_sqlite_vec_and_metadata(
             """
         ).fetchone()
         rows = conn.execute("SELECT count(*) FROM vector_embedding_records").fetchone()[0]
-    assert metadata == ("embedded", "fastembed", "BAAI/bge-small-en-v1.5", 3, 1405)
-    assert rows == 1405
+    assert metadata == (
+        "embedded",
+        "fastembed",
+        "BAAI/bge-small-en-v1.5",
+        3,
+        expected_vector_records,
+    )
+    assert rows == expected_vector_records
 
 
 def test_vector_search_returns_nearest_canonical_records(
