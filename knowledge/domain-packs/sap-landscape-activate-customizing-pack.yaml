@@ -1,0 +1,296 @@
+pack_id: sap-landscape-activate-customizing-pack
+title: SAP landscape, Activate and customizing hierarchy pack
+description: >
+  Context pack for the hierarchy that sits around SAP answers: implementation
+  lifecycle phase, system landscape/client, configuration/customizing surface,
+  and organization scope. It makes explicit when an agent should ask for phase,
+  release or target-tenant evidence instead of pretending a generic answer is
+  implementation-ready.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep as generic navigation/evidence contract; do not add customer landscapes or tenant customizing values.
+freshness_current: &freshness_current
+  valid_from: '2026-06-30'
+  review_after: '2026-12-30'
+  expires_at: '2027-06-30'
+  retrieved_at: '2026-06-30'
+activate_source: &activate_source
+  kind: public_url
+  title: SAP Activate Roadmap Viewer
+  url: https://roadmapviewer-supportportal.dispatcher.hana.ondemand.com/
+  retrieved_at: '2026-06-30'
+  specificity: catalog_entry
+  license_note: Public/gated source pointer only; verify exact roadmap content before quoting phase deliverables.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: SAP Agent Context landscape/customizing hierarchy pattern
+  url: ''
+  retrieved_at: '2026-06-30'
+  specificity: internal_pattern
+  license_note: Internal-derived generic implementation pattern; no customer landscape, tenant values or proprietary SAP documentation.
+items:
+  - id: sap.object.sap-activate-lifecycle
+    title: SAP Activate lifecycle context
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-activate, discover, prepare, explore, realize, deploy, run, lifecycle]
+    used_for: [implementation.lifecycle, agent.context, fo.discovery]
+    summary: >
+      Lifecycle anchor for SAP implementation phases. It helps an agent decide
+      whether the right evidence is a process/design decision, a configuration
+      decision, system proof or run/support evidence.
+    release_applicability:
+      edition: SAP Activate methodology pointer
+      verification: Verify exact roadmap/solution variant before quoting deliverables or phase names as current.
+    freshness: *freshness_current
+    source: *activate_source
+    claims:
+      - statement: >
+          SAP implementation answers should be phase-aware: Discover/Prepare/Explore
+          questions have different evidence expectations than Realize/Deploy/Run questions.
+        evidence: [sap.ref.sap-activate-roadmap-viewer]
+    lifecycle_phases:
+      - phase: Discover
+        evidence_stance: business case, scope and value hypothesis; no target-system proof expected yet
+      - phase: Prepare
+        evidence_stance: project setup, governance and initial landscape/planning evidence
+      - phase: Explore
+        evidence_stance: fit-to-standard/process decisions and gap evidence before build
+      - phase: Realize
+        evidence_stance: configuration, build, migration, integration and test evidence from non-production systems
+      - phase: Deploy
+        evidence_stance: cutover, readiness, transport, production-prep and sign-off evidence
+      - phase: Run
+        evidence_stance: production/support/monitoring evidence, with change controls
+
+  - id: sap.object.sap-system-landscape
+    title: SAP system landscape context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [landscape, dev, qas, quality, prd, production, client, mandant, transports]
+    used_for: [agent.context, fo.discovery, fo.quality_gate]
+    summary: >
+      Landscape anchor for separating DEV/build, QAS/test/acceptance and PRD/run
+      evidence. System/client names and actual landscapes are customer-specific;
+      generic answers can only describe the role of each layer.
+    release_applicability:
+      edition: Generic SAP implementation concept
+      verification: Verify actual project landscape, client strategy and transport path before making implementation claims.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: DEV/QAS evidence must not be presented as production truth; PRD claims need production or approved release evidence.
+        evidence: [sap.rule.sap-landscape-evidence-gate]
+    landscape_layers:
+      - layer: DEV
+        role: build/configuration/development sandbox or development client
+        answer_boundary: useful for build evidence, not production truth
+      - layer: QAS
+        role: quality assurance, test or acceptance validation
+        answer_boundary: useful for test evidence, not production operations truth
+      - layer: PRD
+        role: production/run system
+        answer_boundary: production claims require production evidence/change-control context
+
+  - id: sap.object.sap-configuration-surface
+    title: SAP configuration surface context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [configuration, customizing, spro, img, cbc, sscui, public-cloud, tenant-specific]
+    used_for: [agent.context, fo.business_rules, migration.analysis, fo.quality_gate]
+    summary: >
+      Configuration/customizing anchor for distinguishing classic SPRO/IMG,
+      Public Cloud-oriented configuration/CBC/SSCUI-like surfaces, master data,
+      extensions and code. Concrete configuration values remain target-tenant evidence.
+    release_applicability:
+      edition: Cross-edition configuration concept
+      verification: Verify whether the target is ECC, S/4HANA on-prem/private or S/4HANA Cloud Public Edition before naming the exact configuration path.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: SPRO/IMG/CBC/SSCUI-like configuration guidance must name the product/edition/release and require target-system evidence for concrete settings.
+        evidence: [sap.rule.sap-customizing-proof-gate]
+    configuration_surfaces:
+      - surface: SPRO/IMG
+        typical_context: classic/customizing navigation in ECC or S/4HANA on-prem/private contexts
+        answer_boundary: do not assume availability or exact path for Public Cloud
+      - surface: CBC
+        typical_context: SAP Central Business Configuration / Public Cloud-oriented configuration context
+        answer_boundary: verify project/tenant/release access before exact guidance
+      - surface: SSCUI
+        typical_context: self-service configuration activity style in S/4HANA Cloud contexts
+        answer_boundary: verify scope item and target release before exact guidance
+      - surface: Master data
+        typical_context: business-maintained values such as customers, materials, suppliers
+        answer_boundary: separate from customizing-controlled allowed values
+      - surface: Extension/code
+        typical_context: custom fields, logic, BAdIs, APIs or development objects
+        answer_boundary: verify extensibility model and transport/release path
+
+  - id: sap.object.sap-org-structure-scope
+    title: SAP organization structure scope context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [organization, company-code, controlling-area, plant, sales-org, purchasing-org, storage-location]
+    used_for: [agent.context, fo.discovery, fo.field_mapping, migration.analysis]
+    summary: >
+      Organization scope anchor. Company code, controlling area, plant, storage
+      location, sales organization, distribution channel, division and purchasing
+      organization can scope process behavior, master data and validation.
+    release_applicability:
+      edition: Generic SAP organization concept
+      verification: Verify actual org model and target-system values before accepting mappings or process claims.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Organization unit values are not generic SAP truth; they need target-system or project design evidence.
+        evidence: [sap.rule.sap-customizing-proof-gate]
+    org_units:
+      - key: company_code
+        asks_for: legal/entity/accounting scope and target BUKRS evidence
+      - key: controlling_area
+        asks_for: management accounting scope and controlling design evidence
+      - key: plant
+        asks_for: logistics/manufacturing/site scope and target WERKS evidence
+      - key: storage_location
+        asks_for: inventory location scope and target LGORT evidence
+      - key: sales_organization
+        asks_for: sales/distribution scope and target VKORG evidence
+      - key: purchasing_organization
+        asks_for: procurement scope and target EKORG evidence
+
+  - id: sap.rule.sap-landscape-evidence-gate
+    title: SAP lifecycle and landscape evidence gate
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [lifecycle, landscape, dev, qas, prd, evidence, fail-closed]
+    used_for: [agent.answering, fo.quality_gate, implementation.lifecycle]
+    summary: >
+      Decision rule for phase and system evidence. It prevents agents from asking
+      for impossible tenant evidence too early or overclaiming production truth
+      from non-production evidence.
+    release_applicability:
+      edition: Generic SAP implementation concept
+      verification: Verify actual methodology and landscape before applying to a project.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Answer stance changes by lifecycle phase and system layer; phase/system evidence must be explicit.
+        evidence: [sap.object.sap-activate-lifecycle, sap.object.sap-system-landscape]
+    rules:
+      - condition: lifecycle phase is Discover or Prepare and no target system exists
+        outcome: ask for scope/process/design evidence, not tenant screenshots
+      - condition: lifecycle phase is Explore
+        outcome: ask for fit-to-standard, gap and design evidence
+      - condition: claim is based on DEV only
+        outcome: caveated build evidence, not production truth
+      - condition: claim is based on QAS only
+        outcome: test/acceptance evidence, not production operations truth
+      - condition: claim is about PRD behavior
+        outcome: require production/change-control evidence or state missing evidence
+
+  - id: sap.rule.sap-customizing-proof-gate
+    title: SAP customizing proof gate
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [customizing, configuration, org-structure, tenant-evidence, fail-closed]
+    used_for: [agent.answering, fo.business_rules, migration.analysis, fo.quality_gate]
+    summary: >
+      Decision rule for configuration and org-unit claims. It distinguishes
+      generic explanation from implementation-ready target values/settings.
+    release_applicability:
+      edition: Cross-edition configuration concept
+      verification: Verify target edition/release and configuration surface before exact steps or accepted values.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Concrete customizing settings, allowed values and organization unit values require target-system evidence.
+        evidence: [sap.object.sap-configuration-surface, sap.object.sap-org-structure-scope]
+    rules:
+      - condition: user asks what SPRO/customizing is
+        outcome: explain configuration concept with edition/release caveat
+      - condition: user asks where to configure a setting without product/edition
+        outcome: needs_product_edition_release
+      - condition: user asks whether a company code, plant or org value is valid
+        outcome: needs_tenant_evidence
+      - condition: user asks for Public Cloud configuration path from classic SPRO wording
+        outcome: caveat old terminology and verify CBC/SSCUI or current configuration surface
+      - condition: agent has only source-file value for a customizing-controlled field
+        outcome: needs_target_customizing_evidence
+
+  - id: sap.fo-pattern.sap-phase-landscape-customizing-discovery
+    title: SAP phase, landscape and customizing discovery pattern
+    kind: fo_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [fo-discovery, lifecycle, landscape, customizing, organization]
+    used_for: [fo.discovery, agent.answering, fo.functional_design]
+    summary: >
+      FO discovery pattern for SAP questions where lifecycle, landscape,
+      configuration or org structure changes the right answer.
+    release_applicability:
+      edition: Generic SAP implementation concept
+      verification: Turn answers into implementation-ready guidance only after target product/system evidence exists.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: FO discovery should ask phase, system, configuration surface and org-scope questions before committing to implementation detail.
+        evidence: [sap.rule.sap-landscape-evidence-gate, sap.rule.sap-customizing-proof-gate]
+    questions:
+      - Which lifecycle phase are we in: Discover, Prepare, Explore, Realize, Deploy or Run?
+      - Which system/client is the evidence from: DEV, QAS, PRD or another landscape layer?
+      - Which edition/release is in scope: ECC, S/4HANA on-prem/private or S/4HANA Cloud Public Edition?
+      - Is the behavior controlled by customizing/configuration, master data, extension/code or authorization?
+      - Which org units scope the process and are the target values verified?
+      - What proof exists: design decision, source pointer, tenant screenshot/export, test evidence or production evidence?
+
+  - id: sap.test-pattern.sap-landscape-customizing-fail-closed
+    title: SAP landscape and customizing fail-closed test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [lifecycle, landscape, customizing, fail-closed, test-pattern]
+    used_for: [fo.test_scenarios, fo.quality_gate, agent.answering]
+    summary: >
+      Test pattern proving that phase/landscape/customizing answers use the right
+      evidence level and do not overclaim production or tenant truth.
+    release_applicability:
+      edition: Generic SAP implementation concept
+      verification: Use exact project landscape and target tenant evidence for final claims.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Agents should reject production/customizing claims when evidence is only phase-generic, DEV/QAS-only, or source-file-only.
+        evidence: [sap.rule.sap-landscape-evidence-gate, sap.rule.sap-customizing-proof-gate]
+    test_scenarios:
+      - level: negative
+        case: DEV configuration evidence is used as PRD truth.
+        expected: caveated build evidence, not production truth.
+      - level: negative
+        case: Source file contains company code but target T001 evidence is missing.
+        expected: needs_tenant_evidence.
+      - level: acceptance
+        case: Explore-phase process question has no system yet.
+        expected: ask for fit-to-standard, gap and design evidence.
