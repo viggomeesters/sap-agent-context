@@ -82,6 +82,31 @@ A passing gate means the repo satisfies the stated bounded contract. It does not
 
 ## Roadmap
 
+### Horizon 0 — From-zero SAP ontology and navigation layer
+
+Goal: teach a cloned local agent the SAP mental map before it consumes deep domain packs.
+
+The repo now treats SAP context as overlapping lenses rather than one hierarchy:
+foundation, lifecycle, landscape, edition/release, configuration/customizing,
+organization, process/capability, surface and evidence. This is the layer that
+keeps agents from answering from generic model memory or from a shallow library
+list.
+
+Recommended first ontology slices:
+
+1. **Foundation map**
+   - Why: answer “what is SAP?” from source-backed repo context, not vibes.
+   - Output: `docs/sap-context-ontology.md`, foundation context pack, and fail-closed tests.
+2. **Landscape / Activate / customizing hierarchy**
+   - Why: DEV/QAS/PRD, Discover/Explore/Realize, SPRO/IMG/CBC/SSCUI and org units change what evidence is reasonable.
+   - Output: lifecycle and configuration pack with target-system evidence gates.
+3. **Alias / evolution map**
+   - Why: LTMC, Migration Cockpit, Migrate Your Data, SAP Business Workflow, Flexible Workflow and Build Process Automation are generation/release-sensitive.
+   - Output: alias/evolution records and tests that prevent old/new overclaims.
+4. **Source registry navigation**
+   - Why: Fiori Apps Reference Library, SAP Help, Business Accelerator Hub, Roadmap Viewer, What’s New and SAP Notes need access/freshness labels without copying proprietary text.
+   - Output: source registry pack and citation/access rules.
+
 ### Horizon 1 — Repeat the deep-slice pattern
 
 Goal: prove that EAM/PM was not a one-off.

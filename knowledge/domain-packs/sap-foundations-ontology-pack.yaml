@@ -1,0 +1,302 @@
+pack_id: sap-foundations-ontology-pack
+title: SAP foundations ontology pack
+description: >
+  From-zero SAP context map for agents. This pack defines the first navigation
+  lenses an agent should use before answering SAP questions: foundation,
+  lifecycle, landscape, edition/release, configuration/customizing, organization,
+  process/capability, surface and evidence.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep this as a compact ontology/navigation layer, not a SAP documentation mirror.
+freshness_current: &freshness_current
+  valid_from: '2026-06-30'
+  review_after: '2026-12-30'
+  expires_at: '2027-06-30'
+  retrieved_at: '2026-06-30'
+sap_help_source: &sap_help_source
+  kind: public_url
+  title: SAP Help Portal
+  url: https://help.sap.com/
+  retrieved_at: '2026-06-30'
+  specificity: catalog_entry
+  license_note: Public source pointer only; do not copy SAP documentation text.
+sap_activate_source: &sap_activate_source
+  kind: public_url
+  title: SAP Activate Roadmap Viewer
+  url: https://roadmapviewer-supportportal.dispatcher.hana.ondemand.com/
+  retrieved_at: '2026-06-30'
+  specificity: catalog_entry
+  license_note: Public/gated source pointer only; verify current access and roadmap content.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: SAP Agent Context ontology pattern
+  url: ''
+  retrieved_at: '2026-06-30'
+  specificity: internal_pattern
+  license_note: Internal-derived consultant mental model; use only with source/caveat labels.
+items:
+  - id: sap.ref.sap-help-portal-foundation
+    title: SAP Help Portal source pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-foundation, source-registry, help-portal, evidence]
+    used_for: [agent.context, agent.answering, fo.evidence]
+    summary: >
+      Public SAP Help Portal source pointer. Use as a navigation/evidence source,
+      not as copied documentation content.
+    release_applicability:
+      edition: Cross-SAP source pointer
+      verification: Pick exact product/version pages before making release-specific claims.
+    freshness: *freshness_current
+    source: *sap_help_source
+    claims:
+      - statement: SAP Help Portal can be used as a public source registry pointer, but exact claims need exact product/version pages.
+        evidence: [sap.ref.sap-help-portal-foundation]
+
+  - id: sap.ref.sap-activate-roadmap-viewer
+    title: SAP Activate Roadmap Viewer source pointer
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-activate, lifecycle, roadmap, source-registry]
+    used_for: [agent.context, implementation.lifecycle, fo.evidence]
+    summary: >
+      Source pointer for SAP Activate roadmap/lifecycle context. Use to orient
+      phase-specific work such as Discover, Prepare, Explore, Realize, Deploy and Run.
+    release_applicability:
+      edition: SAP Activate methodology source pointer
+      verification: Verify current roadmap and solution-specific variants before quoting phase deliverables.
+    freshness: *freshness_current
+    source: *sap_activate_source
+    claims:
+      - statement: Implementation questions should be interpreted in lifecycle phase context before asking for system or tenant evidence.
+        evidence: [sap.ref.sap-activate-roadmap-viewer]
+
+  - id: sap.object.sap-context-foundation
+    title: SAP context foundation
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-foundation, erp, mental-model, from-zero, context-ontology]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Foundation anchor for explaining SAP as a broad ERP/business process
+      platform whose answers depend on product generation, edition, release,
+      lifecycle phase, system landscape, configuration, organization and evidence.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Do not turn generic foundation context into release-specific guidance without exact source evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Agents should classify SAP questions through foundation, lifecycle, landscape, edition/release, configuration, organization, process, surface and evidence lenses before answering.
+        evidence: [sap.rule.sap-answer-ontology-gate]
+    relations:
+      rules: [sap.rule.sap-answer-ontology-gate]
+      fields: [sap.field-set.sap-context-lenses]
+      patterns: [sap.fo-pattern.sap-from-zero-answer]
+
+  - id: sap.field-set.sap-context-lenses
+    title: SAP context lenses field set
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-foundation, ontology, classification, evidence]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Field set for answer classification. It records the lenses an agent should
+      fill before presenting SAP guidance.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Lens values must be checked against exact product/release/tenant evidence when they drive implementation advice.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: A safe SAP answer records surface, applicability, tenant dependency, evidence and output stance.
+        evidence: [sap.rule.sap-answer-ontology-gate]
+    field_definitions:
+      - key: SapContext.Surface
+        description: App, SAP GUI transaction, API/event, report, table, migration template, workflow, process or concept.
+        usage: Identify what kind of SAP artifact the user is asking about.
+      - key: SapContext.Applicability
+        description: ECC, S/4HANA, Public Cloud/private/on-prem, release, lifecycle phase and landscape.
+        usage: Prevent old/new or edition-specific claims from being collapsed.
+      - key: SapContext.TenantDependency
+        description: generic_foundation, release_specific, edition_specific or tenant_specific.
+        usage: Controls whether the answer can be ready or must ask for evidence.
+      - key: SapContext.Evidence
+        description: exact source, gated pointer, internal-derived pattern or missing evidence.
+        usage: Ensure answer claims are citeable.
+      - key: SapContext.OutputStance
+        description: ready_answer, caveated_answer or needs_evidence.
+        usage: Fail closed when evidence is missing.
+
+  - id: sap.rule.sap-answer-ontology-gate
+    title: SAP answer ontology gate
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-foundation, fail-closed, tenant-evidence, release-evidence]
+    used_for: [agent.answering, fo.quality_gate, migration.analysis]
+    summary: >
+      Decision rule for SAP answers: classify the question through context
+      lenses and fail closed when product/release/tenant evidence is missing.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Apply before making product/release/tenant-specific claims.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Generic SAP model memory is not enough for implementation-ready claims; repo evidence and applicability labels are required.
+        evidence: [sap.object.sap-context-foundation, sap.field-set.sap-context-lenses]
+    rules:
+      - condition: question is broad foundation context
+        outcome: answer with ontology lenses and source/caveat boundaries
+      - condition: question depends on product generation, edition or release
+        outcome: require exact product/release evidence before ready guidance
+      - condition: question depends on SPRO/customizing, org values, authorization or target tenant data
+        outcome: needs_tenant_evidence
+      - condition: only a public catalog/source pointer exists
+        outcome: cite pointer but do not claim tenant availability or configuration
+      - condition: evidence source is gated or proprietary
+        outcome: link/label source access; do not copy gated text
+
+  - id: sap.object.sap-landscape-and-lifecycle-context
+    title: SAP landscape and lifecycle context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [landscape, dev, qas, prd, lifecycle, sap-activate]
+    used_for: [agent.context, implementation.lifecycle, fo.discovery]
+    summary: >
+      Anchor for separating implementation lifecycle phase from system landscape.
+      Before a system exists, questions belong to Discover/Prepare/Explore-style
+      design evidence; after systems exist, DEV/QAS/PRD/client evidence matters.
+    release_applicability:
+      edition: Generic SAP implementation concept
+      verification: Verify actual project landscape and methodology before mapping phase names to deliverables.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: DEV/QAS evidence should not be treated as PRD truth, and pre-system Explore questions should not demand tenant proof that cannot exist yet.
+        evidence: [sap.ref.sap-activate-roadmap-viewer, sap.rule.sap-answer-ontology-gate]
+
+  - id: sap.object.sap-customizing-configuration-context
+    title: SAP customizing and configuration context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [customizing, spro, img, cbc, sscui, tenant-specific]
+    used_for: [agent.context, fo.business_rules, migration.analysis, fo.quality_gate]
+    summary: >
+      Anchor for configuration/customizing context. SPRO/IMG, CBC and SSCUI-like
+      configuration surfaces can control behavior, allowed values and process
+      variants; concrete values remain target-system evidence, not generic SAP truth.
+    release_applicability:
+      edition: Cross-edition configuration concept
+      verification: Verify whether the target product uses SPRO/IMG, CBC, SSCUI or another configuration path before advising exact steps.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Customizing-controlled behavior and values must be treated as tenant-specific until target-system evidence exists.
+        evidence: [sap.rule.sap-answer-ontology-gate]
+
+  - id: sap.object.sap-org-process-surface-context
+    title: SAP organization, process and surface context
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [organization, company-code, plant, process, fiori, sap-gui, api]
+    used_for: [agent.context, fo.discovery, fo.field_mapping]
+    summary: >
+      Anchor for connecting organizational units, process/capability maps and
+      interaction surfaces. Company codes, plants, sales orgs, Fiori apps,
+      SAP GUI transactions, APIs/events and migration templates are different
+      lenses over the same implementation context.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify exact org model, activated scope, app/transaction availability and target release before implementation-ready claims.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: A surface such as a Fiori app or transaction should be tied back to process, org, authorization and source evidence before an agent claims readiness.
+        evidence: [sap.rule.sap-answer-ontology-gate]
+
+  - id: sap.fo-pattern.sap-from-zero-answer
+    title: From-zero SAP answer pattern
+    kind: fo_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-foundation, answer-shape, from-zero, fo-discovery]
+    used_for: [agent.answering, fo.discovery, fo.functional_design]
+    summary: >
+      FO/agent answer pattern for a user who starts from zero: explain the SAP
+      context lenses first, then narrow to source-backed process/surface/evidence.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Move from foundation explanation to exact product/source evidence before implementation steps.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: From-zero answers should teach the map first and then state what evidence is still required.
+        evidence: [sap.object.sap-context-foundation, sap.rule.sap-answer-ontology-gate]
+    questions:
+      - Which product generation/edition/release are we discussing?
+      - Is the question before implementation, during Explore/Realize, or after go-live?
+      - Which system/client/landscape does the evidence come from?
+      - Is behavior controlled by SAP standard, release, customizing, org structure, authorization or tenant data?
+      - Which source proves the claim and what is its access/freshness label?
+    non_goals:
+      - Do not pretend a broad explanation is implementation-ready configuration.
+      - Do not copy SAP documentation text.
+      - Do not claim tenant availability or values without target evidence.
+
+  - id: sap.test-pattern.sap-foundation-fail-closed
+    title: SAP foundation fail-closed test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-foundation, fail-closed, test-pattern]
+    used_for: [fo.test_scenarios, fo.quality_gate, agent.answering]
+    summary: >
+      Test pattern for ontology-guided answers. Foundation answers must include
+      context lenses and caveats; configuration/release/tenant questions must fail closed.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Use exact source/release/tenant evidence for concrete implementation claims.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Foundation tests should reject fluent SAP prose that lacks applicability, evidence or tenant caveat labels.
+        evidence: [sap.rule.sap-answer-ontology-gate]
+    test_scenarios:
+      - level: acceptance
+        case: User asks what SAP is from zero.
+        expected: Answer includes foundation, lifecycle, landscape, edition/release, configuration, organization, process, surface and evidence lenses.
+      - level: negative
+        case: User asks whether a customizing value is valid in their tenant without tenant evidence.
+        expected: needs_tenant_evidence.
+      - level: negative
+        case: User asks whether a Fiori app is available to a user from a public source pointer only.
+        expected: caveated answer; no tenant availability claim.
