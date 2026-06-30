@@ -1,0 +1,209 @@
+pack_id: sap-value-source-customizing-slice-pack
+title: SAP value-source and customizing slice context pack
+description: >
+  Slice that makes value-source classification explicit for agent answers: direct
+  identifiers, customizing-controlled values, derived/defaulted values, code-list
+  values and tenant-specific lookup evidence are separate proof slots.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep as generic, public-safe value-source patterns. Do not store tenant customizing values; only store the evidence contract.
+freshness_current: &freshness_current
+  valid_from: '2026-06-30'
+  review_after: '2026-12-30'
+  expires_at: '2027-06-30'
+  retrieved_at: '2026-06-30'
+field_atlas_relationships: &field_atlas_relationships
+  kind: public_url
+  title: SAP Field Atlas relationships/value-source seed
+  url: https://github.com/viggomeesters/sap-field-atlas/blob/main/data/relationships.yaml
+  retrieved_at: '2026-06-30'
+  specificity: exact_page
+  license_note: Public MIT metadata from archived Field Atlas; no copied SAP documentation.
+internal_source: &internal_source
+  kind: internal_pattern
+  title: Internal value-source/customizing answer pattern
+  url: ''
+  retrieved_at: '2026-06-30'
+  specificity: internal_pattern
+  license_note: Internal-derived generic value-source pattern; no customer data, tenant values or copied SAP documentation.
+items:
+  - id: sap.object.value-source-classification
+    title: Value-source classification object
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [value-source, customizing, field-mapping, migration, tenant-verification]
+    used_for: [fo.field_mapping, migration.analysis, fo.quality_gate, agent.answering]
+    summary: >
+      Object anchor for classifying whether a field value is a direct identifier,
+      customizing-controlled value, code-list value, derived/defaulted value or
+      tenant-specific lookup.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Verify customizing/value lists in the target tenant and release before accepting concrete values.
+    freshness: *freshness_current
+    source: *field_atlas_relationships
+    claims:
+      - statement: Agents should classify value source before accepting field mappings or migration values.
+        evidence: [sap.ref.field-atlas-migration-relationships]
+    relations:
+      fields: [sap.field-set.value-source-classification-core]
+      field_maps: [sap.field-map.value-source-customizing-evidence]
+
+  - id: sap.field-set.value-source-classification-core
+    title: Value-source classification field set
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [value-source, customizing, field-mapping, evidence]
+    used_for: [fo.field_mapping, migration.analysis, agent.answering]
+    summary: >
+      Field set for value-source evidence: field key, value-source kind,
+      lookup/customizing table when known, owner, allowed value evidence,
+      fallback behavior and readiness status.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Tenant-specific allowed values and defaults require target-system evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Value-source answers should distinguish identifier, customizing, code-list, derived and defaulted values.
+        evidence: [sap.object.value-source-classification]
+    relations:
+      objects: [sap.object.value-source-classification]
+    field_definitions:
+      - key: ValueSource.FieldKey
+        description: Technical or canonical field key being mapped.
+        usage: Cite as the subject of value-source evidence.
+      - key: ValueSource.Kind
+        description: identifier, customizing, code_list, derived, defaulted or tenant_specific_lookup.
+        usage: Controls whether a concrete value can be accepted generically.
+      - key: ValueSource.LookupAnchor
+        description: Lookup/customizing table, app, API, domain or owner used to verify values.
+        usage: Required for customizing and code-list claims.
+      - key: ValueSource.ValueEvidence
+        description: Evidence for allowed values or accepted source-to-target values.
+        usage: Must be tenant/release-specific for implementation-ready mappings.
+      - key: ValueSource.FallbackBehavior
+        description: Whether missing/unknown values may default, derive, block or require remediation.
+        usage: Keep fallback assumptions visible in FO/test scenarios.
+      - key: ValueSource.ReadinessStatus
+        description: ready_with_tenant_evidence, needs_value_evidence or needs_curation.
+        usage: Fail closed when evidence is missing.
+
+  - id: sap.field-map.value-source-customizing-evidence
+    title: Value-source customizing evidence field map
+    kind: field_map
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [value-source, customizing, field-map, migration, evidence]
+    used_for: [fo.field_mapping, migration.analysis, fo.quality_gate]
+    summary: >
+      Maps a candidate field value to explicit evidence slots so agents do not
+      treat customizing-controlled values as generic constants.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Verify lookup/customizing evidence in the target tenant/release.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Customizing-controlled values require lookup anchor and target-tenant evidence before ready status.
+        evidence: [sap.field-set.value-source-classification-core]
+    relations:
+      fields: [sap.field-set.value-source-classification-core]
+      objects: [sap.object.value-source-classification, sap.object.company-code]
+    mapping_steps:
+      - source: FieldDefinition.key
+        target: ValueSource.FieldKey
+        verification: Preserve technical/canonical field key.
+      - source: FieldDefinition.value_source.kind
+        target: ValueSource.Kind
+        verification: Classify identifier/customizing/code-list/derived/defaulted explicitly.
+      - source: FieldDefinition.value_source.lookup_table
+        target: ValueSource.LookupAnchor
+        verification: Record lookup table/app/API/domain when known.
+      - source: TenantEvidence.allowed_values
+        target: ValueSource.ValueEvidence
+        verification: Require tenant/release evidence for concrete allowed values.
+      - source: MappingRule.fallback
+        target: ValueSource.FallbackBehavior
+        verification: Block if fallback behavior is not agreed.
+      - source: Review.readiness
+        target: ValueSource.ReadinessStatus
+        verification: Use needs_value_evidence or needs_curation until evidence exists.
+
+  - id: sap.rule.value-source-customizing-ready-gate
+    title: Value-source customizing ready gate
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [value-source, customizing, ready-gate, fail-closed]
+    used_for: [fo.business_rules, migration.analysis, fo.quality_gate]
+    summary: >
+      Gate for value-source claims: direct identifiers can be mapped generically;
+      customizing and code-list values need lookup evidence; derived/defaulted
+      values need explicit rule and fallback behavior.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Target-system value evidence is required before implementation-ready value mappings.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Company-code-like customizing values must not be accepted from source extracts without target customizing evidence.
+        evidence: [sap.field-map.value-source-customizing-evidence, sap.object.company-code]
+    relations:
+      field_maps: [sap.field-map.value-source-customizing-evidence]
+    rules:
+      - condition: value_source.kind is identifier and target key is known
+        outcome: generic_mapping_allowed_with_source_citation
+      - condition: value_source.kind is customizing and lookup/value evidence is missing
+        outcome: needs_value_evidence
+      - condition: value_source.kind is code_list and release-specific allowed values are missing
+        outcome: needs_release_value_list
+      - condition: value is derived or defaulted but the rule is not explicit
+        outcome: needs_derivation_rule
+      - condition: fallback behavior is unknown
+        outcome: needs_curation_fallback
+
+  - id: sap.test-pattern.value-source-customizing-gate
+    title: Value-source customizing gate test pattern
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_cloud_public
+    topics: [value-source, customizing, test-pattern, field-mapping]
+    used_for: [fo.test_scenarios, fo.quality_gate, migration.analysis]
+    summary: >
+      Test pattern proving that customizing-controlled and derived/defaulted
+      values stay blocked until lookup evidence, derivation rules and fallback
+      behavior are explicit.
+    release_applicability:
+      edition: SAP S/4HANA Cloud Public Edition
+      verification: Validate against target tenant customizing/value-list evidence before final use.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Value-source tests should reject source-only customizing values and hidden defaults.
+        evidence: [sap.rule.value-source-customizing-ready-gate]
+    relations:
+      rules: [sap.rule.value-source-customizing-ready-gate]
+      field_maps: [sap.field-map.value-source-customizing-evidence]
+    test_scenarios:
+      - level: negative
+        case: Company Code source value is present but target tenant T001 evidence is missing.
+        expected: needs_value_evidence.
+      - level: negative
+        case: Field value is defaulted but no default rule or owner is recorded.
+        expected: needs_derivation_rule.
+      - level: acceptance
+        case: Identifier field maps directly and cites source/target key evidence.
+        expected: generic_mapping_allowed_with_source_citation.
