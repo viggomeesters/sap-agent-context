@@ -79,7 +79,9 @@ def test_gap_report_turns_missing_dimensions_into_follow_up_candidates() -> None
     assert report["slices"]
     migration = next(entry for entry in report["slices"] if entry["id"] == "migration")
     assert migration["gaps"]
-    assert migration["gaps"][0]["follow_up_task"].startswith("Add FO pattern records")
+    assert migration["gaps"][0]["priority"] < 200
+    assert migration["gaps"][0]["answer_impact"].startswith("Answers")
+    assert migration["gaps"][0]["follow_up_task"].startswith("Add")
     no_gap = next(entry for entry in report["slices"] if entry["id"] == "eam_pm_lifecycle")
     assert no_gap["gaps"] == []
     assert no_gap["no_follow_up_reason"]
@@ -105,7 +107,9 @@ def test_gap_report_cli_outputs_actionable_markdown(tmp_path: Path, capsys) -> N
     assert "# SAP Agent Context gap report by slice" in markdown
     assert "follow-up candidate" in markdown
     assert "no-follow-up reason" in markdown
-    assert "Add FO pattern records" in markdown
+    assert "Add" in markdown
+    assert "Top answer impact" in markdown
+    assert "Answer impact:" in markdown
     captured = capsys.readouterr()
     assert "# SAP Agent Context gap report by slice" in captured.out
 

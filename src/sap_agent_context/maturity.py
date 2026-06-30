@@ -157,8 +157,8 @@ def render_gap_markdown(report: dict[str, Any]) -> str:
             "slices carry an explicit no-follow-up reason."
         ),
         "",
-        "| Slice | Promotion | Maturity | Gaps | Next action |",
-        "|---|---|---|---:|---|",
+        "| Slice | Promotion | Maturity | Gaps | Top answer impact | Next action |",
+        "|---|---|---|---:|---|---|",
     ]
     for entry in report["slices"]:
         next_action = (
@@ -166,12 +166,18 @@ def render_gap_markdown(report: dict[str, Any]) -> str:
             if entry["gaps"]
             else entry["no_follow_up_reason"]
         )
+        top_impact = (
+            entry["gaps"][0]["answer_impact"]
+            if entry["gaps"]
+            else "no current answer-impact gap"
+        )
         lines.append(
-            "| {id} | {promotion} | {maturity} | {count} | {next_action} |".format(
+            "| {id} | {promotion} | {maturity} | {count} | {top_impact} | {next_action} |".format(
                 id=entry["id"],
                 promotion=entry["promotion"],
                 maturity=entry["maturity"],
                 count=len(entry["gaps"]),
+                top_impact=top_impact,
                 next_action=next_action,
             )
         )
@@ -183,6 +189,8 @@ def render_gap_markdown(report: dict[str, Any]) -> str:
             for gap in entry["gaps"]:
                 lines.append(f"- **{gap['dimension']}**: {gap['follow_up_task']}")
                 lines.append(f"  - Acceptance: {gap['acceptance']}")
+                lines.append(f"  - Answer impact: {gap['answer_impact']}")
+                lines.append(f"  - Priority: {gap['priority']}")
             lines.append("")
     else:
         lines.append("No current maturity gaps under the report heuristic.\n")
@@ -280,9 +288,12 @@ def _gap_entry(entry: dict[str, Any]) -> dict[str, Any]:
             "dimension": dimension,
             "follow_up_task": _follow_up_task(str(entry["id"]), str(dimension)),
             "acceptance": _gap_acceptance(str(dimension)),
+            "answer_impact": _gap_answer_impact(str(dimension)),
+            "priority": _gap_priority(str(entry["promotion"]), str(dimension)),
         }
         for dimension in missing
     ]
+    gaps.sort(key=lambda gap: gap["priority"])
     return {
         "id": entry["id"],
         "promotion": entry["promotion"],
@@ -319,3 +330,30 @@ def _gap_acceptance(dimension: str) -> str:
         "runtime_or_eval_coverage": "Runtime, semantic or FO fixture proves retrieval visibility.",
     }
     return labels.get(dimension, "Missing dimension is filled and covered by tests.")
+
+
+def _gap_answer_impact(dimension: str) -> str:
+    labels = {
+        "source_references": "Answers cannot cite authoritative evidence or freshness boundaries.",
+        "domain_anchors": "Answers stay generic because no concrete SAP app/object can be named.",
+        "fo_patterns": "Answers lack FO-ready questions, assumptions and design structure.",
+        "decision_rules": (
+            "Answers may overclaim tenant-specific behavior instead of failing closed."
+        ),
+        "test_patterns": "Answers can regress without positive/negative scenario coverage.",
+        "runtime_or_eval_coverage": "Answers may not retrieve the slice in local/runtime queries.",
+    }
+    return labels.get(dimension, "Answers lose bounded evidence for this gap.")
+
+
+def _gap_priority(promotion: str, dimension: str) -> int:
+    dimension_rank = {
+        "source_references": 10,
+        "domain_anchors": 20,
+        "decision_rules": 30,
+        "fo_patterns": 40,
+        "runtime_or_eval_coverage": 50,
+        "test_patterns": 60,
+    }
+    promotion_offset = 0 if promotion == "required" else 100
+    return promotion_offset + dimension_rank.get(dimension, 90)
