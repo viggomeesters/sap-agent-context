@@ -12,7 +12,6 @@ from sap_agent_context.bundle import build_context_bundle, mccoy_provider_manife
 from sap_agent_context.completeness import audit_completeness
 from sap_agent_context.content_curation import (
     build_content_curation_report,
-    render_content_curation_markdown,
     write_content_curation_report,
 )
 from sap_agent_context.domain_density import (
@@ -91,12 +90,6 @@ def build_parser() -> argparse.ArgumentParser:
     )
     curation_report.add_argument("--output", type=Path)
     curation_report.add_argument("--sample-size", type=int, default=3)
-    curation_report.add_argument(
-        "--format",
-        choices=["json", "markdown"],
-        default="json",
-        help="render as JSON for machines or Markdown for docs/review",
-    )
 
     evaluate = subparsers.add_parser("evaluate-fixtures")
     evaluate.add_argument("--fixtures", type=Path)
@@ -318,7 +311,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         payload = build_content_curation_report(items, sample_size=args.sample_size)
         if args.output:
             output_path = _resolve_output(root, args.output)
-            write_content_curation_report(payload, output_path, args.format)
+            write_content_curation_report(payload, output_path)
             summary = payload["summary"]
             print(
                 "curation-report written "
@@ -328,10 +321,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 f"curation_needed={summary['curation_needed']}"
             )
             return 0
-        if args.format == "markdown":
-            print(render_content_curation_markdown(payload), end="")
-        else:
-            print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
         return 0
 
     if args.command == "evaluate-fixtures":

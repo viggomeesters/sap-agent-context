@@ -71,8 +71,8 @@ records or legacy packs, then validate records; do not hand-edit generated
 Sample content claims for curation:
 
 ```bash
-uv run sap-agent-context curation-report --sample-size 3 --format markdown \
-  --output build/reports/content-curation-sample.md
+uv run sap-agent-context curation-report --sample-size 3 \
+  --output build/reports/content-curation-sample.json
 ```
 
 The content curation sample checks source/access, freshness, evidence and

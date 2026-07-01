@@ -17,8 +17,7 @@ audit-v02-gap-report:
 curation-report:
 	uv run sap-agent-context curation-report \
 		--sample-size 3 \
-		--format markdown \
-		--output build/reports/content-curation-sample.md
+		--output build/reports/content-curation-sample.json
 
 evaluate:
 	uv run sap-agent-context evaluate-fixtures

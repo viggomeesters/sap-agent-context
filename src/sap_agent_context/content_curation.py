@@ -95,58 +95,8 @@ def build_content_curation_report(
     }
 
 
-def render_content_curation_markdown(report: dict[str, Any]) -> str:
-    """Render a compact Markdown curation report for reviewer handoff."""
-
-    summary = report["summary"]
-    lines = [
-        "# SAP Agent Context content curation sample",
-        "",
-        f"Status: `{report['status']}`",
-        "",
-        "This report makes the residual-risk boundary executable. It samples "
-        "domain-pack claims for source/access, freshness, evidence and "
-        "tenant/customizing boundary checks. It is not exhaustive claim-by-claim "
-        "SAP content certification.",
-        "",
-        "repo-level gates cover schema validation, runtime behavior, source/access "
-        "boundaries, CI semantics and ontology routing. Full SAP claim accuracy "
-        "curation remains a separate pass.",
-        "",
-        "## Summary",
-        "",
-        f"- Total claims: {summary['total_claims']}",
-        f"- Sampled claims: {summary['sampled_claims']}",
-        f"- Packs with claims: {summary['total_packs_with_claims']}",
-        f"- Sampled packs: {summary['sampled_packs']}",
-        f"- Sample size per pack: {summary['sample_size_per_pack']}",
-        f"- Curation needed: {summary['curation_needed']}",
-        "",
-        "## Sampled claims",
-        "",
-        "| Claim | Item | Decision | Checks |",
-        "|---|---|---|---|",
-    ]
-    for sample in report["samples"]:
-        checks = ", ".join(
-            f"{name}:{check['status']}" for name, check in sample["checks"].items()
-        )
-        lines.append(
-            "| "
-            f"`{sample['claim_id']}` | `{sample['item_id']}` | "
-            f"{sample['review_decision']} | {checks} |"
-        )
-    lines.append("")
-    return "\n".join(lines)
-
-
-def write_content_curation_report(
-    report: dict[str, Any], output: Path, output_format: str
-) -> None:
+def write_content_curation_report(report: dict[str, Any], output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    if output_format == "markdown":
-        output.write_text(render_content_curation_markdown(report), encoding="utf-8")
-        return
     output.write_text(
         json.dumps(report, indent=2, sort_keys=True, default=str) + "\n",
         encoding="utf-8",

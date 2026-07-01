@@ -20,10 +20,10 @@ source/access boundaries, CI semantics and ontology routing.
 
 ## What it does not claim
 
-The report is not exhaustive claim-by-claim SAP content certification. A green or
-low-issue sample does not prove all SAP claims are accurate for all products,
-releases, tenants, localizations or customer variants. Full SAP claim accuracy
-curation remains a separate pass.
+The JSON report is not exhaustive claim-by-claim SAP content certification. A
+green or low-issue sample does not prove all SAP claims are accurate for all
+products, releases, tenants, localizations or customer variants. Full SAP claim
+accuracy curation remains a separate pass.
 
 ## Run it
 
@@ -35,14 +35,8 @@ uv run sap-agent-context curation-report \
   --output build/reports/content-curation-sample.json
 ```
 
-Markdown output:
-
-```bash
-uv run sap-agent-context curation-report \
-  --sample-size 3 \
-  --format markdown \
-  --output build/reports/content-curation-sample.md
-```
+`curation-report` is JSON-only. Use Markdown docs for human operating guidance,
+but keep generated curation evidence machine-readable.
 
 Convenience target:
 

@@ -3,11 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from sap_agent_context.cli import main
-from sap_agent_context.content_curation import (
-    build_content_curation_report,
-    render_content_curation_markdown,
-)
+from sap_agent_context.content_curation import build_content_curation_report
 from sap_agent_context.repository import load_items
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -72,20 +71,8 @@ def test_current_sampled_claims_do_not_need_curation_after_targeted_fixes() -> N
     assert report["status"] == "passed"
 
 
-def test_content_curation_markdown_names_residual_risk_boundary() -> None:
-    markdown = render_content_curation_markdown(
-        build_content_curation_report(load_items(ROOT), sample_size=1)
-    )
-
-    assert "# SAP Agent Context content curation sample" in markdown
-    assert "repo-level gates" in markdown
-    assert "not exhaustive claim-by-claim SAP content certification" in markdown
-    assert "| Claim | Item | Decision | Checks |" in markdown
-
-
-def test_content_curation_report_cli_outputs_json_and_markdown(tmp_path: Path, capsys) -> None:
+def test_content_curation_report_cli_outputs_json_only(tmp_path: Path, capsys) -> None:
     json_path = tmp_path / "curation.json"
-    markdown_path = tmp_path / "curation.md"
 
     assert (
         main(
@@ -104,8 +91,20 @@ def test_content_curation_report_cli_outputs_json_and_markdown(tmp_path: Path, c
     payload = json.loads(json_path.read_text(encoding="utf-8"))
     assert payload["scope"]["mode"] == "sampling"
     assert payload["summary"]["sample_size_per_pack"] == 2
+    assert "not exhaustive claim-by-claim SAP content certification" in payload[
+        "scope"
+    ]["boundary"]
+    captured = capsys.readouterr()
+    assert "curation-report written" in captured.out
+    assert str(json_path) in captured.out
+    assert "curation_needed=" in captured.out
+    assert "samples" not in captured.out
 
-    assert (
+
+def test_content_curation_report_rejects_markdown_format(tmp_path: Path) -> None:
+    markdown_path = tmp_path / "curation.md"
+
+    with pytest.raises(SystemExit):
         main(
             [
                 "--root",
@@ -119,13 +118,4 @@ def test_content_curation_report_cli_outputs_json_and_markdown(tmp_path: Path, c
                 str(markdown_path),
             ]
         )
-        == 0
-    )
-    assert "# SAP Agent Context content curation sample" in markdown_path.read_text(
-        encoding="utf-8"
-    )
-    captured = capsys.readouterr()
-    assert "curation-report written" in captured.out
-    assert str(markdown_path) in captured.out
-    assert "curation_needed=" in captured.out
-    assert "| Claim | Item | Decision | Checks |" not in captured.out
+    assert not markdown_path.exists()
