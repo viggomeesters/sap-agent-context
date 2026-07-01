@@ -1,0 +1,102 @@
+{
+  "anti_examples": [
+    {
+      "id": "hallucinated_tenant_fact",
+      "safe_replacement": "The bundle does not provide tenant-specific thresholds or role names. Confirm approval thresholds, approver groups and fallback owner in the target tenant before finalizing this FO section.",
+      "title": "Anti-example \u2014 hallucinated tenant fact",
+      "unsafe_response": "The approval threshold is \u20ac10,000 and approver role is Z_AP_MANAGER.",
+      "why_unsafe": [
+        "The bundle did not provide tenant/customer evidence.",
+        "The role name is invented.",
+        "The threshold is invented."
+      ]
+    }
+  ],
+  "artifact_kind": "consumer_fixture_examples",
+  "description": "Examples showing how an agent should consume sap-agent-context bundles without hallucinating missing SAP or tenant facts.",
+  "examples": [
+    {
+      "id": "ready_bundle",
+      "input_shape": {
+        "citations": [
+          {
+            "access": "public",
+            "item_id": "sap.app.manage-workflows-supplier-invoices",
+            "url": "https://example.invalid/sap-help"
+          }
+        ],
+        "consumer_contract": {
+          "name": "sap-agent-context-bundle",
+          "required_consumer_fields": [
+            "status",
+            "items",
+            "citations",
+            "gaps",
+            "quality_signals"
+          ],
+          "version": 1
+        },
+        "gaps": [],
+        "quality_signals": {
+          "expired_count": 0,
+          "gap_count": 0,
+          "stale_count": 0
+        },
+        "query": {
+          "intent": "fo.workflow",
+          "topic": "supplier invoice workflow"
+        },
+        "status": "ready"
+      },
+      "safe_consumer_response_pattern": "Draft-ready starter context for supplier invoice workflow.\n\nCitations:\n- `sap.app.manage-workflows-supplier-invoices` \u2014 public SAP Help pointer.\n\nFO sections to draft:\n- Workflow trigger and approval routing questions.\n- Role/authorization impact questions.\n- Exception and fallback handling.\n- Test scenarios for happy path, rejection, missing approver and authorization failure.\n\nOpen questions:\n- Confirm tenant workflow variant, approval thresholds and responsible fallback owner.",
+      "title": "ready bundle",
+      "why_safe": [
+        "It preserves the citation.",
+        "It says starter context, not customer truth.",
+        "It asks tenant-specific follow-up questions instead of inventing thresholds or approvers."
+      ]
+    },
+    {
+      "id": "needs_curation_bundle",
+      "input_shape": {
+        "gaps": [
+          "Low topic precision; no selected item covers enough of the query tokens."
+        ],
+        "quality_signals": {
+          "gap_count": 1,
+          "source_url_count": 1
+        },
+        "query": {
+          "intent": "fo.reporting",
+          "topic": "generic executive dashboard"
+        },
+        "status": "needs_curation"
+      },
+      "safe_consumer_response_pattern": "Draft-only: this bundle is `needs_curation`.\n\nI cannot produce final dashboard requirements from this bundle yet because the selected context is too broad.\n\nNeeded before final output:\n- target KPI names;\n- source query/app/table or analytics artifact;\n- filter dimensions and freshness expectation;\n- audience/role and authorization boundary.",
+      "title": "needs-curation bundle",
+      "why_safe": [
+        "It does not pretend a broad dashboard request is ready.",
+        "It turns the gap into concrete follow-up evidence.",
+        "It avoids invented KPIs, filters, roles or data sources."
+      ]
+    },
+    {
+      "id": "report_only_slice",
+      "input_shape": {
+        "maturity": "deep",
+        "note": "Profile is visible for planning but not promoted to required-deep gates.",
+        "profile": "analytics_extensibility_candidate",
+        "promotion": "report_only"
+      },
+      "safe_consumer_response_pattern": "Planning signal: analytics/extensibility has report-only coverage.\n\nUse it to identify candidate records and gaps, but do not treat it as a final customer-ready slice until the profile is promoted and gates pass.",
+      "title": "report_only slice",
+      "why_safe": [
+        "`report_only` is not promoted to final truth.",
+        "It keeps the maturity boundary visible.",
+        "It still gives the agent a useful next-step direction."
+      ]
+    }
+  ],
+  "id": "downstream_consumer_fixtures",
+  "title": "Downstream consumer fixture examples"
+}

@@ -262,4 +262,4 @@ MIT License. See [LICENSE](LICENSE).
 
 ## SAP GUI EAM/PM examples
 
-- [SAP GUI EAM/PM clone-first queries](examples/sap-gui-eam-pm-queries.md)
+- [SAP GUI EAM/PM clone-first queries](examples/sap-gui-eam-pm-queries.json)

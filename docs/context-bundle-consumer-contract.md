@@ -88,7 +88,7 @@ if bundle["status"] != "ready":
     print("Draft only; surface gaps before output:", bundle["gaps"])
 ```
 
-See `examples/downstream-consumer-fixtures.md` for ready, `needs_curation`,
+See `examples/downstream-consumer-fixtures.json` for ready, `needs_curation`,
 `report_only`, and anti-hallucination response examples.
 
 Consumer fail-closed gate fixtures live in

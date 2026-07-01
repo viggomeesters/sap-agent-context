@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,10 +34,13 @@ def test_public_readiness_documents_release_and_privacy_boundaries() -> None:
 
 
 def test_clone_first_examples_cover_ready_and_fail_closed_queries() -> None:
-    example = (ROOT / "examples/clone-first-queries.md").read_text(encoding="utf-8")
+    path = ROOT / "examples/clone-first-queries.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    example = json.dumps(payload, sort_keys=True)
 
     assert "make check" in example
     assert example.count("uv run sap-agent-context query") >= 5
-    assert "Expected: `status: ready`" in example
-    assert "Expected: `status: needs_curation`" in example
+    assert "ready" in example
+    assert "needs_curation" in example
     assert "generic executive dashboard performance report" in example
+    assert not (ROOT / "examples/clone-first-queries.md").exists()

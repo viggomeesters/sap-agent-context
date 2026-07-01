@@ -1,0 +1,36 @@
+{
+  "artifact_kind": "query_examples",
+  "id": "clone_first_queries",
+  "title": "Clone-first query examples",
+  "setup": "Run these after cloning and `uv sync --locked`.",
+  "full_gate": {
+    "command": "make check"
+  },
+  "ready_domain_bundles": [
+    {
+      "command": "uv run sap-agent-context query --intent fo.workflow --topic \"supplier invoice approval payment block payment proposal\" --sap-product s4hana_cloud_public --limit 12",
+      "expected_status": "ready",
+      "expected_bundle_kind": "sap_fo_context_bundle"
+    },
+    {
+      "command": "uv run sap-agent-context query --intent fo.field_mapping --topic \"purchase requisition workflow source of supply account assignment purchase order goods receipt\" --sap-product s4hana_cloud_public --limit 12",
+      "expected_status": "ready",
+      "expected_bundle_kind": "sap_fo_context_bundle"
+    },
+    {
+      "command": "uv run sap-agent-context query --intent fo.integration --topic \"integration api communication arrangement credentials tenant url payload business key error handling no secrets\" --sap-product s4hana_cloud_public --limit 12",
+      "expected_status": "ready",
+      "expected_bundle_kind": "sap_fo_context_bundle"
+    },
+    {
+      "command": "uv run sap-agent-context query --intent fo.business_rules --topic \"custom field tenant boundary exposure analytics reporting readiness filter freshness\" --sap-product s4hana_cloud_public --limit 12",
+      "expected_status": "ready",
+      "expected_bundle_kind": "sap_fo_context_bundle"
+    }
+  ],
+  "fail_closed_generic_probe": {
+    "command": "uv run sap-agent-context query --intent fo.analytics --topic \"generic executive dashboard performance report\" --sap-product s4hana_cloud_public --limit 12",
+    "expected_status": "needs_curation",
+    "expected_behavior": "Generic dashboard wording should not become ready without concrete query/source/filter/freshness semantics."
+  }
+}
