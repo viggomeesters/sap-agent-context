@@ -147,3 +147,37 @@ fixtures:
     forbidden_top_ids:
       - sap.app-analytics-reporting-context
       - sap.field-map.analytics-report-readiness
+  - id: org_process_company_code_plant_runtime
+    query: company code versus plant controlling area storage location org unit evidence
+    limit: 50
+    required_ids:
+      - sap.object.sap-org-model-lens
+      - sap.object.sap-org-company-code
+      - sap.object.sap-org-plant
+      - sap.rule.sap-org-process-evidence-gate
+    forbidden_top_ids:
+      - sap.app-analytics-reporting-context
+  - id: org_process_p2p_o2c_runtime
+    query: is this P2P or O2C sales order purchase requisition process lens evidence
+    limit: 50
+    required_ids:
+      - sap.field-set.sap-process-lenses
+      - sap.fo-pattern.sap-org-process-discovery
+      - sap.rule.sap-org-process-evidence-gate
+    forbidden_top_ids:
+      - sap.app.manage-purchase-requisitions-context
+  - id: org_process_purchasing_org_runtime
+    query: which org unit owns purchasing P2P purchasing organization vendor negotiation evidence
+    limit: 50
+    required_ids:
+      - sap.object.sap-org-purchasing-organization
+      - sap.field-set.sap-process-lenses
+      - sap.rule.sap-org-process-evidence-gate
+  - id: adversarial_tenant_org_assignment_not_authoritative
+    query: my tenant company code 1710 plant 1010 sales org 1010 purchasing organization is configured exactly this way
+    limit: 50
+    required_ids:
+      - sap.test-pattern.sap-org-process-fail-closed
+      - sap.rule.sap-org-process-evidence-gate
+    forbidden_top_ids:
+      - sap.app-analytics-reporting-context

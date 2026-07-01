@@ -69,6 +69,7 @@ def search_runtime_index(
             exact_item_rows = _exact_item_rows(conn, exact_terms, candidate_limit)
             focused_item_rows = [
                 *_foundation_item_rows(conn, tokens),
+                *_org_process_item_rows(conn, tokens),
                 *_focused_item_rows(conn, tokens, max(limit * 2, 20)),
             ]
             claim_rows = conn.execute(
@@ -199,6 +200,47 @@ def _foundation_item_rows(
           WHEN 'sap.test-pattern.sap-foundation-fail-closed' THEN 4
           ELSE 5
         END
+        """,
+        preferred_ids,
+    ).fetchall()
+
+
+def _org_process_item_rows(
+    conn: sqlite3.Connection,
+    tokens: list[str],
+) -> list[sqlite3.Row]:
+    token_set = {token.lower() for token in tokens}
+    if not _looks_like_org_process_query(token_set):
+        return []
+    preferred_ids = [
+        "sap.rule.sap-org-process-evidence-gate",
+        "sap.object.sap-org-model-lens",
+        "sap.field-set.sap-process-lenses",
+        "sap.fo-pattern.sap-org-process-discovery",
+        "sap.test-pattern.sap-org-process-fail-closed",
+        "sap.object.sap-org-company-code",
+        "sap.object.sap-org-plant",
+        "sap.object.sap-org-purchasing-organization",
+        "sap.object.sap-org-sales-organization",
+        "sap.object.sap-org-distribution-channel",
+        "sap.object.sap-org-controlling-area",
+        "sap.object.sap-org-storage-location",
+        "sap.object.sap-org-business-partner-role",
+    ]
+    placeholders = ", ".join("?" for _ in preferred_ids)
+    return conn.execute(
+        f"""
+        SELECT
+          items.id,
+          items.title,
+          items.kind,
+          items.summary AS text,
+          'item_focus' AS source,
+          0.0 AS bm25_score,
+          items.payload_json AS search_text,
+          items.payload_json AS payload_json
+        FROM items
+        WHERE items.id IN ({placeholders})
         """,
         preferred_ids,
     ).fetchall()
@@ -375,6 +417,51 @@ def _focus_boost(
             boost += 75.0
         if kind == "sap_app":
             boost -= 150.0
+    if _looks_like_org_process_query(token_set):
+        if item_id.startswith("sap.bulk."):
+            boost -= 120.0
+        if "org-process" in topics or "org-model" in topics or item_id in {
+            "sap.rule.sap-org-process-evidence-gate",
+            "sap.object.sap-org-model-lens",
+            "sap.field-set.sap-process-lenses",
+            "sap.fo-pattern.sap-org-process-discovery",
+            "sap.test-pattern.sap-org-process-fail-closed",
+        }:
+            boost += 900.0
+        if {"tenant", "configured"} & token_set and item_id in {
+            "sap.rule.sap-org-process-evidence-gate",
+            "sap.test-pattern.sap-org-process-fail-closed",
+        }:
+            boost += 450.0
+        if {"company", "code"} <= token_set and item_id == "sap.object.sap-org-company-code":
+            boost += 350.0
+        if "plant" in token_set and item_id == "sap.object.sap-org-plant":
+            boost += 350.0
+        if (
+            {"purchasing", "purchase"} & token_set
+            and item_id == "sap.object.sap-org-purchasing-organization"
+        ):
+            boost += 350.0
+        if (
+            {"sales", "o2c"} & token_set
+            and item_id == "sap.object.sap-org-sales-organization"
+        ):
+            boost += 250.0
+        if (
+            {"p2p", "o2c", "r2r", "h2r", "d2o"} & token_set
+            and item_id == "sap.field-set.sap-process-lenses"
+        ):
+            boost += 350.0
+        if kind in {
+            "decision_rule",
+            "sap_object",
+            "sap_field",
+            "fo_pattern",
+            "test_pattern",
+        }:
+            boost += 80.0
+        if kind == "sap_app":
+            boost -= 120.0
     return boost
 
 
@@ -394,6 +481,47 @@ def _looks_like_foundation_query(token_set: set[str]) -> bool:
         "source",
     }
     return bool(explicit_foundation_intent & token_set) and len(context_signals & token_set) >= 2
+
+
+def _looks_like_org_process_query(token_set: set[str]) -> bool:
+    org_signals = {
+        "company",
+        "code",
+        "controlling",
+        "area",
+        "plant",
+        "storage",
+        "location",
+        "sales",
+        "distribution",
+        "purchasing",
+        "purchase",
+        "partner",
+    }
+    process_signals = {
+        "o2c",
+        "p2p",
+        "r2r",
+        "h2r",
+        "d2o",
+        "process",
+        "lens",
+        "procure",
+        "pay",
+        "order",
+        "cash",
+        "versus",
+        "vs",
+        "compare",
+    }
+    explicit_org_question = bool({"org", "organization", "organisation"} & token_set) and bool(
+        {"unit", "owns", "owner", *org_signals} & token_set
+    )
+    tenant_org_assertion = bool({"tenant", "configured"} & token_set) and bool(
+        org_signals & token_set
+    )
+    process_question = bool(org_signals & token_set) and bool(process_signals & token_set)
+    return explicit_org_question or tenant_org_assertion or process_question
 
 
 def _json_payload(raw: str) -> dict[str, Any]:

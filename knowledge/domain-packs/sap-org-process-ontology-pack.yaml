@@ -1,0 +1,428 @@
+pack_id: sap-org-process-ontology-pack
+title: SAP organization and process ontology pack
+description: >
+  From-zero organization/process navigation layer for SAP Agent Context. This
+  pack teaches agents how to distinguish SAP organization units from business
+  process lenses before making implementation or tenant-specific claims.
+ownership:
+  owner: sap-agent-context
+  review_strategy: Keep this pack as an ontology/navigation layer; do not turn it into a customer org-model archive.
+freshness_current: &freshness_current
+  valid_from: '2026-07-01'
+  review_after: '2027-01-01'
+  expires_at: '2027-07-01'
+  retrieved_at: '2026-07-01'
+internal_source: &internal_source
+  kind: internal_pattern
+  title: SAP Agent Context organization/process ontology pattern
+  url: ''
+  retrieved_at: '2026-07-01'
+  specificity: internal_pattern
+  license_note: Internal-derived consultant mental model; use only with source/caveat labels.
+sap_help_source: &sap_help_source
+  kind: public_url
+  title: SAP Help Portal
+  url: https://help.sap.com/
+  retrieved_at: '2026-07-01'
+  specificity: catalog_entry
+  license_note: Public source pointer only; choose exact product/version pages before release-specific claims.
+items:
+  - id: sap.object.sap-org-model-lens
+    title: SAP organization model lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sap-foundation, org-model, organization, company-code, plant, purchasing-organization, sales-organization]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Organization-model lens for classifying SAP questions by client/mandant,
+      company code, controlling area, plant, storage location, sales organization,
+      distribution channel, purchasing organization and business partner role.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify exact product/edition and target-tenant org assignments before implementation claims.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: SAP organization units scope financial, logistics, sales, purchasing and partner behavior; target values and assignments are tenant/client-specific evidence.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+    relations:
+      rules: [sap.rule.sap-org-process-evidence-gate]
+      fields: [sap.field-set.sap-process-lenses]
+      patterns: [sap.fo-pattern.sap-org-process-discovery]
+    org_units:
+      - key: client_mandant
+        label: Client / mandant
+        scopes: [cross_application, customizing_partition, master_data_partition]
+        evidence_boundary: Needs target-system/client evidence before claims about configured data or customizing.
+      - key: company_code
+        label: Company code
+        scopes: [finance, legal_entity, R2R]
+        evidence_boundary: Needs tenant org assignment and chart/accounting context before customer-ready claims.
+      - key: controlling_area
+        label: Controlling area
+        scopes: [controlling, management_accounting, R2R]
+        evidence_boundary: Needs target controlling structure and assignment evidence.
+      - key: plant
+        label: Plant
+        scopes: [logistics, valuation, inventory, production, D2O]
+        evidence_boundary: Needs target plant and valuation/process assignment evidence.
+      - key: storage_location
+        label: Storage location
+        scopes: [inventory, warehouse, D2O]
+        evidence_boundary: Needs target plant/storage assignment evidence.
+      - key: sales_organization
+        label: Sales organization
+        scopes: [sales, O2C]
+        evidence_boundary: Needs target sales area evidence.
+      - key: distribution_channel
+        label: Distribution channel
+        scopes: [sales_area, O2C]
+        evidence_boundary: Needs target sales area evidence.
+      - key: purchasing_organization
+        label: Purchasing organization
+        scopes: [procurement, P2P]
+        evidence_boundary: Needs target purchasing org and supplier/material assignment evidence.
+      - key: business_partner_role
+        label: Business partner role
+        scopes: [master_data, customer, supplier, O2C, P2P]
+        evidence_boundary: Needs target role/category/account-group evidence.
+
+  - id: sap.object.sap-org-company-code
+    title: Company code organization lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [company-code, org-model, finance, R2R, legal-entity]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Company code is the financial/legal reporting organization lens. It is not
+      the same as a plant; plant is a logistics/valuation/operations node.
+    org_scope: financial_reporting_legal_entity
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify target company code definitions and assignments in the tenant/client.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Company code questions route to finance/R2R and legal-entity context before logistics or plant-specific claims.
+        evidence: [sap.object.sap-org-model-lens, sap.rule.sap-org-process-evidence-gate]
+
+  - id: sap.object.sap-org-controlling-area
+    title: Controlling area organization lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [controlling-area, org-model, controlling, R2R]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Controlling area scopes management accounting and CO structures. It should
+      not be inferred from company code alone without assignment evidence.
+    org_scope: management_accounting_control_structure
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify target controlling area and company-code assignments.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Controlling area questions need assignment evidence before cost-center/order/profitability claims become implementation-ready.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+
+  - id: sap.object.sap-org-plant
+    title: Plant organization lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [plant, org-model, logistics, inventory, production, D2O]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Plant is a logistics, valuation and operations organization lens. It is not
+      a legal entity substitute for company code.
+    org_scope: logistics_valuation_and_operations_node
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify target plant, valuation and process assignments in the tenant/client.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Plant questions route to logistics, inventory, production or maintenance context; target plant assignments remain tenant-specific.
+        evidence: [sap.object.sap-org-model-lens, sap.rule.sap-org-process-evidence-gate]
+
+  - id: sap.object.sap-org-storage-location
+    title: Storage location organization lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [storage-location, org-model, inventory, plant, D2O]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Storage location is an inventory sub-scope under plant context. Public SAP
+      concept knowledge does not prove a customer's storage-location structure.
+    org_scope: inventory_sub_scope_under_plant
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify target plant/storage location assignments.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Storage-location claims need target plant/storage evidence before being used in final functional design.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+
+  - id: sap.object.sap-org-sales-organization
+    title: Sales organization lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [sales-organization, org-model, sales-area, O2C]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Sales organization scopes sales processing and O2C context together with
+      distribution channel and related sales-area assignments.
+    org_scope: sales_responsibility_and_o2c_scope
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify target sales area and product/customer assignments.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: O2C org questions need sales organization, distribution channel and target sales-area evidence before customer-ready configuration claims.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+
+  - id: sap.object.sap-org-distribution-channel
+    title: Distribution channel lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [distribution-channel, org-model, sales-area, O2C]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Distribution channel is a sales-area lens for how products/services reach
+      customers. It must be interpreted with sales organization and target data.
+    org_scope: sales_area_distribution_route
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify target sales area and distribution-channel assignments.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Distribution-channel claims are not tenant proof without target sales-area evidence.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+
+  - id: sap.object.sap-org-purchasing-organization
+    title: Purchasing organization lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [purchasing-organization, org-model, procurement, P2P, supplier, vendor]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Purchasing organization is the procurement responsibility lens for P2P,
+      supplier negotiation and purchasing context. It does not prove target
+      supplier/material/org assignments by itself.
+    org_scope: procurement_responsibility_and_vendor_negotiation
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify target purchasing organization, plant, supplier and material assignments.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Purchasing ownership questions should route to purchasing organization and P2P context, then ask for target assignment evidence.
+        evidence: [sap.field-set.sap-process-lenses, sap.rule.sap-org-process-evidence-gate]
+
+  - id: sap.object.sap-org-business-partner-role
+    title: Business partner role lens
+    kind: sap_object
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [business-partner-role, org-model, master-data, customer, supplier, O2C, P2P]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Business partner roles connect one party to customer, supplier and other
+      process responsibilities. Role and account semantics require target proof.
+    org_scope: partner_process_role_and_master_data_semantics
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Verify target BP role/category/account and process assignments.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Business partner role claims must preserve customer/supplier/process-role distinction and target evidence.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+
+  - id: sap.field-set.sap-process-lenses
+    title: SAP process lenses field set
+    kind: sap_field
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [process-lens, O2C, P2P, R2R, H2R, D2O, org-process]
+    used_for: [agent.context, agent.answering, fo.discovery]
+    summary: >
+      Process-lens field set for routing SAP questions to O2C, P2P, R2R, H2R or
+      Design-to-Operate before choosing app/table/configuration evidence.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Process classification is not proof that a process is implemented in the target tenant.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Process maps classify where a question belongs; they do not prove configuration, master data, roles or workflow are implemented.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+    field_definitions:
+      - key: SapProcessLens.Process
+        description: O2C, P2P, R2R, H2R or D2O classification for the user question.
+        usage: Route broad business questions before selecting apps, tables or configuration evidence.
+      - key: SapProcessLens.OrgUnits
+        description: Organization units that scope the process lens.
+        usage: Surface which company code, plant, sales org or purchasing org evidence is needed.
+      - key: SapProcessLens.EvidenceBoundary
+        description: Whether the answer is generic, source-backed, release-specific or target-tenant-specific.
+        usage: Fail closed instead of treating process maps as tenant configuration proof.
+    process_lenses:
+      - key: O2C
+        label: Order-to-Cash
+        typical_surfaces: [sales_order, delivery, billing, output_management, customer_master]
+        org_lenses: [sales_organization, distribution_channel, company_code, business_partner_role]
+        boundary: Needs target sales area, customer, pricing/output and release evidence.
+      - key: P2P
+        label: Procure-to-Pay
+        typical_surfaces: [purchase_requisition, purchase_order, supplier_invoice, supplier_master]
+        org_lenses: [purchasing_organization, plant, company_code, business_partner_role]
+        boundary: Needs target purchasing org, supplier, material, plant and approval evidence.
+      - key: R2R
+        label: Record-to-Report
+        typical_surfaces: [journal_entry, AP_AR, fixed_assets, controlling, financial_close]
+        org_lenses: [company_code, controlling_area]
+        boundary: Needs target accounting principle, company code, ledger and controlling evidence.
+      - key: H2R
+        label: Hire-to-Retire
+        typical_surfaces: [workforce, personnel, payroll, time, org_management]
+        org_lenses: [client_mandant, company_code, HR_org]
+        boundary: Outside current starter depth unless specific source-backed HR context exists.
+      - key: D2O
+        label: Design-to-Operate
+        typical_surfaces: [product_master, plant, maintenance, production, inventory, quality]
+        org_lenses: [plant, storage_location, company_code, business_partner_role]
+        boundary: Needs target plant/material/equipment/process evidence.
+
+  - id: sap.rule.sap-org-process-evidence-gate
+    title: SAP organization/process evidence gate
+    kind: decision_rule
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [org-model, process-lens, fail-closed, tenant-evidence, company-code, plant, purchasing-organization]
+    used_for: [agent.answering, fo.quality_gate, fo.discovery]
+    summary: >
+      Decision rule for organization/process answers: route broad questions to
+      org/process lenses and fail closed when asked to prove target tenant org
+      assignments, configuration, roles or process implementation.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Apply before making tenant/client/release-specific org or process claims.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Org assignment is tenant/client-specific; a public process map or generic SAP concept is not proof of implemented customer configuration.
+        evidence: [sap.object.sap-org-model-lens, sap.field-set.sap-process-lenses]
+    rules:
+      - condition: question asks what org unit a concept belongs to
+        outcome: route_to_org_lens
+      - condition: question compares company code and plant
+        outcome: separate_finance_legal_from_logistics_operations
+      - condition: question asks P2P versus O2C versus R2R/H2R/D2O
+        outcome: route_to_process_lens
+      - condition: question asserts target company code/plant/sales org/purchasing org values
+        outcome: needs_target_org_assignment_evidence
+      - condition: answer relies on process map only
+        outcome: process_map_is_not_configuration_proof
+      - condition: answer relies on public SAP concept only
+        outcome: public_concept_is_not_implemented_tenant_process
+
+  - id: sap.fo-pattern.sap-org-process-discovery
+    title: SAP organization/process discovery pattern
+    kind: fo_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [org-process, discovery, company-code, plant, O2C, P2P, R2R, D2O]
+    used_for: [fo.discovery, agent.answering, agent.context]
+    summary: >
+      Discovery pattern for turning broad SAP org/process questions into bounded
+      answer slots: org unit, process lens, tenant dependency, evidence and stance.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Keep as discovery scaffold until target tenant/source evidence exists.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Safe SAP org/process answers should say which lens is generic, which part is tenant-specific and what evidence is still needed.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+    answer_slots:
+      - slot: org_unit_lens
+        required: true
+        evidence: sap.object.sap-org-model-lens
+      - slot: process_lens
+        required: true
+        evidence: sap.field-set.sap-process-lenses
+      - slot: target_assignment_evidence
+        required: true
+        evidence: sap.rule.sap-org-process-evidence-gate
+      - slot: configuration_boundary
+        required: true
+        evidence: sap.rule.sap-org-process-evidence-gate
+      - slot: output_stance
+        required: true
+        evidence: sap.rule.sap-org-process-evidence-gate
+
+  - id: sap.test-pattern.sap-org-process-fail-closed
+    title: SAP organization/process fail-closed tests
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: generic_sap
+    topics: [org-process, fail-closed, tenant-evidence, O2C, P2P, company-code, plant]
+    used_for: [agent.evaluation, fo.quality_gate, agent.answering]
+    summary: >
+      Regression scenarios that prevent agents from turning generic org/process
+      concepts into target-tenant configuration proof.
+    release_applicability:
+      edition: Generic SAP concept
+      verification: Use as retrieval/evaluation guard; not a substitute for target tenant evidence.
+    freshness: *freshness_current
+    source: *internal_source
+    claims:
+      - statement: Org/process answers must preserve tenant-specific org assignment and process implementation boundaries.
+        evidence: [sap.rule.sap-org-process-evidence-gate]
+    test_scenarios:
+      - scenario: invented target org assignment
+        prompt: my tenant company code and plant are configured exactly this way
+        expected: needs_target_org_assignment_evidence
+      - scenario: public process map as tenant proof
+        prompt: public O2C/P2P map proves the customer process is implemented
+        expected: not_configuration_proof
+      - scenario: P2P versus O2C classification
+        prompt: is purchase requisition P2P or sales order O2C
+        expected: route_to_process_lens

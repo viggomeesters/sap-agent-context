@@ -39,6 +39,36 @@ Before giving an SAP answer, classify the question through at least these gates:
 4. **Evidence** — exact source, gated pointer, internal-derived pattern or missing evidence?
 5. **Output stance** — ready answer, caveated answer, or ask for tenant/release/source evidence?
 
+## Organization and process lenses
+
+Organization and process are related, but they prove different things. The
+organization lens tells the agent which SAP org units scope the question;
+the process lens tells the agent which business flow the question belongs to.
+Neither lens proves the target tenant is configured that way.
+
+Core organization lenses:
+
+- **Client / mandant** — system/client partition for customizing and data.
+- **Company code** — finance/legal reporting lens; do not collapse it with plant.
+- **Controlling area** — management-accounting/control lens; needs assignment evidence.
+- **Plant** — logistics, valuation and operations lens.
+- **Storage location** — inventory sub-scope under plant context.
+- **Sales organization + distribution channel** — O2C/sales-area lens.
+- **Purchasing organization** — P2P/procurement responsibility lens.
+- **Business partner role** — customer/supplier/process-role semantics.
+
+Core process lenses:
+
+- **O2C** — Order-to-Cash: sales order, delivery, billing, output, customer master.
+- **P2P** — Procure-to-Pay: purchase requisition/order, supplier invoice, supplier master.
+- **R2R** — Record-to-Report: journals, AP/AR, controlling, financial close.
+- **H2R** — Hire-to-Retire: HR/workforce processes; outside current starter depth unless source-backed.
+- **D2O** — Design-to-Operate: product, plant, maintenance, production, inventory, quality.
+
+Fail-closed rule: org assignment is tenant/client-specific, a process map is not
+configuration proof, and a public SAP concept does not prove the process is
+implemented in a customer tenant.
+
 ## Examples
 
 - “What is SAP?” should retrieve foundation/context lenses, not only a product list.
