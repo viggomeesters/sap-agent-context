@@ -69,3 +69,7 @@ These cases are represented in `schema/runtime-retrieval-fixtures.yaml` so regre
 ## No exhaustive truth claim
 
 A green retrieval gate means the bounded starter contract passed for the current fixtures. It does not mean SAP Agent Context covers all SAP products, releases, tenants, localizations or customer variants. Consumers must keep open questions visible when the repository only provides starter context.
+
+Repo-level audit evidence covers mechanical gates, runtime behavior,
+source/access boundaries, CI semantics and ontology-layer behavior; it is not a
+claim-by-claim SAP content certification across every domain-pack YAML record.
