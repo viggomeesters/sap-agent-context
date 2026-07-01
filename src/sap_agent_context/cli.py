@@ -10,6 +10,11 @@ from pathlib import Path
 from sap_agent_context.agent_records import export_agent_records, validate_agent_records
 from sap_agent_context.bundle import build_context_bundle, mccoy_provider_manifest
 from sap_agent_context.completeness import audit_completeness
+from sap_agent_context.content_curation import (
+    build_content_curation_report,
+    render_content_curation_markdown,
+    write_content_curation_report,
+)
 from sap_agent_context.domain_density import (
     build_domain_density_heatmap,
     render_heatmap_markdown,
@@ -74,6 +79,19 @@ def build_parser() -> argparse.ArgumentParser:
     gap_report = subparsers.add_parser("gap-report")
     gap_report.add_argument("--output", type=Path)
     gap_report.add_argument(
+        "--format",
+        choices=["json", "markdown"],
+        default="json",
+        help="render as JSON for machines or Markdown for docs/review",
+    )
+
+    curation_report = subparsers.add_parser(
+        "curation-report",
+        help="sample domain-pack claims for source/freshness/boundary curation",
+    )
+    curation_report.add_argument("--output", type=Path)
+    curation_report.add_argument("--sample-size", type=int, default=3)
+    curation_report.add_argument(
         "--format",
         choices=["json", "markdown"],
         default="json",
@@ -291,6 +309,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             write_gap_report(payload, _resolve_output(root, args.output), args.format)
         if args.format == "markdown":
             print(render_gap_markdown(payload), end="")
+        else:
+            print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0
+
+    if args.command == "curation-report":
+        items = load_items(root)
+        payload = build_content_curation_report(items, sample_size=args.sample_size)
+        if args.output:
+            write_content_curation_report(
+                payload, _resolve_output(root, args.output), args.format
+            )
+        if args.format == "markdown":
+            print(render_content_curation_markdown(payload), end="")
         else:
             print(json.dumps(payload, indent=2, sort_keys=True, default=str))
         return 0

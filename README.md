@@ -68,6 +68,17 @@ for agents is documented in
 records or legacy packs, then validate records; do not hand-edit generated
 `build/` artifacts or bulk rewrite content to make coverage look complete.
 
+Sample content claims for curation:
+
+```bash
+uv run sap-agent-context curation-report --sample-size 3 --format markdown \
+  --output build/reports/content-curation-sample.md
+```
+
+The content curation sample checks source/access, freshness, evidence and
+fail-closed wording on sampled claims. It is not exhaustive SAP claim
+certification; see [Content curation sampling](docs/content-curation-sampling.md).
+
 Build runtime indexes:
 
 ```bash
