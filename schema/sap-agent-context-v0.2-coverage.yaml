@@ -7,8 +7,9 @@ scope:
     freshness-labelled SAP context for representative AI-agent consumer bundles
     across FO workflow, field mapping, migration cockpit, authorization,
     integration, extensibility, analytics, and core business domains. This is a
-    stricter campaign gate than the starter coverage matrix and is expected to
-    fail until the fill campaign completes.
+    stricter regression gate than the starter coverage matrix. It is expected to
+    pass on main; future threshold increases should land with the evidence needed
+    to keep this gate green.
 minimums:
   items_total: 120
   required_access_classes: [public, gated, internal_derived]

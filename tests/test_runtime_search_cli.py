@@ -117,6 +117,36 @@ def test_query_explain_prioritizes_from_zero_ontology_without_filters(
     assert "sap.rule.sap-answer-ontology-gate" in top_ids
 
 
+def test_query_explain_does_not_inject_foundation_for_domain_queries(
+    tmp_path: Path,
+    capsys,
+) -> None:
+    sqlite_path = _index_path(tmp_path)
+
+    exit_code = main(
+        [
+            "--root",
+            str(ROOT),
+            "query-explain",
+            "SAP procurement release strategy lifecycle customizing evidence",
+            "--sqlite",
+            str(sqlite_path),
+            "--limit",
+            "8",
+        ]
+    )
+
+    assert exit_code == 0
+    payload = json.loads(capsys.readouterr().out)
+    top_ids = [result["id"] for result in payload["results"][:5]]
+    assert "sap.object.sap-context-foundation" not in top_ids
+    assert "sap.field-set.sap-context-lenses" not in top_ids
+    assert any(
+        any(marker in result_id for marker in ["procurement", "purchase", "requisition"])
+        for result_id in top_ids
+    )
+
+
 def test_query_explain_cli_outputs_top_explanation_contract(tmp_path: Path, capsys) -> None:
     sqlite_path = _index_path(tmp_path)
 

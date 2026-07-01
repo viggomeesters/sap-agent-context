@@ -379,16 +379,21 @@ def _focus_boost(
 
 
 def _looks_like_foundation_query(token_set: set[str]) -> bool:
-    foundation_signals = {
+    explicit_foundation_intent = {
         "foundation",
         "from-zero",
         "ontology",
+        "sap-context",
+    }
+    context_signals = {
+        "sap",
         "lifecycle",
         "landscape",
         "customizing",
         "evidence",
+        "source",
     }
-    return "sap" in token_set and len(foundation_signals & token_set) >= 2
+    return bool(explicit_foundation_intent & token_set) and len(context_signals & token_set) >= 2
 
 
 def _json_payload(raw: str) -> dict[str, Any]:
