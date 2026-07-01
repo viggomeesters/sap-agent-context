@@ -118,4 +118,7 @@ def test_content_curation_report_cli_outputs_json_and_markdown(tmp_path: Path, c
         encoding="utf-8"
     )
     captured = capsys.readouterr()
-    assert "SAP Agent Context content curation sample" in captured.out
+    assert "curation-report written" in captured.out
+    assert str(markdown_path) in captured.out
+    assert "curation_needed=" in captured.out
+    assert "| Claim | Item | Decision | Checks |" not in captured.out

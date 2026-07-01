@@ -317,9 +317,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         items = load_items(root)
         payload = build_content_curation_report(items, sample_size=args.sample_size)
         if args.output:
-            write_content_curation_report(
-                payload, _resolve_output(root, args.output), args.format
+            output_path = _resolve_output(root, args.output)
+            write_content_curation_report(payload, output_path, args.format)
+            summary = payload["summary"]
+            print(
+                "curation-report written "
+                f"output={output_path} status={payload['status']} "
+                f"sampled_claims={summary['sampled_claims']} "
+                f"sampled_packs={summary['sampled_packs']} "
+                f"curation_needed={summary['curation_needed']}"
             )
+            return 0
         if args.format == "markdown":
             print(render_content_curation_markdown(payload), end="")
         else:
