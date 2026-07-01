@@ -27,7 +27,7 @@ source:
   specificity: root_pointer
   license_note: Link-first pointer; verify exact app availability per release and tenant.
 claims:
-  - statement: Supplier invoice approval FOs should identify the workflow configuration app or configuration surface.
+  - statement: Supplier invoice approval FOs should identify the workflow configuration app or configuration surface, but must not treat the public app pointer as proof of tenant/client workflow configuration without target-system evidence.
     evidence: [sap.ref.s4hana-cloud-help-portal]
 relations:
   scope_items: [sap.scope.j60-supplier-invoice-processing]

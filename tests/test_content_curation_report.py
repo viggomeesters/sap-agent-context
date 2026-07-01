@@ -65,6 +65,13 @@ def test_content_curation_report_checks_fail_closed_boundaries() -> None:
     )
 
 
+def test_current_sampled_claims_do_not_need_curation_after_targeted_fixes() -> None:
+    report = build_content_curation_report(load_items(ROOT), sample_size=3)
+
+    assert report["summary"]["curation_needed"] == 0
+    assert report["status"] == "passed"
+
+
 def test_content_curation_markdown_names_residual_risk_boundary() -> None:
     markdown = render_content_curation_markdown(
         build_content_curation_report(load_items(ROOT), sample_size=1)

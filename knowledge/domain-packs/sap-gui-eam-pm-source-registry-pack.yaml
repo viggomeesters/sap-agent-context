@@ -353,7 +353,7 @@ items:
     license_note: Internal-derived consultant knowledge; verify in target SAP tenant because screens, statuses and
       profiles can be configured.
   claims:
-  - statement: EAM/PM public context must stay generic, source-labelled and free of customer/project data.
+  - statement: EAM/PM public context must stay generic, source-labelled and free of customer/project data; public context must not be treated as proof of tenant/client customizing, configured status profiles or implemented process behavior without target-system evidence.
     evidence:
     - sap.rule.eam.pm.source-confidence-policy
   relations:
