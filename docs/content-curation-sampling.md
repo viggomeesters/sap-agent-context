@@ -35,8 +35,9 @@ uv run sap-agent-context curation-report \
   --output build/reports/content-curation-sample.json
 ```
 
-`curation-report` is JSON-only. Use Markdown docs for human operating guidance,
-but keep generated curation evidence machine-readable.
+`curation-report` is JSON-only. Markdown in this repo is narrative operating
+context for maintainers and agents; generated curation evidence stays
+machine-readable JSON.
 
 Convenience target:
 
@@ -49,7 +50,7 @@ make curation-report
 Each sampled claim receives one of two review decisions:
 
 - `sample_passed` — the sample has the expected metadata and boundary checks;
-- `curation_needed` — at least one sampled check needs a human/domain curation
+- `curation_needed` — at least one sampled check needs a curation/domain review
   pass.
 
 `curation_needed` is not automatically a repository failure. It is a scoped input

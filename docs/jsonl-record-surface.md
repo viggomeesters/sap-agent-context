@@ -34,14 +34,15 @@ JSONL -> build/context.sqlite
 
 ## Why YAML still exists
 
-YAML remains because pack-level authoring is still more reviewable for humans
-than hand-editing many JSONL lines. That is an implementation convenience, not a
-truth boundary. The durable agent-facing contract is the exported JSONL record
-surface and the generated runtime indexes derived from it.
+YAML remains as a legacy pack-level authoring/import convenience while the repo
+finishes migrating to records-first workflows. That is an implementation
+convenience, not a truth boundary. The durable agent-facing contract is the
+exported JSONL record surface and the generated runtime indexes derived from it.
 
 Practically:
 
-- humans may still edit `knowledge/**/*.yaml` during the migration;
+- bounded maintainer curation may still touch `knowledge/**/*.yaml` during the
+  migration;
 - `export-jsonl` synchronizes those legacy authoring files into records;
 - build/runtime/evidence contracts must treat `records/*.jsonl` as canonical;
 - if YAML and JSONL diverge, the fix is to resync records or migrate the authoring

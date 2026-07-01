@@ -24,7 +24,7 @@
 `status` has two final bundle values:
 
 - `ready`: no bundle gaps were detected for the selected records. Consumers may use it as starter context while preserving citations, access, freshness and caveats.
-- `needs_curation`: the bundle is not final-use ready. Consumers must show gaps and ask for curation/human acceptance/follow-up before generating customer-facing claims.
+- `needs_curation`: the bundle is not final-use ready. Consumers must show gaps and ask for curation acceptance/follow-up before generating customer-facing claims.
 
 `report_only` is not a final bundle status. In machine-readable contract text,
 `report_only is not a final bundle status` means it is a domain/profile maturity

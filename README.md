@@ -57,8 +57,8 @@ uv run sap-agent-context validate-records --records-dir records
 ```
 
 The repo is JSONL-first and records-first: `records/*.jsonl` is the canonical agent record
-surface. YAML is a legacy authoring/import format kept temporarily for human
-pack editing; it is not the source of truth. The export writes typed JSONL files
+surface. YAML is a legacy authoring/import format kept temporarily for bounded
+maintainer curation; it is not the source of truth. The export writes typed JSONL files
 for apps, tables, fields, workflows, roles, claims, sources, and relations, then
 validates them against `schema/*.schema.json`. The intentional
 JSONL-vault-spike alignment and compatibility deviations are documented in

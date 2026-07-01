@@ -33,7 +33,7 @@ When a result is ambiguous, stale, expired, gated without verification or tenant
 | Status / signal | Consumer behavior |
 |---|---|
 | `ready` | Usable as starter context when citations, freshness and access labels are preserved. |
-| `needs_curation` | Draft-only. Surface gaps and ask for curation or human acceptance before final output. |
+| `needs_curation` | Draft-only. Surface gaps and ask for curation acceptance or follow-up before final output. |
 | `report_only` slice | Useful for gap/maturity reporting, not product-ready coverage. Do not promote it to ready without required gates. |
 | stale `review_after` | Mark as needing recertification before final use. |
 | expired `expires_at` | Block final use until replaced or recertified. |

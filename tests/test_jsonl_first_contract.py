@@ -26,12 +26,36 @@ FORBIDDEN_YAML_SSOT_PHRASES = [
     "YAML knowledge files remain the temporary editing source",
 ]
 
+FORBIDDEN_HUMAN_PURPOSE_PHRASES = [
+    "human operating guidance",
+    "for human pack editing",
+    "reviewable for humans",
+    "humans may still edit",
+    "Provide rebuildable generated reports for humans",
+    "AI agents and human",
+    "human acceptance",
+    "human/domain curation",
+    "human-reviewable",
+    "human-readable schema",
+]
+
 
 def test_repo_text_does_not_claim_yaml_source_of_truth() -> None:
     offenders: list[str] = []
     for path in TEXT_PATHS:
         text = path.read_text(encoding="utf-8")
         for phrase in FORBIDDEN_YAML_SSOT_PHRASES:
+            if phrase in text:
+                offenders.append(f"{path.relative_to(ROOT)}: {phrase}")
+
+    assert not offenders
+
+
+def test_repo_text_does_not_frame_agent_context_artifacts_as_for_humans() -> None:
+    offenders: list[str] = []
+    for path in TEXT_PATHS:
+        text = path.read_text(encoding="utf-8")
+        for phrase in FORBIDDEN_HUMAN_PURPOSE_PHRASES:
             if phrase in text:
                 offenders.append(f"{path.relative_to(ROOT)}: {phrase}")
 

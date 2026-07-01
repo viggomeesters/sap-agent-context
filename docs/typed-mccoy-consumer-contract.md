@@ -13,7 +13,7 @@ Bundles include `schema_version: 1`, `producer.name: sap-agent-context`,
 reject unsupported schema versions, and keep backward compatibility for the
 current local-folder registration path.
 
-The human-readable schema is
+The schema companion for readers is
 `schema/sap-agent-context-bundle.schema.yaml`.
 
 ## Readiness Semantics

@@ -43,7 +43,7 @@ Consumers can read generated JSON bundles directly or register the
 - Surface `status`, `gaps`, `quality_signals`, stale items, expired items, and
   gated-source markers before final output generation.
 - Treat `ready` as usable context and `needs_curation` as draft-only context
-  that requires explicit human acceptance or follow-up.
+  that requires explicit curation acceptance or follow-up.
 - Treat expired items as blocked for final use until they are recertified or
   replaced.
 - Use `relations.fields`, `relations.objects`, `relations.roles`, claims, and

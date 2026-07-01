@@ -21,7 +21,7 @@ Use it before treating a JSONL authoring change as loadable. Errors must be fixe
 
 ## Compatibility state
 
-YAML under `knowledge/**/*.yaml` is a legacy authoring/import format. It may still be edited for bounded human-reviewable packs while the migration is active, but it is not the runtime or consumer source of truth.
+YAML under `knowledge/**/*.yaml` is a legacy authoring/import format. It may still be edited for bounded maintainer-curated packs while the migration is active, but it is not the runtime or consumer source of truth.
 
 Allowed compatibility flow:
 

@@ -12,8 +12,8 @@ Use one public repository as the default target:
 sap-agent-context
 ```
 
-The repository should be the cloneable SAP context layer for AI agents and human
-reviewers. It should contain source-backed, compact context artifacts that help
+The repository should be the cloneable SAP context layer for AI agents and
+agent-workflow reviewers. It should contain source-backed, compact context artifacts that help
 agents generate or review functional design, field mapping, workflow, role,
 scope item, and implementation-support output.
 
