@@ -90,6 +90,33 @@ def test_runtime_search_cli_outputs_json(tmp_path: Path, capsys) -> None:
     assert payload["results"][0]["explain"]["source_ids"]
 
 
+def test_query_explain_prioritizes_from_zero_ontology_without_filters(
+    tmp_path: Path,
+    capsys,
+) -> None:
+    sqlite_path = _index_path(tmp_path)
+
+    exit_code = main(
+        [
+            "--root",
+            str(ROOT),
+            "query-explain",
+            "what is SAP foundation lifecycle landscape customizing source evidence",
+            "--sqlite",
+            str(sqlite_path),
+            "--limit",
+            "8",
+        ]
+    )
+
+    assert exit_code == 0
+    payload = json.loads(capsys.readouterr().out)
+    top_ids = [result["id"] for result in payload["results"][:5]]
+    assert top_ids[0] == "sap.object.sap-context-foundation"
+    assert "sap.field-set.sap-context-lenses" in top_ids
+    assert "sap.rule.sap-answer-ontology-gate" in top_ids
+
+
 def test_query_explain_cli_outputs_top_explanation_contract(tmp_path: Path, capsys) -> None:
     sqlite_path = _index_path(tmp_path)
 

@@ -24,7 +24,6 @@ build-backend = "uv_build"
 dev = [
     "pytest>=9.1.1",
     "ruff>=0.15.18",
-    "ty>=0.0.51",
 ]
 
 [tool.pytest.ini_options]
@@ -36,6 +35,3 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
-
-[tool.ty.src]
-include = ["src", "tests"]

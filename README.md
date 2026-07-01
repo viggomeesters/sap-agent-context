@@ -168,6 +168,13 @@ that turns source-labelled knowledge into verifiable agent context bundles.
 Run the full local quality gate:
 
 ```bash
+make check
+make audit-v02-gap-report
+```
+
+`make check` expands to:
+
+```bash
 uv run sap-agent-context validate
 uv run sap-agent-context audit-completeness
 uv run sap-agent-context evaluate-fixtures
@@ -177,10 +184,14 @@ uv run sap-agent-context evaluate-runtime-retrieval
 uv run sap-agent-context evaluate-semantic-models
 uv run pytest -q
 uv run ruff check .
+git diff --check
 ```
 
-The CI workflow runs the same core validation commands on pushes and pull
-requests.
+`make audit-v02-gap-report` is fail-hard; it must fail the command when the
+v0.2 coverage matrix reports blocking findings.
+
+The CI workflow runs `make check` and `make audit-v02-gap-report` on pushes and
+pull requests.
 
 ## McCoy Integration
 

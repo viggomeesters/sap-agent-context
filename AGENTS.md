@@ -47,8 +47,14 @@ Forbidden:
 
 - repository identity/safety guard;
 - YAML knowledge validation;
-- completeness audit;
-- evaluation fixtures;
+- starter completeness audit;
+- FO-output evaluation fixtures;
+- runtime index and embedding builds;
+- runtime retrieval and semantic model evaluations;
 - pytest regression tests;
 - Ruff lint;
 - git whitespace diff check.
+
+`make audit-v02-gap-report` is a separate fail-hard campaign gate for
+`schema/sap-agent-context-v0.2-coverage.yaml`; it must return a non-zero exit
+when the v0.2 matrix reports blocking findings.

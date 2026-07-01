@@ -12,6 +12,7 @@ from sap_agent_context.runtime_embeddings import search_runtime_vectors
 
 IDENTIFIER_RE = re.compile(r"\b[A-Z][A-Z0-9_/-]{2,}\b")
 WORD_RE = re.compile(r"[A-Za-z0-9_/-]+")
+GENERIC_EXACT_TERMS = {"SAP"}
 
 
 def search_runtime_index(
@@ -66,7 +67,10 @@ def search_runtime_index(
                 (match_query, candidate_limit),
             ).fetchall()
             exact_item_rows = _exact_item_rows(conn, exact_terms, candidate_limit)
-            focused_item_rows = _focused_item_rows(conn, tokens, max(limit * 2, 20))
+            focused_item_rows = [
+                *_foundation_item_rows(conn, tokens),
+                *_focused_item_rows(conn, tokens, max(limit * 2, 20)),
+            ]
             claim_rows = conn.execute(
                 """
                 SELECT
@@ -159,6 +163,47 @@ def _exact_item_rows(
     ).fetchall()
 
 
+def _foundation_item_rows(
+    conn: sqlite3.Connection,
+    tokens: list[str],
+) -> list[sqlite3.Row]:
+    token_set = {token.lower() for token in tokens}
+    if not _looks_like_foundation_query(token_set):
+        return []
+    preferred_ids = [
+        "sap.object.sap-context-foundation",
+        "sap.field-set.sap-context-lenses",
+        "sap.rule.sap-answer-ontology-gate",
+        "sap.fo-pattern.sap-from-zero-answer",
+        "sap.test-pattern.sap-foundation-fail-closed",
+    ]
+    placeholders = ", ".join("?" for _ in preferred_ids)
+    return conn.execute(
+        f"""
+        SELECT
+          items.id,
+          items.title,
+          items.kind,
+          items.summary AS text,
+          'item_focus' AS source,
+          0.0 AS bm25_score,
+          items.payload_json AS search_text,
+          items.payload_json AS payload_json
+        FROM items
+        WHERE items.id IN ({placeholders})
+        ORDER BY CASE items.id
+          WHEN 'sap.object.sap-context-foundation' THEN 0
+          WHEN 'sap.field-set.sap-context-lenses' THEN 1
+          WHEN 'sap.rule.sap-answer-ontology-gate' THEN 2
+          WHEN 'sap.fo-pattern.sap-from-zero-answer' THEN 3
+          WHEN 'sap.test-pattern.sap-foundation-fail-closed' THEN 4
+          ELSE 5
+        END
+        """,
+        preferred_ids,
+    ).fetchall()
+
+
 def _focused_item_rows(
     conn: sqlite3.Connection,
     tokens: list[str],
@@ -201,11 +246,12 @@ def _ranked(row: sqlite3.Row, tokens: list[str], exact_terms: list[str]) -> dict
     haystack = text.lower()
     exact_hits = sum(1 for term in exact_terms if term.lower() in haystack)
     bm25_score = float(row["bm25_score"] or 0.0)
-    source_boost = 100 if str(row["source"]).startswith("item_") else 0
+    source = str(row["source"])
+    source_boost = 100 if source.startswith("item_") else -200
     payload = _json_payload(str(row["payload_json"] or ""))
     kind = str(row["kind"])
     item_id = str(row["id"])
-    focus_boost = _focus_boost(tokens, kind, item_id)
+    focus_boost = _focus_boost(tokens, kind, item_id, payload)
     claim_ids = _claim_ids(row, payload)
     source_ids = _source_ids(row, payload)
     result = {
@@ -238,7 +284,7 @@ def _vector_ranked(hit: dict[str, Any], tokens: list[str]) -> dict[str, Any]:
     distance = float(hit.get("distance") or 0.0)
     result_id = str(hit.get("item_id") or hit.get("claim_id") or canonical_id)
     kind = str(metadata.get("kind") or record_type)
-    focus_boost = _focus_boost(tokens, kind, result_id)
+    focus_boost = _focus_boost(tokens, kind, result_id, metadata)
     source_ids = _strings(metadata.get("evidence_ids") or metadata.get("source_ids"))
     result = {
         "id": result_id,
@@ -297,8 +343,14 @@ def _explain_result(
     return explain
 
 
-def _focus_boost(tokens: list[str], kind: str, item_id: str) -> float:
+def _focus_boost(
+    tokens: list[str],
+    kind: str,
+    item_id: str,
+    metadata: dict[str, Any],
+) -> float:
     token_set = {token.lower() for token in tokens}
+    topics = {topic.lower() for topic in _strings(metadata.get("topics"))}
     boost = 0.0
     if kind == "fo_pattern" and ({"fo", "pattern"} & token_set):
         boost += 45.0
@@ -308,7 +360,35 @@ def _focus_boost(tokens: list[str], kind: str, item_id: str) -> float:
         boost += 30.0
     if item_id.startswith("sap.bulk.") and ({"fo", "pattern", "decision", "rule"} & token_set):
         boost -= 25.0
+    if _looks_like_foundation_query(token_set):
+        if item_id.startswith("sap.bulk."):
+            boost -= 400.0
+        if "sap-foundation" in topics or item_id in {
+            "sap.object.sap-context-foundation",
+            "sap.field-set.sap-context-lenses",
+            "sap.rule.sap-answer-ontology-gate",
+        }:
+            boost += 1400.0
+        if "context-ontology" in topics or "from-zero" in topics:
+            boost += 250.0
+        if kind in {"sap_object", "sap_field", "decision_rule"}:
+            boost += 75.0
+        if kind == "sap_app":
+            boost -= 150.0
     return boost
+
+
+def _looks_like_foundation_query(token_set: set[str]) -> bool:
+    foundation_signals = {
+        "foundation",
+        "from-zero",
+        "ontology",
+        "lifecycle",
+        "landscape",
+        "customizing",
+        "evidence",
+    }
+    return "sap" in token_set and len(foundation_signals & token_set) >= 2
 
 
 def _json_payload(raw: str) -> dict[str, Any]:
@@ -373,7 +453,11 @@ def _tokens(query: str) -> list[str]:
 
 
 def _exact_terms(query: str, tokens: list[str]) -> list[str]:
-    identifiers = IDENTIFIER_RE.findall(query)
+    identifiers = [
+        identifier
+        for identifier in IDENTIFIER_RE.findall(query)
+        if identifier not in GENERIC_EXACT_TERMS
+    ]
     short_exact = [token for token in tokens if any(char.isdigit() for char in token)]
     return _dedupe([*identifiers, *short_exact])
 
