@@ -53,7 +53,7 @@ Total items: `666`
 Run:
 
 ```bash
-uv run sap-agent-context maturity-report --format markdown --output docs/maturity-report.md
+uv run sap-agent-context maturity-report --output build/reports/maturity-report.json
 ```
 
 The maturity report maps observed domains and declared density profiles to the
@@ -65,7 +65,7 @@ planning signal, not an exhaustive SAP product truth claim.
 For concrete follow-up candidates by slice, run:
 
 ```bash
-uv run sap-agent-context gap-report --format markdown --output docs/gap-report.md
+uv run sap-agent-context gap-report --output build/reports/gap-report.json
 ```
 
 Each missing dimension becomes a follow-up task candidate with acceptance text;

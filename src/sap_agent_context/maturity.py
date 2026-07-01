@@ -55,74 +55,8 @@ def build_maturity_report(items: list[KnowledgeItem], *, root: Path) -> dict[str
     }
 
 
-def render_maturity_markdown(report: dict[str, Any]) -> str:
-    """Render the maturity report as reviewer-friendly Markdown."""
-
-    lines = [
-        "# SAP Agent Context maturity report",
-        "",
-        "> Planning signal only: this is not exhaustive SAP product coverage.",
-        "",
-        f"Total items: `{report['items']}`",
-        "",
-        "## Domain maturity",
-        "",
-        "| Domain | Maturity | Score | Missing dimensions |",
-        "|---|---|---:|---|",
-    ]
-    for domain in report["domains"]:
-        lines.append(
-            "| {id} | {maturity} | {score:.2f} | {missing} |".format(
-                id=domain["id"],
-                maturity=domain["maturity"],
-                score=domain["score"],
-                missing=", ".join(domain["missing_dimensions"]) or "none",
-            )
-        )
-
-    lines.extend(
-        [
-            "",
-            "## Declared density profiles",
-            "",
-            "| Profile | Promotion | Status | Maturity | Score | Missing dimensions |",
-            "|---|---|---|---|---:|---|",
-        ]
-    )
-    for profile in report["domain_density_profiles"]:
-        lines.append(
-            "| {id} | {promotion} | {status} | {maturity} | {score:.2f} | {missing} |".format(
-                id=profile["id"],
-                promotion=profile["promotion"],
-                status=profile["status"],
-                maturity=profile["maturity"],
-                score=profile["score"],
-                missing=", ".join(profile["missing_dimensions"]) or "none",
-            )
-        )
-
-    lines.extend(
-        [
-            "",
-            "## Consumer boundary",
-            "",
-            "- `required` means the declared slice must stay deep for the current gates.",
-            "- `report_only` is visibility, not product-ready coverage.",
-            "- `needs_curation` means follow-up work is required before final-use claims.",
-            (
-                "- Green maturity never means all SAP products, releases, tenants "
-                "or local variants are covered."
-            ),
-        ]
-    )
-    return "\n".join(lines) + "\n"
-
-
-def write_maturity_report(report: dict[str, Any], output: Path, output_format: str) -> None:
+def write_maturity_report(report: dict[str, Any], output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    if output_format == "markdown":
-        output.write_text(render_maturity_markdown(report), encoding="utf-8")
-        return
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
@@ -146,74 +80,8 @@ def build_gap_report(items: list[KnowledgeItem], *, root: Path) -> dict[str, Any
     }
 
 
-def render_gap_markdown(report: dict[str, Any]) -> str:
-    """Render a concrete gap report for planning and follow-up task creation."""
-
-    lines = [
-        "# SAP Agent Context gap report by slice",
-        "",
-        (
-            "> Every gap below maps to a concrete follow-up candidate. No-gap "
-            "slices carry an explicit no-follow-up reason."
-        ),
-        "",
-        "| Slice | Promotion | Maturity | Gaps | Top answer impact | Next action |",
-        "|---|---|---|---:|---|---|",
-    ]
-    for entry in report["slices"]:
-        next_action = (
-            entry["gaps"][0]["follow_up_task"]
-            if entry["gaps"]
-            else entry["no_follow_up_reason"]
-        )
-        top_impact = (
-            entry["gaps"][0]["answer_impact"]
-            if entry["gaps"]
-            else "no current answer-impact gap"
-        )
-        lines.append(
-            "| {id} | {promotion} | {maturity} | {count} | {top_impact} | {next_action} |".format(
-                id=entry["id"],
-                promotion=entry["promotion"],
-                maturity=entry["maturity"],
-                count=len(entry["gaps"]),
-                top_impact=top_impact,
-                next_action=next_action,
-            )
-        )
-
-    lines.extend(["", "## Gap details", ""])
-    if report["gaps"]:
-        for entry in report["gaps"]:
-            lines.append(f"### {entry['id']}")
-            for gap in entry["gaps"]:
-                lines.append(f"- **{gap['dimension']}**: {gap['follow_up_task']}")
-                lines.append(f"  - Acceptance: {gap['acceptance']}")
-                lines.append(f"  - Answer impact: {gap['answer_impact']}")
-                lines.append(f"  - Priority: {gap['priority']}")
-            lines.append("")
-    else:
-        lines.append("No current maturity gaps under the report heuristic.\n")
-
-    lines.extend(
-        [
-            "## Boundary",
-            "",
-            "- Gap counts are planning inputs, not SAP truth percentages.",
-            (
-                "- Create follow-up tasks only for in-scope gaps; otherwise keep "
-                "the no-follow-up reason visible."
-            ),
-        ]
-    )
-    return "\n".join(lines) + "\n"
-
-
-def write_gap_report(report: dict[str, Any], output: Path, output_format: str) -> None:
+def write_gap_report(report: dict[str, Any], output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    if output_format == "markdown":
-        output.write_text(render_gap_markdown(report), encoding="utf-8")
-        return
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 

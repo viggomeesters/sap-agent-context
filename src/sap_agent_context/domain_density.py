@@ -136,86 +136,8 @@ def build_domain_density_heatmap(items: Iterable[KnowledgeItem]) -> dict[str, An
     }
 
 
-def render_heatmap_markdown(report: dict[str, Any]) -> str:
-    """Render a compact Markdown report for docs and review."""
-
-    lines = [
-        "# SAP Agent Context coverage heatmap",
-        "",
-        (
-            "> Generated from current knowledge items. This is a planning heatmap, "
-            "not an exhaustive SAP product coverage claim."
-        ),
-        "",
-        f"Total items: `{report['items']}`",
-        "",
-        "## Domain density",
-        "",
-        "| Domain | Items | Sources | FO patterns | Decision rules | Test patterns | Eval items |",
-        "|---|---:|---:|---:|---:|---:|---:|",
-    ]
-    for domain, data in report["domains"].items():
-        lines.append(
-            "| {domain} | {items} | {sources} | {fo} | {rules} | {tests} | {evals} |".format(
-                domain=domain,
-                items=data["items"],
-                sources=data["source_references"],
-                fo=data["fo_patterns"],
-                rules=data["decision_rules"],
-                tests=data["test_patterns"],
-                evals=data["eval_items"],
-            )
-        )
-
-    lines.extend(
-        [
-            "",
-            "## EAM/PM lifecycle slices",
-            "",
-            "| Slice | Items | FO patterns | Decision rules | Test patterns | Status |",
-            "|---|---:|---:|---:|---:|---|",
-        ]
-    )
-    for slice_name, data in report["eam_pm_lifecycle"].items():
-        lines.append(
-            "| {slice} | {items} | {fo} | {rules} | {tests} | {status} |".format(
-                slice=slice_name,
-                items=data["items"],
-                fo=data["kind_counts"].get("fo_pattern", 0),
-                rules=data["kind_counts"].get("decision_rule", 0),
-                tests=data["kind_counts"].get("test_pattern", 0),
-                status=data["status"],
-            )
-        )
-
-    lines.extend(["", "## Weak domains", ""])
-    if report["weak_domains"]:
-        for finding in report["weak_domains"]:
-            lines.append(f"- **{finding['domain']}**: {finding['message']}")
-    else:
-        lines.append("- No weak domains under the current planning heuristic.")
-
-    lines.extend(
-        [
-            "",
-            "## Contract",
-            "",
-            "- `records/*.jsonl` remains the canonical agent record surface.",
-            "- YAML is legacy authoring/import format only.",
-            (
-                "- This heatmap should guide filling; it must not become a fake "
-                "exhaustive SAP completeness claim."
-            ),
-        ]
-    )
-    return "\n".join(lines) + "\n"
-
-
-def write_heatmap(report: dict[str, Any], output: Path, output_format: str) -> None:
+def write_heatmap(report: dict[str, Any], output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    if output_format == "markdown":
-        output.write_text(render_heatmap_markdown(report), encoding="utf-8")
-        return
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 

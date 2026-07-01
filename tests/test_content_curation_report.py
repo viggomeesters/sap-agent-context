@@ -95,9 +95,11 @@ def test_content_curation_report_cli_outputs_json_only(tmp_path: Path, capsys) -
         "scope"
     ]["boundary"]
     captured = capsys.readouterr()
-    assert "curation-report written" in captured.out
-    assert str(json_path) in captured.out
-    assert "curation_needed=" in captured.out
+    summary = json.loads(captured.out)
+    assert summary["command"] == "curation-report"
+    assert summary["output"] == str(json_path)
+    assert summary["status"] in {"passed", "needs_curation"}
+    assert summary["curation_needed"] >= 0
     assert "samples" not in captured.out
 
 

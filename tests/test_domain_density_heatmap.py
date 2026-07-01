@@ -3,10 +3,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from sap_agent_context.domain_density import (
     EAM_PM_LIFECYCLE_SLICES,
     build_domain_density_heatmap,
-    render_heatmap_markdown,
 )
 from sap_agent_context.repository import load_items
 
@@ -52,25 +53,30 @@ def test_domain_density_heatmap_exposes_source_and_eval_coverage() -> None:
     assert isinstance(report["weak_domains"], list)
 
 
-def test_domain_density_heatmap_markdown_is_reviewable() -> None:
-    report = build_domain_density_heatmap(load_items(ROOT))
-    markdown = render_heatmap_markdown(report)
-
-    assert "# SAP Agent Context coverage heatmap" in markdown
-    assert "## Domain density" in markdown
-    assert "## EAM/PM lifecycle slices" in markdown
-    assert "maintenance-plan" in markdown
-    assert "records/*.jsonl" in markdown
-
-
-def test_domain_density_heatmap_cli_writes_json_and_markdown(tmp_path: Path) -> None:
+def test_domain_density_heatmap_cli_writes_json_only(tmp_path: Path, capsys) -> None:
     from sap_agent_context.cli import main
 
     json_output = tmp_path / "heatmap.json"
-    markdown_output = tmp_path / "heatmap.md"
 
     assert main(["--root", str(ROOT), "domain-density-heatmap", "--output", str(json_output)]) == 0
-    assert (
+
+    payload = json.loads(json_output.read_text())
+    assert payload["status"] == "passed"
+    assert "eam_pm_lifecycle" in payload
+    captured = capsys.readouterr()
+    summary = json.loads(captured.out)
+    assert summary["command"] == "domain-density-heatmap"
+    assert summary["output"] == str(json_output)
+    assert summary["status"] == "passed"
+    assert "eam_pm_lifecycle" not in summary
+
+
+def test_domain_density_heatmap_rejects_markdown_format(tmp_path: Path) -> None:
+    from sap_agent_context.cli import main
+
+    markdown_output = tmp_path / "heatmap.md"
+
+    with pytest.raises(SystemExit):
         main(
             [
                 "--root",
@@ -82,10 +88,4 @@ def test_domain_density_heatmap_cli_writes_json_and_markdown(tmp_path: Path) -> 
                 str(markdown_output),
             ]
         )
-        == 0
-    )
-
-    payload = json.loads(json_output.read_text())
-    assert payload["status"] == "passed"
-    assert "eam_pm_lifecycle" in payload
-    assert markdown_output.read_text().startswith("# SAP Agent Context coverage heatmap")
+    assert not markdown_output.exists()
