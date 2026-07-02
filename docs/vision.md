@@ -1,211 +1,247 @@
-# Product vision
+# SAP Agent Context vision and design principles
 
-`sap-agent-context` should become the local, source-backed SAP context layer that agents can clone, verify, query, and cite when helping with Functional Design, field mapping, test scenarios, workflow, roles, migration, integrations, and implementation support.
+## One-line vision
 
-It is not a mirror of SAP Help, SAP Notes, Learning Hub, customer systems, or consultant project archives. The project wins when it gives agents enough structured, evidence-labelled context to work faster and safer without pretending to know a tenant or the whole SAP product.
+SAP professionals clone `sap-agent-context` as a local, agent-first SAP context
+resource: compact enough to run quickly, rich enough to ground useful SAP work,
+and strict enough to fail closed when the repo lacks evidence.
 
-## Target state
+## Product promise
 
-A colleague or agent should be able to run:
+A SAP professional should be able to clone this repository, run the local gates,
+query it with an agent, and get source-labelled context bundles for SAP
+functional design, field mapping, workflow, roles, migration, integrations,
+analytics, EAM/PM and implementation support.
+
+The repo is useful when it gives an agent enough structured context to reason
+from zero without leaning on generic model memory, while still refusing to invent
+release, tenant, customizing, role, availability or production facts.
+
+## North star
+
+> **A cloneable, local-first SAP context runtime for agents: self-contained,
+> fast, compact, evidence-backed and fail-closed.**
+
+Every meaningful change should improve at least one part of that sentence. If it
+cannot be mapped to the north star, it is probably scope creep.
+
+## Primary user journey
 
 ```bash
 git clone https://github.com/viggomeesters/sap-agent-context.git
 cd sap-agent-context
 uv sync --locked
-uv run sap-agent-context export-jsonl --output-dir records
-uv run sap-agent-context build-index --sqlite-vec required
-uv run sap-agent-context build-embeddings
-uv run sap-agent-context query --intent fo --topic "maintenance plan task list measuring point" --limit 12
+make check
+uv run sap-agent-context query-explain --intent fo --topic "maintenance plan task list measuring point" --limit 8
 ```
 
-and get a compact context bundle with:
+Expected outcome:
 
-- canonical JSONL agent records;
-- source-labelled claims and links;
-- bounded freshness and review metadata;
-- local SQLite/FTS/vector retrieval;
-- FO-ready patterns, questions, assumptions, and non-goals;
-- evaluation fixtures that prove important queries still retrieve the right anchors;
-- explicit caveats when tenant-specific evidence is required.
+- the repo builds locally without external hosted retrieval services;
+- JSONL records and generated indexes are internally consistent;
+- the agent receives compact context, not a documentation dump;
+- each useful answer can point to source, freshness and access boundaries;
+- missing tenant or release evidence becomes a visible gap, not a hallucinated
+  conclusion.
 
-## The north star
+## Design principles
 
-The north star is:
+### 1. agent-only product surface
 
-> **A cloneable, local-first SAP context runtime that turns source-labelled knowledge into verifiable agent context bundles.**
+Optimize for agents consuming structured context. Do not design the repo as a
+human browsing site, wiki, training manual, or SAP Help replacement.
 
-This means the repository should optimize for:
+Allowed narrative docs exist only to preserve operating context for maintainers
+and agents. They must not become canonical data, generated evidence, or the main
+product surface.
 
-1. **Agent usefulness** — records should answer real agent tasks, not just list SAP terms.
-2. **Evidence before fluency** — claims need source labels, freshness, and confidence boundaries.
-3. **JSONL-first runtime** — `records/*.jsonl` is the canonical agent record surface; build artifacts are generated.
-4. **Local reproducibility** — SQLite, FTS, embeddings, and checks should rebuild from the repo without hosted services.
-5. **Bounded density** — a domain can be deep for a named slice without claiming complete SAP coverage.
-6. **Fail-closed tenant behavior** — when behavior depends on configuration, roles, status profiles, extensions, settlement, or local process, the answer should ask for evidence instead of inventing detail.
+**Good:** JSONL records, bundle contracts, source maps, runtime indexes, fixtures,
+query examples, report JSON.
 
-In short: the repo should make **fail-closed tenant behavior** the default for unknown tenant-specific details.
+**Bad:** long prose pages that agents must scrape to recover facts that should be
+records, claims, sources, relations or fixtures.
 
-## What “good” looks like
+### 2. Self-contained local clone
 
-A mature domain slice is not a pile of YAML. It has a complete implementation-pack shape:
+A cloned repo should contain enough source-labelled metadata, schemas, tests and
+runtime build commands to be useful on a local machine.
 
-| Layer | Good looks like |
+This does not mean copying SAP proprietary documentation. It means carrying
+compact, public-safe, link-first records and evidence requirements that let an
+agent know what it may say, what it must cite, and what it must ask for.
+
+### 3. Fast by default
+
+Default workflows should complete quickly enough to stay in the development loop.
+Heavy or optional work must be explicit.
+
+Design implications:
+
+- keep generated read models rebuildable;
+- prefer deterministic JSONL and SQLite/FTS/vector indexes over opaque hosted
+  services;
+- keep Make targets focused and fail-hard;
+- avoid broad content campaigns that slow the gate without improving retrieval or
+  evidence.
+
+### 4. Compact, not shallow
+
+Compact means high signal density. It does not mean vague summaries.
+
+A good record is small but useful: id, kind, source, access, freshness, claim,
+relations, retrieval hints, caveats and test expectations. A bad record is either
+large copied documentation or a shallow label with no evidence boundary.
+
+### 5. Reliable means fail-closed
+
+Reliability is not fluent SAP-sounding output. Reliability is refusing to cross
+an evidence boundary.
+
+Fail closed on:
+
+- tenant availability;
+- customer/client configuration;
+- SPRO/IMG/CBC/SSCUI/customizing values;
+- roles and authorizations in a target system;
+- release/currentness claims;
+- production behavior;
+- SAP Notes/KBA/SAP for Me content without authorized verification.
+
+### 6. Evidence before coverage
+
+More domains are not automatically progress. A small source-labelled slice with
+fixtures is better than many unverified records.
+
+Promote coverage only when source/access/freshness, runtime retrieval, semantic
+fixtures and adversarial cases support the claim.
+
+### 7. JSON-first, generated-artifact JSON-only
+
+`records/*.jsonl` is the canonical agent record surface. Generated report evidence and machine-consumable examples are JSON-only.
+
+Markdown may remain as narrative operating context for maintainers and agents,
+but never as generated evidence, report output or machine-readable examples.
+
+### 8. Retrieval is part of the product
+
+A record that cannot be retrieved for the right prompt is not very useful. A
+retrieval tweak that breaks nearby domains is not an improvement.
+
+Important behavior needs both:
+
+- positive fixtures/smokes that prove the intended record appears near the top;
+- negative fixtures/smokes that prove generic or nearby words do not hijack the
+  query.
+
+### 9. Public-safe by construction
+
+The repo must stay cloneable and publishable.
+
+Never store customer names, tenant URLs, screenshots, SAP exports, internal
+project identifiers, credentials, proprietary copied SAP documentation, or
+customer-specific mappings. Use public/gated/internal-derived access labels and
+source pointers instead.
+
+### 10. Every gap should become steerable
+
+A gap is useful when it is named, classified and actionable. Avoid vague backlog
+language like “needs more SAP content”.
+
+Prefer generated JSON reports that show:
+
+- affected domain/profile;
+- missing source, FO pattern, rule, fixture, freshness or retrieval proof;
+- severity or promotion status;
+- next curation action.
+
+## What this repo is
+
+| Lens | Meaning |
 |---|---|
-| Sources | Public/gated/internal-derived references are labelled, freshness-tagged, and link-first. |
-| Anchors | Domain objects, apps, tables, fields, workflow surfaces, roles, and APIs are explicit and citable. |
-| FO patterns | Patterns include questions, assumptions, non-goals, and validation notes. |
-| Decision rules | Tenant-specific behavior has fail-closed `if/then/outcome` rules. |
-| Test patterns | The slice has representative test scenarios and acceptance hints. |
-| Retrieval fixtures | Runtime search proves important exact and semantic queries resolve to the right ids. |
-| Evaluation fixtures | FO-output and semantic fixtures protect against regression and hallucinated readiness. |
-| Density gates | `audit-completeness` reports whether the slice is starter, report-only, or required-deep. |
+| Context graph | SAP objects, apps, fields, claims, sources, relations and caveats. |
+| Runtime index | Local SQLite/FTS/vector read model generated from records. |
+| Evidence layer | Source/access/freshness metadata and proof boundaries. |
+| Navigation layer | From-zero SAP lenses: foundation, lifecycle, landscape, edition, release, customizing, org, process, surface and evidence. |
+| Agent contract | Bundle schema, query examples, fixtures and fail-closed consumer behavior. |
+| Curation system | Reports and tests that turn unknowns into targeted follow-up tasks. |
 
-The completed EAM/PM lifecycle slice is the current exemplar for this shape.
+## What this repo is not
 
-## Boundary
+- not a SAP documentation mirror;
+- not a Learning Hub clone;
+- not a SAP Notes/KBA archive;
+- not a customer project archive;
+- not a tenant configuration store;
+- not a secret store;
+- not a generic vector demo;
+- not a human wiki as the primary product surface;
+- not proof that all SAP claims are globally correct.
 
-A passing gate means the repo satisfies the stated bounded contract. It is **not exhaustive SAP product coverage**.
+## Acceptance scorecard
 
-## Non-goals
+Use this before merging meaningful changes.
 
-The project should not try to become:
+| Question | Pass condition |
+|---|---|
+| Agent-only | Does the change improve records, bundles, runtime behavior, tests, reports or operating context for agents? |
+| Self-contained | Can a fresh clone rebuild or consume the result locally? |
+| Fast | Does the default gate stay practical, deterministic and local? |
+| Compact | Is the information structured and high-signal rather than copied prose? |
+| Reliable | Are source/access/freshness/release/tenant boundaries explicit? |
+| JSON-first | Are machine-consumable artifacts JSON/JSONL rather than Markdown? |
+| Public-safe | Is there no client, tenant, secret, screenshot, export or proprietary copied text? |
+| Retrieval-proof | Are important prompts protected by focused tests, fixtures or query smokes? |
+| Gap-steerable | If something is incomplete, is it reported as an actionable gap? |
+| No false certainty | Does the output avoid implying exhaustive SAP certification? |
 
-- an exhaustive SAP product knowledge base;
-- a copy of SAP proprietary documentation;
-- a client/project archive;
-- a tenant-specific configuration store;
-- a secret store;
-- a hosted retrieval service by default;
-- a generic vector database demo with weak evidence discipline.
+A change that fails one of these checks needs either a fix, a narrower scope, or
+an explicit residual risk entry.
 
-A passing gate means the repo satisfies the stated bounded contract. It does not mean “SAP is covered”.
+## Design review checklist
 
-## Roadmap
+Before shipping:
 
-### Horizon 0 — From-zero SAP ontology and navigation layer
+1. Does this help SAP professionals clone the repo as a practical agent resource?
+2. Is the product surface still agent-first rather than prose-first?
+3. Are records/source pointers/freshness/relations explicit where facts matter?
+4. Are generated reports and machine examples JSON-only?
+5. Are tenant/release/customizing claims fail-closed when target evidence is
+   missing?
+6. Did the change add retrieval or fixture proof for important behavior?
+7. Did full gates pass?
+8. Did the final claim state what was proven and what remains outside scope?
 
-Goal: teach a cloned local agent the SAP mental map before it consumes deep domain packs.
+## Maturity model
 
-The repo now treats SAP context as overlapping lenses rather than one hierarchy:
-foundation, lifecycle, landscape, edition/release, configuration/customizing,
-organization, process/capability, surface and evidence. This is the layer that
-keeps agents from answering from generic model memory or from a shallow library
-list.
+| Level | State | Meaning |
+|---|---|---|
+| L0 | `schema_valid` | Records parse and validate, but usefulness is not proven. |
+| L1 | `retrievable` | Important prompts retrieve the record or bundle. |
+| L2 | `source_bounded` | Source/access/freshness and fail-closed caveats are explicit. |
+| L3 | `fixture_protected` | Positive and negative tests protect the intended behavior. |
+| L4 | `consumer_ready` | Downstream bundle consumers can use it without hidden assumptions. |
 
-Recommended first ontology slices:
+Do not call a slice mature because it has many records. Call it mature when it
+moves through these levels with evidence.
 
-1. **Foundation map**
-   - Why: answer “what is SAP?” from source-backed repo context, not vibes.
-   - Output: `docs/sap-context-ontology.md`, foundation context pack, and fail-closed tests.
-2. **Landscape / Activate / customizing hierarchy**
-   - Why: DEV/QAS/PRD, Discover/Explore/Realize, SPRO/IMG/CBC/SSCUI and org units change what evidence is reasonable.
-   - Output: lifecycle and configuration pack with target-system evidence gates.
-3. **Alias / evolution map**
-   - Why: LTMC, Migration Cockpit, Migrate Your Data, SAP Business Workflow, Flexible Workflow and Build Process Automation are generation/release-sensitive.
-   - Output: alias/evolution records and tests that prevent old/new overclaims.
-4. **Source registry navigation**
-   - Why: Fiori Apps Reference Library, SAP Help, Business Accelerator Hub, Roadmap Viewer, What’s New and SAP Notes need access/freshness labels without copying proprietary text.
-   - Output: source registry pack and citation/access rules.
+## Roadmap principles
 
-### Horizon 1 — Repeat the deep-slice pattern
+1. Finish JSONL-native authoring paths without breaking legacy imports.
+2. Promote report-only domains only when fixtures and source boundaries justify
+   it.
+3. Improve `query-explain` until agents can understand why context was selected.
+4. Turn curation reports into targeted follow-up tasks.
+5. Prefer one deep, verified domain slice over five shallow domains.
+6. Keep the repo cloneable, public-safe and local-first even as coverage grows.
 
-Goal: prove that EAM/PM was not a one-off.
+## Current residual risk wording
 
-Recommended next slices:
+Use this when summarizing audit or gate results:
 
-1. **Analytics and extensibility candidate**
-   - Why: it is already visible as a weak/report-only area in the domain-density gates.
-   - Output: source anchors, FO patterns, fail-closed rules, fixtures, and a `report_only` profile that can later be promoted.
-2. **Integration security and API/event boundaries**
-   - Why: high hallucination risk, high reuse value for agents, and strong need for no-secrets policy.
-   - Output: safer bundle behavior around communication users, destinations, APIs, events, roles, and no-secret evidence.
-3. **Procurement release strategy / workflow caveat slice**
-   - Why: common FO topic, but tenant-specific and easy to overclaim.
-   - Output: fail-closed patterns and adversarial fixtures that prevent fake-ready workflow guidance.
+> Residual risk: audit scope is repo-level, not exhaustive claim-by-claim SAP
+> content review across all domain-pack YAML. Gates, runtime behavior,
+> source/access boundaries, CI semantics and the from-zero ontology layer are
+> covered; full SAP claim curation remains a separate pass.
 
-### Horizon 2 — Make authoring JSONL-native
-
-Goal: reduce legacy YAML authoring friction while preserving compatibility.
-
-Steps:
-
-1. Add a small direct JSONL authoring path for new records.
-2. Keep YAML import as a compatibility/editor path, not the canonical source.
-3. Strengthen schema tests so record type, SAP context type, source metadata, relations, and freshness are explicit.
-4. Preserve deterministic export/build behavior so generated SQLite/FTS/vector indexes remain reproducible.
-
-### Horizon 3 — Improve retrieval trust
-
-Goal: every agent result should explain why it was retrieved.
-
-Steps:
-
-1. Add “why this result?” output to runtime/search/bundle commands.
-2. Show exact-token, FTS, vector, source, and fixture evidence separately.
-3. Keep exact/source-backed hits ahead of vague vector similarity.
-4. Add golden retrieval tests for representative high-risk queries.
-
-### Horizon 4 — Make maturity visible
-
-Goal: make the repo steerable without reading every pack.
-
-Steps:
-
-1. Turn coverage heatmap + domain-density profiles into a maturity dashboard/report.
-2. Show each domain as `starter`, `report_only`, or `required-deep`.
-3. Show missing dimensions as source, FO, rule, test, retrieval, semantic, or freshness gaps.
-4. Generate follow-up task candidates from real gaps, not from broad “more content” impulses.
-
-### Horizon 5 — Harden consumer contracts
-
-Goal: downstream tools can rely on the bundle shape.
-
-Steps:
-
-1. Keep `sap-agent-context-bundle` stable and typed.
-2. Maintain compatibility for `sap_fo_context_bundle` only where explicitly needed.
-3. Add consumer examples for local agents and McCoy-style FO generation.
-4. Keep public/private boundary checks in the default gate.
-
-## Decision rules for future work
-
-Use these rules when deciding what to build next:
-
-1. **Prefer one deep slice over five shallow domains.**
-2. **Promote a profile to `required` only after tests prove the slice is deep.**
-3. **Add fixtures before trusting retrieval improvements.**
-4. **Do not add content without a source, confidence label, or tenant caveat.**
-5. **Do not optimize embeddings until exact/source-backed retrieval is protected.**
-6. **If a gap is real but out of scope, document it as `later` or create a follow-up task.**
-7. **If a proposed change cannot be verified locally, it is not ready for the default gate.**
-
-## Suggested next execution package
-
-The best next execution package is:
-
-> Build the analytics/extensibility slice using the deep-domain pack template.
-
-Acceptance should include:
-
-- a bounded slice name and source registry;
-- domain anchors for analytics/reporting/extensibility/custom-field surfaces;
-- FO patterns and fail-closed decision rules;
-- FO-output, runtime retrieval, and semantic fixtures;
-- a `domain_density_profiles` entry that starts as `report_only`;
-- tests proving the slice follows the template without weakening existing gates.
-
-This is the cleanest next move because it turns the current known weak area into a repeatable proof that the deep-domain template works beyond EAM/PM.
-
-## Current truth
-
-As of the EAM/PM pass, the repo has:
-
-- JSONL-first records and generated runtime indexes;
-- a coverage heatmap;
-- EAM/PM lifecycle deep-slice content;
-- FO patterns and decision rules for that slice;
-- FO-output, runtime retrieval, and semantic fixtures;
-- bounded domain-density gates;
-- a reusable deep-domain pack template.
-
-The project is ready to shift from “prove the architecture once” to “repeat the pattern deliberately”.
+This wording keeps the repo valuable without pretending that passing gates certify
+the entire SAP corpus.
