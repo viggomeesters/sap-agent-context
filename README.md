@@ -97,6 +97,60 @@ runtime store. See [Local runtime index](docs/local-runtime-index.md) and
 [Retrieval trust boundary](docs/retrieval-trust-boundary.md) for what ranked
 results can and cannot prove.
 
+Evaluate user-style answer scenarios:
+
+```bash
+uv run sap-agent-context evaluate-answer-scenarios
+```
+
+This is a deterministic retrieval/evidence-readiness gate. It proves that
+representative questions retrieve source-labelled context, required answer terms
+and citation-bearing records. It does **not** claim live internet validation,
+expert certification, or tenant-specific SAP truth. Fixtures may include public
+web evidence hints for a separate human/agent review pass.
+
+| Question | Expected status | Evidence-readiness result |
+|---|---:|---|
+| `Technical fields in MARA?` | `ready` | retrieves the MARA DD03VT field-catalog anchor and requires `MARA.MATNR`, `MARA.MTART`, `DD03VT` on that record |
+| `Field description voor MTART` / `MTART omschrijving` | `ready` | retrieves the MARA field catalog and requires `MARA.MTART`, `Material Type`, `Artikelsoort` |
+| `In welke tabellen kan ik het veld MATNR vinden?` / `Welke tabellen hebben MATNR?` | `ready` | retrieves MARA and EQUI field-catalog anchors and requires `MARA.MATNR` plus `EQUI.MATNR` |
+| `Hoe zit het precies met organisaties scheiden in SAP?` / `Hoe scheid je organisatie-eenheden in SAP?` | `ready` | retrieves org/process lenses for company code, plant, purchasing organization and sales organization with fail-closed evidence boundaries |
+| `Wat is purchase to pay?` / `Wat is procure to pay?` | `ready` | retrieves the P2P/process lens and purchasing-organization context |
+| `Welke SAP modules zijn er?` | `needs_curation` | retrieves foundation/context lenses, but deliberately refuses to claim an exhaustive module taxonomy from current records |
+
+Example report fragment:
+
+```json
+{
+  "artifact_kind": "answer_scenario_evaluation_report",
+  "status": "passed",
+  "fixtures": 11,
+  "contract": {
+    "live_web_boundary": "Fixtures can carry external evidence hints, but this deterministic gate does not claim live internet validation or expert certification.",
+    "answer_boundary": "Retrieved context is answer evidence, not tenant/client-specific SAP configuration proof."
+  }
+}
+```
+
+Example scenario result:
+
+```json
+{
+  "id": "concrete_mtart_description_paraphrase_nl",
+  "question": "MTART omschrijving",
+  "expected_answer_status": "ready",
+  "status": "passed",
+  "top_ids": [
+    "sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog"
+  ],
+  "external_evidence_hints": {
+    "mode": "offline_hint",
+    "accepted_domains": ["sapdatasheet.org", "se80.co.uk", "sap.com"],
+    "search_terms": ["SAP MTART description Material Type", "SAP field MTART Artikelsoort"]
+  }
+}
+```
+
 Generate a context bundle:
 
 ```bash
