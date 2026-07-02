@@ -171,7 +171,7 @@ patterns, decision rules, tests, fixtures, and bounded thresholds for a named
 slice without claiming exhaustive SAP coverage.
 
 The product and design contract is captured in the
-[Vision and design principles](docs/vision.md): a cloneable, local-first SAP context runtime for agents that is self-contained, fast, compact, reliable, source-labelled, JSON-first and fail-closed.
+[Vision and design principles](docs/vision.json): a cloneable, local-first SAP context runtime for agents that is self-contained, fast, compact, reliable, source-labelled, JSON-first and fail-closed.
 
 ## Development
 

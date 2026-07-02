@@ -1,0 +1,254 @@
+{
+  "$schema": "https://viggomeesters.github.io/schemas/repo-vision-contract.schema.json",
+  "schema_version": "1.0.0",
+  "artifact_kind": "repo_design_vision_contract",
+  "repo": {
+    "name": "sap-agent-context",
+    "primary_users": [
+      "agents",
+      "SAP professionals using agents"
+    ],
+    "product_surface": "agent_first",
+    "canonical_agent_records": "records/*.jsonl"
+  },
+  "vision": {
+    "one_line": "SAP professionals clone sap-agent-context as a local, agent-first SAP context resource: compact enough to run quickly, rich enough to ground useful SAP work, and strict enough to fail closed when the repo lacks evidence.",
+    "north_star": "A cloneable, local-first SAP context runtime for agents: self-contained, fast, compact, evidence-backed and fail-closed.",
+    "promise": "A SAP professional should be able to clone this repository, run the local gates, query it with an agent, and get source-labelled context bundles for SAP functional design, field mapping, workflow, roles, migration, integrations, analytics, EAM/PM and implementation support.",
+    "anti_memory_clause": "The repo is useful when it gives an agent enough structured context to reason from zero without leaning on generic model memory, while still refusing to invent release, tenant, customizing, role, availability or production facts."
+  },
+  "primary_user_journey": {
+    "commands": [
+      "git clone https://github.com/viggomeesters/sap-agent-context.git",
+      "cd sap-agent-context",
+      "uv sync --locked",
+      "make check",
+      "uv run sap-agent-context query-explain --intent fo --topic \"maintenance plan task list measuring point\" --limit 8"
+    ],
+    "expected_outcomes": [
+      "the repo builds locally without external hosted retrieval services",
+      "JSONL records and generated indexes are internally consistent",
+      "the agent receives compact context, not a documentation dump",
+      "each useful answer can point to source, freshness and access boundaries",
+      "missing tenant or release evidence becomes a visible gap, not a hallucinated conclusion"
+    ]
+  },
+  "principles": [
+    {
+      "id": "agent-first",
+      "title": "Agent-first product surface",
+      "rule": "Optimize for agents consuming structured context. Do not design the repo as a human browsing site, wiki, training manual, or SAP Help replacement.",
+      "good": [
+        "JSONL records",
+        "bundle contracts",
+        "source maps",
+        "runtime indexes",
+        "fixtures",
+        "query examples",
+        "report JSON"
+      ],
+      "bad": [
+        "long prose pages that agents must scrape to recover facts",
+        "facts hidden only in Markdown",
+        "human wiki as primary product surface"
+      ]
+    },
+    {
+      "id": "self-contained",
+      "title": "Self-contained local clone",
+      "rule": "A cloned repo should contain enough source-labelled metadata, schemas, tests and runtime build commands to be useful on a local machine without copying SAP proprietary documentation.",
+      "good": [
+        "compact public-safe link-first records",
+        "evidence requirements",
+        "local rebuild commands"
+      ],
+      "bad": [
+        "hosted-only retrieval dependency",
+        "copied SAP docs",
+        "external state required for basic validation"
+      ]
+    },
+    {
+      "id": "fast-default",
+      "title": "Fast by default",
+      "rule": "Default workflows should complete quickly enough to stay in the development loop; heavy or optional work must be explicit.",
+      "good": [
+        "rebuildable read models",
+        "focused fail-hard Make targets",
+        "deterministic JSONL and SQLite/FTS/vector indexes"
+      ],
+      "bad": [
+        "broad content campaigns that slow gates without improving retrieval",
+        "opaque hosted services as default path"
+      ]
+    },
+    {
+      "id": "compact-not-shallow",
+      "title": "Compact, not shallow",
+      "rule": "High signal density beats copied documentation or vague labels. A good record is small but useful: id, kind, source, access, freshness, claim, relations, retrieval hints, caveats and test expectations.",
+      "good": [
+        "source/access/freshness labels",
+        "relations and caveats",
+        "test expectations"
+      ],
+      "bad": [
+        "large copied documentation",
+        "shallow labels with no evidence boundary"
+      ]
+    },
+    {
+      "id": "reliable-fail-closed",
+      "title": "Reliable means fail-closed",
+      "rule": "Reliability is refusing to cross an evidence boundary, not fluent SAP-sounding output.",
+      "fail_closed_on": [
+        "tenant availability",
+        "customer/client configuration",
+        "SPRO/IMG/CBC/SSCUI/customizing values",
+        "roles and authorizations in a target system",
+        "release/currentness claims",
+        "production behavior",
+        "SAP Notes/KBA/SAP for Me content without authorized verification"
+      ]
+    },
+    {
+      "id": "evidence-before-coverage",
+      "title": "Evidence before coverage",
+      "rule": "More domains are not automatically progress. A small source-labelled slice with fixtures is better than many unverified records.",
+      "good": [
+        "source/access/freshness",
+        "runtime retrieval proof",
+        "semantic fixtures",
+        "adversarial cases"
+      ],
+      "bad": [
+        "broad unverified coverage claims",
+        "item count as maturity proof"
+      ]
+    },
+    {
+      "id": "json-first",
+      "title": "JSON-first, generated-artifact JSON-only",
+      "rule": "records/*.jsonl is the canonical agent record surface. Generated report evidence and machine-consumable examples are JSON-only. Markdown may remain as narrative operating context for maintainers and agents, but never as generated evidence, report output or machine-readable examples.",
+      "good": [
+        "records/*.jsonl",
+        "docs/vision.json",
+        "examples/*.json",
+        "build/reports/*.json"
+      ],
+      "bad": [
+        "generated evidence as Markdown",
+        "machine examples only in prose"
+      ]
+    },
+    {
+      "id": "retrieval-is-product",
+      "title": "Retrieval is part of the product",
+      "rule": "A record that cannot be retrieved for the right prompt is not very useful, and a retrieval tweak that breaks nearby domains is not an improvement.",
+      "required_proof": [
+        "positive fixtures or smokes that prove intended records appear near the top",
+        "negative fixtures or smokes that prove generic or nearby words do not hijack the query"
+      ]
+    },
+    {
+      "id": "public-safe",
+      "title": "Public-safe by construction",
+      "rule": "The repo must stay cloneable and publishable.",
+      "forbidden": [
+        "customer names",
+        "tenant URLs",
+        "screenshots",
+        "SAP exports",
+        "internal project identifiers",
+        "credentials",
+        "proprietary copied SAP documentation",
+        "customer-specific mappings"
+      ]
+    },
+    {
+      "id": "gaps-steer-work",
+      "title": "Every gap should become steerable",
+      "rule": "A gap is useful when it is named, classified and actionable. Avoid vague backlog language like 'needs more SAP content'.",
+      "report_fields": [
+        "affected domain/profile",
+        "missing source, FO pattern, rule, fixture, freshness or retrieval proof",
+        "severity or promotion status",
+        "next curation action"
+      ]
+    }
+  ],
+  "repo_lenses": [
+    {"id": "context-graph", "meaning": "SAP objects, apps, fields, claims, sources, relations and caveats."},
+    {"id": "runtime-index", "meaning": "Local SQLite/FTS/vector read model generated from records."},
+    {"id": "evidence-layer", "meaning": "Source/access/freshness metadata and proof boundaries."},
+    {"id": "navigation-layer", "meaning": "From-zero SAP lenses: foundation, lifecycle, landscape, edition, release, customizing, org, process, surface and evidence."},
+    {"id": "agent-contract", "meaning": "Bundle schema, query examples, fixtures and fail-closed consumer behavior."},
+    {"id": "curation-system", "meaning": "Reports and tests that turn unknowns into targeted follow-up tasks."}
+  ],
+  "non_goals": [
+    "SAP documentation mirror",
+    "Learning Hub clone",
+    "SAP Notes/KBA archive",
+    "customer project archive",
+    "tenant configuration store",
+    "secret store",
+    "generic vector demo",
+    "human wiki as the primary product surface",
+    "proof that all SAP claims are globally correct"
+  ],
+  "public_safety": {
+    "forbidden": [
+      "customer names",
+      "tenant URLs",
+      "screenshots",
+      "SAP exports",
+      "internal project identifiers",
+      "credentials",
+      "proprietary copied SAP documentation",
+      "customer-specific mappings"
+    ],
+    "required_boundaries": [
+      "public/gated/internal-derived access labels",
+      "source pointers",
+      "freshness or review status",
+      "fail-closed tenant/release caveats"
+    ]
+  },
+  "acceptance_scorecard": [
+    {"id": "agent-first", "question": "Does the change improve records, bundles, runtime behavior, tests, reports or operating context for agents?", "pass_condition": "The change improves the agent-facing product surface instead of only prose."},
+    {"id": "self-contained", "question": "Can a fresh clone rebuild or consume the result locally?", "pass_condition": "Local commands and generated artifacts are reproducible from repo state."},
+    {"id": "fast", "question": "Does the default gate stay practical, deterministic and local?", "pass_condition": "Default checks remain local and bounded."},
+    {"id": "compact", "question": "Is the information structured and high-signal rather than copied prose?", "pass_condition": "Facts live in structured records/contracts, not only narrative text."},
+    {"id": "reliable", "question": "Are source/access/freshness/release/tenant boundaries explicit?", "pass_condition": "Evidence boundaries are visible and fail closed."},
+    {"id": "json-first", "question": "Are machine-consumable artifacts JSON/JSONL rather than Markdown?", "pass_condition": "Generated reports and examples are JSON/JSONL."},
+    {"id": "public-safe", "question": "Is there no client, tenant, secret, screenshot, export or proprietary copied text?", "pass_condition": "Public-safety scan and review find no forbidden material."},
+    {"id": "retrieval-proof", "question": "Are important prompts protected by focused tests, fixtures or query smokes?", "pass_condition": "Positive and negative retrieval behavior is tested."},
+    {"id": "gap-steerable", "question": "If something is incomplete, is it reported as an actionable gap?", "pass_condition": "Gaps are named, classified and actionable."},
+    {"id": "no-false-certainty", "question": "Does the output avoid implying exhaustive SAP certification?", "pass_condition": "Residual risk and proof boundaries are explicit."}
+  ],
+  "review_checklist": [
+    "Does this help SAP professionals clone the repo as a practical agent resource?",
+    "Is the product surface still agent-first rather than prose-first?",
+    "Are records/source pointers/freshness/relations explicit where facts matter?",
+    "Are generated reports and machine examples JSON-only?",
+    "Are tenant/release/customizing claims fail-closed when target evidence is missing?",
+    "Did the change add retrieval or fixture proof for important behavior?",
+    "Did full gates pass?",
+    "Did the final claim state what was proven and what remains outside scope?"
+  ],
+  "maturity_model": [
+    {"level": "L0", "state": "schema_valid", "meaning": "Records parse and validate, but usefulness is not proven."},
+    {"level": "L1", "state": "retrievable", "meaning": "Important prompts retrieve the record or bundle."},
+    {"level": "L2", "state": "source_bounded", "meaning": "Source/access/freshness and fail-closed caveats are explicit."},
+    {"level": "L3", "state": "fixture_protected", "meaning": "Positive and negative tests protect the intended behavior."},
+    {"level": "L4", "state": "consumer_ready", "meaning": "Downstream bundle consumers can use it without hidden assumptions."}
+  ],
+  "roadmap_principles": [
+    "Finish JSONL-native authoring paths without breaking legacy imports.",
+    "Promote report-only domains only when fixtures and source boundaries justify it.",
+    "Improve query-explain until agents can understand why context was selected.",
+    "Turn curation reports into targeted follow-up tasks.",
+    "Prefer one deep, verified domain slice over five shallow domains.",
+    "Keep the repo cloneable, public-safe and local-first even as coverage grows."
+  ],
+  "residual_risk_wording": "Residual risk: audit scope is repo-level, not exhaustive claim-by-claim SAP content review across all domain-pack YAML. Gates, runtime behavior, source/access boundaries, CI semantics and the from-zero ontology layer are covered; full SAP claim curation remains a separate pass."
+}

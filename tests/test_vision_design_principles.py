@@ -1,19 +1,37 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VISION = ROOT / "docs" / "vision.md"
+VISION = ROOT / "docs" / "vision.json"
+OLD_VISION = ROOT / "docs" / "vision.md"
 README = ROOT / "README.md"
 
 
-def test_vision_doc_states_cloneable_agent_first_product_direction() -> None:
-    text = VISION.read_text(encoding="utf-8")
+def _payload() -> dict:
+    return json.loads(VISION.read_text(encoding="utf-8"))
+
+
+def test_vision_contract_is_json_agent_first_artifact() -> None:
+    payload = _payload()
+
+    assert payload["artifact_kind"] == "repo_design_vision_contract"
+    assert payload["repo"]["name"] == "sap-agent-context"
+    assert payload["repo"]["product_surface"] == "agent_first"
+    assert payload["repo"]["canonical_agent_records"] == "records/*.jsonl"
+    assert "agents" in payload["repo"]["primary_users"]
+    assert not OLD_VISION.exists()
+
+
+def test_vision_contract_states_cloneable_agent_first_product_direction() -> None:
+    payload = _payload()
+    text = json.dumps(payload, ensure_ascii=False, sort_keys=True)
 
     required = [
-        "SAP professionals clone `sap-agent-context`",
+        "SAP professionals clone sap-agent-context",
         "agent-first SAP context",
-        "agent-only product surface",
+        "agent-first",
         "self-contained",
         "fast",
         "compact",
@@ -26,50 +44,54 @@ def test_vision_doc_states_cloneable_agent_first_product_direction() -> None:
         assert phrase in text
 
 
-def test_vision_doc_keeps_json_first_and_public_safe_boundaries() -> None:
-    text = VISION.read_text(encoding="utf-8")
+def test_vision_contract_keeps_json_first_and_public_safe_boundaries() -> None:
+    payload = _payload()
+    principle_ids = {item["id"] for item in payload["principles"]}
 
-    required = [
-        "`records/*.jsonl` is the canonical agent record surface",
-        "Generated report evidence and machine-consumable examples are JSON-only",
-        "Markdown may remain as narrative operating context for maintainers and agents",
-        "Never store customer names, tenant URLs, screenshots, SAP exports",
-        "not a SAP documentation mirror",
-        "not a human wiki as the primary product surface",
-    ]
-    for phrase in required:
-        assert phrase in text
-
-
-def test_vision_doc_has_actionable_design_scorecard_and_review_checklist() -> None:
-    text = VISION.read_text(encoding="utf-8")
-
-    scorecard_checks = [
-        "Agent-only",
-        "Self-contained",
-        "Fast",
-        "Compact",
-        "Reliable",
-        "JSON-first",
-        "Public-safe",
-        "Retrieval-proof",
-        "Gap-steerable",
-        "No false certainty",
-    ]
-    for phrase in scorecard_checks:
-        assert phrase in text
-
-    checklist_phrases = [
-        "Does this help SAP professionals clone the repo as a practical agent resource?",
-        "Is the product surface still agent-first rather than prose-first?",
-        "Did the final claim state what was proven and what remains outside scope?",
-    ]
-    for phrase in checklist_phrases:
-        assert phrase in text
+    assert {"agent-first", "json-first", "public-safe", "reliable-fail-closed"} <= principle_ids
+    assert payload["repo"]["canonical_agent_records"] == "records/*.jsonl"
+    json_rule = next(item for item in payload["principles"] if item["id"] == "json-first")
+    assert (
+        "Generated report evidence and machine-consumable examples are JSON-only"
+        in json_rule["rule"]
+    )
+    assert "Markdown may remain as narrative operating context" in json_rule["rule"]
+    public_safe = payload["public_safety"]
+    assert {"tenant URLs", "screenshots", "credentials"} <= set(public_safe["forbidden"])
+    assert "SAP documentation mirror" in payload["non_goals"]
+    assert "human wiki as the primary product surface" in payload["non_goals"]
 
 
-def test_readme_links_to_vision_as_design_contract() -> None:
+def test_vision_contract_has_actionable_design_scorecard_and_review_checklist() -> None:
+    payload = _payload()
+
+    scorecard_ids = {item["id"] for item in payload["acceptance_scorecard"]}
+    expected = {
+        "agent-first",
+        "self-contained",
+        "fast",
+        "compact",
+        "reliable",
+        "json-first",
+        "public-safe",
+        "retrieval-proof",
+        "gap-steerable",
+        "no-false-certainty",
+    }
+    assert expected <= scorecard_ids
+
+    checklist = payload["review_checklist"]
+    assert (
+        "Does this help SAP professionals clone the repo as a practical agent resource?"
+        in checklist
+    )
+    assert "Is the product surface still agent-first rather than prose-first?" in checklist
+    assert "Did the final claim state what was proven and what remains outside scope?" in checklist
+
+
+def test_readme_links_to_json_vision_as_design_contract() -> None:
     text = README.read_text(encoding="utf-8")
 
-    assert "docs/vision.md" in text
+    assert "docs/vision.json" in text
+    assert "docs/vision.md" not in text
     assert "cloneable, local-first SAP context runtime" in text
