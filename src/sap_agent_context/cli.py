@@ -8,6 +8,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from sap_agent_context.agent_records import export_agent_records, validate_agent_records
+from sap_agent_context.answer_scenario_evaluation import evaluate_answer_scenarios
 from sap_agent_context.bundle import build_context_bundle, mccoy_provider_manifest
 from sap_agent_context.completeness import audit_completeness
 from sap_agent_context.content_curation import (
@@ -76,6 +77,13 @@ def build_parser() -> argparse.ArgumentParser:
     runtime_eval = subparsers.add_parser("evaluate-runtime-retrieval")
     runtime_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
     runtime_eval.add_argument("--fixtures", type=Path)
+
+    answer_eval = subparsers.add_parser(
+        "evaluate-answer-scenarios",
+        help="evaluate concrete-to-vague user answer scenarios against runtime evidence",
+    )
+    answer_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
+    answer_eval.add_argument("--fixtures", type=Path)
 
     semantic_eval = subparsers.add_parser("evaluate-semantic-models")
     semantic_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
@@ -365,6 +373,15 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "evaluate-runtime-retrieval":
         payload = evaluate_runtime_retrieval(
+            root=root,
+            sqlite_path=_resolve_output(root, args.sqlite),
+            fixtures_path=_resolve_output(root, args.fixtures) if args.fixtures else None,
+        )
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0 if payload["status"] == "passed" else 1
+
+    if args.command == "evaluate-answer-scenarios":
+        payload = evaluate_answer_scenarios(
             root=root,
             sqlite_path=_resolve_output(root, args.sqlite),
             fixtures_path=_resolve_output(root, args.fixtures) if args.fixtures else None,

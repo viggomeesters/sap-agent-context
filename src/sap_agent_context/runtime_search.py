@@ -471,6 +471,10 @@ def _looks_like_foundation_query(token_set: set[str]) -> bool:
         "from-zero",
         "ontology",
         "sap-context",
+        "module",
+        "modules",
+        "modulen",
+        "moduul",
     }
     context_signals = {
         "sap",
@@ -479,6 +483,8 @@ def _looks_like_foundation_query(token_set: set[str]) -> bool:
         "customizing",
         "evidence",
         "source",
+        "welke",
+        "what",
     }
     return bool(explicit_foundation_intent & token_set) and len(context_signals & token_set) >= 2
 
@@ -496,6 +502,11 @@ def _looks_like_org_process_query(token_set: set[str]) -> bool:
         "distribution",
         "purchasing",
         "purchase",
+        "organisatie",
+        "organisaties",
+        "scheiden",
+        "separate",
+        "separation",
         "partner",
     }
     process_signals = {
@@ -513,15 +524,27 @@ def _looks_like_org_process_query(token_set: set[str]) -> bool:
         "versus",
         "vs",
         "compare",
+        "precies",
+        "exactly",
     }
-    explicit_org_question = bool({"org", "organization", "organisation"} & token_set) and bool(
+    explicit_org_terms = {
+        "org",
+        "organization",
+        "organisation",
+        "organisatie",
+        "organisaties",
+    }
+    explicit_org_question = bool(explicit_org_terms & token_set) and bool(
         {"unit", "owns", "owner", *org_signals} & token_set
+    )
+    dutch_org_separation = bool({"organisatie", "organisaties"} & token_set) and bool(
+        {"scheiden", "precies", "sap"} & token_set
     )
     tenant_org_assertion = bool({"tenant", "configured"} & token_set) and bool(
         org_signals & token_set
     )
     process_question = bool(org_signals & token_set) and bool(process_signals & token_set)
-    return explicit_org_question or tenant_org_assertion or process_question
+    return explicit_org_question or dutch_org_separation or tenant_org_assertion or process_question
 
 
 def _json_payload(raw: str) -> dict[str, Any]:

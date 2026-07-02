@@ -13398,6 +13398,22 @@ items:
   - fo.field_mapping
   - migration.analysis
   - source_traceability
+  retrieval:
+    keywords:
+    - MARA.MATNR
+    - MARA.MTART
+    - MATNR
+    - MTART
+    - Material Number
+    - Material Type
+    - Artikelnummer
+    - Artikelsoort
+    - technical fields in MARA
+    - field description for MTART
+    queries:
+    - Technical fields in MARA?
+    - Field description voor MTART
+    - In welke tabellen kan ik het veld MATNR vinden?
   summary: An anonymized SAP ECC DD03VT extract variant for MARA field metadata. It preserves generic SAP Dictionary field
     structure and multilingual labels without tenant records, customer names or project-specific values.
   freshness:

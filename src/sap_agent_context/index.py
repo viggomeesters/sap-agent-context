@@ -289,6 +289,7 @@ def _insert_items(conn: sqlite3.Connection, item_records: list[dict[str, Any]]) 
                 record["title"],
                 record["kind"],
                 record["summary"],
+                _field_definition_text(record.get("field_definitions")),
                 " ".join(topics),
                 " ".join(used_for),
                 " ".join(_strings(retrieval.get("keywords"))),
@@ -310,6 +311,32 @@ def _insert_items(conn: sqlite3.Connection, item_records: list[dict[str, Any]]) 
             "INSERT INTO item_used_for (item_id, used_for) VALUES (?, ?)",
             [(record["id"], value) for value in used_for],
         )
+
+
+def _field_definition_text(value: Any) -> str:
+    if not isinstance(value, list):
+        return ""
+    parts: list[str] = []
+    for field in value:
+        if not isinstance(field, dict):
+            continue
+        parts.extend(
+            str(field.get(key) or "")
+            for key in [
+                "key",
+                "sap_structure",
+                "sap_field",
+                "data_element",
+                "domain",
+                "check_table",
+                "description",
+            ]
+        )
+        labels = field.get("labels") if isinstance(field.get("labels"), dict) else {}
+        for label in labels.values():
+            if isinstance(label, dict):
+                parts.extend(str(item) for item in label.values())
+    return " ".join(parts)
 
 
 def _insert_claims(conn: sqlite3.Connection, claims: list[dict[str, Any]]) -> None:

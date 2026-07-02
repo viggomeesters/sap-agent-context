@@ -18,6 +18,16 @@ used_for:
 - fo.field_mapping
 - migration.analysis
 - source_traceability
+retrieval:
+  keywords:
+  - EQUI.MATNR
+  - MATNR
+  - Material Number
+  - equipment material number
+  - tables containing MATNR
+  queries:
+  - In welke tabellen kan ik het veld MATNR vinden?
+  - SAP tables containing MATNR field
 summary: An anonymized SAP ECC DD03VT extract variant for EQUI equipment master field metadata. It preserves generic SAP Dictionary
   field structure and multilingual labels without tenant records, equipment numbers, customer names or project-specific values.
 freshness:

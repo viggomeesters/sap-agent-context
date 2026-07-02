@@ -1,0 +1,162 @@
+fixtures:
+  - id: concrete_mara_technical_fields
+    difficulty: concrete
+    question: Technical fields in MARA?
+    limit: 12
+    expected_answer_status: ready
+    required_ids:
+      - sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
+    required_answer_terms:
+      - MARA.MATNR
+      - MARA.MTART
+      - DD03VT
+    require_citations: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - sapdatasheet.org
+        - se80.co.uk
+        - sap.com
+      search_terms:
+        - SAP MARA technical fields MATNR MTART
+        - SAP DD03VT MARA field catalog
+
+  - id: concrete_mtart_field_description
+    difficulty: concrete
+    question: Field description voor MTART
+    limit: 12
+    expected_answer_status: ready
+    required_ids:
+      - sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
+    required_answer_terms:
+      - MARA.MTART
+      - Material Type
+      - Artikelsoort
+    require_citations: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - sapdatasheet.org
+        - se80.co.uk
+        - sap.com
+      search_terms:
+        - SAP MARA MTART Material Type field description
+        - MARA-MTART Material Type SAP
+
+  - id: concrete_matnr_table_lookup
+    difficulty: concrete
+    question: In welke tabellen kan ik het veld MATNR vinden?
+    limit: 20
+    expected_answer_status: ready
+    required_ids:
+      - sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
+      - sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog
+    required_answer_terms:
+      - MARA.MATNR
+      - EQUI.MATNR
+      - DD03VT
+    require_citations: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - sapdatasheet.org
+        - beyondse16.com
+        - sap.com
+      search_terms:
+        - SAP tables containing MATNR field
+        - SAP MARA MATNR EQUI MATNR DD03VT
+
+  - id: mid_org_separation_nl
+    difficulty: mid
+    question: Hoe zit het precies met organisaties scheiden in SAP?
+    limit: 20
+    expected_answer_status: ready
+    required_ids:
+      - sap.rule.sap-org-process-evidence-gate
+      - sap.object.sap-org-model-lens
+      - sap.object.sap-org-company-code
+      - sap.object.sap-org-plant
+      - sap.object.sap-org-purchasing-organization
+      - sap.object.sap-org-sales-organization
+    required_answer_terms:
+      - company code
+      - plant
+      - purchasing organization
+      - sales organization
+      - tenant
+    forbidden_top_kinds:
+      - sap_app
+    require_citations: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - learning.sap.com
+        - help.sap.com
+        - sap-press.com
+      search_terms:
+        - SAP organizational levels client company code plant purchasing organization sales organization
+        - SAP organization units company code plant purchasing organization
+
+  - id: mid_purchase_to_pay
+    difficulty: mid
+    question: Wat is purchase to pay?
+    limit: 20
+    expected_answer_status: ready
+    required_ids:
+      - sap.field-set.sap-process-lenses
+      - sap.object.sap-org-purchasing-organization
+      - sap.rule.sap-org-process-evidence-gate
+    required_answer_terms:
+      - P2P
+      - purchasing organization
+      - process
+    require_citations: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - learning.sap.com
+        - help.sap.com
+        - sap.com
+      search_terms:
+        - SAP S/4HANA sourcing procurement purchase to pay process
+        - SAP purchase to pay P2P procurement process
+
+  - id: vague_sap_modules
+    difficulty: vague
+    question: Welke SAP modules zijn er?
+    limit: 20
+    expected_answer_status: needs_curation
+    curation_reason:
+      - Repo has a foundation/process-lens answer path, but no exhaustive module taxonomy should be claimed from current context.
+    required_ids:
+      - sap.object.sap-context-foundation
+      - sap.field-set.sap-context-lenses
+      - sap.rule.sap-answer-ontology-gate
+    forbidden_top_kinds:
+      - sap_app
+    required_answer_terms:
+      - process
+      - landscape
+      - source
+    require_citations: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - learning.sap.com
+        - help.sap.com
+        - sap.com
+      search_terms:
+        - SAP modules overview FI CO MM SD PP HCM S/4HANA
+        - SAP business processes modules overview
