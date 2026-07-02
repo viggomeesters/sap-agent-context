@@ -79,9 +79,24 @@ def test_current_claims_have_no_l0_boundary_failures_after_targeted_fixes() -> N
 
     assert report["summary"]["curation_needed"] == 0
     assert report["summary"]["sampled_maturity_distribution"]["L0"] == 0
-    assert report["summary"]["maturity_distribution"] == {"L0": 0, "L1": 773, "L2": 0, "L3": 0}
+    assert report["summary"]["maturity_distribution"] == {"L0": 0, "L1": 765, "L2": 8, "L3": 0}
     assert report["status"] == "passed"
     assert report["summary"]["lowest_maturity"] == "L1"
+
+
+def test_finance_ap_catalog_claims_are_agent_ready_l2_without_expert_l3() -> None:
+    report = build_content_curation_report(load_items(ROOT), sample_size=3)
+    finance_rows = [
+        row
+        for row in report["claim_maturity_index"]
+        if Path(row["pack_path"]).name == "finance-ap-supplier-invoice-pack.yaml"
+    ]
+
+    l2_rows = [row for row in finance_rows if row["level"] == "L2"]
+    assert len(l2_rows) == 8
+    assert {row["status"] for row in l2_rows} == {"agent_ready"}
+    assert all("structured_expert_review_present" in row["reasons"] for row in l2_rows)
+    assert not any(row["level"] == "L3" for row in finance_rows)
 
 
 def test_content_curation_report_cli_outputs_json_only(tmp_path: Path, capsys) -> None:

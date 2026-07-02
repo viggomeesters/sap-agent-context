@@ -53,6 +53,7 @@ items:
     freshness: *freshness_current
     source: *supplier_invoice_api
     requires_source_specificity: high
+    confidence: medium
     claims:
       - statement: Supplier invoice FOs should verify invoice identity, supplier, company code, amount and status fields against a public catalog or tenant evidence.
         evidence: [https://api.sap.com/api/API_SUPPLIERINVOICE_PROCESS_SRV/overview]
@@ -75,6 +76,7 @@ items:
     freshness: *freshness_current
     source: *payment_proposal_api
     requires_source_specificity: high
+    confidence: medium
     claims:
       - statement: AP payment FOs should separate invoice approval from payment proposal/payment-run eligibility.
         evidence: [https://api.sap.com/api/API_PAYMENTPROPOSAL/overview]
@@ -97,6 +99,7 @@ items:
     freshness: *freshness_current
     source: *supplier_invoice_api
     requires_source_specificity: high
+    confidence: medium
     claims:
       - statement: Supplier invoice context should distinguish posting/approval/payment concerns rather than treating invoice approval as final AP completion.
         evidence: [sap.ref.api-supplier-invoice-process]
@@ -119,6 +122,7 @@ items:
     freshness: *freshness_current
     source: *payment_proposal_api
     requires_source_specificity: high
+    confidence: medium
     claims:
       - statement: Payment readiness should be modeled as separate from invoice posting and workflow approval.
         evidence: [sap.ref.api-payment-proposal]
@@ -142,6 +146,7 @@ items:
     freshness: *freshness_current
     source: *supplier_invoice_api
     requires_source_specificity: high
+    confidence: medium
     claims:
       - statement: AP invoice field maps should include both accounting fields and workflow/payment status fields when the process spans approval and payment.
         evidence: [sap.ref.api-supplier-invoice-process]
@@ -184,6 +189,7 @@ items:
     freshness: *freshness_current
     source: *payment_proposal_api
     requires_source_specificity: high
+    confidence: medium
     claims:
       - statement: Payment proposal field maps should state why a posted invoice is or is not eligible for payment.
         evidence: [sap.ref.api-payment-proposal]
@@ -219,6 +225,7 @@ items:
     freshness: *freshness_current
     source: *supplier_invoice_api
     requires_source_specificity: high
+    confidence: medium
     claims:
       - statement: Supplier invoice field mapping should retain invoice identity and status fields that affect posting, approval and payment.
         evidence: [sap.field-set.supplier-invoice-ap-core]
@@ -257,6 +264,7 @@ items:
     freshness: *freshness_current
     source: *payment_proposal_api
     requires_source_specificity: high
+    confidence: medium
     claims:
       - statement: AP payment readiness mapping should explain why an approved invoice can still be excluded from payment.
         evidence: [sap.field-set.ap-payment-proposal-core]
