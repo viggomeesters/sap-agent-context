@@ -108,6 +108,16 @@
         "release/currentness claims",
         "production behavior",
         "SAP Notes/KBA/SAP for Me content without authorized verification"
+      ],
+      "good": [
+        "explicit missing-evidence gaps",
+        "release and tenant caveats",
+        "authorized-verification requirements for gated sources"
+      ],
+      "bad": [
+        "SAP-sounding output without source boundaries",
+        "tenant or customizing claims from generic context",
+        "currentness claims without freshness evidence"
       ]
     },
     {
@@ -147,6 +157,16 @@
       "required_proof": [
         "positive fixtures or smokes that prove intended records appear near the top",
         "negative fixtures or smokes that prove generic or nearby words do not hijack the query"
+      ],
+      "good": [
+        "positive retrieval fixtures",
+        "negative hijack fixtures",
+        "query-explain smoke evidence"
+      ],
+      "bad": [
+        "records that never surface for target prompts",
+        "ranking tweaks without regression coverage",
+        "generic keyword hijacks"
       ]
     },
     {
@@ -162,6 +182,16 @@
         "credentials",
         "proprietary copied SAP documentation",
         "customer-specific mappings"
+      ],
+      "good": [
+        "public-safe synthetic examples",
+        "source pointers instead of copied proprietary text",
+        "access labels for gated material"
+      ],
+      "bad": [
+        "tenant URLs or screenshots",
+        "customer-specific mappings",
+        "copied SAP proprietary documentation"
       ]
     },
     {
@@ -173,6 +203,16 @@
         "missing source, FO pattern, rule, fixture, freshness or retrieval proof",
         "severity or promotion status",
         "next curation action"
+      ],
+      "good": [
+        "classified gap reports",
+        "next curation actions",
+        "severity and affected-domain fields"
+      ],
+      "bad": [
+        "vague needs-more-content backlog items",
+        "unclassified warnings",
+        "gaps without a next action"
       ]
     }
   ],
