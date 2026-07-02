@@ -99,3 +99,16 @@ def test_read_model_metadata_is_jsonl_primary_not_yaml_editing_source(tmp_path: 
 
     item_record = json.loads((tmp_path / "items.jsonl").read_text(encoding="utf-8").splitlines()[0])
     assert "source_path" in item_record
+
+
+def test_generated_report_directory_does_not_keep_markdown_artifacts() -> None:
+    reports_dir = ROOT / "build" / "reports"
+    if not reports_dir.exists():
+        return
+
+    offenders = sorted(path.relative_to(ROOT).as_posix() for path in reports_dir.glob("*.md"))
+
+    assert not offenders, (
+        "generated report artifacts must stay JSON-only; remove stale Markdown files: "
+        + ", ".join(offenders)
+    )
