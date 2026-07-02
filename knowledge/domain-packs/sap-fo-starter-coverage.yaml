@@ -91,7 +91,7 @@ items:
     freshness: *freshness_current
     source: *sap_help_source
     claims:
-      - statement: Purchase requisition FOs should identify the requisition app or configuration surface and distinguish requester, approver and buyer responsibilities.
+      - statement: Purchase requisition FOs should identify the requisition app or configuration surface, distinguish requester, approver and buyer responsibilities, and verify target-tenant role/workflow behavior before implementation use.
         evidence: [sap.ref.procurement-overview]
   - id: sap.object.purchase-requisition
     title: PurchaseRequisition business object
@@ -121,7 +121,7 @@ items:
     freshness: *freshness_current
     source: *internal_source
     claims:
-      - statement: Procurement FOs should include requester, purchasing group, plant, value and account assignment where they affect routing or validation.
+      - statement: Procurement FOs should include requester, purchasing group, plant, value and account assignment where they affect routing or validation, and verify target-tenant configuration before implementation use.
         evidence: [sap.object.purchase-requisition]
     relations:
       fields: [PurchaseRequisition.PurchasingGroup, PurchaseRequisition.Plant, PurchaseRequisition.TotalValue, PurchaseRequisition.AccountAssignmentCategory]

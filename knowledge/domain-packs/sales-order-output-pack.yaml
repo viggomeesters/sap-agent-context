@@ -226,7 +226,7 @@ items:
     source: *billing_document_api
     requires_source_specificity: high
     claims:
-      - statement: Billing output maps should include both billing document fields and output dispatch fields when customer communication is in scope.
+      - statement: Billing output maps should include both billing document fields and output dispatch fields when customer communication is in scope, and verify target-tenant output configuration before implementation use.
         evidence: [sap.ref.api-billing-document-process]
     relations:
       objects: [sap.object.billing-document, sap.object.sales-output-item]

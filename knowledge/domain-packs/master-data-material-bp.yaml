@@ -179,7 +179,7 @@ items:
       edition: s4hana_cloud_public
       verification: Verify BP role and customer/supplier extensions in target tenant.
     claims:
-      - statement: Business partner context should separate party identity from customer/supplier role and organizational extension assumptions.
+      - statement: Business partner context should separate party identity from customer/supplier role and organizational extension assumptions, and verify target-tenant role behavior before implementation use.
         evidence: [sap.ref.api-business-partner]
     relations:
       fields: [sap.field-set.business-partner-core, sap.field-set.customer-supplier-role-core]
@@ -202,7 +202,7 @@ items:
     source: *sap_api_business_partner
     requires_source_specificity: high
     claims:
-      - statement: Customer master-data context should state whether the design concerns party identity, customer extension, company-code/accounting use, or process blocking.
+      - statement: Customer master-data context should state whether the design concerns party identity, customer extension, company-code/accounting use, or process blocking, and verify target-tenant role/company-code behavior before implementation use.
         evidence: [sap.ref.api-business-partner]
     relations:
       objects: [sap.object.business-partner-core]
@@ -304,7 +304,7 @@ items:
     source: *sap_api_business_partner
     requires_source_specificity: high
     claims:
-      - statement: Customer and supplier fields should be treated as role/extension context rather than as proof that the party identity itself changed.
+      - statement: Customer and supplier fields should be treated as role/extension context rather than as proof that the party identity itself changed, and verify target-tenant role/extension behavior before implementation use.
         evidence: [sap.ref.api-business-partner]
     relations:
       objects: [sap.object.business-partner-core, sap.object.customer-master, sap.object.supplier-master]
@@ -446,7 +446,7 @@ items:
     source: *sap_api_business_partner
     requires_source_specificity: high
     claims:
-      - statement: Customer/supplier extension mapping should state whether the process needs organizational, company-code or payment-term data.
+      - statement: Customer/supplier extension mapping should state whether the process needs organizational, company-code or payment-term data, and verify target-tenant extension behavior before implementation use.
         evidence: [sap.field-set.customer-supplier-role-core]
     relations:
       objects: [sap.object.business-partner-core, sap.object.customer-master, sap.object.supplier-master]

@@ -74,14 +74,14 @@ def test_content_curation_report_checks_fail_closed_boundaries() -> None:
     )
 
 
-def test_current_sampled_claims_do_not_need_curation_after_targeted_fixes() -> None:
+def test_current_claims_have_no_l0_boundary_failures_after_targeted_fixes() -> None:
     report = build_content_curation_report(load_items(ROOT), sample_size=3)
 
     assert report["summary"]["curation_needed"] == 0
     assert report["summary"]["sampled_maturity_distribution"]["L0"] == 0
-    assert report["summary"]["maturity_distribution"]["L0"] > 0
-    assert report["status"] == "needs_curation"
-    assert report["summary"]["lowest_maturity"] == "L0"
+    assert report["summary"]["maturity_distribution"] == {"L0": 0, "L1": 773, "L2": 0, "L3": 0}
+    assert report["status"] == "passed"
+    assert report["summary"]["lowest_maturity"] == "L1"
 
 
 def test_content_curation_report_cli_outputs_json_only(tmp_path: Path, capsys) -> None:

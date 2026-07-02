@@ -166,7 +166,7 @@ items:
     source: *purchase_requisition_api
     requires_source_specificity: high
     claims:
-      - statement: PR field maps should include account assignment and workflow status when conversion to PO depends on them.
+      - statement: PR field maps should include account assignment and workflow status when conversion to PO depends on them, and verify target-tenant configuration before implementation use.
         evidence: [sap.ref.api-purchase-requisition-process]
     relations:
       objects: [sap.object.purchase-requisition-pr-po]
@@ -320,7 +320,7 @@ items:
     freshness: *freshness_current
     source: *internal_source
     claims:
-      - statement: Workflow-complete PRs can still be blocked from PO conversion by missing sourcing or account assignment context.
+      - statement: Workflow-complete PRs can still be blocked from PO conversion by missing sourcing or account assignment context, and target-tenant configuration must be verified before implementation use.
         evidence: [sap.field-map.pr-to-po-readiness]
     relations:
       field_maps: [sap.field-map.pr-to-po-readiness]
