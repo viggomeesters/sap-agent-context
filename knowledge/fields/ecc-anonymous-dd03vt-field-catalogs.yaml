@@ -13408,12 +13408,15 @@ items:
     - Material Type
     - Artikelnummer
     - Artikelsoort
-    - technical fields in MARA
-    - field description for MTART
+    - technical fields
+    - field catalog
+    - field description
+    - omschrijving
+    - table field lookup
     queries:
-    - Technical fields in MARA?
-    - Field description voor MTART
-    - In welke tabellen kan ik het veld MATNR vinden?
+    - SAP MARA DD03VT field catalog
+    - SAP MARA MTART Material Type field
+    - SAP MATNR table field lookup
   summary: An anonymized SAP ECC DD03VT extract variant for MARA field metadata. It preserves generic SAP Dictionary field
     structure and multilingual labels without tenant records, customer names or project-specific values.
   freshness:

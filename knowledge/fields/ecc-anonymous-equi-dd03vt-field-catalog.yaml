@@ -24,9 +24,10 @@ retrieval:
   - MATNR
   - Material Number
   - equipment material number
-  - tables containing MATNR
+  - tables with MATNR
+  - table field lookup
   queries:
-  - In welke tabellen kan ik het veld MATNR vinden?
+  - SAP EQUI MATNR field catalog
   - SAP tables containing MATNR field
 summary: An anonymized SAP ECC DD03VT extract variant for EQUI equipment master field metadata. It preserves generic SAP Dictionary
   field structure and multilingual labels without tenant records, equipment numbers, customer names or project-specific values.

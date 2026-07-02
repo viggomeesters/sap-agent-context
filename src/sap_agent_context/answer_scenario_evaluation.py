@@ -107,14 +107,30 @@ def _fixture_failures(fixture: dict[str, Any], results: list[dict[str, Any]]) ->
     top_ids = ids[: max(len(_strings(fixture.get("required_top_ids"))), 1)]
     top_kinds = [str(result.get("kind") or "") for result in results[: len(top_ids)]]
     corpus = _result_corpus(results)
+    corpus_by_id = {str(result["id"]): _result_text(result) for result in results}
+    result_by_id = {str(result["id"]): result for result in results}
 
     if not results:
         failures.append("no retrieval results")
 
+    required_ids = _strings(fixture.get("required_ids"))
+    required_ids_top_n = _optional_positive_int(fixture.get("required_ids_top_n"))
+    if required_ids_top_n is not None:
+        required_window = set(ids[:required_ids_top_n])
+        for item_id in required_ids:
+            if item_id not in required_window:
+                failures.append(
+                    f"required id missing from top {required_ids_top_n}: {item_id}"
+                )
+    required_top_n_by_id = _mapping_of_positive_ints(fixture.get("required_top_n_by_id"))
+    for item_id, top_n in required_top_n_by_id.items():
+        if item_id not in set(ids[:top_n]):
+            failures.append(f"required id missing from top {top_n}: {item_id}")
+
     for item_id in _strings(fixture.get("required_top_ids")):
         if item_id not in top_ids:
             failures.append(f"required top id missing: {item_id}; top={top_ids}")
-    for item_id in _strings(fixture.get("required_ids")):
+    for item_id in required_ids:
         if item_id not in ids:
             failures.append(f"required id missing: {item_id}; ids={ids}")
     for item_id in _strings(fixture.get("forbidden_top_ids")):
@@ -128,10 +144,28 @@ def _fixture_failures(fixture: dict[str, Any], results: list[dict[str, Any]]) ->
         if term.lower() not in corpus:
             failures.append(f"required answer term missing from retrieved context: {term}")
 
+    required_terms_by_id = _mapping_of_string_lists(fixture.get("required_terms_by_id"))
+    for item_id, terms in required_terms_by_id.items():
+        item_corpus = corpus_by_id.get(item_id, "")
+        if not item_corpus:
+            failures.append(f"required_terms_by_id target not retrieved: {item_id}")
+            continue
+        for term in terms:
+            if term.lower() not in item_corpus:
+                failures.append(f"required term missing for {item_id}: {term}")
+
     if fixture.get("require_citations"):
         citeable = any(result.get("claim_ids") and result.get("source_ids") for result in results)
         if not citeable:
             failures.append("expected at least one result with claim_ids and source_ids")
+
+    if fixture.get("require_citations_for_required_ids"):
+        for item_id in required_ids:
+            result = result_by_id.get(item_id)
+            if not result:
+                continue
+            if not (result.get("claim_ids") and result.get("source_ids")):
+                failures.append(f"required id is not citeable: {item_id}")
 
     if fixture.get("require_fail_closed_boundary"):
         boundary_terms = {"tenant", "client", "release", "verify", "evidence", "target"}
@@ -157,32 +191,32 @@ def _fixture_failures(fixture: dict[str, Any], results: list[dict[str, Any]]) ->
 
 
 def _result_corpus(results: list[dict[str, Any]]) -> str:
-    parts: list[str] = []
-    for result in results:
-        metadata = result.get("metadata") if isinstance(result.get("metadata"), dict) else {}
-        retrieval = _retrieval(metadata)
-        parts.extend(
-            [
-                str(result.get("id") or ""),
-                str(result.get("title") or ""),
-                str(result.get("text") or ""),
-                str(metadata.get("summary") or ""),
-                " ".join(_strings(metadata.get("topics"))),
-                " ".join(_strings(metadata.get("used_for"))),
-                " ".join(_strings(retrieval.get("keywords"))),
-                " ".join(_strings(retrieval.get("queries"))),
-            ]
-        )
-        for field in metadata.get("field_definitions") or []:
-            if isinstance(field, dict):
-                parts.extend(
-                    str(field.get(key) or "")
-                    for key in ["key", "sap_structure", "sap_field", "description"]
-                )
-                labels = field.get("labels") if isinstance(field.get("labels"), dict) else {}
-                for label in labels.values():
-                    if isinstance(label, dict):
-                        parts.extend(str(value) for value in label.values())
+    return " ".join(_result_text(result) for result in results)
+
+
+def _result_text(result: dict[str, Any]) -> str:
+    metadata = result.get("metadata") if isinstance(result.get("metadata"), dict) else {}
+    retrieval = _retrieval(metadata)
+    parts = [
+        str(result.get("id") or ""),
+        str(result.get("title") or ""),
+        str(result.get("text") or ""),
+        str(metadata.get("summary") or ""),
+        " ".join(_strings(metadata.get("topics"))),
+        " ".join(_strings(metadata.get("used_for"))),
+        " ".join(_strings(retrieval.get("keywords"))),
+        " ".join(_strings(retrieval.get("queries"))),
+    ]
+    for field in metadata.get("field_definitions") or []:
+        if isinstance(field, dict):
+            parts.extend(
+                str(field.get(key) or "")
+                for key in ["key", "sap_structure", "sap_field", "description"]
+            )
+            labels = field.get("labels") if isinstance(field.get("labels"), dict) else {}
+            for label in labels.values():
+                if isinstance(label, dict):
+                    parts.extend(str(value) for value in label.values())
     return " ".join(parts).lower()
 
 
@@ -204,6 +238,38 @@ def _external_evidence(fixture: dict[str, Any]) -> dict[str, Any]:
 def _retrieval(metadata: dict[str, Any]) -> dict[str, Any]:
     retrieval = metadata.get("retrieval")
     return retrieval if isinstance(retrieval, dict) else {}
+
+
+def _mapping_of_string_lists(value: Any) -> dict[str, list[str]]:
+    if not isinstance(value, dict):
+        return {}
+    result: dict[str, list[str]] = {}
+    for key, raw_terms in value.items():
+        terms = _strings(raw_terms)
+        if terms:
+            result[str(key)] = terms
+    return result
+
+
+def _mapping_of_positive_ints(value: Any) -> dict[str, int]:
+    if not isinstance(value, dict):
+        return {}
+    result: dict[str, int] = {}
+    for key, raw_number in value.items():
+        number = _optional_positive_int(raw_number)
+        if number is not None:
+            result[str(key)] = number
+    return result
+
+
+def _optional_positive_int(value: Any) -> int | None:
+    if value is None:
+        return None
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        return None
+    return number if number > 0 else None
 
 
 def _strings(value: Any) -> list[str]:

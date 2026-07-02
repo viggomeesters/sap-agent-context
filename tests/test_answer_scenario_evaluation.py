@@ -27,16 +27,21 @@ def test_answer_scenario_fixtures_cover_concrete_to_vague_questions(tmp_path: Pa
     report = evaluate_answer_scenarios(root=ROOT, sqlite_path=_index_path(tmp_path))
 
     assert report["status"] == "passed"
-    assert report["fixtures"] >= 6
+    assert report["fixtures"] == 11
     ids = {result["id"] for result in report["results"]}
     assert {
         "concrete_mara_technical_fields",
         "concrete_mtart_field_description",
+        "concrete_mtart_description_paraphrase_nl",
         "concrete_matnr_table_lookup",
+        "concrete_matnr_table_lookup_paraphrase_nl",
         "mid_org_separation_nl",
+        "mid_org_units_paraphrase_nl",
+        "mid_org_units_inventory_nl",
         "mid_purchase_to_pay",
+        "mid_procure_to_pay_paraphrase",
         "vague_sap_modules",
-    } <= ids
+    } == ids
 
 
 def test_answer_scenarios_preserve_live_web_boundary_and_external_evidence_hints(

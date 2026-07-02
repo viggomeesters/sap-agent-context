@@ -502,8 +502,14 @@ def _looks_like_org_process_query(token_set: set[str]) -> bool:
         "distribution",
         "purchasing",
         "purchase",
+        "eenheid",
+        "eenheden",
         "organisatie",
+        "organisatie-eenheden",
         "organisaties",
+        "organisatieeenheden",
+        "organizationunits",
+        "scheid",
         "scheiden",
         "separate",
         "separation",
@@ -512,6 +518,8 @@ def _looks_like_org_process_query(token_set: set[str]) -> bool:
     process_signals = {
         "o2c",
         "p2p",
+        "purchase-to-pay",
+        "procure-to-pay",
         "r2r",
         "h2r",
         "d2o",
@@ -530,21 +538,32 @@ def _looks_like_org_process_query(token_set: set[str]) -> bool:
     explicit_org_terms = {
         "org",
         "organization",
+        "organizational",
         "organisation",
         "organisatie",
+        "organisatie-eenheden",
         "organisaties",
+        "organisatieeenheden",
     }
     explicit_org_question = bool(explicit_org_terms & token_set) and bool(
         {"unit", "owns", "owner", *org_signals} & token_set
     )
-    dutch_org_separation = bool({"organisatie", "organisaties"} & token_set) and bool(
-        {"scheiden", "precies", "sap"} & token_set
-    )
+    dutch_org_separation = bool(
+        {"organisatie", "organisatie-eenheden", "organisaties", "organisatieeenheden"}
+        & token_set
+    ) and bool({"scheid", "scheiden", "precies", "sap", "eenheden"} & token_set)
     tenant_org_assertion = bool({"tenant", "configured"} & token_set) and bool(
         org_signals & token_set
     )
+    p2p_process_question = bool({"purchase", "procure"} & token_set) and "pay" in token_set
     process_question = bool(org_signals & token_set) and bool(process_signals & token_set)
-    return explicit_org_question or dutch_org_separation or tenant_org_assertion or process_question
+    return (
+        explicit_org_question
+        or dutch_org_separation
+        or tenant_org_assertion
+        or p2p_process_question
+        or process_question
+    )
 
 
 def _json_payload(raw: str) -> dict[str, Any]:

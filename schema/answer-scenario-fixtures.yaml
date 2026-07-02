@@ -4,13 +4,16 @@ fixtures:
     question: Technical fields in MARA?
     limit: 12
     expected_answer_status: ready
+    required_ids_top_n: 5
     required_ids:
       - sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
-    required_answer_terms:
-      - MARA.MATNR
-      - MARA.MTART
-      - DD03VT
+    required_terms_by_id:
+      sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog:
+        - MARA.MATNR
+        - MARA.MTART
+        - DD03VT
     require_citations: true
+    require_citations_for_required_ids: true
     require_fail_closed_boundary: true
     external_evidence:
       required: true
@@ -28,13 +31,16 @@ fixtures:
     question: Field description voor MTART
     limit: 12
     expected_answer_status: ready
+    required_ids_top_n: 3
     required_ids:
       - sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
-    required_answer_terms:
-      - MARA.MTART
-      - Material Type
-      - Artikelsoort
+    required_terms_by_id:
+      sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog:
+        - MARA.MTART
+        - Material Type
+        - Artikelsoort
     require_citations: true
+    require_citations_for_required_ids: true
     require_fail_closed_boundary: true
     external_evidence:
       required: true
@@ -47,19 +53,51 @@ fixtures:
         - SAP MARA MTART Material Type field description
         - MARA-MTART Material Type SAP
 
+  - id: concrete_mtart_description_paraphrase_nl
+    difficulty: concrete
+    question: MTART omschrijving
+    limit: 12
+    expected_answer_status: ready
+    required_ids_top_n: 3
+    required_ids:
+      - sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
+    required_terms_by_id:
+      sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog:
+        - MARA.MTART
+        - Material Type
+        - Artikelsoort
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - sapdatasheet.org
+        - se80.co.uk
+        - sap.com
+      search_terms:
+        - SAP MTART description Material Type
+        - SAP field MTART Artikelsoort
+
   - id: concrete_matnr_table_lookup
     difficulty: concrete
     question: In welke tabellen kan ik het veld MATNR vinden?
     limit: 20
     expected_answer_status: ready
+    required_ids_top_n: 5
     required_ids:
       - sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
       - sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog
-    required_answer_terms:
-      - MARA.MATNR
-      - EQUI.MATNR
-      - DD03VT
+    required_terms_by_id:
+      sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog:
+        - MARA.MATNR
+        - DD03VT
+      sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog:
+        - EQUI.MATNR
+        - DD03VT
     require_citations: true
+    require_citations_for_required_ids: true
     require_fail_closed_boundary: true
     external_evidence:
       required: true
@@ -72,11 +110,45 @@ fixtures:
         - SAP tables containing MATNR field
         - SAP MARA MATNR EQUI MATNR DD03VT
 
+  - id: concrete_matnr_table_lookup_paraphrase_nl
+    difficulty: concrete
+    question: Welke tabellen hebben MATNR?
+    limit: 20
+    expected_answer_status: ready
+    required_ids_top_n: 5
+    required_ids:
+      - sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog
+      - sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog
+    required_terms_by_id:
+      sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog:
+        - MARA.MATNR
+      sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog:
+        - EQUI.MATNR
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - sapdatasheet.org
+        - beyondse16.com
+        - sap.com
+      search_terms:
+        - SAP tables with MATNR field
+        - SAP MARA EQUI MATNR
+
   - id: mid_org_separation_nl
     difficulty: mid
     question: Hoe zit het precies met organisaties scheiden in SAP?
     limit: 20
     expected_answer_status: ready
+    required_top_n_by_id:
+      sap.field-set.sap-process-lenses: 5
+      sap.object.sap-org-company-code: 5
+      sap.object.sap-org-plant: 10
+      sap.object.sap-org-purchasing-organization: 10
+      sap.object.sap-org-sales-organization: 10
     required_ids:
       - sap.rule.sap-org-process-evidence-gate
       - sap.object.sap-org-model-lens
@@ -84,15 +156,19 @@ fixtures:
       - sap.object.sap-org-plant
       - sap.object.sap-org-purchasing-organization
       - sap.object.sap-org-sales-organization
-    required_answer_terms:
-      - company code
-      - plant
-      - purchasing organization
-      - sales organization
-      - tenant
+    required_terms_by_id:
+      sap.object.sap-org-company-code:
+        - company code
+      sap.object.sap-org-plant:
+        - plant
+      sap.object.sap-org-purchasing-organization:
+        - purchasing organization
+      sap.object.sap-org-sales-organization:
+        - sales organization
     forbidden_top_kinds:
       - sap_app
     require_citations: true
+    require_citations_for_required_ids: true
     require_fail_closed_boundary: true
     external_evidence:
       required: true
@@ -105,20 +181,88 @@ fixtures:
         - SAP organizational levels client company code plant purchasing organization sales organization
         - SAP organization units company code plant purchasing organization
 
+  - id: mid_org_units_paraphrase_nl
+    difficulty: mid
+    question: Hoe scheid je organisatie-eenheden in SAP?
+    limit: 20
+    expected_answer_status: ready
+    required_top_n_by_id:
+      sap.field-set.sap-process-lenses: 5
+      sap.object.sap-org-company-code: 5
+      sap.object.sap-org-plant: 10
+    required_ids:
+      - sap.rule.sap-org-process-evidence-gate
+      - sap.object.sap-org-model-lens
+      - sap.object.sap-org-company-code
+      - sap.object.sap-org-plant
+    forbidden_top_kinds:
+      - sap_app
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - learning.sap.com
+        - help.sap.com
+        - sap-press.com
+      search_terms:
+        - SAP organizational units company code plant
+        - SAP organisatie-eenheden company code plant
+
+  - id: mid_org_units_inventory_nl
+    difficulty: mid
+    question: Welke SAP organisatie-eenheden zijn er?
+    limit: 20
+    expected_answer_status: ready
+    required_top_n_by_id:
+      sap.field-set.sap-process-lenses: 5
+      sap.object.sap-org-company-code: 5
+      sap.object.sap-org-plant: 10
+      sap.object.sap-org-purchasing-organization: 10
+      sap.object.sap-org-sales-organization: 10
+    required_ids:
+      - sap.object.sap-org-model-lens
+      - sap.object.sap-org-company-code
+      - sap.object.sap-org-plant
+      - sap.object.sap-org-purchasing-organization
+      - sap.object.sap-org-sales-organization
+    forbidden_top_kinds:
+      - sap_app
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - learning.sap.com
+        - help.sap.com
+        - sap-press.com
+      search_terms:
+        - SAP organizational units overview company code plant sales organization purchasing organization
+
   - id: mid_purchase_to_pay
     difficulty: mid
     question: Wat is purchase to pay?
     limit: 20
     expected_answer_status: ready
+    required_top_n_by_id:
+      sap.object.sap-org-purchasing-organization: 10
+      sap.field-set.sap-process-lenses: 5
     required_ids:
       - sap.field-set.sap-process-lenses
       - sap.object.sap-org-purchasing-organization
       - sap.rule.sap-org-process-evidence-gate
-    required_answer_terms:
-      - P2P
-      - purchasing organization
-      - process
+    required_terms_by_id:
+      sap.field-set.sap-process-lenses:
+        - P2P
+        - process
+      sap.object.sap-org-purchasing-organization:
+        - purchasing organization
     require_citations: true
+    require_citations_for_required_ids: true
     require_fail_closed_boundary: true
     external_evidence:
       required: true
@@ -131,6 +275,38 @@ fixtures:
         - SAP S/4HANA sourcing procurement purchase to pay process
         - SAP purchase to pay P2P procurement process
 
+  - id: mid_procure_to_pay_paraphrase
+    difficulty: mid
+    question: Wat is procure to pay?
+    limit: 20
+    expected_answer_status: ready
+    required_top_n_by_id:
+      sap.object.sap-org-purchasing-organization: 10
+      sap.field-set.sap-process-lenses: 5
+    required_ids:
+      - sap.field-set.sap-process-lenses
+      - sap.object.sap-org-purchasing-organization
+      - sap.rule.sap-org-process-evidence-gate
+    required_terms_by_id:
+      sap.field-set.sap-process-lenses:
+        - P2P
+        - process
+      sap.object.sap-org-purchasing-organization:
+        - purchasing organization
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - learning.sap.com
+        - help.sap.com
+        - sap.com
+      search_terms:
+        - SAP procure to pay P2P procurement process
+        - SAP purchase to pay P2P procurement process
+
   - id: vague_sap_modules
     difficulty: vague
     question: Welke SAP modules zijn er?
@@ -138,6 +314,7 @@ fixtures:
     expected_answer_status: needs_curation
     curation_reason:
       - Repo has a foundation/process-lens answer path, but no exhaustive module taxonomy should be claimed from current context.
+    required_ids_top_n: 10
     required_ids:
       - sap.object.sap-context-foundation
       - sap.field-set.sap-context-lenses
@@ -149,6 +326,7 @@ fixtures:
       - landscape
       - source
     require_citations: true
+    require_citations_for_required_ids: true
     require_fail_closed_boundary: true
     external_evidence:
       required: true
