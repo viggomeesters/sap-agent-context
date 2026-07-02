@@ -75,8 +75,9 @@ uv run sap-agent-context curation-report --sample-size 3 \
   --output build/reports/content-curation-sample.json
 ```
 
-The content curation sample checks source/access, freshness, evidence and
-fail-closed wording on sampled claims. It is not exhaustive SAP claim
+The content curation report checks source/access, freshness, evidence and
+fail-closed wording on sampled claims, then builds a `claim_maturity_index` for
+all claims with L0/L1/L2/L3 curation readiness. It is not exhaustive SAP claim
 certification; see [Content curation sampling](docs/content-curation-sampling.md).
 
 Build runtime indexes:

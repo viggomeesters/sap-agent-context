@@ -222,7 +222,7 @@
     {"id": "evidence-layer", "meaning": "Source/access/freshness metadata and proof boundaries."},
     {"id": "navigation-layer", "meaning": "From-zero SAP lenses: foundation, lifecycle, landscape, edition, release, customizing, org, process, surface and evidence."},
     {"id": "agent-contract", "meaning": "Bundle schema, query examples, fixtures and fail-closed consumer behavior."},
-    {"id": "curation-system", "meaning": "Reports and tests that turn unknowns into targeted follow-up tasks."}
+    {"id": "curation-system", "meaning": "JSON reports, claim_maturity_index and tests that turn unknowns into targeted L0/L1/L2/L3 follow-up tasks."}
   ],
   "non_goals": [
     "SAP documentation mirror",
@@ -263,6 +263,7 @@
     {"id": "public-safe", "question": "Is there no client, tenant, secret, screenshot, export or proprietary copied text?", "pass_condition": "Public-safety scan and review find no forbidden material."},
     {"id": "retrieval-proof", "question": "Are important prompts protected by focused tests, fixtures or query smokes?", "pass_condition": "Positive and negative retrieval behavior is tested."},
     {"id": "gap-steerable", "question": "If something is incomplete, is it reported as an actionable gap?", "pass_condition": "Gaps are named, classified and actionable."},
+    {"id": "claim-curation-maturity", "question": "Does claim curation improve maturity status instead of merely adding coverage?", "pass_condition": "Curation reports expose L0/L1/L2/L3 distribution and next maturity target per claim index."},
     {"id": "no-false-certainty", "question": "Does the output avoid implying exhaustive SAP certification?", "pass_condition": "Residual risk and proof boundaries are explicit."}
   ],
   "review_checklist": [
@@ -273,6 +274,7 @@
     "Are tenant/release/customizing claims fail-closed when target evidence is missing?",
     "Did the change add retrieval or fixture proof for important behavior?",
     "Did full gates pass?",
+    "Did the curation report expose claim_maturity_index and the next L0/L1/L2/L3 maturity target?",
     "Did the final claim state what was proven and what remains outside scope?"
   ],
   "maturity_model": [
@@ -284,6 +286,7 @@
   ],
   "roadmap_principles": [
     "Finish JSONL-native authoring paths without breaking legacy imports.",
+    "Promote claim maturity from L0/L1 toward L2/L3 before adding broad new coverage.",
     "Promote report-only domains only when fixtures and source boundaries justify it.",
     "Improve query-explain until agents can understand why context was selected.",
     "Turn curation reports into targeted follow-up tasks.",
