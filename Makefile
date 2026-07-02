@@ -1,4 +1,4 @@
-.PHONY: check validate audit audit-v02-gap-report curation-report evaluate build-index build-embeddings evaluate-runtime evaluate-semantic test lint guard diff-check
+.PHONY: check validate audit audit-v02-gap-report curation-report evaluate build-index build-embeddings evaluate-runtime evaluate-semantic test lint guard diff-check clean-reports clean-build
 
 check: guard validate audit evaluate build-index build-embeddings evaluate-runtime evaluate-semantic test lint diff-check
 
@@ -18,6 +18,12 @@ curation-report:
 	uv run sap-agent-context curation-report \
 		--sample-size 3 \
 		--output build/reports/content-curation-sample.json
+
+clean-reports:
+	python3 scripts/clean_generated.py reports
+
+clean-build:
+	python3 scripts/clean_generated.py build
 
 evaluate:
 	uv run sap-agent-context evaluate-fixtures

@@ -112,3 +112,20 @@ def test_generated_report_directory_does_not_keep_markdown_artifacts() -> None:
         "generated report artifacts must stay JSON-only; remove stale Markdown files: "
         + ", ".join(offenders)
     )
+
+def test_make_clean_targets_are_ignored_only_and_build_scoped() -> None:
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    cleaner = (ROOT / "scripts" / "clean_generated.py").read_text(encoding="utf-8")
+
+    assert "clean-reports" in makefile
+    assert "clean-build" in makefile
+    assert ".PHONY:" in makefile and "clean-reports" in makefile.splitlines()[0]
+    assert "python3 scripts/clean_generated.py reports" in makefile
+    assert "python3 scripts/clean_generated.py build" in makefile
+    assert "rm -rf" not in makefile
+    assert "git clean" not in makefile
+    assert '"reports": Path("build/reports")' in cleaner
+    assert '"build": Path("build")' in cleaner
+    assert "check-ignore" in cleaner
+    assert "-q" in cleaner
+    assert "Refusing to clean non-ignored target" in cleaner
