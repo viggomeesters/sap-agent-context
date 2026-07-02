@@ -93,8 +93,18 @@ def test_finance_ap_catalog_claims_are_agent_ready_l2_without_expert_l3() -> Non
     ]
 
     l2_rows = [row for row in finance_rows if row["level"] == "L2"]
-    assert len(l2_rows) == 8
+    assert {row["item_id"] for row in l2_rows} == {
+        "sap.ref.api-supplier-invoice-process",
+        "sap.ref.api-payment-proposal",
+        "sap.object.supplier-invoice-ap",
+        "sap.object.ap-payment-proposal",
+        "sap.field-set.supplier-invoice-ap-core",
+        "sap.field-set.ap-payment-proposal-core",
+        "sap.field-map.supplier-invoice-ap-core",
+        "sap.field-map.ap-payment-readiness",
+    }
     assert {row["status"] for row in l2_rows} == {"agent_ready"}
+    assert all("confidence_high" in row["reasons"] for row in l2_rows)
     assert all("structured_expert_review_present" in row["reasons"] for row in l2_rows)
     assert not any(row["level"] == "L3" for row in finance_rows)
 
