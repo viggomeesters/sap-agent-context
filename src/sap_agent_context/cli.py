@@ -11,6 +11,10 @@ from sap_agent_context.agent_records import export_agent_records, validate_agent
 from sap_agent_context.answer_scenario_evaluation import evaluate_answer_scenarios
 from sap_agent_context.bundle import build_context_bundle, mccoy_provider_manifest
 from sap_agent_context.completeness import audit_completeness
+from sap_agent_context.consultant_answer import (
+    evaluate_consultant_answers,
+    generate_consultant_answer,
+)
 from sap_agent_context.content_curation import (
     build_content_curation_report,
     write_content_curation_report,
@@ -44,6 +48,13 @@ DEFAULT_SQLITE = "build/context.sqlite"
 DEFAULT_ITEMS_JSONL = "build/items.jsonl"
 DEFAULT_VECTOR_JSONL = "build/vector-corpus.jsonl"
 DEFAULT_RECORDS_DIR = "records"
+
+
+def _positive_int(value: str) -> int:
+    parsed = int(value)
+    if parsed < 1:
+        raise argparse.ArgumentTypeError("must be a positive integer")
+    return parsed
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -84,6 +95,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     answer_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
     answer_eval.add_argument("--fixtures", type=Path)
+
+    consultant_answer = subparsers.add_parser(
+        "consultant-answer",
+        help="generate deterministic SAP-consultant prose with citations and boundaries",
+    )
+    consultant_answer.add_argument("question")
+    consultant_answer.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
+    consultant_answer.add_argument("--limit", type=_positive_int, default=12)
+    consultant_answer.add_argument("--output", type=Path)
+
+    consultant_eval = subparsers.add_parser(
+        "evaluate-consultant-answers",
+        help="evaluate deterministic consultant answers for answer-scenario fixtures",
+    )
+    consultant_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
+    consultant_eval.add_argument("--fixtures", type=Path)
 
     semantic_eval = subparsers.add_parser("evaluate-semantic-models")
     semantic_eval.add_argument("--sqlite", type=Path, default=Path(DEFAULT_SQLITE))
@@ -382,6 +409,32 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "evaluate-answer-scenarios":
         payload = evaluate_answer_scenarios(
+            root=root,
+            sqlite_path=_resolve_output(root, args.sqlite),
+            fixtures_path=_resolve_output(root, args.fixtures) if args.fixtures else None,
+        )
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0 if payload["status"] == "passed" else 1
+
+    if args.command == "consultant-answer":
+        payload = generate_consultant_answer(
+            root=root,
+            question=args.question,
+            sqlite_path=_resolve_output(root, args.sqlite),
+            limit=args.limit,
+        )
+        if args.output:
+            output = _resolve_output(root, args.output)
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_text(
+                json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n",
+                encoding="utf-8",
+            )
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0 if payload["citations"] else 2
+
+    if args.command == "evaluate-consultant-answers":
+        payload = evaluate_consultant_answers(
             root=root,
             sqlite_path=_resolve_output(root, args.sqlite),
             fixtures_path=_resolve_output(root, args.fixtures) if args.fixtures else None,

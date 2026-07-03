@@ -151,6 +151,39 @@ Example scenario result:
 }
 ```
 
+Generate deterministic consultant-style prose from the same local evidence:
+
+```bash
+uv run sap-agent-context consultant-answer "Hoe scheid je organisatie-eenheden in SAP?"
+uv run sap-agent-context evaluate-consultant-answers
+```
+
+This layer produces a compact answer plus citations and explicit boundaries. It is a narrow deterministic/extractive scenario layer: no LLM call, no live-web certification, no tenant-specific truth claim, and unsupported/generic questions return `needs_curation` instead of `ready`.
+
+Example answer fragment:
+
+```json
+{
+  "artifact_kind": "sap_consultant_answer",
+  "status": "ready",
+  "question": "Hoe scheid je organisatie-eenheden in SAP?",
+  "answer": "In SAP, organizational separation should be explained through multiple lenses rather than one magic hierarchy: company code, plant, purchasing organization and sales organization can separate legal, logistics, buying and sales responsibilities...",
+  "citations": [
+    {
+      "id": "sap.field-set.sap-process-lenses",
+      "kind": "sap_field",
+      "source_ids": ["sap.source.sap-field-set-sap-process-lenses"],
+      "claim_ids": ["sap.claim.sap-field-set-sap-process-lenses.001"]
+    }
+  ],
+  "boundary": {
+    "live_web_validation": false,
+    "expert_certification": false,
+    "tenant_specific_truth": false
+  }
+}
+```
+
 Generate a context bundle:
 
 ```bash
