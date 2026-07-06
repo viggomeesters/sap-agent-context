@@ -26,6 +26,8 @@ sources through access-labelled pointers.
 - Repo-level planning context captured in
   [Repo Go Vision](docs/repo-go-vision.json), grounded in the canonical
   [Vision Contract](docs/vision.json).
+- Next bounded planning slice captured in
+  [Answer Profile Schema Go Plan](docs/plans/answer-profile-schema-go-plan.json).
 - Consultant-answer layer direction captured in
   [Consultant Answer Vision](docs/consultant-answer-vision.json).
 - Public/gated/internal source labels, review dates, and expiration dates to

@@ -1,0 +1,205 @@
+{
+  "schema": "agent-workflow.plan.v1",
+  "kind": "plan",
+  "plan_type": "parent",
+  "id": "sap-agent-context-answer-profile-schema",
+  "status": "draft",
+  "project": "sap-agent-context",
+  "repo": "viggomeesters/sap-agent-context",
+  "repo_path_hint": "/home/viggo/Dev/sap-agent-context",
+  "created_from": "docs/repo-go-vision.json#first_build_slices.answer-profile-schema",
+  "vision_ref": "docs/repo-go-vision.json",
+  "layer_vision_ref": "docs/consultant-answer-vision.json",
+  "planning_boundary": "One bounded trust/consumer slice only: answer-profile-schema. Do not add broad SAP content, new ready domains, LLM answer generation, or copied SAP documentation in this plan.",
+  "why_now": "The consultant-answer layer already has repeated hardcoded support IDs, classifier triggers, required citations and adversarial boundaries. Moving these into a data-driven answer-profile schema should happen before expanding many more answer domains, otherwise classifier/support drift becomes invisible and brittle.",
+  "wedge_snapshot": "Deterministic, citation-bound SAP consultant answers over local evidence, with class-specific support and fail-closed generic/tenant/release/customizing boundaries.",
+  "must_preserve": [
+    "Generated and machine-consumable artifacts stay JSON/JSONL-first.",
+    "Ready answers require class-specific citeable support, not any top-k source.",
+    "Generic, tenant-specific, release-specific and customizing-specific prompts fail closed unless evidence and profile rules explicitly support them.",
+    "No SAP Help mirror, tenant data, screenshots, exports, credentials or proprietary copied documentation.",
+    "Default gates remain local and deterministic. Network-dependent source verification is out of scope."
+  ],
+  "out_of_scope": [
+    "Adding a new SAP domain or promoting a new ready answer class.",
+    "Changing answer prose semantics beyond preserving current behavior through data-driven profiles.",
+    "Adding an LLM/free-form answer generator.",
+    "Bulk-importing SAP content or changing canonical records.",
+    "Making network/live-source verification part of make check."
+  ],
+  "load_bearing_assumptions": [
+    {
+      "claim": "The current hardcoded consultant-answer profile data can be expressed as schema-backed JSON without changing answer outputs.",
+      "fails_if": "A profile needs Python-only logic that cannot be represented cleanly without weakening classifier boundaries.",
+      "cheapest_test": "Move only existing ready classifications and generic fail-closed checks into a first schema while requiring evaluate-consultant-answers to remain unchanged.",
+      "kill_or_pivot": "If classifier logic is not data-shaped enough, first create a smaller support-profile schema for support IDs and required citations only."
+    },
+    {
+      "claim": "Schema-backed profiles will make future answer expansion safer than hardcoded dictionaries and scattered fixtures.",
+      "fails_if": "Tests still need bespoke Python assertions for each profile because profile rules are not inspectable by validators.",
+      "cheapest_test": "Add validator tests that detect missing support IDs, duplicate profile IDs, required citation IDs not in support IDs, and missing adversarial probes.",
+      "kill_or_pivot": "If the schema cannot express those invariants, stop before adding domains and redesign the contract."
+    },
+    {
+      "claim": "The slice can be completed without broad content or retrieval changes.",
+      "fails_if": "Existing fixtures fail because current source records are insufficient once support rules become stricter.",
+      "cheapest_test": "Run current consultant-answer and answer-scenario evaluations before and after migration and compare ready/needs_curation statuses.",
+      "kill_or_pivot": "If content gaps appear, record them as curation gaps and keep the schema migration behavior-preserving."
+    }
+  ],
+  "task_refs": [
+    {
+      "id": "APS-001",
+      "summary": "Define answer-profile schema contract and seed current profiles",
+      "status": "open",
+      "scope": {
+        "read": [
+          "docs/repo-go-vision.json",
+          "docs/consultant-answer-vision.json",
+          "src/sap_agent_context/consultant_answer.py",
+          "schema/answer-scenario-fixtures.yaml",
+          "tests/test_consultant_answer.py"
+        ],
+        "modify": [
+          "schema/answer-profiles.schema.json",
+          "schema/answer-profiles.json",
+          "docs/agent-consumer-contract.md"
+        ]
+      },
+      "requirements": [
+        "R-1: Express current ready classifications, support IDs, required citation IDs and negative/adversarial probe expectations as JSON data.",
+        "R-2: Keep generic/unsupported classifications explicit instead of implied fallback magic.",
+        "R-3: Do not add new ready domains or SAP content."
+      ],
+      "acceptance": [
+        "Schema validates all seeded profiles and rejects duplicate profile ids.",
+        "Each ready profile names support_ids and at least one positive fixture or probe reference.",
+        "Required citation ids for a profile are a subset of profile support_ids or are explicitly justified as answer-only citations.",
+        "Generic/unsupported profiles document fail-closed status and curation reason requirements."
+      ],
+      "verification": [
+        "uv run pytest -q tests/test_answer_profiles.py",
+        "python -m json.tool schema/answer-profiles.schema.json >/dev/null",
+        "python -m json.tool schema/answer-profiles.json >/dev/null"
+      ]
+    },
+    {
+      "id": "APS-002",
+      "summary": "Load answer profiles from JSON in consultant_answer without changing behavior",
+      "status": "open",
+      "depends_on": ["APS-001"],
+      "scope": {
+        "read": [
+          "schema/answer-profiles.json",
+          "src/sap_agent_context/consultant_answer.py",
+          "tests/test_consultant_answer.py"
+        ],
+        "modify": [
+          "src/sap_agent_context/consultant_answer.py",
+          "tests/test_consultant_answer.py",
+          "tests/test_answer_profiles.py"
+        ]
+      },
+      "requirements": [
+        "R-1: Replace CLASSIFICATION_SUPPORT_IDS and READY_CLASSIFICATIONS source-of-truth with loaded profile data or a thin generated view over it.",
+        "R-2: Preserve current answer statuses, classifications, citations and boundary fields for existing fixtures.",
+        "R-3: Fail closed if the profile file is invalid, missing, or internally inconsistent."
+      ],
+      "acceptance": [
+        "Existing consultant-answer tests pass without loosening expected citations or status assertions.",
+        "Invalid profile data causes a deterministic validation failure, not silent generic behavior.",
+        "Runtime output artifact shape stays backward-compatible for downstream consumers."
+      ],
+      "verification": [
+        "uv run pytest -q tests/test_answer_profiles.py tests/test_consultant_answer.py",
+        "uv run sap-agent-context evaluate-consultant-answers --output build/reports/consultant-answer-evaluation.json"
+      ]
+    },
+    {
+      "id": "APS-003",
+      "summary": "Add profile-bound fixture/adversarial coverage gates",
+      "status": "open",
+      "depends_on": ["APS-002"],
+      "scope": {
+        "read": [
+          "schema/answer-profiles.json",
+          "schema/answer-scenario-fixtures.yaml",
+          "tests/test_consultant_answer.py"
+        ],
+        "modify": [
+          "schema/answer-scenario-fixtures.yaml",
+          "tests/test_answer_profiles.py",
+          "tests/test_consultant_answer.py"
+        ]
+      },
+      "requirements": [
+        "R-1: Every ready profile has positive fixture coverage and nearby negative/adversarial coverage.",
+        "R-2: Broad prompts such as generic API report, generic release strategy and generic module taxonomy remain needs_curation.",
+        "R-3: Evaluator failures name the profile and missing coverage class."
+      ],
+      "acceptance": [
+        "A test fails when a ready profile lacks positive coverage.",
+        "A test fails when a ready profile lacks negative/adversarial probes.",
+        "Current generic/adversarial prompts remain needs_curation after profile migration."
+      ],
+      "verification": [
+        "uv run pytest -q tests/test_answer_profiles.py tests/test_consultant_answer.py tests/test_answer_scenario_evaluation.py",
+        "uv run sap-agent-context consultant-answer \"How should API reporting work?\" --limit 12"
+      ]
+    },
+    {
+      "id": "APS-004",
+      "summary": "Document the answer-profile contract for future domain expansion",
+      "status": "open",
+      "depends_on": ["APS-003"],
+      "scope": {
+        "read": [
+          "README.md",
+          "docs/agent-consumer-contract.md",
+          "docs/consultant-answer-vision.json",
+          "docs/repo-go-vision.json"
+        ],
+        "modify": [
+          "README.md",
+          "docs/agent-consumer-contract.md",
+          "docs/plans/answer-profile-schema-go-plan.json"
+        ]
+      },
+      "requirements": [
+        "R-1: Explain how future ready answer domains must add profiles, fixtures, citation requirements and adversarial probes.",
+        "R-2: State that profiles are not SAP truth, tenant proof, release proof or content-coverage proof.",
+        "R-3: Link the plan/vision context without turning docs into the source of truth."
+      ],
+      "acceptance": [
+        "README or consumer-contract docs point maintainers to the answer-profile JSON contract.",
+        "Docs preserve no broad content expansion and no LLM generation boundaries.",
+        "Plan status/evidence can be updated after implementation without editing unrelated docs."
+      ],
+      "verification": [
+        "uv run pytest -q tests/test_vision_design_principles.py tests/test_clone_first_docs.py tests/test_context_bundle_consumer_contract_docs.py",
+        "git diff --check"
+      ]
+    }
+  ],
+  "task_sequence": ["APS-001", "APS-002", "APS-003", "APS-004"],
+  "progress": {
+    "total": 4,
+    "open": 4,
+    "active": 0,
+    "blocked": 0,
+    "done": 0
+  },
+  "acceptance": [
+    "Plan covers exactly one bounded slice: answer-profile-schema.",
+    "Plan preserves repo and consultant-answer vision non-goals, especially no broad SAP content expansion and no LLM generator.",
+    "Plan decomposes the slice into executable, independently verifiable tasks with scope, acceptance and verification.",
+    "Plan is machine-readable JSON and linked from README or repo docs."
+  ],
+  "verification": [
+    "python -m json.tool docs/plans/answer-profile-schema-go-plan.json >/dev/null",
+    "uv run pytest -q tests/test_vision_design_principles.py tests/test_clone_first_docs.py",
+    "git diff --check"
+  ],
+  "execution_snippet": "$go-goal docs/plans/answer-profile-schema-go-plan.json",
+  "ship_policy": "Planning-only. Do not execute child tasks until explicitly invoked."
+}

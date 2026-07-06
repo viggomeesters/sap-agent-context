@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 VISION = ROOT / "docs" / "vision.json"
 REPO_GO_VISION = ROOT / "docs" / "repo-go-vision.json"
 CONSULTANT_ANSWER_VISION = ROOT / "docs" / "consultant-answer-vision.json"
+ANSWER_PROFILE_SCHEMA_PLAN = ROOT / "docs" / "plans" / "answer-profile-schema-go-plan.json"
 OLD_VISION = ROOT / "docs" / "vision.md"
 README = ROOT / "README.md"
 
@@ -96,6 +97,7 @@ def test_readme_links_to_json_vision_as_design_contract() -> None:
 
     assert "docs/vision.json" in text
     assert "docs/repo-go-vision.json" in text
+    assert "docs/plans/answer-profile-schema-go-plan.json" in text
     assert "docs/consultant-answer-vision.json" in text
     assert "docs/vision.md" not in text
     assert "cloneable, local-first SAP context runtime" in text
@@ -118,3 +120,34 @@ def test_repo_go_vision_is_agent_workflow_planning_context() -> None:
     assert "not a SAP documentation mirror" in text
     assert "Do not create broad SAP-content expansion tasks" in payload["next_planning_boundary"]
     assert CONSULTANT_ANSWER_VISION.exists()
+
+
+def test_answer_profile_schema_go_plan_is_bounded_to_one_slice() -> None:
+    payload = json.loads(ANSWER_PROFILE_SCHEMA_PLAN.read_text(encoding="utf-8"))
+    text = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+
+    assert payload["schema"] == "agent-workflow.plan.v1"
+    assert payload["kind"] == "plan"
+    assert payload["plan_type"] == "parent"
+    assert payload["id"] == "sap-agent-context-answer-profile-schema"
+    assert payload["status"] == "draft"
+    assert payload["vision_ref"] == "docs/repo-go-vision.json"
+    assert payload["layer_vision_ref"] == "docs/consultant-answer-vision.json"
+    assert payload["task_sequence"] == ["APS-001", "APS-002", "APS-003", "APS-004"]
+    assert payload["progress"] == {"total": 4, "open": 4, "active": 0, "blocked": 0, "done": 0}
+    assert "Do not add broad SAP content" in payload["planning_boundary"]
+    assert "answer-profile-schema" in payload["created_from"]
+    assert "Adding a new SAP domain" in text
+    assert "Adding an LLM/free-form answer generator" in text
+    required_task_fields = {
+        "id",
+        "summary",
+        "status",
+        "scope",
+        "requirements",
+        "acceptance",
+        "verification",
+    }
+    for task in payload["task_refs"]:
+        assert required_task_fields <= set(task)
+        assert task["status"] == "open"
