@@ -3,7 +3,7 @@
   "kind": "plan",
   "plan_type": "parent",
   "id": "sap-agent-context-answer-profile-schema",
-  "status": "draft",
+  "status": "done",
   "project": "sap-agent-context",
   "repo": "viggomeesters/sap-agent-context",
   "repo_path_hint": "/home/viggo/Dev/sap-agent-context",
@@ -188,7 +188,7 @@
     {
       "id": "APS-004",
       "summary": "Document the answer-profile contract for future domain expansion",
-      "status": "open",
+      "status": "done",
       "depends_on": [
         "APS-003"
       ],
@@ -218,7 +218,16 @@
       "verification": [
         "uv run pytest -q tests/test_vision_design_principles.py tests/test_clone_first_docs.py tests/test_context_bundle_consumer_contract_docs.py",
         "git diff --check"
-      ]
+      ],
+      "completed_evidence": {
+        "summary": "README and consumer contract now point maintainers to the answer-profile JSON contract, schema, plan and vision boundaries.",
+        "verification": [
+          "uv run pytest -q tests/test_vision_design_principles.py tests/test_clone_first_docs.py tests/test_context_bundle_consumer_contract_docs.py",
+          "git diff --check",
+          "make check"
+        ],
+        "completed_at": "2026-07-06T10:04:23.295882+00:00"
+      }
     }
   ],
   "task_sequence": [
@@ -229,10 +238,10 @@
   ],
   "progress": {
     "total": 4,
-    "open": 1,
+    "open": 0,
     "active": 0,
     "blocked": 0,
-    "done": 3
+    "done": 4
   },
   "acceptance": [
     "Plan covers exactly one bounded slice: answer-profile-schema.",

@@ -99,6 +99,8 @@ def test_readme_links_to_json_vision_as_design_contract() -> None:
     assert "docs/repo-go-vision.json" in text
     assert "docs/plans/answer-profile-schema-go-plan.json" in text
     assert "docs/consultant-answer-vision.json" in text
+    assert "schema/answer-profiles.json" in text
+    assert "schema/answer-profiles.schema.json" in text
     assert "docs/vision.md" not in text
     assert "cloneable, local-first SAP context runtime" in text
 
@@ -130,11 +132,11 @@ def test_answer_profile_schema_go_plan_is_bounded_to_one_slice() -> None:
     assert payload["kind"] == "plan"
     assert payload["plan_type"] == "parent"
     assert payload["id"] == "sap-agent-context-answer-profile-schema"
-    assert payload["status"] == "draft"
+    assert payload["status"] == "done"
     assert payload["vision_ref"] == "docs/repo-go-vision.json"
     assert payload["layer_vision_ref"] == "docs/consultant-answer-vision.json"
     assert payload["task_sequence"] == ["APS-001", "APS-002", "APS-003", "APS-004"]
-    assert payload["progress"] == {"total": 4, "open": 1, "active": 0, "blocked": 0, "done": 3}
+    assert payload["progress"] == {"total": 4, "open": 0, "active": 0, "blocked": 0, "done": 4}
     assert "Do not add broad SAP content" in payload["planning_boundary"]
     assert "answer-profile-schema" in payload["created_from"]
     assert "Adding a new SAP domain" in text
@@ -152,6 +154,6 @@ def test_answer_profile_schema_go_plan_is_bounded_to_one_slice() -> None:
     assert statuses["APS-001"] == "done"
     assert statuses["APS-002"] == "done"
     assert statuses["APS-003"] == "done"
-    assert statuses["APS-004"] == "open"
+    assert statuses["APS-004"] == "done"
     for task in payload["task_refs"]:
         assert required_task_fields <= set(task)

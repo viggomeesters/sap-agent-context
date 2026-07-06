@@ -30,6 +30,10 @@ sources through access-labelled pointers.
   [Answer Profile Schema Go Plan](docs/plans/answer-profile-schema-go-plan.json).
 - Consultant-answer layer direction captured in
   [Consultant Answer Vision](docs/consultant-answer-vision.json).
+- Answer-profile contract for deterministic consultant answers lives in
+  `schema/answer-profiles.json`, with schema in
+  `schema/answer-profiles.schema.json` and consumer guidance in
+  [Agent Consumer Contract](docs/agent-consumer-contract.md).
 - Public/gated/internal source labels, review dates, and expiration dates to
   prevent stale, expired, or private evidence from becoming hidden assumptions.
 
