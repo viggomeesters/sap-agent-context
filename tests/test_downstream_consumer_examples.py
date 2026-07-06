@@ -43,5 +43,6 @@ def test_bundle_contract_doc_links_downstream_examples() -> None:
     text = CONTRACT_DOC.read_text(encoding="utf-8")
 
     assert "examples/downstream-consumer-fixtures.json" in text
+    assert "examples/consumer-contract-json-examples.json" in text
     assert "examples/downstream-consumer-fixtures.md" not in text
     assert "anti-hallucination" in text

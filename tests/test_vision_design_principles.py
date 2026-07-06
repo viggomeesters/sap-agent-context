@@ -101,6 +101,8 @@ def test_readme_links_to_json_vision_as_design_contract() -> None:
     assert "docs/consultant-answer-vision.json" in text
     assert "schema/answer-profiles.json" in text
     assert "schema/answer-profiles.schema.json" in text
+    assert "examples/consumer-contract-json-examples.json" in text
+    assert "schema/consumer-contract-json-examples.schema.json" in text
     assert "docs/vision.md" not in text
     assert "cloneable, local-first SAP context runtime" in text
 

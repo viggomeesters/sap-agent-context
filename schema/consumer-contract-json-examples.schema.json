@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://viggomeesters.github.io/sap-agent-context/schemas/consumer-contract-json-examples.schema.json",
+  "title": "SAP Agent Context consumer contract JSON examples",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "artifact_kind", "id", "purpose", "source_refs", "coverage", "examples", "anti_examples", "consumer_rules"],
+  "properties": {
+    "schema": {"const": "sap-agent-context.consumer-contract-json-examples.v1"},
+    "artifact_kind": {"const": "consumer_contract_json_examples"},
+    "id": {"$ref": "#/$defs/nonEmptyString"},
+    "purpose": {"$ref": "#/$defs/nonEmptyString"},
+    "source_refs": {"$ref": "#/$defs/stringList"},
+    "coverage": {"$ref": "#/$defs/stringList"},
+    "examples": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"$ref": "#/$defs/example"},
+      "uniqueItems": true
+    },
+    "anti_examples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/antiExample"},
+      "uniqueItems": true
+    },
+    "consumer_rules": {"$ref": "#/$defs/stringList"}
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "stringList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/nonEmptyString"},
+      "uniqueItems": true
+    },
+    "example": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "source_surface", "command", "input_focus", "required_output_fields", "safe_consumer_behavior", "must_not_claim"],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonEmptyString"},
+        "title": {"$ref": "#/$defs/nonEmptyString"},
+        "source_surface": {"enum": ["context_bundle", "query_explain", "consultant_answer", "answer_profile"]},
+        "command": {"$ref": "#/$defs/nonEmptyString"},
+        "input_focus": {"$ref": "#/$defs/nonEmptyString"},
+        "required_output_fields": {"$ref": "#/$defs/stringList"},
+        "safe_consumer_behavior": {"$ref": "#/$defs/stringList"},
+        "must_not_claim": {"$ref": "#/$defs/stringList"}
+      }
+    },
+    "antiExample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "unsafe_pattern", "blocked_by", "safe_replacement"],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonEmptyString"},
+        "unsafe_pattern": {"$ref": "#/$defs/nonEmptyString"},
+        "blocked_by": {"$ref": "#/$defs/stringList"},
+        "safe_replacement": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    }
+  }
+}

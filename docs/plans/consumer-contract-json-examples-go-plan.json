@@ -1,0 +1,97 @@
+{
+  "schema": "agent-workflow.plan.v1",
+  "kind": "plan",
+  "plan_type": "parent",
+  "id": "sap-agent-context-consumer-contract-json-examples",
+  "status": "done",
+  "project": "sap-agent-context",
+  "repo": "viggomeesters/sap-agent-context",
+  "repo_path_hint": "/home/viggo/Dev/sap-agent-context",
+  "created_from": "docs/repo-go-vision.json#first_build_slices.consumer-contract-json-examples",
+  "vision_ref": "docs/repo-go-vision.json",
+  "planning_boundary": "One bounded trust/consumer slice only: consumer-contract-json-examples. Do not add broad SAP content, new ready domains, LLM answer generation, network source verification, or copied SAP documentation in this plan.",
+  "why_now": "answer-profile-schema is complete, so the next repo-vision slice is to make downstream agent consumption of bundles, query-explain, consultant-answer, citations, evidence, boundaries and gaps explicit as machine-readable JSON.",
+  "must_preserve": [
+    "Generated and machine-consumable artifacts stay JSON/JSONL-first.",
+    "Ready means starter context, not tenant truth.",
+    "needs_curation must surface gaps before final output.",
+    "report_only remains a maturity/planning signal, not final bundle readiness.",
+    "No SAP Help mirror, tenant data, screenshots, exports, credentials or proprietary copied documentation."
+  ],
+  "task_refs": [
+    {
+      "id": "CCJ-001",
+      "summary": "Add schema-backed JSON consumer example manifest",
+      "status": "done",
+      "scope": {
+        "read": [
+          "docs/repo-go-vision.json",
+          "docs/context-bundle-consumer-contract.md",
+          "examples/downstream-consumer-fixtures.json",
+          "examples/answer-proof-examples.json",
+          "schema/answer-profiles.json"
+        ],
+        "modify": [
+          "schema/consumer-contract-json-examples.schema.json",
+          "examples/consumer-contract-json-examples.json",
+          "tests/test_consumer_contract_json_examples.py"
+        ]
+      },
+      "requirements": [
+        "R-1: Cover context bundle, query-explain, consultant-answer and answer-profile consumer surfaces.",
+        "R-2: Encode safe consumer behavior and must-not-claim boundaries as JSON.",
+        "R-3: Keep examples public-safe and synthetic; no credentials, tenant URLs, customer data or copied SAP docs."
+      ],
+      "acceptance": [
+        "Manifest is JSON and schema-backed.",
+        "Tests prove all target surfaces are covered.",
+        "Tests prove fail-closed boundaries are present."
+      ],
+      "verification": [
+        "python3 -m json.tool schema/consumer-contract-json-examples.schema.json >/dev/null",
+        "python3 -m json.tool examples/consumer-contract-json-examples.json >/dev/null",
+        "uv run pytest -q tests/test_consumer_contract_json_examples.py"
+      ]
+    },
+    {
+      "id": "CCJ-002",
+      "summary": "Link consumer example manifest from README and contract docs",
+      "status": "done",
+      "depends_on": ["CCJ-001"],
+      "scope": {
+        "read": ["README.md", "docs/context-bundle-consumer-contract.md"],
+        "modify": ["README.md", "docs/context-bundle-consumer-contract.md", "tests/test_vision_design_principles.py", "tests/test_downstream_consumer_examples.py"]
+      },
+      "requirements": [
+        "R-1: Make the JSON manifest discoverable without replacing JSON source of truth with prose.",
+        "R-2: Preserve existing clone-first and answer-profile plan links.",
+        "R-3: Keep Markdown narrative-only."
+      ],
+      "acceptance": [
+        "README links the manifest and schema.",
+        "Consumer contract docs mention the broader JSON-first manifest.",
+        "Tests guard the links."
+      ],
+      "verification": [
+        "uv run pytest -q tests/test_vision_design_principles.py tests/test_downstream_consumer_examples.py tests/test_consumer_contract_json_examples.py",
+        "git diff --check"
+      ]
+    }
+  ],
+  "task_sequence": ["CCJ-001", "CCJ-002"],
+  "progress": {"total": 2, "open": 0, "active": 0, "blocked": 0, "done": 2},
+  "acceptance": [
+    "Plan covers exactly one bounded slice: consumer-contract-json-examples.",
+    "Machine-readable examples cover bundles, query-explain, consultant-answer, answer profiles, citations, evidence, boundaries and gaps.",
+    "No broad SAP content, new ready domain, LLM generation or network verification is introduced."
+  ],
+  "verification": [
+    "python3 -m json.tool docs/plans/consumer-contract-json-examples-go-plan.json >/dev/null",
+    "python3 -m json.tool schema/consumer-contract-json-examples.schema.json >/dev/null",
+    "python3 -m json.tool examples/consumer-contract-json-examples.json >/dev/null",
+    "uv run pytest -q tests/test_consumer_contract_json_examples.py tests/test_downstream_consumer_examples.py tests/test_vision_design_principles.py tests/test_clone_first_docs.py",
+    "make check",
+    "git diff --check"
+  ],
+  "execution_snippet": "$go-goal docs/plans/consumer-contract-json-examples-go-plan.json"
+}

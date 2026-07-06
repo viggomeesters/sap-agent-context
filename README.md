@@ -34,6 +34,9 @@ sources through access-labelled pointers.
   `schema/answer-profiles.json`, with schema in
   `schema/answer-profiles.schema.json` and consumer guidance in
   [Agent Consumer Contract](docs/agent-consumer-contract.md).
+- Downstream agent consumption patterns are captured as JSON examples in
+  [Consumer Contract JSON Examples](examples/consumer-contract-json-examples.json),
+  with schema in `schema/consumer-contract-json-examples.schema.json`.
 - Public/gated/internal source labels, review dates, and expiration dates to
   prevent stale, expired, or private evidence from becoming hidden assumptions.
 

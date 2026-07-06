@@ -89,7 +89,10 @@ if bundle["status"] != "ready":
 ```
 
 See `examples/downstream-consumer-fixtures.json` for ready, `needs_curation`,
-`report_only`, and anti-hallucination response examples.
+`report_only`, and anti-hallucination response examples. See
+`examples/consumer-contract-json-examples.json` for a broader JSON-first manifest
+covering context bundles, `query-explain`, `consultant-answer`, answer profiles,
+citations, evidence, boundaries, and gaps.
 
 Consumer fail-closed gate fixtures live in
 `schema/consumer-fail-closed-fixtures.yaml`. They intentionally catch missing
