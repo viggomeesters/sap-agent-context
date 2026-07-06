@@ -1,0 +1,161 @@
+{
+  "schema": "agent-workflow.vision.v1",
+  "kind": "vision",
+  "id": "sap-agent-context-repo",
+  "status": "active",
+  "title": "SAP Agent Context repository vision",
+  "project": "sap-agent-context",
+  "source_design_contract": "docs/vision.json",
+  "wedge": "A cloneable, local-first, agent-first SAP context runtime with evidence-backed JSONL records and fail-closed boundaries; not a SAP documentation mirror, human wiki, generic vector demo, tenant configuration store, or fluent SAP chatbot.",
+  "north_star": "SAP professionals can clone sap-agent-context, run local gates, and give agents enough structured SAP context to reason from zero without inventing tenant, release, customizing, role, availability, or production facts.",
+  "desired_outcome": "Make the repository the practical local context substrate for SAP agents: compact records, source-labelled claims, rebuildable indexes, deterministic gates, query/answer contracts, and actionable gap reports that steer future curation work.",
+  "target_user_audience": [
+    "AI agents working on SAP functional design, field mapping, workflow, roles, migration, integration, analytics, EAM/PM, and implementation support",
+    "SAP professionals using agents who need grounded local context without copying SAP proprietary documentation",
+    "Repo maintainers deciding which domains are mature enough for retrieval, bundle generation, or deterministic answer contracts"
+  ],
+  "painful_moment": "Generic model memory can produce plausible SAP-sounding output, but SAP implementation work needs source/access/freshness boundaries, tenant/release caveats, and local evidence that fails closed when proof is missing.",
+  "core_promise": "Clone the repo, build the local index, query or bundle context, and get compact source-labelled SAP evidence plus explicit gaps instead of copied docs, hidden assumptions, or hallucinated tenant truth.",
+  "principles": [
+    "Agent-first: optimize records, bundles, indexes, schemas, fixtures, and machine-readable examples before human prose.",
+    "JSON/JSONL-first: records/*.jsonl and JSON reports/examples are canonical for agents; Markdown is narrative maintainer context only.",
+    "Evidence before coverage: a small source-labelled domain slice with fixtures beats broad unverified item count growth.",
+    "Fail closed on tenant, release, customizing, authorization, role, availability, production behavior, and gated SAP Note/KBA claims.",
+    "Retrieval is product: important prompts need positive and negative fixtures or query smokes, not just stored records.",
+    "Public-safe by construction: no customer data, tenant URLs, screenshots, SAP exports, credentials, or proprietary copied SAP documentation.",
+    "Gaps must steer work: reports should classify missing source, freshness, retrieval, fixture, rule, or maturity evidence into actionable next slices."
+  ],
+  "non_goals": [
+    "Do not mirror SAP Help, Learning Hub, SAP Notes/KBA, SAP for Me, or copied proprietary documentation.",
+    "Do not become a human browsing wiki or training manual as the primary product surface.",
+    "Do not store tenant configuration, customer mappings, internal URLs, screenshots, credentials, or SAP exports.",
+    "Do not optimize for item count, domain breadth, or fluent prose over source-labelled evidence and gates.",
+    "Do not claim globally exhaustive SAP correctness or current release truth from repo-level audits.",
+    "Do not add broad LLM answer generation before deterministic retrieval/evidence/answer contracts are mature.",
+    "Do not hand-edit generated build artifacts as source of truth."
+  ],
+  "load_bearing_assumptions": [
+    {
+      "claim": "A compact public-safe context graph can make SAP agent work materially better without copying SAP documentation.",
+      "fails_if": "Useful SAP work repeatedly requires copied proprietary text, gated SAP Notes/KBA content, tenant screenshots, or customer-specific mappings.",
+      "cheapest_test": "Run representative query/bundle/answer fixtures and manually inspect whether source pointers, claims, and caveats give enough context for useful first-pass agent output.",
+      "kill_or_pivot": "If public-safe pointers are insufficient for a domain, mark that domain gated/needs_curation and require authorized human verification rather than expanding public-ready records."
+    },
+    {
+      "claim": "Local rebuildable indexes plus FTS/vector retrieval can serve as the practical runtime without hosted retrieval services.",
+      "fails_if": "Fresh clone workflows become too slow, flaky, or dependent on external hosted services for default usage.",
+      "cheapest_test": "Run uv sync --locked, make check, build-index, build-embeddings, and representative runtime-search/query-explain commands on a clean local clone.",
+      "kill_or_pivot": "If local runtime cost becomes unacceptable, split heavy optional artifacts behind explicit commands while keeping default validation and basic retrieval local."
+    },
+    {
+      "claim": "Structured curation gates can improve trust faster than broad content additions.",
+      "fails_if": "Gap, maturity, or curation reports do not produce actionable next slices, or teams still add shallow records to make numbers look better.",
+      "cheapest_test": "Run curation-report and audit-completeness after each slice; classify failures as missing source, freshness, retrieval, fixture, schema, or maturity work.",
+      "kill_or_pivot": "If reports are noisy or non-actionable, pause domain expansion and improve report schemas/thresholds before adding more records."
+    },
+    {
+      "claim": "Deterministic consumer contracts should precede broad LLM generation.",
+      "fails_if": "Downstream consumers cannot use bundles, query examples, or consultant-answer artifacts without hidden assumptions or manual interpretation.",
+      "cheapest_test": "Add JSON consumer examples and run a downstream-agent dry run using only status, citations, evidence, boundary, and gap fields.",
+      "kill_or_pivot": "If consumer output still needs free-form interpretation, strengthen schemas and examples before adding an LLM layer."
+    },
+    {
+      "claim": "SAP Agent Context can stay repo-sized and maintainable while covering multiple high-value SAP lenses.",
+      "fails_if": "Schema, fixtures, support profiles, or ranking rules become brittle, duplicated, or too slow as domains expand.",
+      "cheapest_test": "Before each domain slice, measure changed files, fixture count, test runtime, and whether logic moved from code to reusable data contracts when patterns repeat.",
+      "kill_or_pivot": "If hardcoded profiles or fixtures become brittle, introduce data-driven schemas before adding another domain."
+    }
+  ],
+  "success_metrics": [
+    "Fresh clone path is documented and locally runnable: uv sync --locked, make check, representative query-explain/runtime-search.",
+    "make check and make audit-v02-gap-report pass after each shipped slice.",
+    "records/*.jsonl remains the canonical agent record surface; generated build artifacts remain rebuildable and untracked.",
+    "Every important retrieval/answer behavior has positive and nearby negative fixtures or CLI smokes.",
+    "Curation and audit reports produce classified, actionable gaps instead of vague needs-more-content warnings.",
+    "Public-safety review finds no tenant URLs, customer data, screenshots, credentials, SAP exports, or copied proprietary documentation.",
+    "Final ship reports state exact proof boundaries and residual risks without implying exhaustive SAP certification."
+  ],
+  "verification_strategy": [
+    "Repository guard and schema validation for source records.",
+    "audit-completeness and v0.2 gap report for coverage/gap boundaries.",
+    "evaluate-fixtures, evaluate-runtime-retrieval, evaluate-answer-scenarios, evaluate-consultant-answers, and evaluate-semantic-models for behavior proof.",
+    "Focused tests for repo vision/design principles, clone-first docs, runtime ranking, curation reports, and consultant-answer boundaries.",
+    "Direct CLI smoke tests for target prompts and nearby adversarial prompts before shipping user-facing behavior.",
+    "git diff --check, Ruff, pytest, and public-safety review before commit/push."
+  ],
+  "first_proof": {
+    "statement": "The repo already proves the local-first SAP context runtime pattern: 746 items validate, generated indexes rebuild, runtime retrieval and semantic fixtures pass, answer scenarios and consultant answers are gated, and full local checks pass.",
+    "current_evidence": [
+      "docs/vision.json defines the repo design contract and agent-first product direction",
+      "commit 5d3f04c expanded consultant-answer coverage with evidence binding and 297 passing tests",
+      "commit 4b04d1f added a layer-specific consultant-answer vision",
+      "make check and make audit-v02-gap-report passed after the consultant-answer slice",
+      "README documents clone/install, validation, runtime search, answer-scenario, and consultant-answer commands"
+    ],
+    "next_required_proof": "Pick one bounded next slice that improves consumer trust or planner usability without broad content import: answer-profile schema, query-explain answer debug, source verification soft gate, or JSON consumer contract examples."
+  },
+  "first_build_slices": [
+    {
+      "id": "answer-profile-schema",
+      "summary": "Move repeated consultant-answer support IDs, classifier triggers, required citations, and adversarial probes into a data-driven schema before adding many more answer domains."
+    },
+    {
+      "id": "query-explain-answer-debug",
+      "summary": "Expose why a query or consultant-answer was ready/needs_curation, which evidence was kept/dropped, and which proof boundary decided the status."
+    },
+    {
+      "id": "consumer-contract-json-examples",
+      "summary": "Add machine-readable JSON examples showing how downstream agents consume bundles, query-explain, consultant-answer, citations, evidence, boundaries, and gaps."
+    },
+    {
+      "id": "source-verification-soft-gate",
+      "summary": "Create an optional network-dependent source verification report that checks public pointers without making default make check flaky."
+    },
+    {
+      "id": "claim-maturity-next-lift",
+      "summary": "Use curation-report claim_maturity_index to move a bounded sample from L0/L1 toward L2/L3 with source/access/freshness/fail-closed improvements."
+    },
+    {
+      "id": "next-domain-deep-slice",
+      "summary": "Promote exactly one next SAP domain only when existing evidence can support runtime fixtures, answer/bundle contracts, negative probes, and public-safe boundaries."
+    }
+  ],
+  "open_questions": [
+    "Should the next slice prioritize data-driven answer profiles or downstream consumer JSON examples?",
+    "Which downstream consumer is the strongest forcing function: McCoy FO Generator v2, generic local agents, or a public clone-first demo?",
+    "Should source verification be release-only, a soft Make target, or a separate reviewer command?",
+    "Which domain has enough existing evidence to deserve the next deep slice without broad content import?",
+    "When should legacy YAML authoring be retired in favor of direct JSONL-native tools?"
+  ],
+  "decision_log": [
+    {
+      "date": "2026-07-06",
+      "decision": "Keep docs/vision.json as the repo design contract and add this Go Vision as planning context rather than replacing the existing contract.",
+      "reason": "The existing contract is already covered by tests and documents product principles; Go Vision adds go-plan/go-task-friendly assumptions, proof boundaries, and first slices."
+    },
+    {
+      "date": "2026-07-06",
+      "decision": "Prioritize verified behavior and consumer contracts over broad SAP content expansion.",
+      "reason": "The repository already has enough validated content to expose product gaps in answer, retrieval, curation, and consumer surfaces."
+    },
+    {
+      "date": "2026-07-06",
+      "decision": "Retain JSON/JSONL-first artifacts for durable agent context.",
+      "reason": "Future agents and go-plan tasks need machine-readable constraints, not prose-only vision."
+    }
+  ],
+  "context_refs": [
+    "docs/vision.json",
+    "docs/consultant-answer-vision.json",
+    "README.md",
+    "records/*.jsonl",
+    "schema/*.schema.json",
+    "schema/runtime-retrieval-fixtures.yaml",
+    "schema/answer-scenario-fixtures.yaml",
+    "tests/test_vision_design_principles.py",
+    "tests/test_clone_first_docs.py",
+    "commit:5d3f04c",
+    "commit:4b04d1f"
+  ],
+  "next_planning_boundary": "Use go-plan for one bounded trust/consumer slice only. Recommended first: answer-profile-schema or consumer-contract-json-examples. Do not create broad SAP-content expansion tasks from this vision."
+}
