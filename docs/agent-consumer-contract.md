@@ -55,6 +55,21 @@ Consumers can read generated JSON bundles directly or register the
   promote `needs_curation`, `report_only`, gated, expired or `internal_derived`
   records into customer-specific proof without the required verification.
 
+## Answer Profile Contract
+
+Deterministic consultant answers are governed by `schema/answer-profiles.json`
+and the shape in `schema/answer-profiles.schema.json`. Profiles describe the
+current classification support records, fixture/probe coverage expectations,
+required answer citation ids, and fail-closed boundaries. They are a planning and
+runtime-safety contract, not SAP truth, tenant proof, release proof, customizing
+proof, or content-coverage proof.
+
+Future ready answer domains must add or update a profile, positive fixtures,
+nearby adversarial probes, citation requirements, and boundary notes before they
+are treated as consumer-ready. Generic or unsupported prompts should stay
+`needs_curation` until the repo has a source-backed answer contract; do not use
+profile count or broad keywords as maturity proof.
+
 ## McCoy As Example Consumer
 
 McCoy FO Generator v2 can register the bundle folder as a local-folder provider,

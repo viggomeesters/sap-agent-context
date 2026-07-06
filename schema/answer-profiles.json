@@ -1,0 +1,256 @@
+{
+  "schema": "sap-agent-context.answer-profiles.v1",
+  "artifact_kind": "answer_profiles",
+  "purpose": "Data contract for deterministic consultant-answer classifications, support records, citation expectations and fail-closed fixture boundaries. This file describes current behavior; it is not SAP truth, tenant proof, release proof or content-coverage proof.",
+  "profiles": [
+    {
+      "id": "mtart",
+      "classification": "mtart",
+      "status": "ready",
+      "description": "Material type answer anchored on the MARA DD03VT field catalog.",
+      "support_ids": [
+        "sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog"
+      ],
+      "positive_fixture_ids": [
+        "concrete_mtart_field_description"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Verify target release and tenant DDIC metadata before implementation."
+      ],
+      "adversarial_probe_ids": []
+    },
+    {
+      "id": "material_fields",
+      "classification": "material_fields",
+      "status": "ready",
+      "description": "Material-field lookup answer for MATNR/MARA/EQUI style prompts.",
+      "support_ids": [
+        "sap.field-map.product-number-migration-seed",
+        "sap.field-map.product-number-template-verification",
+        "sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog",
+        "sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog",
+        "sap.field-set.product-master-core",
+        "sap.app.eam.pm.ie01",
+        "sap.app.eam.pm.ie02",
+        "sap.app.eam.pm.ie03"
+      ],
+      "positive_fixture_ids": [
+        "concrete_matnr_table_lookup"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.field-set.ecc-anonymous-equi-dd03vt-field-catalog",
+        "sap.field-set.ecc-anonymous-mara-dd03vt-field-catalog"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Verify target release and tenant dictionary before implementation."
+      ],
+      "adversarial_probe_ids": []
+    },
+    {
+      "id": "org_model",
+      "classification": "org_model",
+      "status": "ready",
+      "description": "Organization separation answer across company code, plant, purchasing organization and sales organization lenses.",
+      "support_ids": [
+        "sap.field-set.sap-process-lenses",
+        "sap.fo-pattern.sap-org-process-discovery",
+        "sap.object.sap-org-business-partner-role",
+        "sap.object.sap-org-company-code",
+        "sap.object.sap-org-controlling-area",
+        "sap.object.sap-org-distribution-channel",
+        "sap.object.sap-org-model-lens",
+        "sap.object.sap-org-plant"
+      ],
+      "positive_fixture_ids": [
+        "mid_org_separation_nl"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.object.sap-org-company-code"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Target tenant assignments and customizing need explicit evidence."
+      ],
+      "adversarial_probe_ids": []
+    },
+    {
+      "id": "p2p",
+      "classification": "p2p",
+      "status": "ready",
+      "description": "Purchase-to-pay/procure-to-pay process lens answer.",
+      "support_ids": [
+        "sap.object.sap-org-purchasing-organization",
+        "sap.field-set.sap-process-lenses",
+        "sap.fo-pattern.sap-org-process-discovery",
+        "sap.object.sap-org-business-partner-role",
+        "sap.object.sap-org-company-code",
+        "sap.object.sap-org-controlling-area",
+        "sap.object.sap-org-distribution-channel",
+        "sap.object.sap-org-model-lens"
+      ],
+      "positive_fixture_ids": [
+        "mid_purchase_to_pay"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.object.sap-org-purchasing-organization"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Verify target workflow, release and customizing before final advice."
+      ],
+      "adversarial_probe_ids": []
+    },
+    {
+      "id": "integration_security",
+      "classification": "integration_security",
+      "status": "ready",
+      "description": "Communication arrangement and integration security answer with redaction/no-secret boundaries.",
+      "support_ids": [
+        "sap.app.communication-arrangements-context",
+        "sap.object.communication-arrangement-integration",
+        "sap.pattern.integration.communication-arrangement-fo",
+        "sap.policy.integration-no-secrets",
+        "sap.field-map.integration-api-message-readiness"
+      ],
+      "positive_fixture_ids": [
+        "mid_integration_communication_security"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.app.communication-arrangements-context"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Do not include tenant URLs, credentials, certificates or customer payloads."
+      ],
+      "adversarial_probe_ids": [
+        "generic_api_report_needs_curation"
+      ]
+    },
+    {
+      "id": "analytics_extensibility",
+      "classification": "analytics_extensibility",
+      "status": "ready",
+      "description": "Custom Fields and Logic / analytical-query exposure answer.",
+      "support_ids": [
+        "sap.app.custom-fields-and-logic-context",
+        "sap.bulk.api.analytical-query.field-map",
+        "sap.bulk.api.analytical-query.field-set",
+        "sap.bulk.api.analytical-query.object",
+        "sap.bulk.api.analytical-query.ref",
+        "sap.bulk.api.analytical-query.rule"
+      ],
+      "positive_fixture_ids": [
+        "mid_analytics_extensibility_custom_field"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.app.custom-fields-and-logic-context",
+        "sap.bulk.api.analytical-query.field-map"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Treat local records as source-labelled guidance, not target-system proof."
+      ],
+      "adversarial_probe_ids": [
+        "generic_api_report_needs_curation"
+      ]
+    },
+    {
+      "id": "procurement_workflow",
+      "classification": "procurement_workflow",
+      "status": "ready",
+      "description": "Procurement release strategy / flexible workflow evidence answer.",
+      "support_ids": [
+        "sap.app.manage-purchase-requisitions-context",
+        "sap.app.manage-purchase-requisitions",
+        "sap.bulk.control.procurement-sourcing.decision-rule",
+        "sap.pattern.procurement-release-strategy-workflow-fo",
+        "sap.rule.procurement-release-strategy-tenant-evidence",
+        "sap.test-pattern.procurement-release-strategy-caveat"
+      ],
+      "positive_fixture_ids": [
+        "mid_procurement_release_strategy_workflow"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.app.manage-purchase-requisitions-context",
+        "sap.bulk.control.procurement-sourcing.decision-rule"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Role/workflow behavior is fail-closed until target tenant, release and customizing are verified."
+      ],
+      "adversarial_probe_ids": [
+        "generic_release_strategy_needs_curation"
+      ]
+    },
+    {
+      "id": "modules",
+      "classification": "modules",
+      "status": "needs_curation",
+      "description": "Vague module-taxonomy prompts stay caveated until source-backed module coverage exists.",
+      "support_ids": [
+        "sap.object.sap-context-foundation",
+        "sap.fo-pattern.sap-from-zero-answer",
+        "sap.field-set.sap-context-lenses",
+        "sap.rule.sap-answer-ontology-gate",
+        "sap.test-pattern.sap-foundation-fail-closed"
+      ],
+      "positive_fixture_ids": [],
+      "adversarial_fixture_ids": [
+        "vague_sap_modules"
+      ],
+      "required_answer_citation_ids": [],
+      "curation_reason_required": true,
+      "boundary_notes": [
+        "Do not claim a complete module taxonomy from current context."
+      ],
+      "adversarial_probe_ids": []
+    },
+    {
+      "id": "unsupported_configuration",
+      "classification": "unsupported_configuration",
+      "status": "needs_curation",
+      "description": "Tenant/release/configuration-specific prompts outside the current answer contract.",
+      "support_ids": [],
+      "positive_fixture_ids": [],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [],
+      "curation_reason_required": true,
+      "boundary_notes": [
+        "Requires source-backed target-system evidence before ready output."
+      ],
+      "adversarial_probe_ids": [
+        "unsupported_tenant_configuration_needs_curation"
+      ]
+    },
+    {
+      "id": "generic",
+      "classification": "generic",
+      "status": "needs_curation",
+      "description": "Default fallback for broad prompts that lack an explicit ready answer contract.",
+      "support_ids": [],
+      "positive_fixture_ids": [],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [],
+      "curation_reason_required": true,
+      "boundary_notes": [
+        "Add a source-backed foundation answer contract before answering generic questions as ready."
+      ],
+      "adversarial_probe_ids": [
+        "generic_api_report_needs_curation",
+        "generic_release_strategy_needs_curation"
+      ]
+    }
+  ]
+}

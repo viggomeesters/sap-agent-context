@@ -51,7 +51,7 @@
     {
       "id": "APS-001",
       "summary": "Define answer-profile schema contract and seed current profiles",
-      "status": "open",
+      "status": "done",
       "scope": {
         "read": [
           "docs/repo-go-vision.json",
@@ -81,13 +81,28 @@
         "uv run pytest -q tests/test_answer_profiles.py",
         "python -m json.tool schema/answer-profiles.schema.json >/dev/null",
         "python -m json.tool schema/answer-profiles.json >/dev/null"
-      ]
+      ],
+      "completed_evidence": {
+        "commit_pending": true,
+        "summary": "Defined schema/answer-profiles.schema.json and seeded current schema/answer-profiles.json with ready and fail-closed profiles; added profile contract docs and tests.",
+        "verification": [
+          "python3 -m json.tool schema/answer-profiles.schema.json >/dev/null",
+          "python3 -m json.tool schema/answer-profiles.json >/dev/null",
+          "uv run pytest -q tests/test_answer_profiles.py tests/test_consultant_answer.py: 18 passed",
+          "uv run ruff check tests/test_answer_profiles.py: passed",
+          "uv run sap-agent-context evaluate-consultant-answers > /tmp/sap-agent-context-consultant-answer-evaluation.json: passed 14 fixtures",
+          "git diff --check: passed"
+        ],
+        "completed_at": "2026-07-06T09:22:15.191409+00:00"
+      }
     },
     {
       "id": "APS-002",
       "summary": "Load answer profiles from JSON in consultant_answer without changing behavior",
       "status": "open",
-      "depends_on": ["APS-001"],
+      "depends_on": [
+        "APS-001"
+      ],
       "scope": {
         "read": [
           "schema/answer-profiles.json",
@@ -119,7 +134,9 @@
       "id": "APS-003",
       "summary": "Add profile-bound fixture/adversarial coverage gates",
       "status": "open",
-      "depends_on": ["APS-002"],
+      "depends_on": [
+        "APS-002"
+      ],
       "scope": {
         "read": [
           "schema/answer-profiles.json",
@@ -151,7 +168,9 @@
       "id": "APS-004",
       "summary": "Document the answer-profile contract for future domain expansion",
       "status": "open",
-      "depends_on": ["APS-003"],
+      "depends_on": [
+        "APS-003"
+      ],
       "scope": {
         "read": [
           "README.md",
@@ -181,13 +200,18 @@
       ]
     }
   ],
-  "task_sequence": ["APS-001", "APS-002", "APS-003", "APS-004"],
+  "task_sequence": [
+    "APS-001",
+    "APS-002",
+    "APS-003",
+    "APS-004"
+  ],
   "progress": {
     "total": 4,
-    "open": 4,
+    "open": 3,
     "active": 0,
     "blocked": 0,
-    "done": 0
+    "done": 1
   },
   "acceptance": [
     "Plan covers exactly one bounded slice: answer-profile-schema.",

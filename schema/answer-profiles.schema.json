@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://viggomeesters.github.io/sap-agent-context/schemas/answer-profiles.schema.json",
+  "title": "SAP Agent Context answer profiles",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "artifact_kind", "profiles"],
+  "properties": {
+    "schema": {"const": "sap-agent-context.answer-profiles.v1"},
+    "artifact_kind": {"const": "answer_profiles"},
+    "purpose": {"type": "string", "minLength": 1},
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/profile"}
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "stringList": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/nonEmptyString"},
+      "uniqueItems": true
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "classification",
+        "status",
+        "support_ids",
+        "positive_fixture_ids",
+        "adversarial_fixture_ids",
+        "required_answer_citation_ids",
+        "curation_reason_required"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonEmptyString"},
+        "classification": {"$ref": "#/$defs/nonEmptyString"},
+        "status": {"enum": ["ready", "needs_curation"]},
+        "description": {"type": "string"},
+        "support_ids": {"$ref": "#/$defs/stringList"},
+        "positive_fixture_ids": {"$ref": "#/$defs/stringList"},
+        "adversarial_fixture_ids": {"$ref": "#/$defs/stringList"},
+        "adversarial_probe_ids": {"$ref": "#/$defs/stringList"},
+        "required_answer_citation_ids": {"$ref": "#/$defs/stringList"},
+        "curation_reason_required": {"type": "boolean"},
+        "boundary_notes": {"$ref": "#/$defs/stringList"}
+      }
+    }
+  }
+}
