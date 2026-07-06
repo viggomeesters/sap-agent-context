@@ -307,6 +307,111 @@ fixtures:
         - SAP procure to pay P2P procurement process
         - SAP purchase to pay P2P procurement process
 
+  - id: mid_integration_communication_security
+    difficulty: mid
+    question: Welke communicatie arrangement security checks en redactie zijn nodig zonder secrets of tenant URL?
+    limit: 20
+    expected_answer_status: ready
+    required_ids_top_n: 5
+    required_ids:
+      - sap.app.communication-arrangements-context
+    required_terms_by_id:
+      sap.app.communication-arrangements-context:
+        - communication arrangements
+        - authentication
+        - tenant URLs
+        - credentials
+    required_answer_terms:
+      - secrets
+      - tenant
+      - authentication
+    required_answer_citation_ids:
+      - sap.app.communication-arrangements-context
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - help.sap.com
+        - api.sap.com
+        - sap.com
+      search_terms:
+        - SAP S/4HANA Cloud communication arrangements authentication
+        - SAP communication arrangement communication system credentials tenant URL
+
+  - id: mid_analytics_extensibility_custom_field
+    difficulty: mid
+    question: Welke vragen moet ik stellen voor custom field exposure in analytics en API rapportage?
+    limit: 20
+    expected_answer_status: ready
+    required_ids_top_n: 5
+    required_ids:
+      - sap.app.custom-fields-and-logic-context
+    required_terms_by_id:
+      sap.app.custom-fields-and-logic-context:
+        - Custom Fields and Logic
+        - business context
+        - publish
+    required_answer_terms:
+      - analytical
+      - API
+      - exposure
+    required_answer_citation_ids:
+      - sap.app.custom-fields-and-logic-context
+      - sap.bulk.api.analytical-query.field-map
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - help.sap.com
+        - api.sap.com
+        - sap.com
+      search_terms:
+        - SAP Custom Fields and Logic analytics exposure business context
+        - SAP S/4HANA custom field analytical query API reporting
+
+  - id: mid_procurement_release_strategy_workflow
+    difficulty: mid
+    question: procurement release strategy flexible workflow threshold approver evidence
+    limit: 20
+    expected_answer_status: ready
+    required_ids_top_n: 6
+    required_ids:
+      - sap.app.manage-purchase-requisitions-context
+      - sap.bulk.control.procurement-sourcing.decision-rule
+    required_terms_by_id:
+      sap.app.manage-purchase-requisitions-context:
+        - requisition
+        - workflow
+        - target tenant
+      sap.bulk.control.procurement-sourcing.decision-rule:
+        - owner approval
+        - evidence
+    required_answer_terms:
+      - procurement
+      - workflow
+      - evidence
+    required_answer_citation_ids:
+      - sap.app.manage-purchase-requisitions-context
+      - sap.bulk.control.procurement-sourcing.decision-rule
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - help.sap.com
+        - sap.com
+      search_terms:
+        - SAP S/4HANA Cloud procurement flexible workflow purchase requisition approver threshold
+        - SAP purchase requisition release strategy workflow approver evidence
+
   - id: vague_sap_modules
     difficulty: vague
     question: Welke SAP modules zijn er?

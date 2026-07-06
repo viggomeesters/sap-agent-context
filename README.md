@@ -116,6 +116,9 @@ web evidence hints for a separate human/agent review pass.
 | `In welke tabellen kan ik het veld MATNR vinden?` / `Welke tabellen hebben MATNR?` | `ready` | retrieves MARA and EQUI field-catalog anchors and requires `MARA.MATNR` plus `EQUI.MATNR` |
 | `Hoe zit het precies met organisaties scheiden in SAP?` / `Hoe scheid je organisatie-eenheden in SAP?` | `ready` | retrieves org/process lenses for company code, plant, purchasing organization and sales organization with fail-closed evidence boundaries |
 | `Wat is purchase to pay?` / `Wat is procure to pay?` | `ready` | retrieves the P2P/process lens and purchasing-organization context |
+| `Welke communicatie arrangement security checks en redactie zijn nodig zonder secrets of tenant URL?` | `ready` | retrieves communication-arrangement security context and keeps tenant URLs, credentials and customer payloads out of public answers |
+| `Welke vragen moet ik stellen voor custom field exposure in analytics en API rapportage?` | `ready` | retrieves Custom Fields and Logic / analytical-query context and requires exposure, publish, API/reporting and tenant-availability caveats |
+| `procurement release strategy flexible workflow threshold approver evidence` | `ready` | retrieves procurement workflow/control evidence and keeps approver, threshold and customizing behavior tenant-verified |
 | `Welke SAP modules zijn er?` | `needs_curation` | retrieves foundation/context lenses, but deliberately refuses to claim an exhaustive module taxonomy from current records |
 
 Example report fragment:
@@ -124,7 +127,7 @@ Example report fragment:
 {
   "artifact_kind": "answer_scenario_evaluation_report",
   "status": "passed",
-  "fixtures": 11,
+  "fixtures": 14,
   "contract": {
     "live_web_boundary": "Fixtures can carry external evidence hints, but this deterministic gate does not claim live internet validation or expert certification.",
     "answer_boundary": "Retrieved context is answer evidence, not tenant/client-specific SAP configuration proof."
@@ -158,7 +161,7 @@ uv run sap-agent-context consultant-answer "Hoe scheid je organisatie-eenheden i
 uv run sap-agent-context evaluate-consultant-answers
 ```
 
-This layer produces a compact answer plus citations and explicit boundaries. It is a narrow deterministic/extractive scenario layer: no LLM call, no live-web certification, no tenant-specific truth claim, and unsupported/generic questions return `needs_curation` instead of `ready`.
+This layer produces a compact answer plus citations and explicit boundaries. It is a narrow deterministic/extractive scenario layer covering material-field, organization/process, integration-security, analytics/extensibility and procurement-workflow intents: no LLM call, no live-web certification, no tenant-specific truth claim, and unsupported/generic questions return `needs_curation` instead of `ready`.
 
 Example answer fragment:
 

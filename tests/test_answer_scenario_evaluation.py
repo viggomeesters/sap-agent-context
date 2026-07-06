@@ -27,7 +27,7 @@ def test_answer_scenario_fixtures_cover_concrete_to_vague_questions(tmp_path: Pa
     report = evaluate_answer_scenarios(root=ROOT, sqlite_path=_index_path(tmp_path))
 
     assert report["status"] == "passed"
-    assert report["fixtures"] == 11
+    assert report["fixtures"] == 14
     ids = {result["id"] for result in report["results"]}
     assert {
         "concrete_mara_technical_fields",
@@ -40,6 +40,9 @@ def test_answer_scenario_fixtures_cover_concrete_to_vague_questions(tmp_path: Pa
         "mid_org_units_inventory_nl",
         "mid_purchase_to_pay",
         "mid_procure_to_pay_paraphrase",
+        "mid_integration_communication_security",
+        "mid_analytics_extensibility_custom_field",
+        "mid_procurement_release_strategy_workflow",
         "vague_sap_modules",
     } == ids
 

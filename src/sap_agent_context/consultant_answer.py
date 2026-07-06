@@ -19,7 +19,41 @@ from sap_agent_context.repository import load_items
 from sap_agent_context.runtime_search import search_runtime_index
 
 DEFAULT_SQLITE = "build/context.sqlite"
-READY_CLASSIFICATIONS = {"material_fields", "mtart", "org_model", "p2p"}
+READY_CLASSIFICATIONS = {
+    "analytics_extensibility",
+    "integration_security",
+    "material_fields",
+    "mtart",
+    "org_model",
+    "p2p",
+    "procurement_workflow",
+}
+
+CLASSIFICATION_SUPPORT_IDS: dict[str, set[str]] = {
+    "analytics_extensibility": {
+        "sap.app.custom-fields-and-logic-context",
+        "sap.bulk.api.analytical-query.field-map",
+        "sap.bulk.api.analytical-query.field-set",
+        "sap.bulk.api.analytical-query.object",
+        "sap.bulk.api.analytical-query.ref",
+        "sap.bulk.api.analytical-query.rule",
+    },
+    "integration_security": {
+        "sap.app.communication-arrangements-context",
+        "sap.object.communication-arrangement-integration",
+        "sap.pattern.integration.communication-arrangement-fo",
+        "sap.policy.integration-no-secrets",
+        "sap.field-map.integration-api-message-readiness",
+    },
+    "procurement_workflow": {
+        "sap.app.manage-purchase-requisitions-context",
+        "sap.app.manage-purchase-requisitions",
+        "sap.bulk.control.procurement-sourcing.decision-rule",
+        "sap.pattern.procurement-release-strategy-workflow-fo",
+        "sap.rule.procurement-release-strategy-tenant-evidence",
+        "sap.test-pattern.procurement-release-strategy-caveat",
+    },
+}
 
 
 def generate_consultant_answer(
@@ -32,9 +66,10 @@ def generate_consultant_answer(
     sqlite = _ensure_index(root=root, sqlite_path=sqlite_path or root / DEFAULT_SQLITE)
     results = search_runtime_index(sqlite, question, limit=max(limit, 0))
     classification = _classify_question(question, results)
-    status = _answer_status(classification, results)
-    answer = _answer_for_classification(classification, question, results, status)
-    citations = _citations(results)
+    support_results = _supporting_results(classification, results)
+    status = _answer_status(classification, support_results)
+    answer = _answer_for_classification(classification, question, support_results, status)
+    citations = _citations(support_results)
     boundary = {
         "live_web_validation": False,
         "expert_certification": False,
@@ -53,7 +88,7 @@ def generate_consultant_answer(
         "answer_style": "deterministic_extract_consultant_summary",
         "classification": classification,
         "citations": citations,
-        "evidence": _evidence(results),
+        "evidence": _evidence(support_results),
         "boundary": boundary,
         "contract": {
             "live_web_boundary": (
@@ -117,6 +152,11 @@ def _evaluate_fixture(root: Path, sqlite_path: Path, fixture: dict[str, Any]) ->
         failures.append("answer claims tenant-specific truth")
     if expected_status == "ready" and not _has_citable_support(answer):
         failures.append("ready answer has no citation with source_ids and claim_ids")
+    if expected_status == "ready":
+        cited_ids = {str(citation.get("id") or "") for citation in answer.get("citations") or []}
+        for item_id in _strings(fixture.get("required_answer_citation_ids")):
+            if item_id not in cited_ids:
+                failures.append(f"required answer citation id missing: {item_id}")
     if expected_status == "needs_curation" and "needs curation" not in answer["answer"].lower():
         failures.append("needs_curation answer must say needs curation")
     for term in _strings(fixture.get("required_answer_terms")):
@@ -167,7 +207,70 @@ def _classify_question(question: str, results: list[dict[str, Any]]) -> str:
         return "p2p"
     if "organisatie" in text or "organization" in text:
         return "org_model"
+    if _looks_like_integration_security(text):
+        return "integration_security"
+    if _looks_like_analytics_extensibility(text):
+        return "analytics_extensibility"
+    if _looks_like_procurement_workflow(text):
+        return "procurement_workflow"
     return "generic"
+
+
+def _looks_like_integration_security(text: str) -> bool:
+    integration_terms = {
+        "api",
+        "communicatie arrangement",
+        "communication arrangement",
+        "communication system",
+        "integration",
+    }
+    security_terms = {
+        "authentication",
+        "credential",
+        "credentials",
+        "redactie",
+        "redaction",
+        "secret",
+        "secrets",
+        "security",
+        "tenant url",
+    }
+    return any(term in text for term in integration_terms) and any(
+        term in text for term in security_terms
+    )
+
+
+def _looks_like_analytics_extensibility(text: str) -> bool:
+    analytics_terms = {"analytics", "analytical", "report", "reporting", "rapportage", "kpi"}
+    extensibility_terms = {
+        "custom field",
+        "extension",
+        "extensibility",
+        "exposure",
+        "publish",
+    }
+    return any(term in text for term in analytics_terms) and any(
+        term in text for term in extensibility_terms
+    )
+
+
+def _looks_like_procurement_workflow(text: str) -> bool:
+    procurement_terms = {
+        "procurement",
+        "purchase order",
+        "purchase requisition",
+    }
+    workflow_terms = {
+        "approval",
+        "approver",
+        "flexible workflow",
+        "release strategy",
+        "threshold",
+        "workflow",
+    }
+    return any(term in text for term in procurement_terms) and any(
+        term in text for term in workflow_terms
+    )
 
 
 def _looks_like_unsupported_tenant_configuration(text: str) -> bool:
@@ -184,6 +287,13 @@ def _looks_like_unsupported_tenant_configuration(text: str) -> bool:
         term in text for term in unsupported_domains
     )
 
+
+
+def _supporting_results(classification: str, results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    support_ids = CLASSIFICATION_SUPPORT_IDS.get(classification)
+    if not support_ids:
+        return results
+    return [result for result in results if str(result.get("id") or "") in support_ids]
 
 def _answer_status(classification: str, results: list[dict[str, Any]]) -> str:
     if classification not in READY_CLASSIFICATIONS:
@@ -239,6 +349,33 @@ def _answer_for_classification(
             "process lens and purchasing organization evidence, then verify target "
             f"workflow, release and customizing before final advice. Evidence: {evidence_ids}."
         )
+    if classification == "integration_security":
+        return (
+            "For integration and communication-arrangement security, answer from the "
+            "local integration evidence and keep public bundles secret-free/no secrets: "
+            "name the communication arrangement, communication arrangements/system, "
+            "authentication pattern, API or message surface, redaction requirements, "
+            "and test evidence, but do not include "
+            "tenant URLs, credentials, certificates or customer payloads. Verify the "
+            f"target tenant setup before implementation. Evidence: {evidence_ids}."
+        )
+    if classification == "analytics_extensibility":
+        return (
+            "For analytics/extensibility questions, separate Custom Fields and Logic custom-field "
+            "definition from exposure and consumption: confirm business context, publish/exposure "
+            "status, analytical query or report/KPI surface, API/reporting consumers, "
+            "filter/freshness evidence and tenant-specific availability. Treat the "
+            "local records as source-labelled guidance, not target-system proof. "
+            f"Evidence: {evidence_ids}."
+        )
+    if classification == "procurement_workflow":
+        return (
+            "For procurement release strategy or flexible-workflow questions, identify "
+            "the purchase-requisition/purchasing process surface, owner approval, approver "
+            "responsibilities, threshold or condition evidence, fallback/escalation path "
+            "and test cases. Keep role/workflow behavior fail-closed until the target "
+            f"tenant, release and customizing are verified. Evidence: {evidence_ids}."
+        )
     if classification == "modules":
         return (
             "This question needs curation before a final exhaustive answer. The repo can "
@@ -259,7 +396,8 @@ def _answer_for_classification(
             "This question needs curation before a safe consultant answer. The current "
             "deterministic consultant-answer layer is intentionally narrow and only "
             "generates ready prose for covered scenario intents such as MARA/MTART/MATNR, "
-            "organization separation, and purchase/procure-to-pay. Add a source-backed "
+            "organization separation, purchase/procure-to-pay, integration security, "
+            "analytics/extensibility and procurement workflow. Add a source-backed "
             "foundation answer contract before answering this generic question. "
             f"Evidence: {evidence_ids or 'none'}."
         )

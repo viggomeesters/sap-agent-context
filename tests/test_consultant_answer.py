@@ -104,12 +104,87 @@ def test_consultant_answer_handles_vague_modules_as_needs_curation(tmp_path: Pat
     assert answer["citations"]
 
 
+
+def test_consultant_answer_covers_integration_security(tmp_path: Path) -> None:
+    answer = generate_consultant_answer(
+        root=ROOT,
+        question=(
+            "Welke communicatie arrangement security checks en redactie zijn nodig "
+            "zonder secrets of tenant URL?"
+        ),
+        sqlite_path=_index_path(tmp_path),
+    )
+
+    assert answer["status"] == "ready"
+    assert answer["classification"] == "integration_security"
+    assert "communication arrangement" in answer["answer"]
+    assert "tenant URLs" in answer["answer"]
+    assert "credentials" in answer["answer"]
+    assert answer["citations"]
+
+
+def test_consultant_answer_covers_analytics_extensibility(tmp_path: Path) -> None:
+    answer = generate_consultant_answer(
+        root=ROOT,
+        question=(
+            "Welke vragen moet ik stellen voor custom field exposure in analytics "
+            "en API rapportage?"
+        ),
+        sqlite_path=_index_path(tmp_path),
+    )
+
+    assert answer["status"] == "ready"
+    assert answer["classification"] == "analytics_extensibility"
+    assert "custom-field" in answer["answer"]
+    assert "exposure" in answer["answer"]
+    assert "tenant-specific availability" in answer["answer"]
+    assert answer["citations"]
+
+
+def test_consultant_answer_covers_procurement_workflow(tmp_path: Path) -> None:
+    answer = generate_consultant_answer(
+        root=ROOT,
+        question="procurement release strategy flexible workflow threshold approver evidence",
+        sqlite_path=_index_path(tmp_path),
+    )
+
+    assert answer["status"] == "ready"
+    assert answer["classification"] == "procurement_workflow"
+    assert "release strategy" in answer["answer"]
+    assert "approver" in answer["answer"]
+    assert "tenant, release and customizing" in answer["answer"]
+    assert answer["citations"]
+
+
+def test_consultant_answer_keeps_generic_api_report_needs_curation(tmp_path: Path) -> None:
+    answer = generate_consultant_answer(
+        root=ROOT,
+        question="How should API reporting work?",
+        sqlite_path=_index_path(tmp_path),
+    )
+
+    assert answer["status"] == "needs_curation"
+    assert answer["classification"] == "generic"
+
+
+def test_consultant_answer_keeps_generic_release_strategy_needs_curation(
+    tmp_path: Path,
+) -> None:
+    answer = generate_consultant_answer(
+        root=ROOT,
+        question="What is release strategy?",
+        sqlite_path=_index_path(tmp_path),
+    )
+
+    assert answer["status"] == "needs_curation"
+    assert answer["classification"] == "generic"
+
 def test_consultant_answer_evaluation_covers_all_answer_scenarios(tmp_path: Path) -> None:
     report = evaluate_consultant_answers(root=ROOT, sqlite_path=_index_path(tmp_path))
 
     assert report["artifact_kind"] == "consultant_answer_evaluation_report"
     assert report["status"] == "passed"
-    assert report["fixtures"] == 11
+    assert report["fixtures"] == 14
     assert {result["status"] for result in report["results"]} == {"passed"}
 
 
@@ -151,4 +226,4 @@ def test_consultant_answer_evaluation_cli_outputs_json(tmp_path: Path, capsys) -
     payload = json.loads(capsys.readouterr().out)
     assert payload["artifact_kind"] == "consultant_answer_evaluation_report"
     assert payload["status"] == "passed"
-    assert payload["fixtures"] == 11
+    assert payload["fixtures"] == 14
