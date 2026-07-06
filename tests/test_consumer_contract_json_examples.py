@@ -39,6 +39,7 @@ def test_consumer_contract_json_examples_cover_runtime_surfaces() -> None:
     assert surfaces >= REQUIRED_SURFACES
     assert "query-explain" in text
     assert "consultant-answer" in text
+    assert "decision_trace" in text
     assert "schema/answer-profiles.json" in text
     assert "status=needs_curation" in text
     assert "report_only" in text

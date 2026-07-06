@@ -1,0 +1,100 @@
+{
+  "schema": "agent-workflow.plan.v1",
+  "kind": "plan",
+  "plan_type": "parent",
+  "id": "sap-agent-context-query-explain-answer-debug",
+  "status": "done",
+  "project": "sap-agent-context",
+  "repo": "viggomeesters/sap-agent-context",
+  "repo_path_hint": "/home/viggo/Dev/sap-agent-context",
+  "created_from": "docs/repo-go-vision.json#first_build_slices.query-explain-answer-debug",
+  "vision_ref": "docs/repo-go-vision.json",
+  "planning_boundary": "One bounded trust/consumer slice only: query-explain-answer-debug. Do not add broad SAP content, new ready domains, LLM answer generation, network source verification, or copied SAP documentation in this plan.",
+  "why_now": "query-explain already exposes retrieval ranking evidence, and consumer JSON examples now describe downstream use. The missing bounded proof is a consultant-answer decision trace that explains why output is ready or needs_curation and which profile support evidence was kept or dropped.",
+  "must_preserve": [
+    "Generated and machine-consumable artifacts stay JSON/JSONL-first.",
+    "Ready answers require class-specific citeable support, not any top-k source.",
+    "needs_curation remains draft-only and must not become tenant/release/customizing proof.",
+    "No SAP Help mirror, tenant data, screenshots, exports, credentials or proprietary copied documentation."
+  ],
+  "task_refs": [
+    {
+      "id": "QAD-001",
+      "summary": "Add consultant-answer decision trace",
+      "status": "done",
+      "scope": {
+        "read": [
+          "src/sap_agent_context/consultant_answer.py",
+          "schema/answer-profiles.json",
+          "tests/test_consultant_answer.py"
+        ],
+        "modify": [
+          "src/sap_agent_context/consultant_answer.py",
+          "tests/test_consultant_answer.py"
+        ]
+      },
+      "requirements": [
+        "R-1: Expose classification, profile status, support filtering, kept/dropped support ids, required citation ids and status reasons in consultant-answer output.",
+        "R-2: Keep existing status/classification/citation behavior unchanged.",
+        "R-3: Preserve fail-closed boundaries for generic, tenant, release and customizing prompts."
+      ],
+      "acceptance": [
+        "Ready answers include decision_trace.status=ready and a ready status reason.",
+        "needs_curation answers include decision_trace.status=needs_curation and a fail-closed status reason.",
+        "CLI JSON output includes the same decision_trace contract."
+      ],
+      "verification": [
+        "uv run pytest -q tests/test_consultant_answer.py",
+        "uv run sap-agent-context consultant-answer \"How should API reporting work?\" --limit 12"
+      ]
+    },
+    {
+      "id": "QAD-002",
+      "summary": "Document decision trace for downstream consumers",
+      "status": "done",
+      "depends_on": ["QAD-001"],
+      "scope": {
+        "read": [
+          "docs/local-runtime-index.md",
+          "examples/consumer-contract-json-examples.json",
+          "tests/test_consumer_contract_json_examples.py"
+        ],
+        "modify": [
+          "docs/local-runtime-index.md",
+          "examples/consumer-contract-json-examples.json",
+          "tests/test_consumer_contract_json_examples.py"
+        ]
+      },
+      "requirements": [
+        "R-1: Explain decision_trace as answer-debug evidence, not live/tenant proof.",
+        "R-2: Add decision_trace to the JSON-first downstream consumer example manifest.",
+        "R-3: Keep Markdown narrative-only and JSON as the machine-consumable source."
+      ],
+      "acceptance": [
+        "Local runtime docs name decision_trace and its boundary.",
+        "Consumer JSON examples require/preserve decision_trace for consultant-answer output.",
+        "Focused tests guard the JSON example coverage."
+      ],
+      "verification": [
+        "uv run pytest -q tests/test_consumer_contract_json_examples.py tests/test_consultant_answer.py",
+        "git diff --check"
+      ]
+    }
+  ],
+  "task_sequence": ["QAD-001", "QAD-002"],
+  "progress": {"total": 2, "open": 0, "active": 0, "blocked": 0, "done": 2},
+  "acceptance": [
+    "Plan covers exactly one bounded slice: query-explain-answer-debug.",
+    "consultant-answer output explains ready/needs_curation decisions without adding new SAP content.",
+    "Consumer docs/examples preserve trace, citations, evidence, boundaries and gaps."
+  ],
+  "verification": [
+    "python3 -m json.tool docs/plans/query-explain-answer-debug-go-plan.json >/dev/null",
+    "python3 -m json.tool examples/consumer-contract-json-examples.json >/dev/null",
+    "uv run pytest -q tests/test_consultant_answer.py tests/test_consumer_contract_json_examples.py tests/test_runtime_search_cli.py",
+    "make check",
+    "make audit-v02-gap-report",
+    "git diff --check"
+  ],
+  "execution_snippet": "$go-goal docs/plans/query-explain-answer-debug-go-plan.json"
+}

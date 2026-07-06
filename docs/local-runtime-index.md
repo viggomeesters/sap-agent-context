@@ -99,6 +99,14 @@ same ranked result shape as `runtime-search`, plus a top-level
 `explain_contract` and `top_explanation` so an agent can show why the first item
 was returned without scanning the full result list.
 
+`consultant-answer` carries the same explain-first principle into deterministic
+answer output. In addition to `citations`, `evidence`, `boundary`, and
+`contract`, it includes `decision_trace` with the selected classification,
+profile status, support-id filtering, kept/dropped result ids, required citation
+ids, and status reasons. Use that trace to explain why an answer is `ready` or
+`needs_curation`; do not treat it as live web, tenant, release or customizing
+proof.
+
 Table/field lookup:
 
 ```bash

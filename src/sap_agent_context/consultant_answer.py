@@ -35,8 +35,9 @@ def generate_consultant_answer(
     profiles = _load_answer_profiles(root / DEFAULT_ANSWER_PROFILES)
     results = search_runtime_index(sqlite, question, limit=max(limit, 0))
     classification = _classify_question(question, results)
+    profile = profiles.get(classification)
     support_results = _supporting_results(classification, results, profiles)
-    status = _answer_status(classification, support_results, profiles)
+    status, status_reasons = _answer_status(classification, support_results, profiles)
     answer = _answer_for_classification(classification, question, support_results, status)
     citations = _citations(support_results)
     boundary = {
@@ -58,6 +59,14 @@ def generate_consultant_answer(
         "classification": classification,
         "citations": citations,
         "evidence": _evidence(support_results),
+        "decision_trace": _decision_trace(
+            classification=classification,
+            profile=profile,
+            retrieved_results=results,
+            support_results=support_results,
+            status=status,
+            status_reasons=status_reasons,
+        ),
         "boundary": boundary,
         "contract": {
             "live_web_boundary": (
@@ -320,18 +329,22 @@ def _answer_status(
     classification: str,
     results: list[dict[str, Any]],
     profiles: dict[str, dict[str, Any]],
-) -> str:
+) -> tuple[str, list[str]]:
     profile = profiles.get(classification)
-    if not profile or profile.get("status") != "ready":
-        return "needs_curation"
+    if not profile:
+        return "needs_curation", ["no answer profile exists for classification"]
+    if profile.get("status") != "ready":
+        return "needs_curation", ["answer profile status is needs_curation"]
     if not results:
-        return "needs_curation"
+        return "needs_curation", ["no retrieved results matched profile support_ids"]
     if not any(
         _strings(result.get("source_ids")) and _strings(result.get("claim_ids"))
         for result in results[:5]
     ):
-        return "needs_curation"
-    return "ready"
+        return "needs_curation", [
+            "top support results lack both source_ids and claim_ids"
+        ]
+    return "ready", ["ready profile matched citeable support evidence"]
 
 
 def _answer_for_classification(
@@ -435,6 +448,49 @@ def _answer_for_classification(
         f"Use the cited records and keep tenant/release/customizing claims fail-closed. "
         f"Evidence: {result_summaries}."
     )
+
+
+def _decision_trace(
+    *,
+    classification: str,
+    profile: dict[str, Any] | None,
+    retrieved_results: list[dict[str, Any]],
+    support_results: list[dict[str, Any]],
+    status: str,
+    status_reasons: list[str],
+) -> dict[str, Any]:
+    support_ids = set(_strings(profile.get("support_ids"))) if profile else set()
+    kept_ids = [str(result.get("id") or "") for result in support_results]
+    dropped_ids = [
+        str(result.get("id") or "")
+        for result in retrieved_results
+        if str(result.get("id") or "") not in set(kept_ids)
+    ]
+    return {
+        "contract": "consultant_answer_decision_trace.v1",
+        "classification": classification,
+        "profile_id": str(profile.get("id") or "") if profile else "",
+        "profile_status": str(profile.get("status") or "") if profile else "missing",
+        "status": status,
+        "status_reasons": status_reasons,
+        "retrieved_count": len(retrieved_results),
+        "support_count": len(support_results),
+        "support_filter": {
+            "mode": "profile_support_ids" if support_ids else "unfiltered_no_support_ids",
+            "support_ids": sorted(support_ids),
+            "kept_result_ids": kept_ids[:8],
+            "dropped_result_ids": dropped_ids[:8],
+        },
+        "required_answer_citation_ids": _strings(
+            profile.get("required_answer_citation_ids") if profile else []
+        ),
+        "boundary_decisions": [
+            "status=ready requires a ready profile plus citeable support evidence",
+            "needs_curation means draft-only; do not promote to tenant, release "
+            "or customizing proof",
+            "retrieval evidence is local/source-labelled and not live web validation",
+        ],
+    }
 
 
 def _citations(results: list[dict[str, Any]]) -> list[dict[str, Any]]:

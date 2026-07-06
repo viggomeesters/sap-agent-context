@@ -44,6 +44,12 @@ def test_consultant_answer_generates_prose_with_citations_and_boundaries(tmp_pat
     assert answer["boundary"]["live_web_validation"] is False
     assert answer["boundary"]["expert_certification"] is False
     assert answer["boundary"]["tenant_specific_truth"] is False
+    trace = answer["decision_trace"]
+    assert trace["contract"] == "consultant_answer_decision_trace.v1"
+    assert trace["status"] == "ready"
+    assert trace["profile_status"] == "ready"
+    assert "ready profile matched citeable support evidence" in trace["status_reasons"]
+    assert trace["support_filter"]["mode"] == "profile_support_ids"
 
 
 def test_consultant_answer_fails_closed_for_generic_question(tmp_path: Path) -> None:
@@ -57,6 +63,9 @@ def test_consultant_answer_fails_closed_for_generic_question(tmp_path: Path) -> 
     assert answer["classification"] == "generic"
     assert "needs curation" in answer["answer"].lower()
     assert "intentionally narrow" in answer["answer"]
+    assert answer["decision_trace"]["status"] == "needs_curation"
+    assert answer["decision_trace"]["profile_status"] == "needs_curation"
+    assert "answer profile status is needs_curation" in answer["decision_trace"]["status_reasons"]
 
 
 def test_consultant_answer_fails_closed_for_unsupported_tenant_config(tmp_path: Path) -> None:
@@ -257,6 +266,8 @@ def test_consultant_answer_cli_outputs_json(tmp_path: Path, capsys) -> None:
     assert "company code" in payload["answer"]
     assert "tenant" in payload["answer"]
     assert payload["citations"]
+    assert payload["decision_trace"]["contract"] == "consultant_answer_decision_trace.v1"
+    assert payload["decision_trace"]["classification"] == payload["classification"]
 
 
 def test_consultant_answer_evaluation_cli_outputs_json(tmp_path: Path, capsys) -> None:

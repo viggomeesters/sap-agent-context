@@ -26,7 +26,14 @@
       "source_surface": "context_bundle",
       "command": "uv run sap-agent-context query --intent fo.workflow --topic supplier-invoice workflow --sap-product s4hana_cloud_public --limit 12 --output build/context-bundles/supplier-invoice-workflow.json",
       "input_focus": "A bundle with status=ready, citations, selected items, gaps=[] and quality_signals.gap_count=0.",
-      "required_output_fields": ["status", "items", "citations", "gaps", "quality_signals", "consumer_contract"],
+      "required_output_fields": [
+        "status",
+        "items",
+        "citations",
+        "gaps",
+        "quality_signals",
+        "consumer_contract"
+      ],
       "safe_consumer_behavior": [
         "Use the bundle as starter context only.",
         "Preserve item ids, citation ids, access labels and freshness metadata in downstream source maps.",
@@ -43,7 +50,12 @@
       "source_surface": "context_bundle",
       "command": "uv run sap-agent-context query --intent fo.reporting --topic generic executive dashboard performance report --limit 12",
       "input_focus": "A bundle with status=needs_curation and gaps explaining why final output is blocked.",
-      "required_output_fields": ["status", "gaps", "quality_signals", "query"],
+      "required_output_fields": [
+        "status",
+        "gaps",
+        "quality_signals",
+        "query"
+      ],
       "safe_consumer_behavior": [
         "Treat the response as draft-only.",
         "Surface the gaps before any final prose or customer-facing document.",
@@ -60,7 +72,14 @@
       "source_surface": "query_explain",
       "command": "uv run sap-agent-context query-explain \"Welke communicatie arrangement security checks en redactie zijn nodig zonder secrets of tenant URL?\" --limit 5",
       "input_focus": "A query-explain payload with rank_source, matched_terms, claim_ids, source_ids, access and freshness for each ranked result.",
-      "required_output_fields": ["command", "status", "query", "results", "top_explanation", "explain_contract"],
+      "required_output_fields": [
+        "command",
+        "status",
+        "query",
+        "results",
+        "top_explanation",
+        "explain_contract"
+      ],
       "safe_consumer_behavior": [
         "Explain why the top result matched using rank_source, matched_terms, claim_ids and source_ids.",
         "Keep retrieval evidence separate from tenant-specific proof.",
@@ -77,15 +96,27 @@
       "source_surface": "consultant_answer",
       "command": "uv run sap-agent-context consultant-answer \"Welke communicatie arrangement security checks en redactie zijn nodig zonder secrets of tenant URL?\" --limit 12",
       "input_focus": "A deterministic consultant-answer payload with status=ready, classification=integration_security, citations, evidence and boundary booleans.",
-      "required_output_fields": ["artifact_kind", "status", "classification", "answer", "citations", "evidence", "boundary", "contract"],
+      "required_output_fields": [
+        "artifact_kind",
+        "status",
+        "classification",
+        "answer",
+        "citations",
+        "evidence",
+        "decision_trace",
+        "boundary",
+        "contract"
+      ],
       "safe_consumer_behavior": [
+        "Use the decision_trace to explain why the answer is ready or needs_curation.",
         "Preserve citations and evidence ids when reusing the answer.",
         "Show boundary.live_web_validation=false, boundary.expert_certification=false and boundary.tenant_specific_truth=false when implementation decisions matter.",
         "Use the answer as local extracted context, not as target tenant verification."
       ],
       "must_not_claim": [
         "Do not claim live SAP Help verification from consultant-answer output.",
-        "Do not convert ready into tenant-specific configuration proof."
+        "Do not convert ready into tenant-specific configuration proof.",
+        "Do not drop decision_trace when converting consultant-answer output into downstream prose."
       ]
     },
     {
@@ -94,7 +125,15 @@
       "source_surface": "answer_profile",
       "command": "python3 -m json.tool schema/answer-profiles.json >/dev/null",
       "input_focus": "Profile records that name classification status, support_ids, required_answer_citation_ids, positive_fixture_ids and adversarial_probe_ids.",
-      "required_output_fields": ["schema", "artifact_kind", "profiles", "classification", "status", "support_ids", "boundary_notes"],
+      "required_output_fields": [
+        "schema",
+        "artifact_kind",
+        "profiles",
+        "classification",
+        "status",
+        "support_ids",
+        "boundary_notes"
+      ],
       "safe_consumer_behavior": [
         "Treat profiles as runtime safety contracts rather than SAP content coverage.",
         "Require support ids, positive fixtures and adversarial probes before promoting a ready profile.",
@@ -110,13 +149,23 @@
     {
       "id": "hallucinated_tenant_configuration",
       "unsafe_pattern": "The downstream agent turns a ready bundle or consultant answer into a concrete customer threshold, Z-role, tenant URL or customizing value.",
-      "blocked_by": ["boundary.tenant_specific_truth=false", "gaps", "access labels", "answer profile boundary_notes"],
+      "blocked_by": [
+        "boundary.tenant_specific_truth=false",
+        "gaps",
+        "access labels",
+        "answer profile boundary_notes"
+      ],
       "safe_replacement": "State that local context is ready for starter analysis, then ask for target tenant/release/customizing evidence before implementation-ready claims."
     },
     {
       "id": "hidden_needs_curation_gap",
       "unsafe_pattern": "The downstream agent omits gaps and writes final prose from status=needs_curation.",
-      "blocked_by": ["status", "gaps", "quality_signals.gap_count", "consumer_contract.statuses"],
+      "blocked_by": [
+        "status",
+        "gaps",
+        "quality_signals.gap_count",
+        "consumer_contract.statuses"
+      ],
       "safe_replacement": "Label the output draft-only, show the gaps first and convert each gap into a curation request."
     }
   ],

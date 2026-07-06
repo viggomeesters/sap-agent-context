@@ -8,6 +8,9 @@ VISION = ROOT / "docs" / "vision.json"
 REPO_GO_VISION = ROOT / "docs" / "repo-go-vision.json"
 CONSULTANT_ANSWER_VISION = ROOT / "docs" / "consultant-answer-vision.json"
 ANSWER_PROFILE_SCHEMA_PLAN = ROOT / "docs" / "plans" / "answer-profile-schema-go-plan.json"
+QUERY_EXPLAIN_ANSWER_DEBUG_PLAN = (
+    ROOT / "docs" / "plans" / "query-explain-answer-debug-go-plan.json"
+)
 OLD_VISION = ROOT / "docs" / "vision.md"
 README = ROOT / "README.md"
 
@@ -98,6 +101,7 @@ def test_readme_links_to_json_vision_as_design_contract() -> None:
     assert "docs/vision.json" in text
     assert "docs/repo-go-vision.json" in text
     assert "docs/plans/answer-profile-schema-go-plan.json" in text
+    assert "docs/plans/query-explain-answer-debug-go-plan.json" in text
     assert "docs/consultant-answer-vision.json" in text
     assert "schema/answer-profiles.json" in text
     assert "schema/answer-profiles.schema.json" in text
@@ -159,3 +163,22 @@ def test_answer_profile_schema_go_plan_is_bounded_to_one_slice() -> None:
     assert statuses["APS-004"] == "done"
     for task in payload["task_refs"]:
         assert required_task_fields <= set(task)
+
+
+def test_query_explain_answer_debug_go_plan_is_bounded_to_one_slice() -> None:
+    payload = json.loads(QUERY_EXPLAIN_ANSWER_DEBUG_PLAN.read_text(encoding="utf-8"))
+    text = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+
+    assert payload["schema"] == "agent-workflow.plan.v1"
+    assert payload["kind"] == "plan"
+    assert payload["plan_type"] == "parent"
+    assert payload["id"] == "sap-agent-context-query-explain-answer-debug"
+    assert payload["status"] == "done"
+    assert payload["vision_ref"] == "docs/repo-go-vision.json"
+    assert payload["task_sequence"] == ["QAD-001", "QAD-002"]
+    assert payload["progress"] == {"total": 2, "open": 0, "active": 0, "blocked": 0, "done": 2}
+    assert "query-explain-answer-debug" in payload["created_from"]
+    assert "Do not add broad SAP content" in payload["planning_boundary"]
+    assert "decision_trace" in text
+    assert "network source verification" in text
+    assert "copied SAP documentation" in text

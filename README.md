@@ -26,8 +26,10 @@ sources through access-labelled pointers.
 - Repo-level planning context captured in
   [Repo Go Vision](docs/repo-go-vision.json), grounded in the canonical
   [Vision Contract](docs/vision.json).
-- Next bounded planning slice captured in
-  [Answer Profile Schema Go Plan](docs/plans/answer-profile-schema-go-plan.json).
+- Bounded planning slices captured in
+  [Answer Profile Schema Go Plan](docs/plans/answer-profile-schema-go-plan.json),
+  [Consumer Contract JSON Examples Go Plan](docs/plans/consumer-contract-json-examples-go-plan.json),
+  and [Query Explain Answer Debug Go Plan](docs/plans/query-explain-answer-debug-go-plan.json).
 - Consultant-answer layer direction captured in
   [Consultant Answer Vision](docs/consultant-answer-vision.json).
 - Answer-profile contract for deterministic consultant answers lives in
