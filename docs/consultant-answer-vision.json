@@ -1,0 +1,147 @@
+{
+  "schema": "agent-workflow.vision.v1",
+  "kind": "vision",
+  "id": "sap-agent-context-consultant-answer-layer",
+  "status": "active",
+  "title": "SAP Agent Context consultant-answer layer",
+  "project": "sap-agent-context",
+  "wedge": "A deterministic, citation-bound SAP consultant-answer layer over local evidence; not a generic SAP chatbot, LLM answer generator, documentation mirror, or tenant-truth oracle.",
+  "north_star": "SAP professionals and their agents can ask bounded SAP implementation questions and receive compact, source-labelled consultant-style answers that are useful when evidence exists and explicitly fail closed when it does not.",
+  "desired_outcome": "Turn SAP Agent Context from a strong retrieval/context repository into a practical local answer contract where every ready answer is backed by class-specific citations, visible boundaries, adversarial fixtures, and no false tenant/release/customizing certainty.",
+  "target_user_audience": [
+    "AI agents helping SAP professionals draft or review functional design context",
+    "SAP consultants who need quick local evidence-backed starting answers",
+    "Repo maintainers deciding which SAP domain slices are mature enough for deterministic answers"
+  ],
+  "painful_moment": "The repo can retrieve useful SAP context, but a user or downstream agent still needs to know whether a direct consultant-style answer is safe, cited, and bounded enough to use as a starting point.",
+  "core_promise": "Ask a supported SAP scenario question; get a compact answer with citations and explicit live-web, expert-certification and tenant-specific-truth boundaries. Ask an unsupported or generic question; get needs_curation instead of SAP-sounding filler.",
+  "principles": [
+    "Answer generation is deterministic and extractive before any LLM synthesis is considered.",
+    "Ready status requires class-specific citeable support, not just any top-k source and claim.",
+    "Every new ready intent needs positive fixtures, nearby negative/adversarial probes, and answer-specific citation checks.",
+    "Unsupported, generic, tenant-specific, release-specific, or customizing-specific questions fail closed with an actionable curation boundary.",
+    "Citations are part of the product surface; noisy or unrelated evidence is a correctness bug, even if the answer text sounds right.",
+    "Keep examples and generated proof machine-readable JSON/JSONL first; Markdown remains narrative maintainer context only."
+  ],
+  "non_goals": [
+    "Do not add an LLM/free-form answer generator before deterministic evidence binding is mature.",
+    "Do not bulk-import SAP Help or turn the repo into a SAP documentation mirror.",
+    "Do not claim tenant availability, target workflow configuration, release currentness, authorizations, or customizing values from generic/public context.",
+    "Do not promote broad/generic questions such as 'API report', 'How should API reporting work?', 'What is release strategy?' or 'Welke SAP modules zijn er?' to ready without a source-backed answer contract.",
+    "Do not use item count, broad keyword matches, or any citeable top-5 result as maturity proof.",
+    "Do not hide generated-answer evidence only in Markdown examples."
+  ],
+  "load_bearing_assumptions": [
+    {
+      "claim": "Deterministic templates can cover high-value SAP scenario answers before LLM synthesis is needed.",
+      "fails_if": "Users primarily ask broad, compound, or tenant-specific questions that templates cannot answer without sounding artificial or evasive.",
+      "cheapest_test": "Add 10 representative user-style consultant-answer fixtures across supported and unsupported questions; inspect whether ready/needs_curation matches human expectation.",
+      "kill_or_pivot": "If more than 30% of representative supported questions need free-form reasoning beyond retrieved evidence, pivot to a stricter retrieval-bundle plus optional LLM-consumer contract instead of expanding templates."
+    },
+    {
+      "claim": "Class-specific evidence binding is sufficient to prevent noisy citation bugs for supported intents.",
+      "fails_if": "Ready answers still cite unrelated domain/app/access-policy records after support-id filtering and answer-specific citation checks.",
+      "cheapest_test": "For every new classifier, run direct CLI probes and assert required_answer_citation_ids in evaluate-consultant-answers.",
+      "kill_or_pivot": "If support-id lists become too brittle or large, move support profiles into a data-driven ranking/answer-profile schema before adding more domains."
+    },
+    {
+      "claim": "Nearby negative probes can keep classifier boundaries honest enough for deterministic ready status.",
+      "fails_if": "Generic prompts with shared keywords are repeatedly promoted to ready by broad trigger words.",
+      "cheapest_test": "Maintain adversarial tests for generic API/reporting/release/workflow/module prompts whenever a classifier changes.",
+      "kill_or_pivot": "If boundary regressions recur, require classifiers to use retrieved support profiles plus explicit intent patterns rather than keyword pairs alone."
+    },
+    {
+      "claim": "The next valuable product step is deeper answer contracts, not broader SAP content coverage.",
+      "fails_if": "Gap reports show important answer failures are caused by missing source-labelled records rather than answer-layer/evaluator weakness.",
+      "cheapest_test": "Run curation-report and consultant-answer evaluation, then classify failures as missing evidence, ranking, classifier, template, or evaluator gaps.",
+      "kill_or_pivot": "If missing evidence dominates, pause answer-template expansion and run a bounded knowledge/domain-pack curation slice first."
+    },
+    {
+      "claim": "Public-safe local answer artifacts can be useful without copying proprietary SAP text.",
+      "fails_if": "Useful answers require copied SAP documentation, tenant screenshots, internal URLs, customer mappings, or gated SAP Notes/KBA content.",
+      "cheapest_test": "Review every new ready fixture for public-safe source pointers, access labels, and no tenant/customer/proprietary content.",
+      "kill_or_pivot": "If public-safe pointers are insufficient for a domain, mark it gated/needs_curation and require authorized human verification rather than shipping ready answers."
+    }
+  ],
+  "success_metrics": [
+    "evaluate-consultant-answers passes with answer-specific citation checks for every ready scenario.",
+    "Every new ready classifier has at least one positive fixture and at least two nearby negative/adversarial probes.",
+    "Ready answers cite only classification-support records or explicitly required answer citation IDs for the scenario.",
+    "Generic unsupported prompts remain needs_curation in tests and direct CLI probes.",
+    "make check and make audit-v02-gap-report stay green after each slice.",
+    "No public-safety scan or review finds tenant URLs, credentials, customer data, screenshots, SAP exports, or copied proprietary documentation."
+  ],
+  "verification_strategy": [
+    "Focused RED probes before each classifier/template expansion.",
+    "schema/answer-scenario-fixtures.yaml positive and negative scenario coverage.",
+    "tests/test_consultant_answer.py for classification, status, citation, and adversarial boundary behavior.",
+    "evaluate-answer-scenarios for retrieval/evidence readiness, separate from evaluate-consultant-answers for generated-answer proof.",
+    "Direct CLI smoke: consultant-answer for supported prompts and nearby generic prompts.",
+    "Full gate: make check, make audit-v02-gap-report, git diff --check before ship."
+  ],
+  "first_proof": {
+    "statement": "The newly expanded consultant-answer layer proves the pattern for three domains when answer citations are bound to classification-specific support and generic nearby prompts remain needs_curation.",
+    "current_evidence": [
+      "commit 5d3f04c expanded ready coverage to integration_security, analytics_extensibility, and procurement_workflow",
+      "make check passed with 297 pytest tests",
+      "make audit-v02-gap-report passed",
+      "adversarial probes API report, How should API reporting work, and What is release strategy returned needs_curation generic"
+    ],
+    "next_required_proof": "Repeat the same evidence-binding pattern for one additional high-value domain or convert support profiles to data-driven schema if classifier/support lists become brittle."
+  },
+  "first_build_slices": [
+    {
+      "id": "answer-profile-schema-spike",
+      "summary": "Move CLASSIFICATION_SUPPORT_IDS, classifier triggers, required answer citations, and negative probes into a data-driven answer-profile schema if the next domain repeats hardcoded patterns."
+    },
+    {
+      "id": "query-explain-answer-debug",
+      "summary": "Add a compact debug surface showing why a consultant-answer was ready/needs_curation, which support IDs were retained, and which required citation IDs passed or failed."
+    },
+    {
+      "id": "source-verification-soft-gate",
+      "summary": "Add optional public source verification for answer scenarios without making network availability part of default make check."
+    },
+    {
+      "id": "next-domain-ready-slice",
+      "summary": "Promote one next high-value domain only if it can satisfy positive fixtures, answer-specific citation IDs, nearby negative probes, and fail-closed templates. Candidate domains: EAM/PM lifecycle or migration cockpit."
+    },
+    {
+      "id": "consumer-contract-example-json",
+      "summary": "Add JSON examples showing how downstream agents should consume status, answer, citations, evidence, and boundary fields without treating ready as tenant truth."
+    }
+  ],
+  "open_questions": [
+    "Should answer-profile configuration move to schema/ before the next domain expansion, or only after one more hardcoded slice proves repeated structure?",
+    "Which downstream consumer should define the minimum answer artifact contract: local CLI users, McCoy FO Generator v2, or generic agent workflows?",
+    "Should source verification be a release-only command, a soft Make target, or a separate reviewer workflow?",
+    "What is the next domain with enough existing evidence to deserve ready answers without broad new content import?"
+  ],
+  "decision_log": [
+    {
+      "date": "2026-07-06",
+      "decision": "Keep consultant-answer deterministic/extractive and fail-closed rather than adding LLM generation.",
+      "reason": "The repo's differentiator is local, evidence-backed SAP context with explicit source and tenant boundaries."
+    },
+    {
+      "date": "2026-07-06",
+      "decision": "Bind ready answer evidence to class-specific support IDs and answer-specific citation requirements.",
+      "reason": "A pre-ship review found that green retrieval gates could still produce ready answers citing noisy or unrelated evidence."
+    },
+    {
+      "date": "2026-07-06",
+      "decision": "Generic API/reporting/release-strategy prompts stay needs_curation unless they contain explicit supported intent and evidence anchors.",
+      "reason": "Broad trigger words are too easy to over-promote and create false certainty."
+    }
+  ],
+  "context_refs": [
+    "docs/vision.json",
+    "README.md#usage",
+    "schema/answer-scenario-fixtures.yaml",
+    "src/sap_agent_context/consultant_answer.py",
+    "tests/test_consultant_answer.py",
+    "tests/test_answer_scenario_evaluation.py",
+    "commit:5d3f04c"
+  ],
+  "next_planning_boundary": "Run go-plan only for one bounded next slice: answer-profile schema spike, query-explain answer debug, source-verification soft gate, or next-domain ready slice. Do not create broad SAP-content tasks from this vision."
+}

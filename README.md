@@ -23,6 +23,8 @@ sources through access-labelled pointers.
   evaluation gates.
 - Typed context bundle contract for downstream consumers such as McCoy FO
   Generator v2 and local AI agent workflows.
+- Consultant-answer layer direction captured in
+  [Consultant Answer Vision](docs/consultant-answer-vision.json).
 - Public/gated/internal source labels, review dates, and expiration dates to
   prevent stale, expired, or private evidence from becoming hidden assumptions.
 
