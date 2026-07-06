@@ -99,7 +99,7 @@
     {
       "id": "APS-002",
       "summary": "Load answer profiles from JSON in consultant_answer without changing behavior",
-      "status": "open",
+      "status": "done",
       "depends_on": [
         "APS-001"
       ],
@@ -128,7 +128,17 @@
       "verification": [
         "uv run pytest -q tests/test_answer_profiles.py tests/test_consultant_answer.py",
         "uv run sap-agent-context evaluate-consultant-answers --output build/reports/consultant-answer-evaluation.json"
-      ]
+      ],
+      "completed_evidence": {
+        "summary": "consultant_answer now loads answer profile status/support rules from schema/answer-profiles.json and fails closed on invalid profile contracts.",
+        "verification": [
+          "uv run pytest -q tests/test_answer_profiles.py tests/test_consultant_answer.py: 19 passed",
+          "uv run ruff check src/sap_agent_context/consultant_answer.py tests/test_consultant_answer.py tests/test_answer_profiles.py: passed",
+          "uv run sap-agent-context evaluate-consultant-answers: passed 14 fixtures",
+          "git diff --check: passed"
+        ],
+        "completed_at": "2026-07-06T09:52:50.099050+00:00"
+      }
     },
     {
       "id": "APS-003",
@@ -208,10 +218,10 @@
   ],
   "progress": {
     "total": 4,
-    "open": 3,
+    "open": 2,
     "active": 0,
     "blocked": 0,
-    "done": 1
+    "done": 2
   },
   "acceptance": [
     "Plan covers exactly one bounded slice: answer-profile-schema.",

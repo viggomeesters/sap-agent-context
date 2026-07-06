@@ -134,7 +134,7 @@ def test_answer_profile_schema_go_plan_is_bounded_to_one_slice() -> None:
     assert payload["vision_ref"] == "docs/repo-go-vision.json"
     assert payload["layer_vision_ref"] == "docs/consultant-answer-vision.json"
     assert payload["task_sequence"] == ["APS-001", "APS-002", "APS-003", "APS-004"]
-    assert payload["progress"] == {"total": 4, "open": 3, "active": 0, "blocked": 0, "done": 1}
+    assert payload["progress"] == {"total": 4, "open": 2, "active": 0, "blocked": 0, "done": 2}
     assert "Do not add broad SAP content" in payload["planning_boundary"]
     assert "answer-profile-schema" in payload["created_from"]
     assert "Adding a new SAP domain" in text
@@ -150,7 +150,7 @@ def test_answer_profile_schema_go_plan_is_bounded_to_one_slice() -> None:
     }
     statuses = {task["id"]: task["status"] for task in payload["task_refs"]}
     assert statuses["APS-001"] == "done"
-    assert statuses["APS-002"] == "open"
+    assert statuses["APS-002"] == "done"
     assert statuses["APS-003"] == "open"
     assert statuses["APS-004"] == "open"
     for task in payload["task_refs"]:

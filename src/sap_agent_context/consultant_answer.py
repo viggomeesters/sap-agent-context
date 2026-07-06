@@ -8,6 +8,8 @@ expert validation.
 
 from __future__ import annotations
 
+import json
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -19,41 +21,7 @@ from sap_agent_context.repository import load_items
 from sap_agent_context.runtime_search import search_runtime_index
 
 DEFAULT_SQLITE = "build/context.sqlite"
-READY_CLASSIFICATIONS = {
-    "analytics_extensibility",
-    "integration_security",
-    "material_fields",
-    "mtart",
-    "org_model",
-    "p2p",
-    "procurement_workflow",
-}
-
-CLASSIFICATION_SUPPORT_IDS: dict[str, set[str]] = {
-    "analytics_extensibility": {
-        "sap.app.custom-fields-and-logic-context",
-        "sap.bulk.api.analytical-query.field-map",
-        "sap.bulk.api.analytical-query.field-set",
-        "sap.bulk.api.analytical-query.object",
-        "sap.bulk.api.analytical-query.ref",
-        "sap.bulk.api.analytical-query.rule",
-    },
-    "integration_security": {
-        "sap.app.communication-arrangements-context",
-        "sap.object.communication-arrangement-integration",
-        "sap.pattern.integration.communication-arrangement-fo",
-        "sap.policy.integration-no-secrets",
-        "sap.field-map.integration-api-message-readiness",
-    },
-    "procurement_workflow": {
-        "sap.app.manage-purchase-requisitions-context",
-        "sap.app.manage-purchase-requisitions",
-        "sap.bulk.control.procurement-sourcing.decision-rule",
-        "sap.pattern.procurement-release-strategy-workflow-fo",
-        "sap.rule.procurement-release-strategy-tenant-evidence",
-        "sap.test-pattern.procurement-release-strategy-caveat",
-    },
-}
+DEFAULT_ANSWER_PROFILES = "schema/answer-profiles.json"
 
 
 def generate_consultant_answer(
@@ -64,10 +32,11 @@ def generate_consultant_answer(
     limit: int = 12,
 ) -> dict[str, Any]:
     sqlite = _ensure_index(root=root, sqlite_path=sqlite_path or root / DEFAULT_SQLITE)
+    profiles = _load_answer_profiles(root / DEFAULT_ANSWER_PROFILES)
     results = search_runtime_index(sqlite, question, limit=max(limit, 0))
     classification = _classify_question(question, results)
-    support_results = _supporting_results(classification, results)
-    status = _answer_status(classification, support_results)
+    support_results = _supporting_results(classification, results, profiles)
+    status = _answer_status(classification, support_results, profiles)
     answer = _answer_for_classification(classification, question, support_results, status)
     citations = _citations(support_results)
     boundary = {
@@ -177,6 +146,52 @@ def _evaluate_fixture(root: Path, sqlite_path: Path, fixture: dict[str, Any]) ->
         "answer_excerpt": answer["answer"][:280],
         "failures": failures,
     }
+
+
+def _load_answer_profiles(path: Path) -> dict[str, dict[str, Any]]:
+    return _load_answer_profiles_cached(path.resolve())
+
+
+@lru_cache(maxsize=16)
+def _load_answer_profiles_cached(path: Path) -> dict[str, dict[str, Any]]:
+    if not path.exists():
+        raise ValueError(f"answer profiles file not found: {path}")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema") != "sap-agent-context.answer-profiles.v1":
+        raise ValueError(f"unexpected answer profiles schema in {path}")
+    profiles = payload.get("profiles")
+    if not isinstance(profiles, list) or not profiles:
+        raise ValueError(f"expected non-empty profiles list in {path}")
+
+    by_classification: dict[str, dict[str, Any]] = {}
+    seen_ids: set[str] = set()
+    for profile in profiles:
+        if not isinstance(profile, dict):
+            raise ValueError(f"invalid answer profile entry in {path}")
+        profile_id = str(profile.get("id") or "")
+        classification = str(profile.get("classification") or "")
+        status = str(profile.get("status") or "")
+        if not profile_id or not classification:
+            raise ValueError(f"answer profile missing id/classification in {path}")
+        if profile_id in seen_ids:
+            raise ValueError(f"duplicate answer profile id: {profile_id}")
+        if classification in by_classification:
+            raise ValueError(f"duplicate answer classification: {classification}")
+        if status not in {"ready", "needs_curation"}:
+            raise ValueError(f"invalid answer profile status for {profile_id}: {status}")
+        support_ids = set(_strings(profile.get("support_ids")))
+        required_citations = set(_strings(profile.get("required_answer_citation_ids")))
+        if status == "ready" and not support_ids:
+            raise ValueError(f"ready answer profile has no support_ids: {profile_id}")
+        missing_required = required_citations - support_ids
+        if missing_required:
+            missing = ", ".join(sorted(missing_required))
+            raise ValueError(
+                f"answer profile {profile_id} has citations outside support_ids: {missing}"
+            )
+        seen_ids.add(profile_id)
+        by_classification[classification] = profile
+    return by_classification
 
 
 def _ensure_index(*, root: Path, sqlite_path: Path) -> Path:
@@ -289,14 +304,25 @@ def _looks_like_unsupported_tenant_configuration(text: str) -> bool:
 
 
 
-def _supporting_results(classification: str, results: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    support_ids = CLASSIFICATION_SUPPORT_IDS.get(classification)
+def _supporting_results(
+    classification: str,
+    results: list[dict[str, Any]],
+    profiles: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    profile = profiles.get(classification)
+    support_ids = set(_strings(profile.get("support_ids"))) if profile else set()
     if not support_ids:
         return results
     return [result for result in results if str(result.get("id") or "") in support_ids]
 
-def _answer_status(classification: str, results: list[dict[str, Any]]) -> str:
-    if classification not in READY_CLASSIFICATIONS:
+
+def _answer_status(
+    classification: str,
+    results: list[dict[str, Any]],
+    profiles: dict[str, dict[str, Any]],
+) -> str:
+    profile = profiles.get(classification)
+    if not profile or profile.get("status") != "ready":
         return "needs_curation"
     if not results:
         return "needs_curation"

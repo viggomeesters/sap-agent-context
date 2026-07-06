@@ -5,6 +5,7 @@ from pathlib import Path
 
 from sap_agent_context.cli import main
 from sap_agent_context.consultant_answer import (
+    _load_answer_profiles,
     evaluate_consultant_answers,
     generate_consultant_answer,
 )
@@ -178,6 +179,38 @@ def test_consultant_answer_keeps_generic_release_strategy_needs_curation(
 
     assert answer["status"] == "needs_curation"
     assert answer["classification"] == "generic"
+
+def test_answer_profiles_fail_closed_on_invalid_required_citation(tmp_path: Path) -> None:
+    profiles_path = tmp_path / "answer-profiles.json"
+    profiles_path.write_text(
+        json.dumps(
+            {
+                "schema": "sap-agent-context.answer-profiles.v1",
+                "artifact_kind": "answer_profiles",
+                "profiles": [
+                    {
+                        "id": "broken",
+                        "classification": "broken",
+                        "status": "ready",
+                        "support_ids": ["sap.example.support"],
+                        "positive_fixture_ids": ["example_fixture"],
+                        "adversarial_fixture_ids": [],
+                        "required_answer_citation_ids": ["sap.example.missing"],
+                        "curation_reason_required": False,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    try:
+        _load_answer_profiles(profiles_path)
+    except ValueError as exc:
+        assert "citations outside support_ids" in str(exc)
+    else:  # pragma: no cover - validation must fail closed
+        raise AssertionError("invalid answer profile should fail validation")
+
 
 def test_consultant_answer_evaluation_covers_all_answer_scenarios(tmp_path: Path) -> None:
     report = evaluate_consultant_answers(root=ROOT, sqlite_path=_index_path(tmp_path))
