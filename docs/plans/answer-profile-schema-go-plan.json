@@ -143,7 +143,7 @@
     {
       "id": "APS-003",
       "summary": "Add profile-bound fixture/adversarial coverage gates",
-      "status": "open",
+      "status": "done",
       "depends_on": [
         "APS-002"
       ],
@@ -172,7 +172,18 @@
       "verification": [
         "uv run pytest -q tests/test_answer_profiles.py tests/test_consultant_answer.py tests/test_answer_scenario_evaluation.py",
         "uv run sap-agent-context consultant-answer \"How should API reporting work?\" --limit 12"
-      ]
+      ],
+      "completed_evidence": {
+        "summary": "Added profile-level adversarial probe registry and tests that require every ready profile to have positive fixture coverage plus nearby adversarial coverage.",
+        "verification": [
+          "python3 -m json.tool schema/answer-profiles.schema.json >/dev/null",
+          "python3 -m json.tool schema/answer-profiles.json >/dev/null",
+          "uv run pytest -q tests/test_answer_profiles.py tests/test_consultant_answer.py: 20 passed",
+          "uv run ruff check schema src/sap_agent_context/consultant_answer.py tests/test_consultant_answer.py tests/test_answer_profiles.py: passed",
+          "git diff --check: passed"
+        ],
+        "completed_at": "2026-07-06T09:59:08.831659+00:00"
+      }
     },
     {
       "id": "APS-004",
@@ -218,10 +229,10 @@
   ],
   "progress": {
     "total": 4,
-    "open": 2,
+    "open": 1,
     "active": 0,
     "blocked": 0,
-    "done": 2
+    "done": 3
   },
   "acceptance": [
     "Plan covers exactly one bounded slice: answer-profile-schema.",

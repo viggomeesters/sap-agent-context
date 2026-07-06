@@ -43,6 +43,11 @@ def _fixture_ids() -> set[str]:
     return {str(fixture["id"]) for fixture in payload.get("fixtures", [])}
 
 
+def _probe_ids() -> set[str]:
+    payload = _payload()
+    return {str(probe["id"]) for probe in payload.get("adversarial_probes", [])}
+
+
 def test_answer_profiles_contract_is_json_agent_artifact() -> None:
     payload = _payload()
     schema = json.loads(PROFILE_SCHEMA.read_text(encoding="utf-8"))
@@ -78,6 +83,7 @@ def test_answer_profiles_have_unique_ids_and_required_shape() -> None:
 
 def test_ready_answer_profiles_name_support_and_positive_fixtures() -> None:
     fixture_ids = _fixture_ids()
+    probe_ids = _probe_ids()
     profiles = {profile["classification"]: profile for profile in _payload()["profiles"]}
 
     assert set(profiles) >= READY_CLASSIFICATIONS
@@ -87,6 +93,8 @@ def test_ready_answer_profiles_name_support_and_positive_fixtures() -> None:
         assert profile["support_ids"], classification
         assert profile["positive_fixture_ids"], classification
         assert set(profile["positive_fixture_ids"]) <= fixture_ids
+        assert set(profile["adversarial_probe_ids"]) <= probe_ids
+        assert profile["adversarial_fixture_ids"] or profile["adversarial_probe_ids"]
         assert set(profile["required_answer_citation_ids"]) <= set(profile["support_ids"])
         assert profile["curation_reason_required"] is False
 
@@ -100,6 +108,7 @@ def test_fail_closed_profiles_are_explicit_and_not_ready() -> None:
         assert profile["curation_reason_required"] is True
         assert profile["required_answer_citation_ids"] == []
         assert profile["boundary_notes"]
+        assert set(profile["adversarial_probe_ids"]) <= _probe_ids()
 
     assert profiles["modules"]["adversarial_fixture_ids"] == ["vague_sap_modules"]
     assert profiles["generic"].get("adversarial_probe_ids") == [

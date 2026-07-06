@@ -13,6 +13,7 @@ from sap_agent_context.index import build_indexes
 from sap_agent_context.repository import load_items
 
 ROOT = Path(__file__).resolve().parents[1]
+ANSWER_PROFILES = ROOT / "schema" / "answer-profiles.json"
 
 
 def _index_path(tmp_path: Path) -> Path:
@@ -179,6 +180,21 @@ def test_consultant_answer_keeps_generic_release_strategy_needs_curation(
 
     assert answer["status"] == "needs_curation"
     assert answer["classification"] == "generic"
+
+def test_answer_profile_adversarial_probes_remain_needs_curation(tmp_path: Path) -> None:
+    sqlite_path = _index_path(tmp_path)
+    payload = json.loads(ANSWER_PROFILES.read_text(encoding="utf-8"))
+
+    for probe in payload["adversarial_probes"]:
+        answer = generate_consultant_answer(
+            root=ROOT,
+            question=probe["question"],
+            sqlite_path=sqlite_path,
+            limit=12,
+        )
+        assert answer["status"] == probe["expected_status"], probe["id"]
+        assert "needs curation" in answer["answer"].lower(), probe["id"]
+
 
 def test_answer_profiles_fail_closed_on_invalid_required_citation(tmp_path: Path) -> None:
     profiles_path = tmp_path / "answer-profiles.json"

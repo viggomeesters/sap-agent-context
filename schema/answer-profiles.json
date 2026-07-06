@@ -22,7 +22,9 @@
       "boundary_notes": [
         "Verify target release and tenant DDIC metadata before implementation."
       ],
-      "adversarial_probe_ids": []
+      "adversarial_probe_ids": [
+        "generic_mtart_without_field_context"
+      ]
     },
     {
       "id": "material_fields",
@@ -51,7 +53,9 @@
       "boundary_notes": [
         "Verify target release and tenant dictionary before implementation."
       ],
-      "adversarial_probe_ids": []
+      "adversarial_probe_ids": [
+        "generic_material_master_without_field_lookup"
+      ]
     },
     {
       "id": "org_model",
@@ -79,7 +83,9 @@
       "boundary_notes": [
         "Target tenant assignments and customizing need explicit evidence."
       ],
-      "adversarial_probe_ids": []
+      "adversarial_probe_ids": [
+        "tenant_org_assignment_not_authoritative"
+      ]
     },
     {
       "id": "p2p",
@@ -107,7 +113,9 @@
       "boundary_notes": [
         "Verify target workflow, release and customizing before final advice."
       ],
-      "adversarial_probe_ids": []
+      "adversarial_probe_ids": [
+        "generic_p2p_without_process_evidence"
+      ]
     },
     {
       "id": "integration_security",
@@ -215,7 +223,9 @@
       "boundary_notes": [
         "Do not claim a complete module taxonomy from current context."
       ],
-      "adversarial_probe_ids": []
+      "adversarial_probe_ids": [
+        "generic_mtart_without_field_context"
+      ]
     },
     {
       "id": "unsupported_configuration",
@@ -251,6 +261,50 @@
         "generic_api_report_needs_curation",
         "generic_release_strategy_needs_curation"
       ]
+    }
+  ],
+  "adversarial_probes": [
+    {
+      "id": "generic_mtart_without_field_context",
+      "question": "What is material type in SAP generally?",
+      "expected_status": "needs_curation",
+      "reason": "Broad material-type explanation without explicit MTART/MARA field-catalog anchor stays out of ready scope."
+    },
+    {
+      "id": "generic_material_master_without_field_lookup",
+      "question": "Explain material master data end to end",
+      "expected_status": "needs_curation",
+      "reason": "Generic material-master prose is broader than the MATNR/MARA/EQUI field lookup contract."
+    },
+    {
+      "id": "tenant_org_assignment_not_authoritative",
+      "question": "Which plant should this company code use in my tenant?",
+      "expected_status": "needs_curation",
+      "reason": "Target tenant organization assignments require tenant evidence."
+    },
+    {
+      "id": "generic_p2p_without_process_evidence",
+      "question": "How should we redesign procurement operations?",
+      "expected_status": "needs_curation",
+      "reason": "Broad operating-model advice is beyond the P2P process-lens answer contract."
+    },
+    {
+      "id": "generic_api_report_needs_curation",
+      "question": "How should API reporting work?",
+      "expected_status": "needs_curation",
+      "reason": "Generic API/reporting wording must not trigger integration-security or analytics-extensibility readiness."
+    },
+    {
+      "id": "generic_release_strategy_needs_curation",
+      "question": "What is release strategy?",
+      "expected_status": "needs_curation",
+      "reason": "Broad release-strategy wording lacks procurement workflow threshold/approver/evidence anchors."
+    },
+    {
+      "id": "unsupported_tenant_configuration_needs_curation",
+      "question": "How do I configure FI tax procedure for my tenant go-live?",
+      "expected_status": "needs_curation",
+      "reason": "Tenant/release/configuration-specific guidance requires source-backed target-system evidence."
     }
   ]
 }
