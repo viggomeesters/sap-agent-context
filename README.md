@@ -32,6 +32,10 @@ sources through access-labelled pointers.
   and [Query Explain Answer Debug Go Plan](docs/plans/query-explain-answer-debug-go-plan.json).
 - Consultant-answer layer direction captured in
   [Consultant Answer Vision](docs/consultant-answer-vision.json).
+- Mandatory no-answer fallback captured in
+  [Answer Gap Curation Procedure](docs/answer-gap-curation-procedure.json):
+  `needs_curation` means research and add a source-backed answer plus the exact
+  question, not merely report that the local context is empty.
 - Answer-profile contract for deterministic consultant answers lives in
   `schema/answer-profiles.json`, with schema in
   `schema/answer-profiles.schema.json` and consumer guidance in

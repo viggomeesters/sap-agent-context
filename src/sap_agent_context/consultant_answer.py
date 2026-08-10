@@ -219,6 +219,8 @@ def _ensure_index(*, root: Path, sqlite_path: Path) -> Path:
 def _classify_question(question: str, results: list[dict[str, Any]]) -> str:
     text = question.lower()
     del results
+    if _looks_like_cross_selling_table_lookup(text):
+        return "cross_selling_tables"
     if _looks_like_unsupported_tenant_configuration(text):
         return "unsupported_configuration"
     if "module" in text:
@@ -238,6 +240,17 @@ def _classify_question(question: str, results: list[dict[str, Any]]) -> str:
     if _looks_like_procurement_workflow(text):
         return "procurement_workflow"
     return "generic"
+
+
+def _looks_like_cross_selling_table_lookup(text: str) -> bool:
+    transaction_terms = {"vb41", "vb42", "vb43"}
+    cross_selling_terms = {"cross-selling", "cross selling", "cs01", "pakket", "package"}
+    lookup_terms = {"tabel", "table", "halen", "read", "extract", "data"}
+    return (
+        any(term in text for term in transaction_terms)
+        and any(term in text for term in cross_selling_terms)
+        and any(term in text for term in lookup_terms)
+    )
 
 
 def _looks_like_integration_security(text: str) -> bool:
@@ -414,6 +427,19 @@ def _answer_for_classification(
             "responsibilities, threshold or condition evidence, fallback/escalation path "
             "and test cases. Keep role/workflow behavior fail-closed until the target "
             f"tenant, release and customizing are verified. Evidence: {evidence_ids}."
+        )
+    if classification == "cross_selling_tables":
+        return (
+            "Voor het VB42/VB43-cross-sellingpakket met condition type CS01 begin je "
+            "in de gedocumenteerde material-only inrichting bij KOTD011. Selecteer daar "
+            "de record voor KAPPL = VS, KSCHL = CS01, het ingevoerde MATNR en de geldige "
+            "DATAB/DATBI-periode. Gebruik vervolgens KOTD011-KNUMH om KONDD en KONDDP "
+            "te lezen; SMATN is het voorgestelde/pakketartikel en KONDDP-KPOSN ordent "
+            "gepositioneerde pakketregels. Praktisch: lees beide itemtabellen, omdat "
+            "bestaande of uitgebreid gepositioneerde entries in KONDDP kunnen staan. "
+            "KOTD011 is niet universeel: controleer in het doelsysteem welke gegenereerde "
+            "KOTDnnn-tabel de access sequence van CS01 werkelijk gebruikt. "
+            f"Evidence: {evidence_ids}."
         )
     if classification == "modules":
         return (

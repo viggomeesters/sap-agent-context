@@ -203,6 +203,34 @@
       ]
     },
     {
+      "id": "cross_selling_tables",
+      "classification": "cross_selling_tables",
+      "status": "ready",
+      "description": "ECC VB42/VB43 CS01 cross-selling package table and join answer.",
+      "support_ids": [
+        "sap.ref.ecc-sd-cross-selling-vb42-code-evidence",
+        "sap.object.ecc-sd-cross-selling-condition-records",
+        "sap.rule.ecc-sd-cross-selling-table-join",
+        "sap.test-pattern.question-vb42-vb43-cs01-package-table"
+      ],
+      "positive_fixture_ids": [
+        "concrete_vb42_cross_selling_package_tables"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.object.ecc-sd-cross-selling-condition-records",
+        "sap.rule.ecc-sd-cross-selling-table-join"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Verify the CS01 access sequence and generated KOTDnnn condition table in the target ECC system."
+      ],
+      "adversarial_probe_ids": [
+        "generic_cs01_meaning_needs_curation",
+        "generic_package_table_needs_curation"
+      ]
+    },
+    {
       "id": "modules",
       "classification": "modules",
       "status": "needs_curation",
@@ -305,6 +333,18 @@
       "question": "How do I configure FI tax procedure for my tenant go-live?",
       "expected_status": "needs_curation",
       "reason": "Tenant/release/configuration-specific guidance requires source-backed target-system evidence."
+    },
+    {
+      "id": "generic_cs01_meaning_needs_curation",
+      "question": "What does CS01 mean in SAP?",
+      "expected_status": "needs_curation",
+      "reason": "CS01 alone is ambiguous and must not trigger the VB42/VB43 cross-selling table answer."
+    },
+    {
+      "id": "generic_package_table_needs_curation",
+      "question": "Which SAP table contains packages?",
+      "expected_status": "needs_curation",
+      "reason": "Generic package wording lacks VB42/VB43 or cross-selling evidence anchors."
     }
   ]
 }

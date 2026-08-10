@@ -412,6 +412,47 @@ fixtures:
         - SAP S/4HANA Cloud procurement flexible workflow purchase requisition approver threshold
         - SAP purchase requisition release strategy workflow approver evidence
 
+  - id: concrete_vb42_cross_selling_package_tables
+    difficulty: concrete
+    question: In VB42/VB43 vul ik CS01 en een artikel in; na doorklikken is het cross-selling pakket zichtbaar. Uit welke tabel kan ik dit halen?
+    limit: 20
+    expected_answer_status: ready
+    required_ids_top_n: 10
+    required_ids:
+      - sap.object.ecc-sd-cross-selling-condition-records
+      - sap.rule.ecc-sd-cross-selling-table-join
+    required_terms_by_id:
+      sap.object.ecc-sd-cross-selling-condition-records:
+        - KOTD011
+        - KONDD
+        - KONDDP
+        - KNUMH
+        - SMATN
+      sap.rule.ecc-sd-cross-selling-table-join:
+        - CS01
+        - KPOSN
+    required_answer_terms:
+      - KOTD011
+      - KNUMH
+      - KONDD
+      - KONDDP
+      - SMATN
+    required_answer_citation_ids:
+      - sap.object.ecc-sd-cross-selling-condition-records
+      - sap.rule.ecc-sd-cross-selling-table-join
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - wordpress.com
+        - community.sap.com
+      search_terms:
+        - SAP VB42 CS01 KOTD011 KONDD KONDDP KNUMH SMATN
+        - SAP ECC cross selling condition record tables VB43
+
   - id: vague_sap_modules
     difficulty: vague
     question: Welke SAP modules zijn er?

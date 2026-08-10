@@ -25,6 +25,7 @@ REQUIRED_PROFILE_FIELDS = {
 
 READY_CLASSIFICATIONS = {
     "analytics_extensibility",
+    "cross_selling_tables",
     "integration_security",
     "material_fields",
     "mtart",

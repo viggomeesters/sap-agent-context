@@ -1,0 +1,170 @@
+pack_id: sap-ecc-sd-cross-selling-pack
+schema_version: 1.0.0
+title: SAP ECC SD cross-selling condition records
+summary: >
+  Public-safe, source-backed context for reading the cross-selling package shown
+  by VB42/VB43 for condition type CS01. This pack records the exact user question,
+  the condition-record join, and the target-system verification boundary.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep the answer limited to generic ECC condition-technique tables. Verify the
+    configured access sequence and generated condition table in the target system.
+freshness: &freshness
+  valid_from: 2026-08-10
+  review_after: 2027-02-10
+  expires_at: 2027-08-10
+  retrieved_at: 2026-08-10
+cross_selling_code_source: &cross_selling_code_source
+  kind: public_url
+  title: ABAP ECC 6 SD Cross Selling Function Module (VB41/VB42)
+  url: https://stewartmasonosborne.wordpress.com/2015/08/05/abap-ecc-6-sd-cross-selling-function-module-vb41-vb42-bapi-2/
+  retrieved_at: 2026-08-10
+  specificity: exact_page
+  license_note: >
+    Link-first technical evidence. Store only concise derived claims; do not copy
+    the published implementation wholesale.
+sap_community_source: &sap_community_source
+  kind: public_url
+  title: SAP Community - Cross Selling popup and VB41/VB42 condition data
+  url: https://community.sap.com/t5/enterprise-resource-planning-q-a/cross-selling-popup-screen-displaying-for-material-not-defined-for-c-s/qaq-p/10833900
+  retrieved_at: 2026-08-10
+  specificity: exact_page
+  license_note: Link-first SAP Community evidence; verify against the target ECC DDIC and customizing.
+items:
+  - id: sap.ref.ecc-sd-cross-selling-vb42-code-evidence
+    title: ECC cross-selling VB41/VB42 technical evidence
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: ecc
+    topics: [sd, cross-selling, vb41, vb42, vb43, cs01, condition-technique]
+    used_for: [technical_table_lookup, source_traceability]
+    summary: >
+      Public technical example for ECC cross-selling using application VS,
+      condition type CS01, generated condition table KOTD011 and item tables
+      KONDD/KONDDP.
+    freshness: *freshness
+    source: *cross_selling_code_source
+    requires_source_specificity: high
+    release_applicability:
+      edition: ecc
+      verification: Verify target-system access sequence, condition table number and DDIC definitions.
+    claims:
+      - statement: >
+          For the shown CS01/material example, KOTD011 supplies KNUMH and the
+          cross-selling materials are read from KONDD or KONDDP by KNUMH and SMATN.
+        evidence:
+          - https://stewartmasonosborne.wordpress.com/2015/08/05/abap-ecc-6-sd-cross-selling-function-module-vb41-vb42-bapi-2/
+
+  - id: sap.object.ecc-sd-cross-selling-condition-records
+    title: ECC SD cross-selling condition-record tables
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: ecc
+    topics: [sd, cross-selling, vb42, vb43, cs01, kotd011, kondd, konddp, knumh, smatn]
+    used_for: [technical_table_lookup, data_extraction, consultant_answer]
+    summary: >
+      VB42/VB43 cross-selling for CS01 is condition-technique data. In the
+      documented material-only setup, select the header/access record from
+      KOTD011 and use KNUMH to read suggested/package materials in KONDD and,
+      for positioned package entries, KONDDP. SMATN is the suggested material.
+    freshness: *freshness
+    source: *cross_selling_code_source
+    requires_source_specificity: high
+    release_applicability:
+      edition: ecc
+      verification: >
+        Check V/07/V/03 or DDIC in the target system because another configured
+        access sequence can point CS01 to a different generated KOTDnnn table.
+    claims:
+      - statement: KOTD011 contains the material-keyed cross-selling condition/access record and KNUMH.
+        evidence:
+          - https://stewartmasonosborne.wordpress.com/2015/08/05/abap-ecc-6-sd-cross-selling-function-module-vb41-vb42-bapi-2/
+          - https://community.sap.com/t5/enterprise-resource-planning-q-a/cross-selling-popup-screen-displaying-for-material-not-defined-for-c-s/qaq-p/10833900
+      - statement: KONDD and KONDDP contain the cross-selling item material SMATN linked by KNUMH.
+        evidence:
+          - https://stewartmasonosborne.wordpress.com/2015/08/05/abap-ecc-6-sd-cross-selling-function-module-vb41-vb42-bapi-2/
+    relations:
+      references: [sap.ref.ecc-sd-cross-selling-vb42-code-evidence]
+      rules: [sap.rule.ecc-sd-cross-selling-table-join]
+
+  - id: sap.rule.ecc-sd-cross-selling-table-join
+    title: Read VB42/VB43 CS01 package through KNUMH
+    kind: decision_rule
+    status: active
+    access: public
+    requires_login: false
+    sap_product: ecc
+    topics: [sd, cross-selling, vb42, vb43, cs01, kotd011, kondd, konddp, join]
+    used_for: [technical_table_lookup, data_extraction, consultant_answer]
+    summary: >
+      Start with KOTD011 for KAPPL = VS, KSCHL = CS01, the entered MATNR and a
+      valid DATAB/DATBI interval. Join KOTD011-KNUMH to KONDD-KNUMH and
+      KONDDP-KNUMH. Read SMATN as the suggested/package material; KONDDP also
+      carries KPOSN for positioned entries. Do not assume KOTD011 when the
+      target CS01 access sequence uses another generated condition table.
+    freshness: *freshness
+    source: *cross_selling_code_source
+    requires_source_specificity: high
+    claims:
+      - statement: >
+          The safe extraction path is condition/access record to KNUMH to
+          cross-selling items, with target-system validation of the generated table.
+        evidence:
+          - https://stewartmasonosborne.wordpress.com/2015/08/05/abap-ecc-6-sd-cross-selling-function-module-vb41-vb42-bapi-2/
+    rules:
+      - condition: VB42/VB43 uses CS01 with the material-only access represented by KOTD011.
+        value_source: KOTD011-KAPPL, KOTD011-KSCHL, KOTD011-MATNR, KOTD011-DATAB and KOTD011-DATBI
+        outcome: Read KOTD011-KNUMH and join it to KONDD-KNUMH and KONDDP-KNUMH.
+        owner: SAP SD data extraction owner
+      - condition: The target CS01 access sequence uses a different generated condition table.
+        value_source: Target-system condition technique customizing and DDIC
+        outcome: Replace KOTD011 with the configured KOTDnnn table; keep the KNUMH item join.
+        owner: SAP SD configuration owner
+    relations:
+      objects: [sap.object.ecc-sd-cross-selling-condition-records]
+
+  - id: sap.test-pattern.question-vb42-vb43-cs01-package-table
+    title: Exact question - VB42/VB43 CS01 package table lookup
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: ecc
+    topics: [sd, cross-selling, vb42, vb43, cs01, package, pakket, table-lookup]
+    used_for: [consultant_answer, regression_test, question_provenance]
+    summary: >
+      Gestelde vraag: "De VB42/VB43 transactie. Dan vervolgens invullen: CS01;
+      artikel(len) invullen; doorklikken op pakket; pakket zichtbaar. Weet jij
+      uit welke tabel we dit kunnen halen?" Verwacht antwoord: KOTD011 naar
+      KONDD/KONDDP via KNUMH; SMATN bevat het voorgestelde materiaal, met een
+      target-system check op de werkelijk geconfigureerde condition table.
+    freshness: *freshness
+    source:
+      kind: internal_pattern
+      title: User question captured for SAP Agent Context curation
+      url: ""
+      retrieved_at: 2026-08-10
+      specificity: internal_pattern
+      license_note: Public-safe user question; no customer, tenant or material values included.
+    claims:
+      - statement: >
+          A ready answer must name KOTD011, KNUMH, KONDD, KONDDP and SMATN and
+          must retain the configured-condition-table verification caveat.
+        evidence:
+          - sap.object.ecc-sd-cross-selling-condition-records
+          - sap.rule.ecc-sd-cross-selling-table-join
+    relations:
+      objects: [sap.object.ecc-sd-cross-selling-condition-records]
+      rules: [sap.rule.ecc-sd-cross-selling-table-join]
+    test_scenarios:
+      - level: acceptance
+        case: Ask the captured VB42/VB43 CS01 package-table question.
+        expected: Answer names KOTD011, KNUMH, KONDD, KONDDP and SMATN.
+      - level: negative
+        case: Ask only which SAP table contains packages without VB42/VB43 or cross-selling context.
+        expected: Do not promote the question to a ready cross-selling-table answer.

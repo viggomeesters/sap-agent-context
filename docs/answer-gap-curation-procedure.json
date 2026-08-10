@@ -1,0 +1,71 @@
+{
+  "schema": "sap-agent-context.answer-gap-curation-procedure.v1",
+  "artifact_kind": "answer_gap_curation_procedure",
+  "title": "No answer -> source-backed SAP Agent Context curation",
+  "trigger": {
+    "condition": "A SAP question returns needs_curation, generic fallback, no answer, or an answer without relevant citeable support.",
+    "mandatory_action": "Do not stop at the gap. Research the answer and add it to SAP Agent Context with the source and exact question asked."
+  },
+  "procedure": [
+    {
+      "step": 1,
+      "name": "probe_local_context",
+      "action": "Run consultant-answer with the user's exact question and preserve its status/decision trace as before-state evidence."
+    },
+    {
+      "step": 2,
+      "name": "research_sources",
+      "action": "Find at least one sufficiently specific public or gated source pointer. Prefer SAP-owned sources; when unavailable, use clearly labelled technical/community evidence and keep the confidence boundary explicit."
+    },
+    {
+      "step": 3,
+      "name": "curate_answer_contract",
+      "action": "Add compact source-labelled knowledge records containing the answer, technical join/navigation, source pointer, freshness metadata, release/tenant/customizing caveat, and the exact user question without customer data."
+    },
+    {
+      "step": 4,
+      "name": "bind_ready_answer",
+      "action": "Add or extend a narrow answer profile, classifier, deterministic answer template, required citation IDs, one positive answer fixture, and nearby negative/adversarial probes."
+    },
+    {
+      "step": 5,
+      "name": "regenerate",
+      "action": "Run `uv run sap-agent-context export-jsonl --output-dir records`; generated JSONL records must include the curated content."
+    },
+    {
+      "step": 6,
+      "name": "verify",
+      "action": "Prove RED before the content change, then GREEN with a focused consultant-answer test. Run evaluate-consultant-answers, make check, make audit-v02-gap-report, and git diff --check."
+    },
+    {
+      "step": 7,
+      "name": "answer_user",
+      "action": "Return the direct SAP answer, source links, target-system verification caveat, and state that SAP Agent Context was supplemented."
+    }
+  ],
+  "required_curation_fields": [
+    "exact_question",
+    "answer_claim",
+    "source_url_or_gated_pointer",
+    "source_access_label",
+    "retrieved_at",
+    "release_or_edition_scope",
+    "tenant_or_customizing_verification_boundary",
+    "positive_fixture",
+    "required_answer_citation_ids",
+    "nearby_negative_probes"
+  ],
+  "fail_closed_rules": [
+    "Never invent an answer or source because local context is empty.",
+    "Never use generic retrieval hits as citation support for a ready answer.",
+    "Never store customer names, material values, tenant URLs, screenshots, credentials, or copied gated documentation.",
+    "Never make a generated KOTDnnn condition table universal when the target access sequence can differ."
+  ],
+  "done_when": [
+    "The exact question returns status ready from consultant-answer.",
+    "The answer cites classification-specific records with source_ids and claim_ids.",
+    "The exact question and source pointer are present in the curated records.",
+    "Nearby ambiguous prompts remain needs_curation.",
+    "Repository gates pass."
+  ]
+}

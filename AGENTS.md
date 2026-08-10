@@ -41,6 +41,16 @@ Forbidden:
 4. Commit focused changes after gates pass.
 5. Push to the public repo only when that external/public write is intended.
 
+## Mandatory answer-gap curation
+
+When `consultant-answer` returns `needs_curation`, a generic fallback, no answer,
+or irrelevant citations, do not stop at the gap. Follow
+`docs/answer-gap-curation-procedure.json`: research a sufficiently specific
+source, add the answer plus source and exact user question, bind a narrow answer
+profile with positive and nearby negative fixtures, regenerate `records/*.jsonl`,
+and prove the exact question returns `ready`. Keep tenant/release/customizing
+claims fail-closed and public-safe.
+
 ## Validation contract
 
 `make check` runs:

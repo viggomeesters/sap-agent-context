@@ -167,6 +167,31 @@ def test_consultant_answer_covers_procurement_workflow(tmp_path: Path) -> None:
     assert answer["citations"]
 
 
+def test_consultant_answer_covers_vb42_cross_selling_tables(tmp_path: Path) -> None:
+    question = (
+        "In VB42/VB43 vul ik CS01 en een artikel in; na doorklikken is het "
+        "cross-selling pakket zichtbaar. Uit welke tabel kan ik dit halen?"
+    )
+    answer = generate_consultant_answer(
+        root=ROOT,
+        question=question,
+        sqlite_path=_index_path(tmp_path),
+        limit=20,
+    )
+
+    assert answer["status"] == "ready"
+    assert answer["classification"] == "cross_selling_tables"
+    assert "KOTD011" in answer["answer"]
+    assert "KNUMH" in answer["answer"]
+    assert "KONDD" in answer["answer"]
+    assert "KONDDP" in answer["answer"]
+    assert "SMATN" in answer["answer"]
+    assert {
+        "sap.object.ecc-sd-cross-selling-condition-records",
+        "sap.rule.ecc-sd-cross-selling-table-join",
+    } <= {citation["id"] for citation in answer["citations"]}
+
+
 def test_consultant_answer_keeps_generic_api_report_needs_curation(tmp_path: Path) -> None:
     answer = generate_consultant_answer(
         root=ROOT,
@@ -242,7 +267,7 @@ def test_consultant_answer_evaluation_covers_all_answer_scenarios(tmp_path: Path
 
     assert report["artifact_kind"] == "consultant_answer_evaluation_report"
     assert report["status"] == "passed"
-    assert report["fixtures"] == 14
+    assert report["fixtures"] == 15
     assert {result["status"] for result in report["results"]} == {"passed"}
 
 
@@ -286,4 +311,4 @@ def test_consultant_answer_evaluation_cli_outputs_json(tmp_path: Path, capsys) -
     payload = json.loads(capsys.readouterr().out)
     assert payload["artifact_kind"] == "consultant_answer_evaluation_report"
     assert payload["status"] == "passed"
-    assert payload["fixtures"] == 14
+    assert payload["fixtures"] == 15
