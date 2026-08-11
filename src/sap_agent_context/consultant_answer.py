@@ -35,6 +35,12 @@ def generate_consultant_answer(
     profiles = _load_answer_profiles(root / DEFAULT_ANSWER_PROFILES)
     results = search_runtime_index(sqlite, question, limit=max(limit, 0))
     classification = _classify_question(question, results)
+    results = _augment_results_for_classification(
+        sqlite=sqlite,
+        classification=classification,
+        results=results,
+        limit=limit,
+    )
     profile = profiles.get(classification)
     support_results = _supporting_results(classification, results, profiles)
     status, status_reasons = _answer_status(classification, support_results, profiles)
@@ -219,6 +225,8 @@ def _ensure_index(*, root: Path, sqlite_path: Path) -> Path:
 def _classify_question(question: str, results: list[dict[str, Any]]) -> str:
     text = question.lower()
     del results
+    if _looks_like_hcm_personnel_name_status_lookup(text):
+        return "hcm_personnel_name_status"
     if _looks_like_cross_selling_table_lookup(text):
         return "cross_selling_tables"
     if _looks_like_unsupported_tenant_configuration(text):
@@ -240,6 +248,29 @@ def _classify_question(question: str, results: list[dict[str, Any]]) -> str:
     if _looks_like_procurement_workflow(text):
         return "procurement_workflow"
     return "generic"
+
+
+def _looks_like_hcm_personnel_name_status_lookup(text: str) -> bool:
+    personnel_terms = {
+        "pa0000",
+        "pernr",
+        "personeelsnummer",
+        "personnel number",
+        "personal nr",
+    }
+    name_terms = {"naam", "name", "persoon", "person"}
+    status_terms = {
+        "status van dienstverband",
+        "dienstverband",
+        "employment status",
+        "employee status",
+        "stat2",
+    }
+    return (
+        any(term in text for term in personnel_terms)
+        and any(term in text for term in name_terms)
+        and any(term in text for term in status_terms)
+    )
 
 
 def _looks_like_cross_selling_table_lookup(text: str) -> bool:
@@ -324,6 +355,31 @@ def _looks_like_unsupported_tenant_configuration(text: str) -> bool:
         term in text for term in unsupported_domains
     )
 
+
+
+def _augment_results_for_classification(
+    *,
+    sqlite: Path,
+    classification: str,
+    results: list[dict[str, Any]],
+    limit: int,
+) -> list[dict[str, Any]]:
+    anchor_queries = {
+        "hcm_personnel_name_status": "PA0000 PA0002 PERNR STAT2 VORNA NACHN BEGDA ENDDA",
+    }
+    anchor_query = anchor_queries.get(classification)
+    if not anchor_query:
+        return results
+    anchored = search_runtime_index(sqlite, anchor_query, limit=max(limit, 12))
+    merged: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for result in [*anchored, *results]:
+        result_id = str(result.get("id") or "")
+        if result_id in seen_ids:
+            continue
+        seen_ids.add(result_id)
+        merged.append(result)
+    return merged
 
 
 def _supporting_results(
@@ -439,6 +495,20 @@ def _answer_for_classification(
             "bestaande of uitgebreid gepositioneerde entries in KONDDP kunnen staan. "
             "KOTD011 is niet universeel: controleer in het doelsysteem welke gegenereerde "
             "KOTDnnn-tabel de access sequence van CS01 werkelijk gebruikt. "
+            f"Evidence: {evidence_ids}."
+        )
+    if classification == "hcm_personnel_name_status":
+        return (
+            "Koppel het personeelsnummer PERNR aan de datumgeldige PA0002-record "
+            "voor de naam: VORNA is de voornaam en NACHN de achternaam. Als je al "
+            "PA0001 gebruikt, kun je ENAME/SNAME als opgemaakte naam meenemen, maar "
+            "PA0002 is geschikter voor losse naamcomponenten. De status van het "
+            "dienstverband staat in PA0000-STAT2: standaard 0 = uit dienst, 1 = "
+            "inactief, 2 = gepensioneerd en 3 = actief. Filter PA0000, PA0002 en "
+            "eventueel PA0001 altijd op dezelfde peildatum met BEGDA <= peildatum <= "
+            "ENDDA; alleen joinen op PERNR kan historische records verdubbelen. "
+            "Controleer in het doelsysteem DDIC, statusinrichting, concurrent employment "
+            "en HR-autorisaties voordat je dit als personeelswaarheid gebruikt. "
             f"Evidence: {evidence_ids}."
         )
     if classification == "modules":

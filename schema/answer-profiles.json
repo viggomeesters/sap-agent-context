@@ -203,6 +203,34 @@
       ]
     },
     {
+      "id": "hcm_personnel_name_status",
+      "classification": "hcm_personnel_name_status",
+      "status": "ready",
+      "description": "ERP HCM PERNR to date-valid employee name and employment-status table answer.",
+      "support_ids": [
+        "sap.ref.erp-hcm-infotype-0002-name-fields",
+        "sap.object.erp-hcm-personnel-name-and-employment-status",
+        "sap.rule.erp-hcm-personnel-name-status-key-date-join",
+        "sap.test-pattern.question-pa0000-person-name-employment-status"
+      ],
+      "positive_fixture_ids": [
+        "concrete_hcm_personnel_name_employment_status"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.object.erp-hcm-personnel-name-and-employment-status",
+        "sap.rule.erp-hcm-personnel-name-status-key-date-join"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Verify target DDIC, key-date logic, status behavior, concurrent employment and HR authorization."
+      ],
+      "adversarial_probe_ids": [
+        "generic_pa0000_contents_needs_curation",
+        "generic_employee_name_table_needs_curation"
+      ]
+    },
+    {
       "id": "cross_selling_tables",
       "classification": "cross_selling_tables",
       "status": "ready",
@@ -345,6 +373,18 @@
       "question": "Which SAP table contains packages?",
       "expected_status": "needs_curation",
       "reason": "Generic package wording lacks VB42/VB43 or cross-selling evidence anchors."
+    },
+    {
+      "id": "generic_pa0000_contents_needs_curation",
+      "question": "What does PA0000 contain?",
+      "expected_status": "needs_curation",
+      "reason": "A generic PA0000 description is broader than the name-plus-employment-status enrichment contract."
+    },
+    {
+      "id": "generic_employee_name_table_needs_curation",
+      "question": "Which SAP table contains employee names?",
+      "expected_status": "needs_curation",
+      "reason": "Employee-name wording without ERP HCM PERNR and employment-status context is ambiguous across SAP products and identity models."
     }
   ]
 }

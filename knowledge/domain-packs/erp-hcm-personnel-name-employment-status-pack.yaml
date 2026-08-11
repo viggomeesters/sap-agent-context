@@ -1,0 +1,186 @@
+pack_id: sap-erp-hcm-personnel-name-employment-status-pack
+schema_version: 1.0.0
+title: SAP ERP HCM personnel name and employment status
+summary: >
+  Public-safe, source-backed context for resolving a personnel number to an
+  employee name and the current employment status in classic SAP ERP HCM.
+  The pack captures the exact PA0000 question, date-valid table navigation,
+  status values and target-system verification boundary.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Keep this answer limited to standard ERP HCM infotypes and fields. Verify
+    DDIC definitions, date validity, concurrent-employment handling and local
+    status/customizing behavior in the target system.
+freshness: &freshness
+  valid_from: 2026-08-11
+  review_after: 2027-02-11
+  expires_at: 2027-08-11
+  retrieved_at: 2026-08-11
+personal_data_source: &personal_data_source
+  kind: public_url
+  title: SAP Help Portal - Personal Information (Infotype 0002)
+  url: https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/ba566f6093324c6b8acbd431787ca8ef/90e5a853c55e0077e10000000a4450e5.html
+  retrieved_at: 2026-08-11
+  specificity: exact_page
+  license_note: >
+    Link-first SAP-owned evidence for the standard VORNA and NACHN fields;
+    store only concise derived claims.
+actions_source: &actions_source
+  kind: public_url
+  title: SAP Help Portal - Actions (Infotype 0000)
+  url: https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/84bfedb215ae482c80851d00ac2ee7f2/81c5c353b677b44ce10000000a174cb4.html
+  retrieved_at: 2026-08-11
+  specificity: exact_page
+  license_note: >
+    Link-first SAP-owned evidence for employment status 2 and date-valid
+    Actions infotype behavior.
+status_field_source: &status_field_source
+  kind: public_url
+  title: SAP Help Portal - PA0000 STAT2 Employment Status
+  url: https://help.sap.com/docs/ERP_HCM/d3bc4479e3344626be836c03a5c6962f/4fc8757f4ff943b2e10000000a42189b.html
+  retrieved_at: 2026-08-11
+  specificity: exact_page
+  license_note: Link-first SAP-owned evidence that PA0000-STAT2 is Employment Status.
+items:
+  - id: sap.ref.erp-hcm-infotype-0002-name-fields
+    title: ERP HCM Personal Data name-field evidence
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: erp_hcm
+    topics: [hcm, pa, pa0002, infotype-0002, pernr, vorna, nachn, employee-name]
+    used_for: [technical_table_lookup, source_traceability]
+    summary: >
+      SAP-owned field mapping identifies VORNA as given/first name and NACHN as
+      family/last name in Personal Data infotype 0002.
+    freshness: *freshness
+    source: *personal_data_source
+    requires_source_specificity: high
+    release_applicability:
+      edition: erp_hcm
+      verification: Verify target-system DDIC and country-specific name handling.
+    claims:
+      - statement: PA0002-VORNA contains first name and PA0002-NACHN contains last name.
+        evidence:
+          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/ba566f6093324c6b8acbd431787ca8ef/90e5a853c55e0077e10000000a4450e5.html
+
+  - id: sap.object.erp-hcm-personnel-name-and-employment-status
+    title: ERP HCM personnel name and employment-status tables
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: erp_hcm
+    topics: [hcm, pa, pa0000, pa0001, pa0002, pernr, ename, sname, vorna, nachn, stat2]
+    used_for: [technical_table_lookup, data_extraction, consultant_answer]
+    summary: >
+      Resolve PERNR to name through PA0002 for structured name components
+      (VORNA/NACHN); PA0001 can provide the formatted organizational-assignment
+      name field ENAME/SNAME where present. Read employment status from the
+      date-valid PA0000 Actions record in STAT2. Join on PERNR and select the
+      record valid on the reporting key date using BEGDA and ENDDA.
+    freshness: *freshness
+    source: *personal_data_source
+    requires_source_specificity: high
+    release_applicability:
+      edition: erp_hcm
+      verification: >
+        Verify target DDIC, key-date logic, concurrent employment/personnel
+        assignments and authorization before using HR personal data.
+    claims:
+      - statement: PA0002 stores structured employee name data including VORNA and NACHN.
+        evidence:
+          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/ba566f6093324c6b8acbd431787ca8ef/90e5a853c55e0077e10000000a4450e5.html
+      - statement: PA0000-STAT2 is the employment-status field on the Actions infotype.
+        evidence:
+          - https://help.sap.com/docs/ERP_HCM/d3bc4479e3344626be836c03a5c6962f/4fc8757f4ff943b2e10000000a42189b.html
+          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/84bfedb215ae482c80851d00ac2ee7f2/81c5c353b677b44ce10000000a174cb4.html
+    relations:
+      references: [sap.ref.erp-hcm-infotype-0002-name-fields]
+      rules: [sap.rule.erp-hcm-personnel-name-status-key-date-join]
+
+  - id: sap.rule.erp-hcm-personnel-name-status-key-date-join
+    title: Join PERNR to date-valid HCM name and employment status
+    kind: decision_rule
+    status: active
+    access: public
+    requires_login: false
+    sap_product: erp_hcm
+    topics: [hcm, pa, pa0000, pa0001, pa0002, pernr, stat2, begda, endda, key-date]
+    used_for: [technical_table_lookup, data_extraction, consultant_answer]
+    summary: >
+      Join PA0000 and PA0002 on PERNR and select records where the reporting key
+      date lies between BEGDA and ENDDA. Use PA0002-VORNA/NACHN for structured
+      name components. Use PA0000-STAT2 for employment status: standard values
+      are 0 withdrawn/left, 1 inactive, 2 pensioner/retiree and 3 active. PA0001
+      ENAME/SNAME is a convenient formatted-name alternative when that infotype
+      is already in the extraction.
+    freshness: *freshness
+    source: *actions_source
+    requires_source_specificity: high
+    claims:
+      - statement: >
+          Employment status must be read from the PA0000 record valid on the key
+          date; standard STAT2 values distinguish withdrawn, inactive, pensioner
+          and active employees.
+        evidence:
+          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/84bfedb215ae482c80851d00ac2ee7f2/81c5c353b677b44ce10000000a174cb4.html
+          - https://help.sap.com/docs/ERP_HCM/d3bc4479e3344626be836c03a5c6962f/4fc8757f4ff943b2e10000000a42189b.html
+    rules:
+      - condition: A personnel number must be enriched with name and current employment status.
+        value_source: PA0002-PERNR/VORNA/NACHN and PA0000-PERNR/STAT2/BEGDA/ENDDA
+        outcome: Join on PERNR and filter both infotypes to the reporting key date.
+        owner: SAP HCM data extraction owner
+      - condition: A formatted display name is sufficient and PA0001 is already selected.
+        value_source: PA0001-ENAME or PA0001-SNAME plus PA0001-BEGDA/ENDDA
+        outcome: Use the date-valid PA0001 formatted name; keep PA0002 for separate first/last-name components.
+        owner: SAP HCM data extraction owner
+      - condition: The extraction is used as employment or headcount truth.
+        value_source: Target-system PA0000 action history, status customizing and reporting key date
+        outcome: Validate target release/customizing, concurrent employment and authorization; do not infer status from record presence alone.
+        owner: SAP HCM functional owner
+    relations:
+      objects: [sap.object.erp-hcm-personnel-name-and-employment-status]
+
+  - id: sap.test-pattern.question-pa0000-person-name-employment-status
+    title: Exact question - PA0000 personnel name and employment status
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: erp_hcm
+    topics: [hcm, pa0000, pa0001, pa0002, pernr, name, dienstverband, employment-status]
+    used_for: [consultant_answer, regression_test, question_provenance]
+    summary: >
+      Gestelde vraag: "Zie onderstaand een overzicht van SAP personeelsnummers.
+      Kun jij hier de naam van die persoon bijzoeken en de status van dienstverband?
+      In PA0000 vind ik alleen personal nr." Verwacht antwoord: koppel PERNR aan
+      de datumgeldige PA0002-record voor VORNA/NACHN (of PA0001 ENAME/SNAME voor
+      een opgemaakte naam) en lees PA0000-STAT2 uit de datumgeldige Actions-record.
+    freshness: *freshness
+    source:
+      kind: internal_pattern
+      title: User question captured for SAP Agent Context curation
+      url: ""
+      retrieved_at: 2026-08-11
+      specificity: internal_pattern
+      license_note: Public-safe generic user question; no personnel numbers or personal data stored.
+    claims:
+      - statement: >
+          A ready answer must name PA0002 VORNA/NACHN, PA0000 STAT2, PERNR and
+          BEGDA/ENDDA; PA0001 ENAME/SNAME may be stated as a formatted-name shortcut.
+        evidence:
+          - sap.object.erp-hcm-personnel-name-and-employment-status
+          - sap.rule.erp-hcm-personnel-name-status-key-date-join
+    relations:
+      objects: [sap.object.erp-hcm-personnel-name-and-employment-status]
+      rules: [sap.rule.erp-hcm-personnel-name-status-key-date-join]
+    test_scenarios:
+      - level: acceptance
+        case: Ask which tables enrich PA0000 personnel numbers with names and employment status.
+        expected: Answer names PA0002, VORNA, NACHN, PA0000, STAT2, PERNR, BEGDA and ENDDA.
+      - level: negative
+        case: Ask generally what PA0000 contains without requesting name or employment-status enrichment.
+        expected: Do not promote the question to this ready extraction answer.

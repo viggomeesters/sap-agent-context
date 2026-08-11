@@ -453,6 +453,49 @@ fixtures:
         - SAP VB42 CS01 KOTD011 KONDD KONDDP KNUMH SMATN
         - SAP ECC cross selling condition record tables VB43
 
+  - id: concrete_hcm_personnel_name_employment_status
+    difficulty: concrete
+    question: Zie onderstaand een overzicht van SAP personeelsnummers. Kun jij hier de naam van die persoon bijzoeken en de status van dienstverband? In PA0000 vind ik alleen personal nr.
+    limit: 20
+    expected_answer_status: ready
+    required_ids_top_n: 10
+    required_ids:
+      - sap.object.erp-hcm-personnel-name-and-employment-status
+      - sap.rule.erp-hcm-personnel-name-status-key-date-join
+    required_terms_by_id:
+      sap.object.erp-hcm-personnel-name-and-employment-status:
+        - PA0002
+        - VORNA
+        - NACHN
+        - PA0000
+        - STAT2
+      sap.rule.erp-hcm-personnel-name-status-key-date-join:
+        - PERNR
+        - BEGDA
+        - ENDDA
+    required_answer_terms:
+      - PA0002
+      - VORNA
+      - NACHN
+      - PA0000-STAT2
+      - PERNR
+      - BEGDA
+      - ENDDA
+    required_answer_citation_ids:
+      - sap.object.erp-hcm-personnel-name-and-employment-status
+      - sap.rule.erp-hcm-personnel-name-status-key-date-join
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - help.sap.com
+      search_terms:
+        - SAP PA0002 VORNA NACHN PA0000 STAT2 employment status
+        - SAP HCM personnel number name employment status infotype 0000 0002
+
   - id: vague_sap_modules
     difficulty: vague
     question: Welke SAP modules zijn er?

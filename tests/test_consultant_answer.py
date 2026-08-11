@@ -192,6 +192,37 @@ def test_consultant_answer_covers_vb42_cross_selling_tables(tmp_path: Path) -> N
     } <= {citation["id"] for citation in answer["citations"]}
 
 
+def test_consultant_answer_covers_hcm_personnel_name_and_status(tmp_path: Path) -> None:
+    question = (
+        "Zie onderstaand een overzicht van SAP personeelsnummers. Kun jij hier de "
+        "naam van die persoon bijzoeken en de status van dienstverband? In PA0000 "
+        "vind ik alleen personal nr."
+    )
+    answer = generate_consultant_answer(
+        root=ROOT,
+        question=question,
+        sqlite_path=_index_path(tmp_path),
+        limit=20,
+    )
+
+    assert answer["status"] == "ready"
+    assert answer["classification"] == "hcm_personnel_name_status"
+    for term in (
+        "PA0002",
+        "VORNA",
+        "NACHN",
+        "PA0000-STAT2",
+        "PERNR",
+        "BEGDA",
+        "ENDDA",
+    ):
+        assert term in answer["answer"]
+    assert {
+        "sap.object.erp-hcm-personnel-name-and-employment-status",
+        "sap.rule.erp-hcm-personnel-name-status-key-date-join",
+    } <= {citation["id"] for citation in answer["citations"]}
+
+
 def test_consultant_answer_keeps_generic_api_report_needs_curation(tmp_path: Path) -> None:
     answer = generate_consultant_answer(
         root=ROOT,
@@ -267,7 +298,7 @@ def test_consultant_answer_evaluation_covers_all_answer_scenarios(tmp_path: Path
 
     assert report["artifact_kind"] == "consultant_answer_evaluation_report"
     assert report["status"] == "passed"
-    assert report["fixtures"] == 15
+    assert report["fixtures"] == 16
     assert {result["status"] for result in report["results"]} == {"passed"}
 
 
@@ -311,4 +342,4 @@ def test_consultant_answer_evaluation_cli_outputs_json(tmp_path: Path, capsys) -
     payload = json.loads(capsys.readouterr().out)
     assert payload["artifact_kind"] == "consultant_answer_evaluation_report"
     assert payload["status"] == "passed"
-    assert payload["fixtures"] == 15
+    assert payload["fixtures"] == 16
