@@ -24,8 +24,8 @@ migration_object_source: &migration_object_source
   license_note: Link-first SAP Help evidence; store only compact derived claims.
 migration_boundary_source: &migration_boundary_source
   kind: public_url
-  title: SAP Help - Available Migration Objects
-  url: https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/29193bf0ebdd4583930b2176cb993268/8dd142b479f9481891fa8b3f86648df3.html
+  title: SAP Help - Migration Objects for SAP S/4HANA implementation guide
+  url: https://help.sap.com/doc/69dd0f1ef0034261ab6e617e0b2beb21/1909.000/en-US/MigrationObjects_OP_EN.pdf
   retrieved_at: 2026-08-24
   specificity: exact_page
   license_note: Link-first SAP Help evidence; verify the target release documentation.
@@ -142,7 +142,7 @@ items:
     claims:
       - statement: SAP migration objects are built for initial migration and are not a general change/update mechanism for existing data.
         evidence:
-          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/29193bf0ebdd4583930b2176cb993268/8dd142b479f9481891fa8b3f86648df3.html
+          - https://help.sap.com/doc/69dd0f1ef0034261ab6e617e0b2beb21/1909.000/en-US/MigrationObjects_OP_EN.pdf
       - statement: CLMM is intended for mass changes to assigned characteristic values, not as the primary route for adding one class to many objects.
         evidence:
           - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/f48e215134d542109811123fe95a66af/70bdc55368511e4be10000000a174cb4.html
