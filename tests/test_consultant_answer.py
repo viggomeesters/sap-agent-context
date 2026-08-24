@@ -223,6 +223,30 @@ def test_consultant_answer_covers_hcm_personnel_name_and_status(tmp_path: Path) 
     } <= {citation["id"] for citation in answer["citations"]}
 
 
+def test_consultant_answer_covers_retail_article_mass_class_assignment(tmp_path: Path) -> None:
+    question = (
+        "Er moet een extra artikelklasse massaal aan bestaande SAP Retail-artikelen "
+        "van een custom article type worden gekoppeld. Kan dit via Migration Cockpit, "
+        "en wat is het alternatief?"
+    )
+    answer = generate_consultant_answer(
+        root=ROOT,
+        question=question,
+        sqlite_path=_index_path(tmp_path),
+        limit=20,
+    )
+
+    assert answer["status"] == "ready"
+    assert answer["classification"] == "retail_article_mass_class_assignment"
+    for term in ("Object classification", "CLF_OBJ", "001", "CL24N", "CLMM", "MASS"):
+        assert term in answer["answer"]
+    assert {
+        "sap.ref.s4-migration-object-object-classification",
+        "sap.object.retail-article-class-assignment-maintenance",
+        "sap.rule.retail-article-mass-class-assignment-route",
+    } <= {citation["id"] for citation in answer["citations"]}
+
+
 def test_consultant_answer_keeps_generic_api_report_needs_curation(tmp_path: Path) -> None:
     answer = generate_consultant_answer(
         root=ROOT,
@@ -298,7 +322,7 @@ def test_consultant_answer_evaluation_covers_all_answer_scenarios(tmp_path: Path
 
     assert report["artifact_kind"] == "consultant_answer_evaluation_report"
     assert report["status"] == "passed"
-    assert report["fixtures"] == 16
+    assert report["fixtures"] == 17
     assert {result["status"] for result in report["results"]} == {"passed"}
 
 
@@ -342,4 +366,4 @@ def test_consultant_answer_evaluation_cli_outputs_json(tmp_path: Path, capsys) -
     payload = json.loads(capsys.readouterr().out)
     assert payload["artifact_kind"] == "consultant_answer_evaluation_report"
     assert payload["status"] == "passed"
-    assert payload["fixtures"] == 16
+    assert payload["fixtures"] == 17

@@ -79,7 +79,7 @@ def test_current_claims_have_no_l0_boundary_failures_after_targeted_fixes() -> N
 
     assert report["summary"]["curation_needed"] == 0
     assert report["summary"]["sampled_maturity_distribution"]["L0"] == 0
-    assert report["summary"]["maturity_distribution"] == {"L0": 0, "L1": 775, "L2": 8, "L3": 0}
+    assert report["summary"]["maturity_distribution"] == {"L0": 0, "L1": 783, "L2": 8, "L3": 0}
     assert report["status"] == "passed"
     assert report["summary"]["lowest_maturity"] == "L1"
 

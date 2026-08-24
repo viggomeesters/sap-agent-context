@@ -259,6 +259,35 @@
       ]
     },
     {
+      "id": "retail_article_mass_class_assignment",
+      "classification": "retail_article_mass_class_assignment",
+      "status": "ready",
+      "description": "S/4HANA Retail article/material extra-class mass-assignment route across Migration Cockpit, CL24N and CLMM.",
+      "support_ids": [
+        "sap.ref.s4-migration-object-object-classification",
+        "sap.object.retail-article-class-assignment-maintenance",
+        "sap.rule.retail-article-mass-class-assignment-route",
+        "sap.test-pattern.question-retail-article-extra-class-mass-assignment"
+      ],
+      "positive_fixture_ids": [
+        "concrete_retail_article_extra_class_mass_assignment"
+      ],
+      "adversarial_fixture_ids": [],
+      "required_answer_citation_ids": [
+        "sap.ref.s4-migration-object-object-classification",
+        "sap.object.retail-article-class-assignment-maintenance",
+        "sap.rule.retail-article-mass-class-assignment-route"
+      ],
+      "curation_reason_required": false,
+      "boundary_notes": [
+        "Verify target edition/release, class type, multiple-classification rules, authorizations and a small target-system test."
+      ],
+      "adversarial_probe_ids": [
+        "generic_mass_transaction_needs_curation",
+        "generic_characteristic_value_change_needs_curation"
+      ]
+    },
+    {
       "id": "modules",
       "classification": "modules",
       "status": "needs_curation",
@@ -385,6 +414,18 @@
       "question": "Which SAP table contains employee names?",
       "expected_status": "needs_curation",
       "reason": "Employee-name wording without ERP HCM PERNR and employment-status context is ambiguous across SAP products and identity models."
+    },
+    {
+      "id": "generic_mass_transaction_needs_curation",
+      "question": "Wat kan ik met transactie MASS?",
+      "expected_status": "needs_curation",
+      "reason": "Generic MASS wording lacks Retail article, class-assignment and Migration Cockpit context."
+    },
+    {
+      "id": "generic_characteristic_value_change_needs_curation",
+      "question": "Hoe wijzig ik classificatiewaarden massaal?",
+      "expected_status": "needs_curation",
+      "reason": "Characteristic-value maintenance is broader than assigning one extra material/article class and may require CLMM-specific curation."
     }
   ]
 }

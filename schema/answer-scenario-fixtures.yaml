@@ -496,6 +496,46 @@ fixtures:
         - SAP PA0002 VORNA NACHN PA0000 STAT2 employment status
         - SAP HCM personnel number name employment status infotype 0000 0002
 
+  - id: concrete_retail_article_extra_class_mass_assignment
+    difficulty: concrete
+    question: Er moet een extra artikelklasse massaal aan bestaande SAP Retail-artikelen van een custom article type worden gekoppeld. Kan dit via Migration Cockpit, en wat is het alternatief?
+    retrieval_query: CL24N
+    limit: 20
+    expected_answer_status: ready
+    required_ids_top_n: 10
+    required_ids:
+      - sap.object.retail-article-class-assignment-maintenance
+      - sap.rule.retail-article-mass-class-assignment-route
+    required_terms_by_id:
+      sap.object.retail-article-class-assignment-maintenance:
+        - CL24N
+        - bestaande artikelen
+      sap.rule.retail-article-mass-class-assignment-route:
+        - CLMM
+    required_answer_terms:
+      - Migration Cockpit
+      - Object classification
+      - CLF_OBJ
+      - CL24N
+      - CLMM
+      - MASS
+    required_answer_citation_ids:
+      - sap.ref.s4-migration-object-object-classification
+      - sap.object.retail-article-class-assignment-maintenance
+      - sap.rule.retail-article-mass-class-assignment-route
+    require_citations: true
+    require_citations_for_required_ids: true
+    require_fail_closed_boundary: true
+    external_evidence:
+      required: true
+      mode: offline_hint
+      accepted_domains:
+        - help.sap.com
+      search_terms:
+        - SAP Migration Cockpit Object classification General template CLF_OBJ material class type 001
+        - SAP CL24N assign objects material class mass
+        - SAP CLMM mass change assigned values classification
+
   - id: vague_sap_modules
     difficulty: vague
     question: Welke SAP modules zijn er?

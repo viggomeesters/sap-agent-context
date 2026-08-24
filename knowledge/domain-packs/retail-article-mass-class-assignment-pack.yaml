@@ -1,0 +1,226 @@
+pack_id: sap-retail-article-mass-class-assignment-pack
+schema_version: 1.0.0
+title: SAP Retail article mass class assignment
+summary: >
+  Public-safe, SAP-source-backed context for choosing between Migration Cockpit,
+  CL24N and CLMM when an extra material/article class must be assigned to many
+  existing SAP Retail articles.
+ownership:
+  owner: sap-agent-context
+  review_strategy: >
+    Recheck the target S/4HANA edition/release and class type. Keep initial
+    migration separate from operational mass maintenance of existing articles.
+freshness: &freshness
+  valid_from: 2026-08-24
+  review_after: 2027-02-24
+  expires_at: 2027-08-24
+  retrieved_at: 2026-08-24
+migration_object_source: &migration_object_source
+  kind: public_url
+  title: SAP Help - Object classification - General template
+  url: https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/29193bf0ebdd4583930b2176cb993268/ffae53fcdb8f44eeb64d94d4cf9b835c.html
+  retrieved_at: 2026-08-24
+  specificity: exact_page
+  license_note: Link-first SAP Help evidence; store only compact derived claims.
+migration_boundary_source: &migration_boundary_source
+  kind: public_url
+  title: SAP Help - Available Migration Objects
+  url: https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/29193bf0ebdd4583930b2176cb993268/8dd142b479f9481891fa8b3f86648df3.html
+  retrieved_at: 2026-08-24
+  specificity: exact_page
+  license_note: Link-first SAP Help evidence; verify the target release documentation.
+cl24n_source: &cl24n_source
+  kind: public_url
+  title: SAP Help - CL24N Assigning Objects or Classes to Class
+  url: https://help.sap.com/docs/nullSUPPORT_CONTENT/plm/3363506676.html
+  retrieved_at: 2026-08-24
+  specificity: exact_page
+  license_note: Link-first SAP Help support content; verify availability and authorization in the target system.
+clmm_source: &clmm_source
+  kind: public_url
+  title: SAP Help - Mass Change for Assigned Values
+  url: https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/f48e215134d542109811123fe95a66af/70bdc55368511e4be10000000a174cb4.html
+  retrieved_at: 2026-08-24
+  specificity: exact_page
+  license_note: Link-first SAP Help evidence; distinguish class assignment from characteristic-value maintenance.
+items:
+  - id: sap.ref.s4-migration-object-object-classification
+    title: S/4HANA Migration Cockpit object classification reference
+    kind: external_reference
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_on_premise
+    topics: [migration-cockpit, object-classification, material, article, class-type-001]
+    used_for: [migration_analysis, consultant_answer, source_traceability]
+    retrieval:
+      keywords: [CLF_OBJ, Object classification, class type 001, artikelklasse, Migration Cockpit]
+      queries:
+        - extra artikelklasse massaal koppelen via Migration Cockpit alternatief
+    summary: >
+      SAP provides the staging-table migration object Object classification -
+      General template (CLF_OBJ). It assigns existing object identifiers to a
+      class and supports material class type 001; the class, characteristics and
+      product must already be maintained or migrated.
+    freshness: *freshness
+    source: *migration_object_source
+    requires_source_specificity: high
+    release_applicability:
+      edition: s4hana_on_premise
+      verification: Verify that the exact migration object is delivered and active in the target release/project.
+    claims:
+      - statement: Object classification - General template supports assigning material class type 001.
+        evidence:
+          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/29193bf0ebdd4583930b2176cb993268/ffae53fcdb8f44eeb64d94d4cf9b835c.html
+      - statement: The referenced class, characteristics and product are prerequisites for the classification migration object.
+        evidence:
+          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/29193bf0ebdd4583930b2176cb993268/ffae53fcdb8f44eeb64d94d4cf9b835c.html
+
+  - id: sap.object.retail-article-class-assignment-maintenance
+    title: Retail article material-class assignment maintenance
+    kind: sap_object
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_on_premise
+    topics: [retail, article, material, classification, cl24n, class-assignment, class-type-001]
+    used_for: [master_data_maintenance, consultant_answer, mass_change]
+    retrieval:
+      keywords: [CL24N, artikelklasse, extra klasse, massaal koppelen, bestaande artikelen]
+      queries:
+        - extra artikelklasse massaal aan bestaande artikelen koppelen
+    summary: >
+      For an operational mass assignment of one additional class to many existing
+      articles/materials, CL24N is the direct standard classification transaction:
+      select the class and class type, insert the target objects/articles and save
+      the new assignments. This is separate from changing values within an already
+      assigned class.
+    freshness: *freshness
+    source: *cl24n_source
+    requires_source_specificity: high
+    release_applicability:
+      edition: s4hana_on_premise
+      verification: >
+        Verify class type, multiple-classification rules, article object type,
+        authorization and a small target-system test before the production run.
+    claims:
+      - statement: CL24N allows a class to be assigned to multiple objects.
+        evidence:
+          - https://help.sap.com/docs/nullSUPPORT_CONTENT/plm/3363506676.html
+      - statement: CL24N can add material/article objects to the selected class and maintain class characteristic values.
+        evidence:
+          - https://help.sap.com/docs/nullSUPPORT_CONTENT/plm/3363506676.html
+    relations:
+      references: [sap.ref.s4-migration-object-object-classification]
+      rules: [sap.rule.retail-article-mass-class-assignment-route]
+
+  - id: sap.rule.retail-article-mass-class-assignment-route
+    title: Choose Migration Cockpit or CL24N for article class assignment
+    kind: decision_rule
+    status: active
+    access: public
+    requires_login: false
+    sap_product: s4hana_on_premise
+    topics: [retail, article, migration-cockpit, cl24n, clmm, mass, classification]
+    used_for: [migration_analysis, master_data_maintenance, consultant_answer]
+    retrieval:
+      keywords: [CL24N, CLMM, MASS, Migration Cockpit, extra artikelklasse, alternatief]
+      queries:
+        - Kan een extra artikelklasse massaal via Migration Cockpit en wat is het alternatief
+    summary: >
+      Use Object classification - General template only as part of a controlled
+      initial migration/load where the exact object is available and the product,
+      class and characteristics already exist. SAP describes migration objects as
+      initial-migration tooling rather than a general update mechanism. For a
+      post-migration mass assignment of an extra class to existing articles, use
+      CL24N. Use CLMM when the class assignment already exists and characteristic
+      values must be changed in bulk. Do not present generic transaction MASS as
+      the standard classification-assignment route.
+    freshness: *freshness
+    source: *migration_boundary_source
+    requires_source_specificity: high
+    claims:
+      - statement: SAP migration objects are built for initial migration and are not a general change/update mechanism for existing data.
+        evidence:
+          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/29193bf0ebdd4583930b2176cb993268/8dd142b479f9481891fa8b3f86648df3.html
+      - statement: CLMM is intended for mass changes to assigned characteristic values, not as the primary route for adding one class to many objects.
+        evidence:
+          - https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/f48e215134d542109811123fe95a66af/70bdc55368511e4be10000000a174cb4.html
+      - statement: CL24N is the direct standard route for assigning a selected class to multiple objects.
+        evidence:
+          - https://help.sap.com/docs/nullSUPPORT_CONTENT/plm/3363506676.html
+    rules:
+      - condition: The assignment belongs to the controlled initial S/4HANA migration and the target migration object supports the edition/release.
+        value_source: Target Migration Cockpit object catalog and Object classification - General template documentation
+        outcome: Use CLF_OBJ/Object classification with class type 001 after product, class and characteristics exist; test the load in the migration project.
+        owner: SAP data migration owner
+      - condition: Existing live articles need one additional class assigned in bulk after migration.
+        value_source: Target article list, class, class type and authorization
+        outcome: Use CL24N to insert the article objects under the selected class and save the assignments.
+        owner: SAP classification or article-master owner
+      - condition: Objects are already assigned to the class and only characteristic values must be changed in bulk.
+        value_source: Existing class assignments and characteristic-value change set
+        outcome: Use CLMM mass change for assigned values, subject to class/object prerequisites.
+        owner: SAP classification owner
+    relations:
+      objects: [sap.object.retail-article-class-assignment-maintenance]
+      references: [sap.ref.s4-migration-object-object-classification]
+
+  - id: sap.test-pattern.question-retail-article-extra-class-mass-assignment
+    title: Exact question - mass-assign extra article class
+    kind: test_pattern
+    status: active
+    access: internal_derived
+    requires_login: false
+    sap_product: s4hana_on_premise
+    topics: [retail, article, custom-article-type, extra-class, migration-cockpit, cl24n, mass]
+    used_for: [consultant_answer, regression_test, question_provenance]
+    retrieval:
+      keywords:
+        - custom article type
+        - extra artikelklasse
+        - massawijziging artikelstamdata
+        - Migration Cockpit alternatief
+        - CL24N CLMM MASS CLF_OBJ
+      queries:
+        - Er moet een extra artikelklasse massaal aan bestaande SAP Retail-artikelen van een custom article type worden gekoppeld Kan dit via Migration Cockpit en wat is het alternatief
+    summary: >
+      Gestelde vraag, publiek geredigeerd: "Er gaat nog een massawijziging gedaan
+      moeten worden op de artikelstamdata, specifiek een custom article type. Daar
+      moet nog een extra artikelklasse
+      aan worden gekoppeld. Kan dit vanuit de Migration Cockpit? Wat is het
+      alternatief?" Verwacht antwoord: nuanceer dat Object classification -
+      General template bestaat voor een gecontroleerde initiële migratieload,
+      maar adviseer CL24N voor de operationele massatoewijzing van een extra
+      klasse aan bestaande artikelen. CLMM is voor massale waardewijzigingen in
+      reeds toegewezen klassen; MASS is niet de primaire classificatieroute.
+    freshness: *freshness
+    source:
+      kind: internal_pattern
+      title: Public-safe user question captured for SAP Agent Context curation
+      url: ""
+      retrieved_at: 2026-08-24
+      specificity: internal_pattern
+      license_note: Customer-specific article-type identifiers are redacted; no customer, tenant, material numbers or internal identifiers are stored.
+    claims:
+      - statement: >
+          A ready answer must distinguish initial migration from live mass maintenance,
+          name Object classification - General template and CL24N, and explain CLMM's
+          narrower characteristic-value role.
+        evidence:
+          - sap.ref.s4-migration-object-object-classification
+          - sap.object.retail-article-class-assignment-maintenance
+          - sap.rule.retail-article-mass-class-assignment-route
+    relations:
+      objects: [sap.object.retail-article-class-assignment-maintenance]
+      rules: [sap.rule.retail-article-mass-class-assignment-route]
+    test_scenarios:
+      - level: acceptance
+        case: Ask whether an extra article class can be mass-assigned to existing Retail articles through Migration Cockpit and request the alternative.
+        expected: Answer distinguishes initial migration from operational maintenance and recommends CL24N for the latter.
+      - level: negative
+        case: Ask only what transaction MASS does without article classification context.
+        expected: Do not promote to this ready article-class-assignment answer.
+      - level: negative
+        case: Ask how to change characteristic values in an already assigned class.
+        expected: Do not misstate CL24N as the only route; CLMM may be relevant.

@@ -73,9 +73,15 @@ def _load_fixtures(path: Path) -> list[dict[str, Any]]:
 
 def _evaluate_fixture(sqlite_path: Path, fixture: dict[str, Any]) -> dict[str, Any]:
     filters = fixture.get("filters") if isinstance(fixture.get("filters"), dict) else {}
+    retrieval_query = str(
+        fixture.get("retrieval_query")
+        or fixture.get("question")
+        or fixture.get("query")
+        or ""
+    )
     results = search_runtime_index(
         sqlite_path,
-        str(fixture.get("question") or fixture.get("query") or ""),
+        retrieval_query,
         limit=int(fixture.get("limit") or 12),
         kind=filters.get("kind"),
         sap_product=filters.get("sap_product"),
@@ -89,6 +95,7 @@ def _evaluate_fixture(sqlite_path: Path, fixture: dict[str, Any]) -> dict[str, A
         "id": str(fixture.get("id") or fixture.get("question") or "fixture"),
         "difficulty": str(fixture.get("difficulty") or "unspecified"),
         "question": str(fixture.get("question") or fixture.get("query") or ""),
+        "retrieval_query": retrieval_query,
         "expected_answer_status": str(fixture.get("expected_answer_status") or "ready"),
         "status": "failed" if failures else "passed",
         "top_ids": top_ids,

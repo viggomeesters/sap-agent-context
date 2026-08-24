@@ -229,6 +229,8 @@ def _classify_question(question: str, results: list[dict[str, Any]]) -> str:
         return "hcm_personnel_name_status"
     if _looks_like_cross_selling_table_lookup(text):
         return "cross_selling_tables"
+    if _looks_like_retail_article_mass_class_assignment(text):
+        return "retail_article_mass_class_assignment"
     if _looks_like_unsupported_tenant_configuration(text):
         return "unsupported_configuration"
     if "module" in text:
@@ -281,6 +283,19 @@ def _looks_like_cross_selling_table_lookup(text: str) -> bool:
         any(term in text for term in transaction_terms)
         and any(term in text for term in cross_selling_terms)
         and any(term in text for term in lookup_terms)
+    )
+
+
+def _looks_like_retail_article_mass_class_assignment(text: str) -> bool:
+    article_terms = {"artikel", "article", "material", "product"}
+    class_terms = {"artikelklasse", "class assignment", "extra class", "klasse"}
+    mass_terms = {"massa", "mass", "bulk", "meerdere", "many"}
+    route_terms = {"migration cockpit", "migratiecockpit", "cl24n", "alternatief"}
+    return (
+        any(term in text for term in article_terms)
+        and any(term in text for term in class_terms)
+        and any(term in text for term in mass_terms)
+        and any(term in text for term in route_terms)
     )
 
 
@@ -365,14 +380,19 @@ def _augment_results_for_classification(
     limit: int,
 ) -> list[dict[str, Any]]:
     anchor_queries = {
-        "hcm_personnel_name_status": "PA0000 PA0002 PERNR STAT2 VORNA NACHN BEGDA ENDDA",
+        "hcm_personnel_name_status": [
+            "PA0000 PA0002 PERNR STAT2 VORNA NACHN BEGDA ENDDA"
+        ],
+        "retail_article_mass_class_assignment": ["CL24N", "CLF_OBJ"],
     }
-    anchor_query = anchor_queries.get(classification)
-    if not anchor_query:
+    queries = anchor_queries.get(classification)
+    if not queries:
         return results
-    anchored = search_runtime_index(sqlite, anchor_query, limit=max(limit, 12))
     merged: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
+    anchored: list[dict[str, Any]] = []
+    for query in queries:
+        anchored.extend(search_runtime_index(sqlite, query, limit=max(limit, 12)))
     for result in [*anchored, *results]:
         result_id = str(result.get("id") or "")
         if result_id in seen_ids:
@@ -496,6 +516,22 @@ def _answer_for_classification(
             "KOTD011 is niet universeel: controleer in het doelsysteem welke gegenereerde "
             "KOTDnnn-tabel de access sequence van CS01 werkelijk gebruikt. "
             f"Evidence: {evidence_ids}."
+        )
+    if classification == "retail_article_mass_class_assignment":
+        return (
+            "Kort antwoord: niet via de normale Product/Material-extensie in Migration "
+            "Cockpit. SAP levert wel het aparte migratieobject 'Object classification - "
+            "General template' (CLF_OBJ), inclusief materiaal-klassentype 001. Dat past "
+            "bij een gecontroleerde initiële migratieload waarin product, klasse en "
+            "kenmerken al bestaan; Migration Cockpit is geen algemene transactieroute "
+            "voor onderhoud van bestaande live data. Voor het massaal koppelen van één "
+            "extra klasse aan bestaande artikelen is CL24N de directe standaardroute: "
+            "selecteer klasse en klassentype, voeg de artikelen/objecten toe en sla de "
+            "toewijzingen op. Gebruik CLMM wanneer de klasse al is toegewezen en je vooral "
+            "kenmerkwaarden massaal wilt wijzigen. De generieke transactie MASS is niet "
+            "de primaire route voor classificatietoewijzingen. Test eerst met enkele "
+            "artikelen en controleer klassentype, multiple-classification-inrichting en "
+            f"autorisaties in het doelsysteem. Evidence: {evidence_ids}."
         )
     if classification == "hcm_personnel_name_status":
         return (

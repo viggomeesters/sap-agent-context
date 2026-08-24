@@ -33,6 +33,7 @@ READY_CLASSIFICATIONS = {
     "org_model",
     "p2p",
     "procurement_workflow",
+    "retail_article_mass_class_assignment",
 }
 
 
